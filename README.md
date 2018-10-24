@@ -1,11 +1,10 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/a3efc709ca5a444807b9/maintainability)](https://codeclimate.com/github/mercadopago/cart-prestashop/maintainability)
 
-# Prestashop - Mercado Pago Module (v1.3.6 - 1.4.7.3x, 1.5.x, 1.6.x, 1.7.x)
+# Prestashop - Mercado Pago Module (1.7.x)
 ---
 
 * [Features](#features)
 * [Requirements](#requirements)
-* [Available versions](#available_versions)
 * [Installation](#installation)
 * [Setup](#setup)
 * [Notifications](#notifications)
@@ -13,23 +12,8 @@
 * [Social](#social)
 
 <a name="features"></a>
-##Features##
-
-Checkout options right for your business:
-We offer two checkout methods that make it easy to securely accept payments from anyone, anywhere.
-
-**Custom Checkout**
-
-Offer a checkout fully customized to your brand experience with our simple-to-use payments API.
-
-* Seamless integration— no coding required, unless you want to.
-* Full control of buying experience.
-* Store buyer’s card for fast checkout.
-* Accept tickets in addition to cards.
-* Accept Mercado Pago's discount coupons.
-* Improve conversion rate.
-
-*Available for Argentina, Brazil, Colombia, Mexico, Peru and Venezuela*
+## Features ##
+*Available for Argentina, Brazil, Colombia, Mexico, Peru, Uruguay and Venezuela*
 
 **Basic Checkout**
 
@@ -41,15 +25,13 @@ Great for merchants who want to get going quickly and easily.
 * Accept tickets, bank transfer and account money in addition to cards.
 * Accept Mercado Pago's discount coupons.
 
-*Available for Argentina, Brazil, Chile, Colombia, Mexico, Peru, Uruguay and Venezuela*
-
 <a name="requirements"></a>
-##Requirements##
-Basically, the requirements of this plugin are same as you need to run WooCommerce. Your machine should have:
+## Requirements ##
+Basically, the requirements of this plugin are same as you need to run Prestashop. Your machine should have:
 
 **Platforms**
 
-* <a href="https://www.prestashop.com/en/download">Prestashop</a> 1.6 or greater;
+* <a href="https://www.prestashop.com/en/download">Prestashop 1.7</a> ;
 
 **Web Server Host**
 
@@ -62,62 +44,25 @@ Basically, the requirements of this plugin are same as you need to run WooCommer
 If you're using Custom Checkout, it is a requirement that you have a SSL certificate, and the payment form to be provided under an HTTPS page.
 During the sandbox mode tests, you can operate over HTTP, but for homologation you'll need to acquire the certificate in case you don't have it.
 
-
-<a name="available_versions"></a>
-##Available versions##
-<table>
-  <thead>
-    <tr>
-      <th>Plugin Version</th>
-      <th>Status</th>
-      <th>Compatible Versions</th>
-    </tr>
-  <thead>
-  <tbody>
-    <tr>
-      <td><a href="https://github.com/mercadopago/cart-prestashop/tree/master/v1.3.6%20-%201.4.7.3x">v1.3.6 - 1.4.7.3x</a></td>
-      <td>Deprecated (Old Version)</td>
-      <td>Prestashop v1.3.6 - 1.4.7.3x</td>
-    </tr>
-    <tr>
-      <td><a href="https://github.com/mercadopago/cart-prestashop/tree/master/v1.5.x/mercadopago">v1.5.x</a></td>
-      <td>Deprecated (Old Version)</td>
-      <td>Prestashop v1.5.x</td>
-    </tr>
-    <tr>
-      <td><a href="https://github.com/mercadopago/cart-prestashop/tree/master/v1.6.x">v1.6.x</a></td>
-      <td>Stable (Current Version)</td>
-      <td>Prestashop v1.6.x</td>
-     </tr>
-    <tr>
-      <td><a href="https://github.com/mercadopago/cart-prestashop/tree/master/v1.7.x">v1.7.x</a></td>
-      <td>Stable (Current Version)</td>
-      <td>Prestashop v1.7.x</td>
-     </tr>
-  </tbody>
-</table>
-
 <a name="installation"></a>
-##Installation##
+## Installation ##
 
-1. Download Prestashop: https://www.prestashop.com/es/versiones-para-programadores#previous-version
-    * Prestashop v1.3.6 - 1.4.7.3x
-    * Prestashop v1.5.x
-    * Prestashop v1.6.x
-    * Prestashop v1.7.x
+1. [Download Prestashop](https://www.prestashop.com/es/versiones-para-programadores#previous-version)
+  
+1. [Download Plugin](https://github.com/mercadopago/cart-prestashop-7/releases)
 
 <a name="setup"></a>
-##Setup##
+## Setup ##
 
 1. Copy **mercadopago** folder to **modules** folder.
 
 2. On your store administration, go to **Modules > Modules**.
 
-3. Search by **MercadoPago** and click install. <br />
+3. Search by **Mercado Pago** and click install. <br />
 You will receive the following message: " Module(s) installed successfully."
-  ![Installation](https://raw.github.com/mercadopago/cart-prestashop/master/README.img/Installation.JPG)<br />
+  ![Installation](https://raw.github.com/mercadopago/cart-prestashop-7/master/README.img/Config.jpg)<br />
 
-4. Set your **CLIENT_ID** and **CLIENT_SECRET**, or **PUBLIC_KEY** and **ACCESS_TOKEN** (depending on which module you're using). 
+4. Set your **CLIENT_ID** and **CLIENT_SECRET**. 
 
   Get your credentials in the following address:
   * Argentina: [https://www.mercadopago.com/mla/account/credentials](https://www.mercadopago.com/mla/account/credentials)
@@ -128,6 +73,9 @@ You will receive the following message: " Module(s) installed successfully."
   * Peru: [https://www.mercadopago.com/mlp/account/credentials](https://www.mercadopago.com/mlp/account/credentials)
   * Venezuela: [https://www.mercadopago.com/mlv/account/credentials](https://www.mercadopago.com/mlv/account/credentials)
   * Uruguay: [https://www.mercadopago.com/mlu/account/credentials](https://www.mercadopago.com/mlu/account/credentials)
+
+5. Enable your payments methods before save your credentials. 
+  ![Installation](https://raw.github.com/mercadopago/cart-prestashop-7/master/README.img/Payments.jpg)<br />
 
 ***IMPORTANT:*** *This module will only work with the following currencies:*
 
@@ -156,27 +104,14 @@ Your store will automatically sync with Mercado Pago. The notification URL will 
 <a name="pictures_features"></a>
 ## Example features
 
-**Credit Card Customized Checkout**
+**Standard Checkout**
 <br/>
-![pictures_features](https://raw.github.com/mercadopago/cart-prestashop/master/README.img/Checkout.jpg)
-
-**Print Ticket**
-<br/>
-![pictures_features](https://raw.github.com/mercadopago/cart-prestashop/master/README.img/Ticket.jpg)
-
-**Customer Card** <strong>Prestashop v1.6.x</strong>
-<br/>
-![pictures_features](https://raw.github.com/mercadopago/cart-prestashop/master/README.img/CustomerCard.jpg)
-
-**Discount Coupon** <strong>Prestashop v1.6.x</strong>
-<br/>
-![pictures_features](https://raw.github.com/mercadopago/cart-prestashop/master/README.img/Coupon.jpg)
+![pictures_features](https://raw.github.com/mercadopago/cart-prestashop-7/master/README.img/Checkout.jpg)
 
 <a name="social"></a>
 ##Social##
 
 Follow our facebook group and watch our videos
 <ul>
-  <li><a href="https://www.facebook.com/groups/modulos.mercadopago/?ref=ts&fref=ts" target="_blank">FACEBOOK</a></li>
   <li><a href="https://www.youtube.com/playlist?list=PLl8LGzRu2_sXxChIJm1e0xY6dU3Dj_tNi" target="_blank">YOUTUBE</a></li>
 </ul>
