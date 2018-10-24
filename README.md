@@ -9,6 +9,7 @@
 * [Setup](#setup)
 * [Notifications](#notifications)
 * [Example features](#pictures_features)
+* [Suport](#suport)
 * [Social](#social)
 
 <a name="features"></a>
@@ -60,6 +61,7 @@ During the sandbox mode tests, you can operate over HTTP, but for homologation y
 
 3. Search by **Mercado Pago** and click install. <br />
 You will receive the following message: " Module(s) installed successfully."
+
   ![Installation](https://raw.github.com/mercadopago/cart-prestashop-7/master/README.img/Config.jpg)<br />
 
 4. Set your **CLIENT_ID** and **CLIENT_SECRET**. 
@@ -108,8 +110,14 @@ Your store will automatically sync with Mercado Pago. The notification URL will 
 <br/>
 ![pictures_features](https://raw.github.com/mercadopago/cart-prestashop-7/master/README.img/Checkout.jpg)
 
+<a name="suport"></a>
+## Suport ##
+
+If you have some problem, [click here](https://www.mercadopago.com.br/developers/suporte).
+
+
 <a name="social"></a>
-##Social##
+## Social ##
 
 Follow our facebook group and watch our videos
 <ul>
