@@ -31,7 +31,7 @@ include_once 'MPRestCli.php';
 
 class MPApi
 {
-    const VERSION = '1.0.14';
+    const VERSION = '1.0.15';
 
     /* Info */
     const INFO = 1;
@@ -470,4 +470,13 @@ class MPApi
             return implode('&', $elements);
         }
     }
+    /**
+     * getVersion
+     * @return lastversion
+     */
+    public function getVersion()
+    {
+        $result = MPRestCli::get('/devtools/lastversion/cart-prestashop-7');
+        return $result;
+    }     
 }

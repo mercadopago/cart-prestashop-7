@@ -643,7 +643,6 @@ class MercadoPago extends PaymentModule
 
     public function getContent()
     {
-        UtilMercadoPago::log("LOG", "LOG LOG LOG ");
         $shopDomainSsl = Tools::getShopDomainSsl(true, true);
         $backOfficeCssUrl = $shopDomainSsl.__PS_BASE_URI__."modules/".$this->name."/views/css/backoffice.css";
         $marketingCssUrl = $shopDomainSsl.__PS_BASE_URI__."modules/".$this->name."/views/css/marketing.css";
@@ -781,10 +780,6 @@ class MercadoPago extends PaymentModule
     protected function getPaymentConfigurationLocale()
     {
         $locale = array();
-
-        $locale["label"]["active"] = $this->l("Enabled");
-        $locale["label"]["disable"] = $this->l("Disable");
-
         $locale["paymentsConfig"] = $this->l("Payment Configuration");
 
 
@@ -918,9 +913,15 @@ class MercadoPago extends PaymentModule
 
     protected function getPageRequirements()
     {
+        $result = MPApi::getInstanceMP()->getVersion();
+        $tagName = str_replace("v", "", $result['response']['release']['tag_name']);
+        $url = $result['response']['repository']['html_url'];
+        
         $tplVars = array(
             "thisPath" => $this->_path,
-            "log" => $this->_path . "/logs/mercadopago.log"
+            "log" => $this->_path . "/logs/mercadopago.log",
+            "tagName" => $tagName,
+            "url" => $url           
         );
         $this->context->smarty->assign($tplVars);
         return $this->display(__FILE__, "views/templates/admin/requirements.tpl");
@@ -1387,18 +1388,15 @@ class MercadoPago extends PaymentModule
     public function getExternalPaymentOption()
     {
         $country = strtoupper(MPApi::getInstanceMP()->getCountry());
-      
-        UtilMercadoPago::log("country", $country);
-        UtilMercadoPago::log("banner getExternalPaymentOption", UtilMercadoPago::$DEFAULT_BANNER[$country]);
-      
+        
         $externalOption = new PaymentOption();
-        // Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/mercadopago.png")
         $externalOption->setCallToActionText($this->l(''))
                        ->setAction($this->context->link->getModuleLink($this->name, "standard", array(), true))
                        ->setModuleName($this->name)
+
                        ->setLogo(empty(UtilMercadoPago::$DEFAULT_BANNER[$country]) ?
                           Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/mercadopago.png")
-                          : UtilMercadoPago::$DEFAULT_BANNER[$country])
+                          : Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/$country/mercadopago_468X60.jpg"))
                        ->setInputs([
                             "token" => [
                                 "name" =>"token",

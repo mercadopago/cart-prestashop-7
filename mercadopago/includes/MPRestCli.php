@@ -33,11 +33,6 @@ class MPRestCli
     const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
 
     const API_CONFIG_BASE_URL = 'https://api.mercadopago.com/account';
-  
-     /**
-     *Product Id, identifier used to designate the product, device and version
-     */
-    const PRODUCT_ID = 'BC32CCRU643001OI39AG';
 
 
     private static function getConnect($uri, $method, $content_type, $uri_base)
@@ -52,7 +47,6 @@ class MPRestCli
             array(
                 'Accept: application/json',
                 'Content-Type: '.$content_type,
-                'x-product-id: '.self::PRODUCT_ID,
             )
         );
 
@@ -73,7 +67,6 @@ class MPRestCli
                 'Accept: application/json',
                 'Content-Type: '.$content_type,
                 'X-Tracking-Id:'.$trackingID,
-                'x-product-id: '.self::PRODUCT_ID,
             )
         );
 
