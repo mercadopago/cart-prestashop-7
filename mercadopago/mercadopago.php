@@ -790,6 +790,8 @@ class MercadoPago extends PaymentModule
         $locale["button"]["yes"] = $this->l("Yes");
         $locale["button"]["no"] = $this->l("No");
 
+        $locale["label"]["active"] = $this->l("Active");
+        $locale["label"]["disable"] = $this->l("Disable");
         return $locale;
     }
 
