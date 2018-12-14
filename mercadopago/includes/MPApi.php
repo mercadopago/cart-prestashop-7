@@ -478,5 +478,5 @@ class MPApi
     {
         $result = MPRestCli::get('/devtools/lastversion/cart-prestashop-7');
         return $result;
-    }     
+    }
 }

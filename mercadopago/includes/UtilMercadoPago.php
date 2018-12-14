@@ -67,7 +67,7 @@ class UtilMercadoPago
         } else {
             error_log($data_hora."===".$mensagem);
         }
-    }  
+    }
 
     /*
     User Errors...
@@ -78,7 +78,7 @@ class UtilMercadoPago
         $log = "Date:  ".$date."  | ".$msg.
         "|  " . $exceptionMessage . "\n";
         error_log($log, 3, _PS_ROOT_DIR_ . '/modules/mercadopago/logs/mercadopago.log');
-    }    
+    }
 
     public static function setNamePaymentType($payment_type_id)
     {
@@ -170,12 +170,12 @@ class UtilMercadoPago
         return $value;
     }
 
-    public static function getOrderTotalMLC_MCO($value)
+    public static function getOrderTotalMLCToMCO($value)
     {
         if (is_null($value) || empty($value)) {
             return 0;
         }
-        return strpos($value,".") ? (double)substr($value, 0, strpos($value,".")) : $value;
+        return strpos($value, ".") ? (double)Tools::substr($value, 0, strpos($value, ".")) : $value;
     }
 
 
@@ -196,5 +196,4 @@ class UtilMercadoPago
 
         return isset($result['id_order']) ? $result['id_order'] : false;
     }
-
 }

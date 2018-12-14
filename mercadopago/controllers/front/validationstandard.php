@@ -30,8 +30,6 @@ class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontCont
 
     public function initContent()
     {
-
-
         parent::initContent();
     
 
@@ -50,8 +48,6 @@ class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontCont
             $status_details = array();
             $transaction_amounts = 0;
             $collection_ids = explode(',', Tools::getValue('collection_id'));
-
-            $merchant_order_id = Tools::getValue('merchant_order_id');
 
             $mercadopago = $this->module;
             $mercadopago_sdk = MPApi::getInstanceMP();

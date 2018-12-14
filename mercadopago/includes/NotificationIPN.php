@@ -1,7 +1,6 @@
 <?php
-
 /**
- * 2007-2015 PrestaShop.
+ * 2007-2018 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +18,7 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    henriqueleite
+ *  @author    MercadoPago
  *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
  *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of MercadoPago
@@ -27,7 +26,7 @@
 
 class NotificationIPN
 {
-    public function listenIPN($checkout, $topic, $id) 
+    public function listenIPN($checkout, $topic, $id)
     {
         $payment_method_ids = array();
         $payment_ids = array();
@@ -121,22 +120,20 @@ class NotificationIPN
                     }
                 }
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             UtilMercadoPago::log("LOG exception", "===listenIPN postProcess checkout====". $e->getMessage());
-            var_dump(http_response_code(500));   
+            var_dump(http_response_code(500));
         }
     }
     
     private function updateOrder(
         $payment_ids,
         $payment_statuses,
-        $payment_types,
         $external_reference,
-        $result,
         $checkout
     ) {
         $order = null;
-        try {        
+        try {
             // if has two creditcard validate whether payment has same status in order to continue validating order
             if (count($payment_statuses) == 1 ||
                 (count($payment_statuses) == 2 &&
@@ -144,7 +141,6 @@ class NotificationIPN
             ) {
                 $order = null;
                 $payment_status = $payment_statuses[0];
-                $payment_type = $payment_types[0];
                 // just change if there is an order status
                 $id_cart = $external_reference;
                 $id_order = UtilMercadoPago::getOrderByCartId($id_cart);
@@ -222,7 +218,8 @@ class NotificationIPN
 
     public static function getPriceTotalByIdCart($idCart)
     {
-        return Db::getInstance()->getValue('SELECT total_paid_real FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$idCart);
-    }    
-
+        return Db::getInstance()->getValue(
+            'SELECT total_paid_real FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$idCart
+        );
+    }
 }

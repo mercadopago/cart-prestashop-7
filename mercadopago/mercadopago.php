@@ -1,28 +1,28 @@
 <?php
-/*
-* 2007-2015 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+/**
+ * 2007-2018 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    MercadoPago
+ *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
+ *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *  International Registered Trademark & Property of MercadoPago
+ */
 
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
@@ -35,7 +35,7 @@ include dirname(__FILE__)."/includes/MPApi.php";
 class MercadoPago extends PaymentModule
 {
     protected $html = "";
-    protected $_postErrors = array();
+    protected $postErrors = array();
 
     public $details;
     public $owner;
@@ -127,24 +127,39 @@ class MercadoPago extends PaymentModule
 
         $this->currencies = true;
         $this->currencies_mode = "checkbox";
-        $this->confirmUninstall = $this->l('Are you sure you want to uninstall?', array(), 'Modules.Mercadopago.Admin');
+        $this->confirmUninstall = $this->l(
+            'Are you sure you want to uninstall?',
+            array(),
+            'Modules.Mercadopago.Admin'
+        );
         if (!isset($this->access_key) || !isset($this->secret_key)) {
-            $this->warning = $this->l('Your Mercado Pago details must be configured before using this module.', array(), 'Modules.Mercadopago.Admin');
+            $this->warning = $this->l(
+                'Your Mercado Pago details must be configured before using this module.',
+                array(),
+                'Modules.Mercadopago.Admin'
+            );
         }
         $this->bootstrap = true;
         parent::__construct();
 
         $this->displayName = $this->l("Mercado Pago");
-        $this->description = $this->l('Receive your payments using Mercado Pago, you can using the Checkout Standard.', array(), 'Modules.Mercadopago.Admin');
+        $this->description = $this->l(
+            'Receive your payments using Mercado Pago, you can using the Checkout Standard.',
+            array(),
+            'Modules.Mercadopago.Admin'
+        );
 
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
-            $this->warning = $this->l("No currency has been set for this module.", array(), 'Modules.Mercadopago.Admin');
+            $this->warning = $this->l(
+                "No currency has been set for this module.",
+                array(),
+                'Modules.Mercadopago.Admin'
+            );
         }
     }
 
     public function install()
     {
-        $returnStatus = $this->createStates();
         return parent::install() &&
             $this->registerHook('paymentOptions') &&
             $this->registerHook('displayOrderDetail') &&
@@ -231,7 +246,7 @@ class MercadoPago extends PaymentModule
         return $this->display(__file__, '/views/templates/hook/display_admin_order.tpl');
     }
 
-    private function setTracking($order, $shipments, $update)
+    private function setTracking($order, $shipments)
     {
         $shipment_id = null;
         $retorno = null;
@@ -267,16 +282,28 @@ class MercadoPago extends PaymentModule
                         $substatus_description = $this->l('Unsuccessful', array(), 'Modules.Mercadopago.Admin');
                         break;
                     case 'delayed':
-                        $substatus_description = $this->l('Sending the delayed path', array(), 'Modules.Mercadopago.Admin');
+                        $substatus_description = $this->l(
+                            'Sending the delayed path',
+                            array(),
+                            'Modules.Mercadopago.Admin'
+                        );
                         break;
                     case 'receiver_absent':
-                        $substatus_description = $this->l('Missing recipient for delivery', array(), 'Modules.Mercadopago.Admin');
+                        $substatus_description = $this->l(
+                            'Missing recipient for delivery',
+                            array(),
+                            'Modules.Mercadopago.Admin'
+                        );
                         break;
                     case 'returning_to_sender':
                         $substatus_description = $this->l('In return to sender', array(), 'Modules.Mercadopago.Admin');
                         break;
                     case 'claimed_me':
-                        $substatus_description = $this->l('Buyer initiates complaint and requested a refund.', array(), 'Modules.Mercadopago.Admin');
+                        $substatus_description = $this->l(
+                            'Buyer initiates complaint and requested a refund.',
+                            array(),
+                            'Modules.Mercadopago.Admin'
+                        );
                         break;
                     default:
                         $substatus_description = $response_shipment['substatus'];
@@ -314,7 +341,7 @@ class MercadoPago extends PaymentModule
                 $order_carrier = new OrderCarrier($id_order_carrier);
                 $order_carrier->tracking_number = $tracking_number;
                 $order_carrier->update();
-                // if ($update) {
+            // if ($update) {
                 //     $id_order_carrier = $order->getIdOrderCarrier();
                 //     $order_carrier = new OrderCarrier($id_order_carrier);
                 //     $order_carrier->tracking_number = $tracking_number;
@@ -356,7 +383,7 @@ class MercadoPago extends PaymentModule
             $order_payments = $order->getOrderPayments();
             foreach ($order_payments as $order_payment) {
                 $result = MPApi::getInstanceMP()->getPayment($order_payment->transaction_id);
-                if ($result['status'] == '404' || $result['status'] == '401' ) {
+                if ($result['status'] == '404' || $result['status'] == '401') {
                     $result = MPApi::getInstanceMP()->getPaymentStandard($order_payment->transaction_id);
 
                     $result_merchant = MPApi::getInstanceMP()->getMerchantOrder(
@@ -559,7 +586,7 @@ class MercadoPago extends PaymentModule
             }
         }
         if (!is_null($this->orderStateAvailable(Configuration::get('MERCADOPAGO_STATUS_11')))) {
-            $update = Db::getInstance()->update(
+            Db::getInstance()->update(
                 'order_state',
                 array(
                     'logable' => 1,
@@ -570,7 +597,7 @@ class MercadoPago extends PaymentModule
         }
       
         if (!is_null($this->orderStateAvailable(Configuration::get('MERCADOPAGO_STATUS_1')))) {
-            $update = Db::getInstance()->update(
+            Db::getInstance()->update(
                 'order_state',
                 array(
                     'logable' => 1,
@@ -578,11 +605,10 @@ class MercadoPago extends PaymentModule
                     'send_email' => 1,
                     'invoice' => 1,
                     'pdf_invoice' => 1
-                  
                 ),
                 'module_name = "mercadopago" and id_order_state = '.Configuration::get('MERCADOPAGO_STATUS_1')
             );
-        }              
+        }
         return true;
     }
 
@@ -620,7 +646,6 @@ class MercadoPago extends PaymentModule
 
     public function uninstall()
     {
-
         if (!Configuration::deleteByName("MERCADOPAGO_CHECKOUT_DISPLAY")
             || !Configuration::deleteByName("MERCADOENVIOS_ACTIVATE")
 
@@ -630,7 +655,7 @@ class MercadoPago extends PaymentModule
             || !$this->unregisterHook("paymentReturn")
             || !$this->unregisterHook("header")
             || !parent::uninstall()) {
-                return false;
+            return false;
         }
 
         return true;
@@ -734,7 +759,10 @@ class MercadoPago extends PaymentModule
                 $payments[$i]["id"] = $paymentMethod["id"];
                 $payments[$i]["title"] = $paymentTypeLowerCase;
                 $payments[$i]["type"] = $paymentMethod["payment_type_id"];
-                $payments[$i]["active"] = Tools::getValue("MERCADOPAGO_".$paymentMethod["id"]."_ACTIVE", $activeConfigName);
+                $payments[$i]["active"] = Tools::getValue(
+                    "MERCADOPAGO_".$paymentMethod["id"]."_ACTIVE",
+                    $activeConfigName
+                );
                 $payments[$i]["mode"] = Tools::getValue("MERCADOPAGO_".$paymentMethod["id"]."_MODE", $modeConfigName);
                 $payments[$i]["brand"] = $paymentMethod["secure_thumbnail"];
                 $payments[$i]["tooltips"] = "";
@@ -861,7 +889,6 @@ class MercadoPago extends PaymentModule
                 $this->context->cookie->mercadoPagoConfigMessage = $warning;
             } else {
                 $this->updateGeneralSetting();
-
             }
         }
     }
@@ -869,16 +896,11 @@ class MercadoPago extends PaymentModule
     protected function updateGeneralSetting()
     {
         if (Tools::isSubmit("btnSubmit")) {
-            $client_id = Tools::getValue("MERCADOPAGO_CLIENT_ID");
-            $client_secret = Tools::getValue("MERCADOPAGO_CLIENT_SECRET");
-
             Configuration::updateValue("MERCADOPAGO_CLIENT_ID", Tools::getValue("MERCADOPAGO_CLIENT_ID"));
             Configuration::updateValue("MERCADOPAGO_CLIENT_SECRET", Tools::getValue("MERCADOPAGO_CLIENT_SECRET"));
             Configuration::updateValue("MERCADOPAGO_CHECKOUT_DISPLAY", Tools::getValue("MERCADOPAGO_CHECKOUT_DISPLAY"));
             Configuration::updateValue("MERCADOPAGO_CATEGORY", Tools::getValue("MERCADOPAGO_CATEGORY"));
-
             Configuration::updateValue("MERCADOPAGO_INSTALLMENTS", Tools::getValue("MERCADOPAGO_INSTALLMENTS"));
-
             Configuration::updateValue("MERCADOPAGO_COUNTRY", MPApi::getInstanceMP()->getCountry());
 
             //BY DEFAULT SET THE BUTTON THAT ACTIVE THE PAYMENT FOR ENABLE
@@ -921,7 +943,7 @@ class MercadoPago extends PaymentModule
             "thisPath" => $this->_path,
             "log" => $this->_path . "/logs/mercadopago.log",
             "tagName" => $tagName,
-            "url" => $url           
+            "url" => $url
         );
         $this->context->smarty->assign($tplVars);
         return $this->display(__FILE__, "views/templates/admin/requirements.tpl");
@@ -942,7 +964,6 @@ class MercadoPago extends PaymentModule
     {
         if (Tools::isSubmit("btnSubmitPaymentConfig")) {
             $ativo = 0;
-            $posicao = 0;
             foreach (MPApi::getInstanceMP()->getPaymentMethods() as $paymentMethod) {
                 $active = Tools::getValue("MERCADOPAGO_".$paymentMethod["id"]."_ACTIVE");
                 $ativo += $active;
@@ -954,8 +975,8 @@ class MercadoPago extends PaymentModule
             if ($ativo == 0) {
                 $warning = $this->l("It is necessary that at least one payment method enable.");
                 $this->context->cookie->mercadoPagoMessageSuccess = false;
-                $this->context->cookie->mercadoPagoConfigMessage = $warning;   
-                return;             
+                $this->context->cookie->mercadoPagoConfigMessage = $warning;
+                return;
             }
 
             Configuration::updateValue("MERCADOPAGO_STARDAND_ACTIVE", Tools::getValue("MERCADOPAGO_STARDAND_ACTIVE"));
@@ -966,8 +987,10 @@ class MercadoPago extends PaymentModule
             if ($mercadoenvios_activate == 1 &&
                 count(Tools::jsonDecode(Configuration::get('MERCADOPAGO_CARRIER'))) == 0) {
                 $this->setCarriers();
-            } elseif ($mercadoenvios_activate == 0 && count(Tools::jsonDecode(Configuration::get('MERCADOPAGO_CARRIER'))) > 0) {
-                $this->removeMercadoEnvios();
+            } elseif ($mercadoenvios_activate == 0 &&
+                count(Tools::jsonDecode(Configuration::get('MERCADOPAGO_CARRIER'))) > 0
+                ) {
+                    $this->removeMercadoEnvios();
             }
 
             if ($this->l("SUCCESS_GENERAL_PAYMENTCONFIG") == "SUCCESS_GENERAL_PAYMENTCONFIG") {
@@ -1082,7 +1105,7 @@ class MercadoPago extends PaymentModule
 
     private function getDisplayList($display)
     {
-        $displayList = array (
+        $displayList = array(
             // array(
             //    "id" => "IFRAME",
             //    "name"   => $display["iframe"]
@@ -1099,7 +1122,7 @@ class MercadoPago extends PaymentModule
 
     private function getDisplayCategoryList($display)
     {
-        $displayList = array (
+        $displayList = array(
             array(
                "id" => "others",
                "name"   => $display["others"]
@@ -1219,20 +1242,24 @@ class MercadoPago extends PaymentModule
         //descrições
         $locale["client_id"]["desc"] =
                 $this->l("This field is required and you can't to show to other people.
-                For more information: https://www.mercadopago.com.br/developers/en/solutions/payments/basic-checkout/receive-payments.");
+                For more information: 
+                https://www.mercadopago.com.br/developers/en/solutions/payments/basic-checkout/receive-payments.");
         $locale["client_secret"]["desc"] =
                $this->l("This field is required and you can't to show to other people.
-                For more information: https://www.mercadopago.com.br/developers/en/solutions/payments/basic-checkout/receive-payments.");
+                For more information: 
+                https://www.mercadopago.com.br/developers/en/solutions/payments/basic-checkout/receive-payments.");
 
         $locale["checkout_installments"]["label"] = $this->l("Installments");
-        $locale["checkout_installments"]["desc"] = $this->l("Inform the allowed amount of parcels that the customers can install, maximum 24.");
+        $locale["checkout_installments"]["desc"] = $this->l("Inform the allowed amount of parcels 
+        that the customers can install, maximum 24.");
 
         $locale["checkout_display_category"]["label"] = "Categoria";
         $locale["checkout_display_category"]["others"] = "Other categories";
 
         $locale["checkout_display_category"]["desc"] = "Selecione a categoria da sua loja.";
         $locale["checkout_display_category"]["art"] = "Collectibles & Art";
-        $locale["checkout_display_category"]["baby"] = "Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats";
+        $locale["checkout_display_category"]["baby"] = "Toys for Baby, Stroller,".
+        " Stroller Accessories, Car Safety Seats";
 
         $locale["checkout_display_category"]["coupons"] = "Coupons";
         $locale["checkout_display_category"]["donations"] = "Donations";
@@ -1241,22 +1268,27 @@ class MercadoPago extends PaymentModule
         $locale["checkout_display_category"]["cameras"] = "Cameras & Photography";
         $locale["checkout_display_category"]["video_games"] = "Video Games & Consoles";
         $locale["checkout_display_category"]["television"] = "LCD, LED, Smart TV, Plasmas, TVs";
-        $locale["checkout_display_category"]["car_electronics"] = "Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC";
+        $locale["checkout_display_category"]["car_electronics"] = "Car Audio, Car Alarm Systems & 
+        Security, Car DVRs, Car Video Players, Car PC";
         $locale["checkout_display_category"]["electronics"] = "Audio & Surveillance, Video & GPS, Others";
         $locale["checkout_display_category"]["automotive"] = "Parts & Accessories";
-        $locale["checkout_display_category"]["entertainment"] = "Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys";
+        $locale["checkout_display_category"]["entertainment"] = "Music, Movies & Series, Books, 
+        Magazines & Comics, Board Games & Toys";
 
-        $locale["checkout_display_category"]["fashion"] = "Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches";
+        $locale["checkout_display_category"]["fashion"] = "Men\'s, Women\'s, Kids & baby, 
+        Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches";
         $locale["checkout_display_category"]["games"] = "Online Games & Credits";
         $locale["checkout_display_category"]["home"] = "Home appliances. Home & Garden";
         $locale["checkout_display_category"]["musical"] = "Instruments & Gear";
         $locale["checkout_display_category"]["phones"] = "Cell Phones & Accessories";
         $locale["checkout_display_category"]["services"] = "General services";
         $locale["checkout_display_category"]["learnings"] = "Trainings, Conferences, Workshops";
-        $locale["checkout_display_category"]["tickets"] = "Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more";
+        $locale["checkout_display_category"]["tickets"] = "Tickets for Concerts, Sports, Arts, 
+        Theater, Family, Excursions tickets, Events & more";
         $locale["checkout_display_category"]["travels"] = "Plane tickets, Hotel vouchers, Travel vouchers";
         $locale["checkout_display_category"]["virtual_goods"] = "E-books, Music Files, Software, Digital Images,".
-        "PDF Files and any item which can be electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge";
+        "PDF Files and any item which can be electronically stored in a file, 
+        Mobile Recharge, DTH Recharge and any Online Recharge";
 
         $locale["save"] = $this->l("Save");
 
@@ -1304,11 +1336,8 @@ class MercadoPago extends PaymentModule
         if (!$this->checkCurrency($params["cart"])) {
             return;
         }
-        $payment_options = [
-            $this->getExternalPaymentOption()
-        ];
 
-        return $payment_options;
+        return $this->getExternalPaymentOption();
     }
 
     public function hookPaymentReturn($parameters)
@@ -1384,10 +1413,11 @@ class MercadoPago extends PaymentModule
         }
         return false;
     }
-            //die($this->module->getTranslator()->trans('This payment method is not available.', array(), 'Modules.Wirepayment.Shop'));
+    //die($this->module->getTranslator()->trans('This payment method is not available.',
+    // array(), 'Modules.Wirepayment.Shop'));
     public function getExternalPaymentOption()
     {
-        $country = strtoupper(MPApi::getInstanceMP()->getCountry());
+        $country = Tools::strtoupper(MPApi::getInstanceMP()->getCountry());
         
         $externalOption = new PaymentOption();
         $externalOption->setCallToActionText($this->l(''))
@@ -1396,14 +1426,15 @@ class MercadoPago extends PaymentModule
 
                        ->setLogo(empty(UtilMercadoPago::$DEFAULT_BANNER[$country]) ?
                           Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/mercadopago.png")
-                          : Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/$country/mercadopago_468X60.jpg"))
-                       ->setInputs([
-                            "token" => [
+                          : Media::getMediaPath(_PS_MODULE_DIR_.$this->name.
+                          "/views/img/$country/mercadopago_468X60.jpg"))
+                       ->setInputs(array(
+                            "token" => array(
                                 "name" =>"token",
                                 "type" =>"hidden",
                                 "value" =>"12345689",
-                            ],
-                        ]);
+                            ),
+                        ));
 
         UtilMercadoPago::log("getExternalPaymentOption", "pagamento");
         return $externalOption;
@@ -1411,21 +1442,21 @@ class MercadoPago extends PaymentModule
 
     protected function generateForm()
     {
-        $months = [];
+        $months = array();
         for ($i = 1; $i <= 12; $i++) {
-            $months[] = sprintf("%02d", $i);
+            $months = sprintf("%02d", $i);
         }
 
-        $years = [];
+        $years = array();
         for ($i = 0; $i <= 10; $i++) {
-            $years[] = date("Y", strtotime("+".$i." years"));
+            $years = date("Y", strtotime("+".$i." years"));
         }
 
-        $this->context->smarty->assign([
+        $this->context->smarty->assign(array(
             "action" => $this->context->link->getModuleLink($this->name, "validation", array(), true),
             "months" => $months,
             "years" => $years,
-        ]);
+        ));
 
         return $this->context->smarty->fetch("module:paymentexample/views/templates/front/payment_form.tpl");
     }
@@ -1436,10 +1467,10 @@ class MercadoPago extends PaymentModule
             case 'ERROR_PENDING':
                 $message = $this->l('Unfortunately, the confirmation of your payment failed.
                     Please contact your merchant for clarification.');
-            break;
+                break;
             default:
                 $message = "";
-            break;
+                break;
         }
         return $message;
     }
@@ -1723,7 +1754,9 @@ class MercadoPago extends PaymentModule
                     $height = $sort_dim[1];
                     $width = $sort_dim[2];
                 }
-                $weight += ($p['weight2'] > 0.1 ? $p['weight2'] : Configuration::get('default_weight')) * $p['quantity'];
+                $weight += (
+                        $p['weight2'] > 0.1 ? $p['weight2'] : Configuration::get('default_weight')
+                    ) * $p['quantity'];
             }
         }
 
@@ -1754,7 +1787,6 @@ class MercadoPago extends PaymentModule
         $id_mercadoenvios_service_code = $lista_shipping['MP_CARRIER'][$id_carrier];
 
         $cart = Context::getContext()->cart;
-        $price_total = 0;
 
         // Init var
         $address = new Address($params->id_address_delivery);

@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop.
+ * 2007-2018 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
@@ -18,11 +18,12 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    henriqueleite
+ *  @author    MercadoPago
  *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
  *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of MercadoPago
  */
+
 class MercadoPagoStandardModuleFrontController extends ModuleFrontController
 {
     protected $paymentMethod = '';
@@ -41,11 +42,13 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         $data = array();
         Tools::getValue('token');
         $cart = $this->context->cart;
-        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
+        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
+            $cart->id_address_invoice == 0 || !$this->module->active) {
             Tools::redirect('index.php?controller=order&step=1');
         }
-        $mercadopago = $this->module;
-        // Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
+
+        // Check that this payment option is still available in case the customer changed
+        // his address just before the end of the checkout process
         $authorized = false;
         foreach (Module::getPaymentModules() as $module) {
             if ($module['name'] == 'mercadopago') {
@@ -281,7 +284,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'cart_id' => $cart->id,
                 'notification' => "ipn"),
                 $this->module->isSSLEnabled()
-            );          
+            );
         }
 
         // swap to payer index since customer is only for transparent
@@ -290,21 +293,6 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         $data['payer'] = $data['customer'];
         unset($data['customer']);
         return $data;
-    }
-
-    private function getURLReturn($cart_id, $mercadopagoSettings, $typeReturn)
-    {
-        $statusUrl = $this->context->link->getModuleLink(
-            'mercadopago',
-            'validationstandard',
-            array('checkout' => 'standard',
-            'cart_id' => $cart_id,
-            'typeReturn' => $typeReturn,
-            'notification' => "back_urls"),
-            $this->module->isSSLEnabled()
-        );
-
-        return $statusUrl;
     }
 
     private function getURLSite()
@@ -357,5 +345,4 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         }
         return $excluded_payment_methods;
     }
-
 }
