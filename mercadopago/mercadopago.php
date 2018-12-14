@@ -118,7 +118,7 @@ class MercadoPago extends PaymentModule
     {
         $this->name = "mercadopago";
         $this->tab = "payments_gateways";
-        $this->version = MPApi::VERSION;
+        $this->version = '1.1.0';
         $this->ps_versions_compliancy = array("min" => "1.7", "max" => _PS_VERSION_);
         $this->author = "Mercado Pago";
         $this->controllers = array("validationstandard", "standardreturn");
@@ -143,11 +143,7 @@ class MercadoPago extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l("Mercado Pago");
-        $this->description = $this->l(
-            'Receive your payments using Mercado Pago, you can using the Checkout Standard.',
-            array(),
-            'Modules.Mercadopago.Admin'
-        );
+        $this->description = $this->l("Receive your payments with Mercado Pago checkout standard.");
 
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->l(
@@ -160,7 +156,9 @@ class MercadoPago extends PaymentModule
 
     public function install()
     {
+        $returnStatus = $this->createStates();
         return parent::install() &&
+            $returnStatus &&
             $this->registerHook('paymentOptions') &&
             $this->registerHook('displayOrderDetail') &&
             $this->registerHook('displayAdminOrder') &&
@@ -341,12 +339,6 @@ class MercadoPago extends PaymentModule
                 $order_carrier = new OrderCarrier($id_order_carrier);
                 $order_carrier->tracking_number = $tracking_number;
                 $order_carrier->update();
-            // if ($update) {
-                //     $id_order_carrier = $order->getIdOrderCarrier();
-                //     $order_carrier = new OrderCarrier($id_order_carrier);
-                //     $order_carrier->tracking_number = $tracking_number;
-                //     $order_carrier->update();
-                // }
             } else {
                 $retorno = array(
                     'shipment_id' => $shipment_id,
@@ -781,7 +773,6 @@ class MercadoPago extends PaymentModule
                 "thisPath" => Tools::getShopDomain(true, true).__PS_BASE_URI__."modules/mercadopago/",
                 "fieldsValue" => $this->getPaymentConfiguration(),
                 "currentIndex" => $this->getAdminModuleLink(),
-                "label" => $locale["label"],
                 "button" => $locale["button"]
             );
         } else {
@@ -1336,8 +1327,12 @@ class MercadoPago extends PaymentModule
         if (!$this->checkCurrency($params["cart"])) {
             return;
         }
-
-        return $this->getExternalPaymentOption();
+      
+        $payment_options = array (
+            $this->getExternalPaymentOption(),
+        );
+      
+        return $payment_options;
     }
 
     public function hookPaymentReturn($parameters)
@@ -1413,8 +1408,7 @@ class MercadoPago extends PaymentModule
         }
         return false;
     }
-    //die($this->module->getTranslator()->trans('This payment method is not available.',
-    // array(), 'Modules.Wirepayment.Shop'));
+
     public function getExternalPaymentOption()
     {
         $country = Tools::strtoupper(MPApi::getInstanceMP()->getCountry());
@@ -1423,44 +1417,14 @@ class MercadoPago extends PaymentModule
         $externalOption->setCallToActionText($this->l(''))
                        ->setAction($this->context->link->getModuleLink($this->name, "standard", array(), true))
                        ->setModuleName($this->name)
-
                        ->setLogo(empty(UtilMercadoPago::$DEFAULT_BANNER[$country]) ?
                           Media::getMediaPath(_PS_MODULE_DIR_.$this->name."/views/img/mercadopago.png")
                           : Media::getMediaPath(_PS_MODULE_DIR_.$this->name.
-                          "/views/img/$country/mercadopago_468X60.jpg"))
-                       ->setInputs(array(
-                            "token" => array(
-                                "name" =>"token",
-                                "type" =>"hidden",
-                                "value" =>"12345689",
-                            ),
-                        ));
-
-        UtilMercadoPago::log("getExternalPaymentOption", "pagamento");
+                          "/views/img/$country/mercadopago_468X60.jpg"));
+      
         return $externalOption;
     }
-
-    protected function generateForm()
-    {
-        $months = array();
-        for ($i = 1; $i <= 12; $i++) {
-            $months = sprintf("%02d", $i);
-        }
-
-        $years = array();
-        for ($i = 0; $i <= 10; $i++) {
-            $years = date("Y", strtotime("+".$i." years"));
-        }
-
-        $this->context->smarty->assign(array(
-            "action" => $this->context->link->getModuleLink($this->name, "validation", array(), true),
-            "months" => $months,
-            "years" => $years,
-        ));
-
-        return $this->context->smarty->fetch("module:paymentexample/views/templates/front/payment_form.tpl");
-    }
-
+  
     public function getMappingError($idError)
     {
         switch ($idError) {

@@ -77,6 +77,7 @@ class UtilMercadoPago
         $date = date('d.m.Y h:i:s');
         $log = "Date:  ".$date."  | ".$msg.
         "|  " . $exceptionMessage . "\n";
+ 
         error_log($log, 3, _PS_ROOT_DIR_ . '/modules/mercadopago/logs/mercadopago.log');
     }
 

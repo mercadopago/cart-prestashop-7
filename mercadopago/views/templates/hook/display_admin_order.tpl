@@ -142,30 +142,7 @@
 {/if}
 
 
-<!-- 			$.ajax({
-				type : "GET",
-				url : "{$payment_pos_action_url|escape:'htmlall':'UTF-8'}" + "?id_order={$id_order|escape:'htmlall':'UTF-8'}" +
-				"&id_point="+ $('#pos_id').val(),
-					success : function(r) {
-						alert("entrou aqui");
-						if (r.status == 200) {
-							console.info("Sucesso");
-						} else {
-							alert(r.message);
-						}
-					},
-					error : function(r) {
-						console.info(r);
-						alert(r.message);
-					}
-				}); -->
-
 <script type="text/javascript">
-
-	// function cancelOrder() {
-	// 	location.reload();
-	// }
-	// 
 
 	{if $statusOrder == "Pendente"}
 		$('#btoCancelOrder').click(function() {
@@ -198,7 +175,6 @@
 			},  "json")
 			  .fail(function(data) {
 			  	alert("Ocurred a error, send a email to modulos@mercadopago.com.br");
-			    console.info("Error:  " +  data );
 			  }).complete(function(data) {
 			  	$( "#show_message_waiting" ).hide();
 			  });

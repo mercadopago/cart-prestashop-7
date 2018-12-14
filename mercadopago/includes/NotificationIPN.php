@@ -81,7 +81,6 @@ class NotificationIPN
                     $this->updateOrder(
                         $payment_ids,
                         $payment_statuses,
-                        $payment_types,
                         $external_reference,
                         $result,
                         $checkout
@@ -143,7 +142,7 @@ class NotificationIPN
                 $payment_status = $payment_statuses[0];
                 // just change if there is an order status
                 $id_cart = $external_reference;
-                $id_order = UtilMercadoPago::getOrderByCartId($id_cart);
+                $id_order = Order::getOrderByCartId($id_cart);
                 $order = new Order($id_order);
                 $payment_status = Configuration::get(UtilMercadoPago::$statusMercadoPagoPresta[$payment_status]);
                 if ($id_order) {
@@ -164,10 +163,10 @@ class NotificationIPN
                 $statusPS = (int)$order->getCurrentState();
                 if ($payment_status != $statusPS) {
                     $order->setCurrentState($payment_status);
+                    $payments = $order->getOrderPaymentCollection();
+                    $payments[0]->transaction_id = implode(' / ', $payment_ids);
+                    $payments[0]->update();
                 }
-                $payments = $order->getOrderPaymentCollection();
-                $payments[0]->transaction_id = implode(' / ', $payment_ids);
-                $payments[0]->update();
             }
         } catch (Exception $e) {
             UtilMercadoPago::log("Exception", "vai atualizar " . $e->getMessage());

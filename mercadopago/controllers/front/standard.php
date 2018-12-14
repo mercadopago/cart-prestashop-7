@@ -268,9 +268,9 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         }
 
         $data['auto_return'] = $mercadopagoSettings['auto_return'] == 'approved' ? 'approved' : '';
-        $data['back_urls']['success'] = $this->getURLReturn($cart->id, $mercadopagoSettings, 'success');
-        $data['back_urls']['failure'] = $this->getURLReturn($cart->id, $mercadopagoSettings, 'failure');
-        $data['back_urls']['pending'] = $this->getURLReturn($cart->id, $mercadopagoSettings, 'pending');
+        $data['back_urls']['success'] = $this->getURLReturn($cart->id, 'success');
+        $data['back_urls']['failure'] = $this->getURLReturn($cart->id, 'failure');
+        $data['back_urls']['pending'] = $this->getURLReturn($cart->id, 'pending');
         $data['payment_methods']['excluded_payment_methods'] = $this->getExcludedPaymentMethods();
         $data['payment_methods']['excluded_payment_types'] = array();
         $data['payment_methods']['installments'] = (integer) $mercadopagoSettings['installments'];
@@ -286,7 +286,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 $this->module->isSSLEnabled()
             );
         }
-
+      
         // swap to payer index since customer is only for transparent
         $data['customer']['name'] = $data['customer']['first_name'];
         $data['customer']['surname'] = $data['customer']['last_name'];
@@ -295,6 +295,20 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         return $data;
     }
 
+    private function getURLReturn($cart_id, $typeReturn)
+    {
+        $statusUrl = $this->context->link->getModuleLink(
+            'mercadopago',
+            'validationstandard',
+            array('checkout' => 'standard',
+            'cart_id' => $cart_id,
+            'typeReturn' => $typeReturn,
+            'notification' => "back_urls"),
+            $this->module->isSSLEnabled()
+        );
+        return $statusUrl;
+    }
+  
     private function getURLSite()
     {
         $url = Tools::htmlentitiesutf8(

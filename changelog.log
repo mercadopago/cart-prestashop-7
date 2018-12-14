@@ -23,3 +23,6 @@ Fix in IPN notification with states opened
 
 V1.0.15(05/11/2018)
 - Fix the key used to create the orders, customer->secure_key to cart-secure_key and banner in checkout
+
+V1.1.0(14/12/2018)
+- Prestashop validation

@@ -32,6 +32,10 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+        //It is necessary to give time for the function validateOrder create an order.
+        // https://goo.gl/oC44t8
+        sleep(2);
+      
         $cart = new Cart(Tools::getValue('cart_id'));
         $total = (float)($cart->getOrderTotal(true, Cart::BOTH));
         $notification = new NotificationIPN();
@@ -79,7 +83,6 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
             "Notification received - ",
             "cart id ".Tools::getValue('cart_id')." - the order exist ? = " . $cart->orderExists()
         );
-        
         if ($topic == 'merchant_order') {
             $mercadopago_sdk = MPApi::getInstanceMP();
             $result = $mercadopago_sdk->getMerchantOrder($id);
@@ -88,7 +91,6 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
                 die();
             }
         }
-      
         if ($checkout == 'standard' && $topic == 'merchant_order') {
             $id_order = Order::getOrderByCartId(Tools::getValue('cart_id'));
             if (!$cart->orderExists()) {
@@ -100,6 +102,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
                 var_dump(http_response_code(500));
                 $displayName = $mercadopago->l('Mercado Pago Redirect');
                 $payment_status = Configuration::get(UtilMercadoPago::$statusMercadoPagoPresta['started']);
+              
                 try {
                     $mercadopago->validateOrder(
                         $cart->id,
