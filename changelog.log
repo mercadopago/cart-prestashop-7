@@ -26,3 +26,7 @@ V1.0.15(05/11/2018)
 
 V1.1.0(14/12/2018)
 - Prestashop validation
+
+V1.1.1(16/01/2019)
+- Fix ID sent to validateOrder
+- Fix Order Status Started
