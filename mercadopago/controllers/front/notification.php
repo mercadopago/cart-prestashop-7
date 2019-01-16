@@ -100,9 +100,11 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
                     " and return 500 to API, because is necessary to create before."
                 );
                 var_dump(http_response_code(500));
-                $displayName = $mercadopago->l('Mercado Pago Redirect');
+                $displayName = $mercadopago->l('Mercado Pago standard');
                 $payment_status = Configuration::get(UtilMercadoPago::$statusMercadoPagoPresta['started']);
-              
+
+                $customer = new Customer((int)$cart->id_customer);
+                
                 try {
                     $mercadopago->validateOrder(
                         $cart->id,
@@ -113,7 +115,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
                         array(),
                         (int)$cart->id_currency,
                         false,
-                        $cart->secure_key
+                        $customer->secure_key
                     );
                     $id_order = Order::getOrderByCartId(Tools::getValue('cart_id'));
                     UtilMercadoPago::log(

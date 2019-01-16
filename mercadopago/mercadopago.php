@@ -581,7 +581,7 @@ class MercadoPago extends PaymentModule
             Db::getInstance()->update(
                 'order_state',
                 array(
-                    'logable' => 1,
+                    'logable' => 0,
                     'send_email' => 0
                 ),
                 'module_name = "mercadopago" and id_order_state = '.Configuration::get('MERCADOPAGO_STATUS_11')
