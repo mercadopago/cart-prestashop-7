@@ -1,5 +1,3 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/a3efc709ca5a444807b9/maintainability)](https://codeclimate.com/github/mercadopago/cart-prestashop/maintainability)
-
 # Prestashop - Mercado Pago Module (1.7.x)
 ---
 
