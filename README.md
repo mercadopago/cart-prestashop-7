@@ -12,6 +12,6 @@ For a better experience, you will be redirected to our site by clicking on the l
 * [Integration](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_integration)
 * [Receive Payments](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_receive_payments)
 
-## Suport
+## Support
 
 Something's wrong? [Get in touch with our support](https://www.mercadopago.com.ar/developers/en/support)
