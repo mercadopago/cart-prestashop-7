@@ -1,6 +1,6 @@
-# Prestashop 1.7.x - Mercado Pago Module
+# Prestashop 1.7.x - Mercado Pago Module (v4.0.0)
 
-**Mercado Pago Module (v4.0.0)**
+With the official module of Mercado Pago you will have an integration, hundreds of solutions and thousands of sales. Maximize your conversions and make your customers return to your store by increasing their confidence in the shopping experience.
 
 ## Documentation
 
