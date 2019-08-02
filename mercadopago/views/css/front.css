@@ -1,0 +1,118 @@
+/**
+* 2007-2019 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2019 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+
+.pt-20{
+    padding-top: 20px !important;
+}
+
+.title-checkout{
+    padding: 5px 0 0px;
+}
+
+.subtitle-checkout{
+    padding: 20px 0px 0px;
+    margin: 0px 0 5px !important;
+    text-transform: uppercase;
+    font-family: sans-serif !important;
+}
+
+.badge-checkout{
+    padding: 5px 10px;
+    margin-left: 5px;
+    display: inline-block;
+    background-color: #2ec74b;
+    color: #fff;
+    text-transform: none;
+    border-radius: 2px;
+}
+
+.img-tarjetas{
+    padding: 10px;
+}
+
+.redirect-checkout-six{
+    display: block;
+}
+
+.redirect-checkout-six:hover{
+    background-color: #eee;
+}
+
+.frame-checkout-six{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 25px 20px 20px;
+    margin: 0px 0px 10px;
+}
+
+.title-checkout-six p{
+    display: inline-block;
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;    
+}
+
+.title-checkout-six img{
+    padding-right: 10px;   
+}
+
+.subtitle-checkout-six{
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #04204c;
+    padding: 25px 0 0;
+    margin: 0px;
+}
+
+.redirect-frame{
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 25px 0 10px;
+}
+
+.redirect-frame img{
+    max-width: 160px !important;
+}
+
+.redirect-frame p{
+    padding-top: 15px !important;
+    font-family: sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-stretch: normal !important;
+    line-height: 1.71 !important;
+    letter-spacing: normal !important;
+    text-align: center !important;
+    color: #333333 !important;
+}
