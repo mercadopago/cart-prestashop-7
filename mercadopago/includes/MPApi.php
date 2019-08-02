@@ -24,459 +24,339 @@
  *          International Registered Trademark & Property of MercadoPago
  */
 
-$GLOBALS['LIB_LOCATION'] = dirname(__FILE__);
-
-include_once 'UtilMercadoPago.php';
-include_once 'MPRestCli.php';
-
 class MPApi
 {
-    const VERSION = '1.1.1';
-
-    /* Info */
-    const INFO = 1;
-
-    /* Warning */
-    const WARNING = 2;
-
-    /* Error */
-    const ERROR = 3;
-
-    /* Fatal Error */
-    const FATAL_ERROR = 4;
-
-    private $client_id;
-
-    private $client_secret;
-
-    private $access_data;
-
-    private $sandbox = false;
-
-    public function __construct($client_id, $client_secret)
+    public function __construct()
     {
-        $this->client_id = $client_id;
-        $this->client_secret = $client_secret;
     }
 
-    public static function getInstanceMP()
+    /**
+     * Instance the class
+     *
+     * @return void
+     */
+    public static function getinstance()
     {
         static $mercadopago = null;
         if (null === $mercadopago) {
-            $mercadopago = new MPApi(
-                Configuration::get('MERCADOPAGO_CLIENT_ID'),
-                Configuration::get('MERCADOPAGO_CLIENT_SECRET')
-            );
+            $mercadopago = new MPApi();
         }
-
         return $mercadopago;
     }
 
     /**
-     * Get Access Token for API use
-     */
-    public function getAccessToken()
-    {
-        $app_client_values = $this->buildQuery(
-            array(
-                'client_id' => $this->client_id,
-                'client_secret' => $this->client_secret,
-                'grant_type' => 'client_credentials'
-            )
-        );
-
-        $access_data = MPRestCli::post('/oauth/token', $app_client_values, 'application/x-www-form-urlencoded');
-
-        $this->access_data = $access_data['response'];
-
-        return $this->access_data['access_token'];
-    }
-
-    /**
-     * Get Access Token for API use
-     */
-    public function getAccessTokenResponse()
-    {
-        $app_client_values = $this->buildQuery(
-            array(
-                'client_id' => $this->client_id,
-                'client_secret' => $this->client_secret,
-                'grant_type' => 'client_credentials'
-            )
-        );
-
-        $access_data = MPRestCli::post('/oauth/token', $app_client_values, 'application/x-www-form-urlencoded');
-
-        $this->access_data = $access_data['response'];
-
-        return $access_data['response'];
-    }
-
-    /**
-     * Get Access Token for API use
-     */
-    public function getAccessTokenV1()
-    {
-        return trim(Configuration::get('MERCADOPAGO_ACCESS_TOKEN'));
-    }
-
-    /*
-     * v0
-     */
-    public function isTestUser()
-    {
-        $access_token = $this->getAccessToken();
-        $result = MPRestCli::get('/users/me?access_token=' . $access_token);
-
-        return in_array('test_user', $result['response']['tags']);
-    }
-
-    public function getCountry()
-    {
-        $access_token = $this->getAccessToken();
-        $result = MPRestCli::get('/users/me?access_token=' . $access_token);
-
-        return $result['response']['site_id'];
-    }
-
-    /*
-     * v0
-     */
-    public function calculateEnvios($params)
-    {
-        $access_token = $this->getAccessToken();
-
-        $uri = "/shipping_options";
-        $params["access_token"] = $access_token;
-
-        $uri .= (strpos($uri, "?") === false) ? "?" : "&";
-        $uri .= $this->buildQuery($params);
-
-        $result = MPRestCli::get($uri);
-
-        return  $result;
-    }
-    /**
-     * Get information for specific payment
+     * Get access token
      *
-     * @param int $id
-     * @return array(json)
+     * @return void
      */
-    public function getPayment($id)
+    protected function getAccessToken()
     {
-        $access_token = $this->getAccessTokenV1();
-        $uri_prefix = $this->sandbox ? '/sandbox' : '';
-        $payment_info = MPRestCli::get($uri_prefix . '/v1/payments/' . $id . '?access_token=' . $access_token);
-        return $payment_info;
+        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        }
+
+        return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
     }
 
     /**
-     * Get information for specific payment
-     * https://api.mercadolibre.com/shipments/$id_shipment?access_token='
-     * @param int $id
-     * @return array(json)
-     */
-    public function getTracking($id_shipment)
-    {
-        $access_token = $this->getAccessToken();
-
-        $tracking = MPRestCli::getShipment('/shipments/' . $id_shipment . '?access_token=' . $access_token);
-
-        return $tracking;
-    }
-
-    public function getTagShipment($id_shipment)
-    {
-        $access_token = $this->getAccessToken();
-        $tag_shipment = '/shipment_labels?savePdf=Y&shipment_ids='.$id_shipment.'&access_token=' . $access_token;
-
-        return MPRestCli::API_BASE_MELI_URL.$tag_shipment;
-    }
-
-    public function getTagShipmentZebra($id_shipment)
-    {
-        $access_token = $this->getAccessToken();
-        $tag_shipment = '/shipment_labels?response_type=zpl2&shipment_ids='.
-            $id_shipment.'&access_token=' .
-            $access_token;
-
-        return MPRestCli::API_BASE_MELI_URL.$tag_shipment;
-    }
-
-    /**
-     * Get information for specific payment
+     * Get payment methods
      *
-     * @param int $id
-     * @return array(json)
-     */
-    public function getPaymentStandard($id)
-    {
-        $access_token = $this->getAccessToken();
-
-        $uri_prefix = $this->sandbox ? '/sandbox' : '';
-        $payment_info = MPRestCli::get(
-            $uri_prefix . '/v1/payments/' . $id . '?access_token=' . $access_token
-        );
-
-        
-
-        return $payment_info;
-    }
-
-    /**
-     * Get information for specific payment
-     *
-     * @param int $id
-     * @return array(json)
-     */
-    public function getMerchantOrder($id)
-    {
-        $access_token = $this->getAccessToken();
-
-        $uri_prefix = $this->sandbox ? '/sandbox' : '';
-        $merchant_order = MPRestCli::get($uri_prefix . '/merchant_orders/' . $id . '?access_token=' . $access_token);
-        return $merchant_order;
-    }
-
-    /**
-     * Get all payment methods for merchant country
-     *
-     * @return array(json)
+     * @return void
      */
     public function getPaymentMethods()
     {
-        $result = MPRestCli::get('/sites/' . $this->getCountry() . '/payment_methods?marketplace=NONE');
-        $result = $result['response'];
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/payment_methods?access_token=' . $access_token);
 
-        // remove account_money
-        foreach ($result as $key => $value) {
-            if ($value['payment_type_id'] == 'account_money') {
-                unset($result[$key]);
-            }
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_payment_methods error: ' . $response['response']['message'], 'error');
+            return false;
         }
 
-        return $result;
+        //response treatment
+        $result = $response['response'];
+        asort($result);
+
+        $payments = array();
+        foreach ($result as $value) {
+            $payments[] = array(
+                'id' => Tools::strtoupper($value['id']),
+                'name' => $value['name'],
+                'type' => $value['payment_type_id'],
+                'image' => $value['secure_thumbnail'],
+                'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+            );
+        }
+
+        return $payments;
     }
 
     /**
-     * Get all offline payment methods for merchant country
+     * Get online payment methods
      *
-     * @return array(json)
+     * @return void
+     */
+    public function getOnlinePaymentMethods()
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/payment_methods?access_token=' . $access_token);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_payment_methods error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        asort($result);
+
+        $payments = array();
+        foreach ($result as $value) {
+            if ($value['payment_type_id'] == 'credit_card' ||
+                $value['payment_type_id'] == 'debit_card' ||
+                $value['payment_type_id'] == 'prepaid_card'
+            ) {
+                $payments[] = array(
+                    'id' => Tools::strtoupper($value['id']),
+                    'name' => $value['name'],
+                );
+            }
+        }
+
+        return $payments;
+    }
+
+    /**
+     * Get offline payment methods
+     *
+     * @return void
      */
     public function getOfflinePaymentMethods()
     {
-        $access_token = $this->getAccessTokenV1();
-        $result = MPRestCli::get('/v1/payment_methods?access_token=' . $access_token);
-        $result = $result['response'];
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/payment_methods?access_token=' . $access_token);
 
-        // remove account_money
-        foreach ($result as $key => $value) {
-            if ($value['payment_type_id'] == 'account_money' || $value['payment_type_id'] == 'credit_card' ||
-                 $value['payment_type_id'] == 'debit_card' || $value['payment_type_id'] == 'prepaid_card') {
-                unset($result[$key]);
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_payment_methods error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        asort($result);
+
+        $payments = array();
+        foreach ($result as $value) {
+            if ($value['payment_type_id'] != 'credit_card' &&
+                $value['payment_type_id'] != 'debit_card' &&
+                $value['payment_type_id'] != 'prepaid_card'
+            ) {
+                $payments[] = array(
+                    'id' => Tools::strtoupper($value['id']),
+                    'name' => $value['name'],
+                );
             }
         }
-        return $result;
+
+        return $payments;
     }
 
     /**
-     * Get all offline payment methods for merchant country
+     * Create preference
      *
-     * @return array(json)
-     */
-    public function getPaymentCreditsMLM()
-    {
-        $access_token = $this->getAccessTokenV1();
-        $result = MPRestCli::get('/v1/payment_methods/?access_token=' . $access_token);
-        $result = $result['response'];
-        // remove account_money
-        foreach ($result as $key => $value) {
-            if ($value['payment_type_id'] == 'ticket' ||
-                $value['payment_type_id'] == 'bank_transfer') {
-                unset($result[$key]);
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Create a checkout preference
-     *
-     * @param array $preference
-     * @return array(json)
+     * @param [array] $preference
+     * @return void
      */
     public function createPreference($preference)
     {
         $access_token = $this->getAccessToken();
-        $trackingID = "platform:desktop,type:prestashop,so:".MPApi::VERSION;
-        $preference_result = MPRestCli::postTracking(
+        $tracking_id = "platform:desktop,type:prestashop,so:1.0.0";
+        $response = MPRestCli::postTracking(
             '/checkout/preferences?access_token=' . $access_token,
             $preference,
-            $trackingID
-        );
-        return $preference_result;
-    }
-
-    /*
-     * Create payment v1
-     */
-    public function createCustomPayment($info)
-    {
-        $access_token = $this->getAccessTokenV1();
-        $trackingID = "platform:v1-whitelabel,type:prestashop,so:".MPApi::VERSION;
-        $preference_result = MPRestCli::postTracking(
-            '/v1/payments?access_token=' .
-            $access_token,
-            $info,
-            $trackingID
+            $tracking_id
         );
 
-        return $preference_result;
-    }
-
-    /*
-     * getCustomer
-     */
-    public function getCustomer($params)
-    {
-        $access_token = $this->getAccessTokenV1();
-
-        $uri = "/v1/customers/search";
-        $params["access_token"] = $access_token;
-
-        $uri .= (strpos($uri, "?") === false) ? "?" : "&";
-        $uri .= $this->buildQuery($params);
-
-        $customer = MPRestCli::get($uri);
-
-        return $customer;
-    }
-
-    /*
-     * getCustomerCards
-     */
-    public function getCustomerCards($customerID)
-    {
-        $access_token = $this->getAccessTokenV1();
-        $uri = "/v1/customers/" . $customerID . "?access_token=" . $access_token;
-        $customerCards = MPRestCli::get($uri);
-        return $customerCards;
-    }
-
-    /*
-     * Create customerCard v1
-     * $mp->post ("/v1/customers", array("email" => "test@test.com"));
-     */
-    public function createCustomerCard($params)
-    {
-        $access_token = $this->getAccessTokenV1();
-        $customerResponse = MPRestCli::post("/v1/customers?access_token=" . $access_token, $params);
-
-        if ($customerResponse == null || $customerResponse["status"] != "200") {
-            UtilMercadoPago::logMensagem(
-                'MercadoPago::createCustomerCard - Error: Doens\'t possibled to create the Customer',
-                MPApi::WARNING
-            );
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API create_preferences error: ' . $response['response']['message'], 'error');
+            return false;
         }
-        return $customerResponse;
-    }
 
-    /*
-     * Create customerCard v1
-     */
-    public function addCustomerCard($token, $customerId)
-    {
-        $access_token = $this->getAccessTokenV1();
-        $uri = "/v1/customers/" . $customerId . "/cards?access_token=" . $access_token;
-
-        $result_response = MPRestCli::post($uri, $token);
-        return $result_response;
-    }
-
-    public static function getCategories()
-    {
-        $response = MPRestCli::get('/item_categories');
-        $response = $response['response'];
-        return $response;
-    }
-
-    public function getCheckConfigCard()
-    {
-        $access_token = $this->getAccessTokenV1();
-        $uri = "/settings?access_token=".$access_token;
-        $result = MPRestCli::getConfig($uri);
+        //response treatment
+        $result = $response['response'];
         return $result;
     }
 
-    /*
-     * v1
-     * active/inactive
-     */
-    public function setEnableDisableTwoCard($params)
-    {
-        $access_token = $this->getAccessTokenV1();
-
-        $params = array(
-            "two_cards" => $params
-        );
-        $result = MPRestCli::putConfig("/settings?access_token=" . $access_token, $params);
-        return  $result;
-    }
-
-    public function getTestUser($siteID)
-    {
-        $access_token = $this->getAccessToken();
-        $uri = "/users/test_user?access_token=" . $access_token;
-        $result = MPRestCli::post($uri, $siteID);
-        return $result;
-    }
-
-    public function getDiscount($params)
-    {
-        $access_token = $this->getAccessToken();
-        $uri = "/discount_campaigns";
-        $params["access_token"] = $access_token;
-
-        if (count($params) > 0) {
-            $uri .= (strpos($uri, "?") === false) ? "?" : "&";
-            $uri .= $this->buildQuery($params);
-        }
-        $result = MPRestCli::get($uri);
-        return $result;
-    }
-
-    /*
-     * Save settings
-     */
-    public function saveSettings($params)
-    {
-        $access_token = $this->getAccessTokenV1();
-        $uri = "/modules/tracking/saveSettings?access_token=" . $access_token;
-
-        $result_response = MPRestCli::post($uri, $params);
-
-        return $result_response;
-    }
-
-    private function buildQuery($params)
-    {
-        if (function_exists('http_build_query')) {
-            return http_build_query($params, '', '&');
-        } else {
-            $elements = array();
-            foreach ($params as $value) {
-                $elements[] = '{$name}=' . urlencode($value);
-            }
-            return implode('&', $elements);
-        }
-    }
     /**
-     * getVersion
-     * @return lastversion
+     * Get payment standard
+     *
+     * @param [integer] $collection_id
+     * @return void
      */
-    public function getVersion()
+    public function getPaymentStandard($collection_id)
     {
-        $result = MPRestCli::get('/devtools/lastversion/cart-prestashop-7');
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/payments/' . $collection_id . '?access_token=' . $access_token);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_payment_standard error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response;
         return $result;
+    }
+
+    /**
+     * Is valid access token
+     *
+     * @param [string] $access_token
+     * @return boolean
+     */
+    public function isValidAccessToken($access_token)
+    {
+        $response = MPRestCli::get('/users/me?access_token=' . $access_token);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API valid_access_token error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
+    }
+
+    /**
+     * Is valid sponsor id
+     *
+     * @param [integer] $sponsor_id
+     * @return boolean
+     */
+    public function isValidSponsorId($sponsor_id)
+    {
+        $response = MPRestCli::get('/users/' . $sponsor_id);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API valid_sponsor_id error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        if ($result['site_id'] != Configuration::get('MERCADOPAGO_SITE_ID') ||
+            $result['id'] == Configuration::get('MERCADOPAGO_SELLER_ID')
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Is test user
+     *
+     * @return boolean
+     */
+    public function isTestUser()
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/users/me?access_token=' . $access_token);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API is_test_user error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        if (in_array('test_user', $response['response']['tags'])) {
+            return true;
+        }
+    }
+
+    /**
+     * Get merchant order
+     *
+     * @param [integer] $id
+     * @return void
+     */
+    public function getMerchantOrder($id)
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/merchant_orders/' . $id . '?access_token=' . $access_token);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_merchant_orders error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
+    }
+
+    /**
+     * Send platform info to settings api
+     *
+     * @param [array] $params
+     * @return void
+     */
+    public function saveApiSettings($params)
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::post('/modules/tracking/settings?access_token=' . $access_token, $params);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API save_api_settings error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get application_id
+     *
+     * @param [integer] $seller
+     * @return int
+     */
+    public function getApplicationId()
+    {
+        $seller = explode('-', $this->getAccessToken());
+        return $seller[1];
+    }
+
+    /**
+     * Get application_id
+     *
+     * @param [integer] $seller
+     * @return int
+     */
+    public function homologValidate()
+    {
+        $seller = $this->getApplicationId();
+        $response = MPRestCli::getMercadoLibre('/applications/' . $seller);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API application_search_owner_id error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+
+        return $result['scopes'];
     }
 }

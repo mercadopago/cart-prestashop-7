@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2015 PrestaShop.
+ * 2007-2018 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,7 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    henriqueleite
+ *  @author    MercadoPago
  *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
  *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of MercadoPago
@@ -26,132 +26,87 @@
 
 class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontController
 {
-    protected $orderConfirmationUrl = 'index.php?controller=order-confirmation';
 
     public function initContent()
     {
-        parent::initContent();
-    
-
-        if (Tools::getValue('typeReturn') == 'failure') {
+        $mercadopago = MPApi::getInstance();
+        $payments_id = Tools::getValue('collection_id');
+        
+        //failure payments
+        if (Tools::getValue('typeReturn') == 'failure' && $payments_id == 'null') {
             $this->redirectError();
         }
-        if (Tools::getIsset('collection_id') && Tools::getValue('collection_id') != 'null') {
-            // payment variables
-            $payment_statuses = array();
-            $payment_ids = array();
-            $payment_types = array();
-            $payment_method_ids = array();
-            $card_holder_names = array();
-            $four_digits_arr = array();
-            $statement_descriptors = array();
+        
+        //aproved and pending payments
+        if (isset($payments_id) && $payments_id != 'null') {
+            //treatment for payments data
+            $collection_ids = explode(',', $payments_id);
+            $payments_id = array();
+            $payments_type = array();
+            $payments_method = array();
+            $payments_status = array();
+            $payments_amount = array();
             $status_details = array();
-            $transaction_amounts = 0;
-            $collection_ids = explode(',', Tools::getValue('collection_id'));
+            $cards_holder_name = array();
+            $statement_descriptors = array();
+            $four_digits = array();
 
-            $mercadopago = $this->module;
-            $mercadopago_sdk = MPApi::getInstanceMP();
             foreach ($collection_ids as $collection_id) {
-                $result = $mercadopago_sdk->getPaymentStandard($collection_id);
-                if ($result['status'] != 200) {
+                $payment_info = $mercadopago->getPaymentStandard($collection_id);
+                if ($payment_info['status'] != 200) {
                     continue;
                 }
 
-                $payment_info = $result['response'];
-                $id_cart = $payment_info['external_reference'];
-                $cart = new Cart($id_cart);
-                $payment_statuses[] = $payment_info['status'];
-                $payment_ids[] = $payment_info['id'];
-                $payment_types[] = $payment_info['payment_type_id'];
+                $payment_info = $payment_info['response'];
+                $payments_id[] = $payment_info['id'];
+                $payments_type[] = $payment_info['payment_type_id'];
+                $payments_method[] = $payment_info['payment_method_id'];
+                $payments_status[] = $payment_info['status'];
+                $payments_amount[] = $payment_info['transaction_amount'];
+                $payment_type_id = $payment_info['payment_type_id'];
+                $cart_id = $payment_info['external_reference'];
 
-                if (isset($payment_info['payment_method_id'])) {
-                    $payment_method_ids[] = $payment_info['payment_method_id'];
-                }
-
-                $transaction_amounts += $payment_info['transaction_amount'];
-
-                if (isset($payment_info['payment_type_id']) && $payment_info['payment_type_id'] == 'credit_card') {
-                    $card_holder_names[] = isset($payment_info['card']['cardholder']['name'])
-                    ? $payment_info['card']['cardholder']['name'] : '';
-                    if (isset($payment_info['card']['last_four_digits'])) {
-                        $four_digits_arr[] = '**** **** **** '.$payment_info['card']['last_four_digits'];
-                    }
-                    $statement_descriptors[] = $payment_info['statement_descriptor'];
+                if ($payment_type_id == 'credit_card') {
                     $status_details[] = $payment_info['status_detail'];
+                    $cards_holder_name[] = $payment_info['card']['cardholder']['name'];
+                    $statement_descriptors[] = $payment_info['statement_descriptor'];
+                    $four_digits[] = '**** **** **** '.$payment_info['card']['last_four_digits'];
                 }
             }
-
-            if (Validate::isLoadedObject($cart)) {
-                $total = $cart->getOrderTotal(true, Cart::BOTH);
-                $order_status = null;
-                $payment_status = $payment_info['status'];
-                switch ($payment_status) {
-                    case 'in_process':
-                        $order_status = 'MERCADOPAGO_STATUS_0';
-                        break;
-                    case 'approved':
-                        $order_status = 'MERCADOPAGO_STATUS_1';
-                        break;
-                    case 'pending':
-                        $order_status = 'MERCADOPAGO_STATUS_7';
-                        break;
-                }
-
-                $order_id = UtilMercadoPago::getOrderByCartId($cart->id);
-                $order = new Order($order_id);
-                if ($order_status != null) {
-                    $statusPS = (int)$order->getCurrentState();
-                    $payment_status = $payment_info['status'];
-                    $payment_status = Configuration::get(UtilMercadoPago::$statusMercadoPagoPresta[$payment_status]);
-                    if ($payment_status != $statusPS) {
-                        $order->setCurrentState($payment_status);
-                    }
-
-                    try {
-                        $payments = $order->getOrderPaymentCollection();
-                        $payments[0]->transaction_id = implode(' / ', $payment_ids);
-                        $payments[0]->update();
-                    } catch (Exception $e) {
-                        UtilMercadoPago::logMensagem(
-                            'Occured a error during the process the update order, payments is null = '.$id_cart,
-                            MPApi::ERROR,
-                            $e->getMessage(),
-                            true,
-                            null,
-                            'MercadoPago->updateOrder'
-                        );
-                    }
-
-                    $uri = __PS_BASE_URI__.'order-confirmation.php?id_cart='.$order->id_cart.'&id_module='.
-                         $mercadopago->id.'&id_order='.$order->id.'&key='.$order->secure_key;
-
-                    $uri .= '&payment_status='.$payment_statuses[0];
-                    $uri .= '&payment_id='.implode(' / ', $payment_ids);
-                    $uri .= '&payment_type='.implode(' / ', $payment_types);
-                    $uri .= '&payment_method_id='.implode(' / ', $payment_method_ids);
-                    $uri .= '&amount='.$total;
-                    if ($payment_info['payment_type_id'] == 'credit_card') {
-                        $uri .= '&card_holder_name='.implode(' / ', $card_holder_names);
-                        $uri .= '&four_digits='.implode(' / ', $four_digits_arr);
-                        $uri .= '&statement_descriptor='.$statement_descriptors[0];
-                        $uri .= '&status_detail='.$status_details[0];
-                    }
-                    Tools::redirectLink($uri);
-                }
+            
+            //order confirmation redirect
+            $cart = new Cart($cart_id);
+            $total = $cart->getOrderTotal();
+            $order_id = Order::getOrderByCartId($cart->id);
+            $order = new Order($order_id);
+            
+            $uri = __PS_BASE_URI__.'index.php?controller=order-confirmation';
+            $uri .= '&id_cart='.$order->id_cart;
+            $uri .= '&key='.$order->secure_key;
+            $uri .= '&id_order='.$order->id;
+            $uri .= '&id_module='.$this->module->id;
+            $uri .= '&typeReturn='.Tools::getValue('typeReturn');
+            $uri .= '&payment_id='.implode(',', $payments_id);
+            $uri .= '&payment_type='.implode(',', $payments_type);
+            $uri .= '&payment_method='.implode(',', $payments_method);
+            $uri .= '&payment_status='.implode(',', $payments_status);
+            $uri .= '&payment_amount='.implode(',', $payments_amount);
+            $uri .= '&amount='.$total;
+            if ($payment_type_id == 'credit_card') {
+                $uri .= '&card_holder_name='.implode(',', $cards_holder_name);
+                $uri .= '&four_digits='.implode(',', $four_digits);
+                $uri .= '&statement_descriptor='.implode(',', $statement_descriptors);
+                $uri .= '&status_detail='.implode(',', $status_details);
             }
-        } else {
-            UtilMercadoPago::logMensagem(
-                'MercadoPagoStandardReturnModuleFrontController::initContent = '.
-                'External reference is not set. Order placement has failed.',
-                MPApi::ERROR
-            );
+            
+            //redirect to order confirmation page
+            Tools::redirect($uri);
         }
     }
-
+    
     protected function redirectError()
     {
-        $this->errors[] = $this->module->getMappingError("ERROR_PENDING");
-        $this->redirectWithNotifications($this->context->link->getPageLink('order', true, null, array(
-            'step' => '3')));
+        MPLog::generate('The callback failed', 'error');
+        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
     }
 }
