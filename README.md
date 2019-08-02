@@ -4,6 +4,8 @@ With the official module of Mercado Pago you will have an integration, hundreds 
 
 ## Documentation
 
+For a better experience, you will be redirected to our site by clicking on the links below:
+
 * [Introduction](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_introduction)
 * [Installation Requirements](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_installation_requirements)
 * [Installation](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_installation)
