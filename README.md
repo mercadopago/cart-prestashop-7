@@ -2,7 +2,7 @@
 
 **Mercado Pago Module (v4.0.0)**
 
-##Documentation
+## Documentation
 
 * [Introduction](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_introduction)
 * [Installation Requirements](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_installation_requirements)
@@ -10,6 +10,6 @@
 * [Integration](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_integration)
 * [Receive Payments](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_receive_payments)
 
-##Suport
+## Suport
 
 Something's wrong? [Get in touch with our support](https://www.mercadopago.com.ar/developers/en/support)
