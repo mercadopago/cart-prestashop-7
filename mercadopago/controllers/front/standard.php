@@ -155,7 +155,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'picture_url' => ('https://' ? 'https://' : 'http://').$imagePath,
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => $product['quantity'],
-                "currency_id" => $this->context->currency->iso_code,
+                "currency_id" => $cart->id_currency,
                 'unit_price' => $product['price_wt'],
             );
             
@@ -170,7 +170,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'description' => 'Wrapping service used by store',
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => 1,
-                'currency_id' => $this->context->currency->iso_code,
+                'currency_id' => $cart->id_currency,
                 'unit_price' => $wrapping_cost,
             );
             $items[] = $item;
