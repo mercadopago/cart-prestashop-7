@@ -12,3 +12,48 @@
 [2019-08-07 20:44:31] [INFO]: Credentials saved successfully
 [2019-08-07 20:45:55] [ERROR]: API save_api_settings error: Internal server error
 [2019-08-07 20:45:55] [INFO]: Credentials saved successfully
+[2019-08-09 19:20:59] [WARNING]: Invalid sponsor_id submitted
+[2019-08-09 19:20:59] [INFO]: Store information saved successfully
+[2019-08-09 19:21:29] [INFO]: Store information saved successfully
+[2019-08-09 19:21:47] [ERROR]: API valid_sponsor_id error: User, 23123123, not found
+[2019-08-09 19:21:47] [WARNING]: Invalid sponsor_id submitted
+[2019-08-09 19:21:47] [INFO]: Store information saved successfully
+[2019-08-09 19:22:39] [INFO]: Store information saved successfully
+[2019-08-09 19:22:50] [INFO]: Store information saved successfully
+[2019-08-09 20:04:32] [INFO]: Standard checkout configuration saved successfully
+[2019-08-09 20:04:50] [INFO]: Standard checkout configuration saved successfully
+[2019-08-09 20:05:02] [WARNING]: Invalid expiration_date_to submitted
+[2019-08-09 20:05:04] [INFO]: Standard checkout configuration saved successfully
+[2019-08-09 21:24:39] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:25:27] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:25:55] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:25:59] [INFO]: Credentials saved successfully
+[2019-08-09 21:26:44] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:26:48] [INFO]: Credentials saved successfully
+[2019-08-09 21:27:44] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:27:47] [INFO]: Credentials saved successfully
+[2019-08-09 21:28:00] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:28:04] [INFO]: Credentials saved successfully
+[2019-08-09 21:29:51] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:31:01] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:57:18] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:57:39] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 21:58:52] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:05:32] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:06:42] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:07:45] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:08:04] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:08:23] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:11:48] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:12:11] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:12:15] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:13:28] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:14:03] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:14:11] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:14:18] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:17:48] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:19:25] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:20:36] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:31:34] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:31:47] [ERROR]: API application_search_owner_id error: 
+[2019-08-09 22:35:12] [ERROR]: API application_search_owner_id error: 

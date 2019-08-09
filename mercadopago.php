@@ -25,8 +25,8 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-error_reporting(E_ALL);
-ini_set('display_errors','On');
+// error_reporting(E_ALL);
+// ini_set('display_errors','On');
 
 define('MP_VERSION', '4.0.1');
 define('MP_ROOT_URL', dirname(__FILE__));
@@ -153,18 +153,18 @@ class Mercadopago extends PaymentModule
         //return forms for admin views
         $country_link = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
-        $localization = new LocalizationSettings();
-        $credentials = new CredentialsSettings();
-        $homologation = new HomologationSettings();
-        $standard = new StandardSettings();
-        $advanced = new AdvancedSettings();
+        $store = new StoreSettings();
         $rating = new RatingSettings();
+        $standard = new StandardSettings();
+        $credentials = new CredentialsSettings();
+        $localization = new LocalizationSettings();
+        $homologation = new HomologationSettings();
 
-        $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
-        $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
-        $homologation = $this->renderForm($homologation->submit, $homologation->values, $homologation->form);
+        $store = $this->renderForm($store->submit, $store->values, $store->form);
         $standard = $this->renderForm($standard->submit, $standard->values, $standard->form);
-        $advanced = $this->renderForm($advanced->submit, $advanced->values, $advanced->form);
+        $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
+        $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
+        $homologation = $this->renderForm($homologation->submit, $homologation->values, $homologation->form);
 
         $output = $this->context->smarty->assign(array(
             'alert' => self::$form_alert,
@@ -175,8 +175,8 @@ class Mercadopago extends PaymentModule
             'country_form' => $localization,
             'credentials' => $credentials,
             'homolog_form' => $homologation,
+            'store_form' => $store,
             'standard_form' => $standard,
-            'advanced_form' => $advanced,
             'access_token' => Configuration::get('MERCADOPAGO_ACCESS_TOKEN'),
             'sandbox_status' => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
             'sandbox_access_token' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN'),
@@ -212,12 +212,12 @@ class Mercadopago extends PaymentModule
      */
     public function loadSettings()
     {
-        require_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/AdvancedSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/StoreSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/RatingSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
     }
 
     /**

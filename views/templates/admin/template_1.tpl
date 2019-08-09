@@ -182,8 +182,21 @@
         <div style="display: block">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>
     {/if}
     
-    {html_entity_decode($standard_form|escape:'html':'UTF-8')}
-    {html_entity_decode($advanced_form|escape:'html':'UTF-8')}
+    {html_entity_decode($store_form|escape:'html':'UTF-8')}
+
+    <!-- Nav tabs checkouts -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Standard Checkout' mod='mercadopago'}</a></li>
+        <li><a href="#custom_checkout" role="tab" data-toggle="tab">{l s='Custom Checkout' mod='mercadopago'}</a></li>
+        <li><a href="#ticket_checkout" role="tab" data-toggle="tab">{l s='Ticket Checkout' mod='mercadopago'}</a></li>
+    </ul>
+    
+    <!-- Tab panes checkouts -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="standard_checkout">{html_entity_decode($standard_form|escape:'html':'UTF-8')}</div>
+        <div class="tab-pane" id="custom_checkout"></div>
+        <div class="tab-pane" id="ticket_checkout"></div>
+    </div>
     
     {if $sandbox_status == true}
     <div class="panel">

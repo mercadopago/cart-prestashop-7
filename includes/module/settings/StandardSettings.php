@@ -70,27 +70,6 @@ class StandardSettings extends AbstractSettings
                 ),
             ),
             array(
-                'col' => 6,
-                'type' => 'text',
-                'label' => $this->module->l('Name'),
-                'name' => 'MERCADOPAGO_INVOICE_NAME',
-                'desc' => $this->module->l('This is the name that will appear on the customers invoice.'),
-            ),
-            array(
-                'col' => 4,
-                'type' => 'select',
-                'label' => $this->module->l('Category'),
-                'name' => 'MERCADOPAGO_STORE_CATEGORY',
-                'desc' => $this->module->l('What category are your products? ') .
-                    $this->module->l('Choose the one that best characterizes them ') .
-                    $this->module->l('(choose "other" if your product is too specific).'),
-                'options' => array(
-                    'query' => $this->getCategories(),
-                    'id' => 'id',
-                    'name' => 'name'
-                )
-            ),
-            array(
                 'col' => 4,
                 'type' => 'checkbox',
                 'label' => $this->module->l('Payment methods'),
@@ -127,6 +106,62 @@ class StandardSettings extends AbstractSettings
                     'id' => 'id',
                     'name' => 'name'
                 )
+            ),
+            array(
+                'type' => 'switch',
+                'label' => $this->module->l('Return to the store'),
+                'name' => 'MERCADOPAGO_AUTO_RETURN',
+                'is_bool' => true,
+                'desc' => $this->module->l('Do you want your client to come back to ') .
+                    $this->module->l('the store after finishing the purchase?'),
+                'values' => array(
+                    array(
+                        'id' => 'MERCADOPAGO_AUTO_RETURN_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Active')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_AUTO_RETURN_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Inactive')
+                    )
+                ),
+            ),
+            array(
+                'type' => 'switch',
+                'label' => $this->module->l('Binary Mode'),
+                'name' => 'MERCADOPAGO_BINARY_MODE',
+                'is_bool' => true,
+                'desc' => $this->module->l('Accept and reject payments automatically. Do you want us to activate it? '),
+                'hint' => $this->module->l('If you activate the binary mode ') .
+                    $this->module->l('you will not be able to leave pending payments. ') .
+                    $this->module->l('This can affect the prevention of fraud. ') .
+                    $this->module->l('Leave it inactive to be protected by our own tool.'),
+                'values' => array(
+                    array(
+                        'id' => 'MERCADOPAGO_BINARY_MODE_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Active')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_BINARY_MODE_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Inactive')
+                    )
+                ),
+            ),
+            array(
+                'col' => 2,
+                'suffix' => 'horas',
+                'type' => 'text',
+                'name' => 'MERCADOPAGO_EXPIRATION_DATE_TO',
+                'label' => $this->module->l('Save payment preferences during '),
+                'hint' => $this->module->l('Payment links are generated every time we receive ') .
+                    $this->module->l('data of a purchase intention of your customers. ') .
+                    $this->module->l('We keep that information for a period of time not to ') .
+                    $this->module->l('ask for the data each time you return to the purchase process. ') .
+                    $this->module->l('Choose when you want us to forget it.'),
+                'desc' => ' ',
             )
         );
 
@@ -140,10 +175,18 @@ class StandardSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        parent::postFormProcess();
+        $expiration_date = Tools::getValue('MERCADOPAGO_EXPIRATION_DATE_TO');
+
+        if ($expiration_date != '' && !is_numeric($expiration_date)) {
+            Mercadopago::$form_alert = 'alert-danger';
+            Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
+            MPLog::generate('Invalid expiration_date_to submitted', 'warning');
+        } else {
+            parent::postFormProcess();
+        }
 
         $this->sendSettingsInfo();
-        MPLog::generate('Basic configuration saved successfully');
+        MPLog::generate('Standard checkout configuration saved successfully');
     }
 
     /**
@@ -154,10 +197,11 @@ class StandardSettings extends AbstractSettings
     public function getFormValues()
     {
         $form_values = array(
-            'MERCADOPAGO_CHECKOUT_STATUS' => Configuration::get('MERCADOPAGO_CHECKOUT_STATUS'),
-            'MERCADOPAGO_STORE_CATEGORY' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-            'MERCADOPAGO_INVOICE_NAME' => Configuration::get('MERCADOPAGO_INVOICE_NAME'),
             'MERCADOPAGO_INSTALLMENTS' => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
+            'MERCADOPAGO_CHECKOUT_STATUS' => Configuration::get('MERCADOPAGO_CHECKOUT_STATUS'),
+            'MERCADOPAGO_AUTO_RETURN' => Configuration::get('MERCADOPAGO_AUTO_RETURN'),
+            'MERCADOPAGO_BINARY_MODE' => Configuration::get('MERCADOPAGO_BINARY_MODE'),
+            'MERCADOPAGO_EXPIRATION_DATE_TO' => Configuration::get('MERCADOPAGO_EXPIRATION_DATE_TO'),
         );
 
         $payment_methods = $this->mercadopago->getPaymentMethods();
@@ -201,60 +245,5 @@ class StandardSettings extends AbstractSettings
         }
 
         return $installments;
-    }
-
-    /**
-     * Get mercadopago categories
-     *
-     * @return array
-     */
-    public function getCategories()
-    {
-        $categories = array();
-        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Select the category'));
-        $categories[] = array('id' => 'others', 'name' => 'Other categories');
-        $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
-        $categories[] = array(
-            'id' => 'baby',
-            'name' => 'Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats'
-        );
-        $categories[] = array('id' => 'coupons', 'name' => 'Coupons');
-        $categories[] = array('id' => 'donations', 'name' => 'Donations');
-        $categories[] = array('id' => 'computing', 'name' => 'Computers & Tablets');
-        $categories[] = array('id' => 'cameras', 'name' => 'Cameras & Photography');
-        $categories[] = array('id' => 'video_games', 'name' => 'Video Games & Consoles');
-        $categories[] = array('id' => 'television', 'name' => 'LCD, LED, Smart TV, Plasmas, TVs');
-        $categories[] = array(
-            'id' => 'car_electronics',
-            'name' => 'Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC'
-        );
-        $categories[] = array('id' => 'electronics', 'name' => 'Audio & Surveillance, Video & GPS, Others');
-        $categories[] = array('id' => 'automotive', 'name' => 'Parts & Accessories');
-        $categories[] = array(
-            'id' => 'entertainment',
-            'name' => 'Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys'
-        );
-        $categories[] = array(
-            'id' => 'fashion',
-            'name' => 'Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches'
-        );
-        $categories[] = array('id' => 'games', 'name' => 'Online Games & Credits');
-        $categories[] = array('id' => 'home', 'name' => 'Home appliances. Home & Garden');
-        $categories[] = array('id' => 'musical', 'name' => 'Instruments & Gear');
-        $categories[] = array('id' => 'phones', 'name' => 'Cell Phones & Accessories');
-        $categories[] = array('id' => 'services', 'name' => 'General services');
-        $categories[] = array('id' => 'learnings', 'name' => 'Trainings, Conferences, Workshops');
-        $categories[] = array(
-            'id' => 'tickets',
-            'name' => 'Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more'
-        );
-        $categories[] = array('id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers');
-        $categories[] = array(
-            'id' => 'virtual_goods',
-            'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be 
-            electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge'
-        );
-
-        return $categories;
     }
 }

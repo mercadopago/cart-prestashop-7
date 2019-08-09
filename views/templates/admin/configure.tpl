@@ -50,27 +50,26 @@
         for (var i=0; i < element.length; i++) {
             element[i].id = "module_form_" + i;
         }
-        
+
 
         // ----- country form ----- //
-        var form_country = document.querySelector("#module_form_0 .panel .form-wrapper");
-        var form_prepend = document.createElement("div");
+        var form_country_prepend = document.createElement("div");
+        var form_country = document.querySelector("#module_form_3 .panel .form-wrapper");
 
-        form_prepend.innerHTML = "<div class='row'>\
+        form_country_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12 pb-25'>\
                 <h4 class='title-checkout-body'>{l s='¿En qué país opera tu cuenta de Mercado Pago?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
-
-        form_country.insertBefore(form_prepend, form_country.firstChild);
+        form_country.insertBefore(form_country_prepend, form_country.firstChild);
 
 
         // ----- credentials form ----- //
-        var form_prepend = document.createElement("div");
-        var form_credentials = document.querySelector("#module_form_1 .panel .form-wrapper");
-        var form_credentials_inputs = document.querySelectorAll("#module_form_1 .panel .form-wrapper .form-group");
+        var form_credentials_prepend = document.createElement("div");
+        var form_credentials = document.querySelector("#module_form_2 .panel .form-wrapper");
+        var form_credentials_inputs = document.querySelectorAll("#module_form_2 .panel .form-wrapper .form-group");
 
-        form_prepend.innerHTML = "<div class='row'>\
+        form_credentials_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12'>\
                 <h4 class='title-checkout-body'>{l s='Ingresa tus credenciales y elige cómo operar' mod='mercadopago'}</h4>\
             </div>\
@@ -83,8 +82,7 @@
                 <p class='text-credenciais'>{l s='Cuando veas que todo va bien, desactivá Sandbox, prendé Producción y abrí paso a tus ventas online.' mod='mercadopago'}</p>\
             </div>\
         </div>";
-
-        form_credentials.insertBefore(form_prepend, form_credentials.firstChild);
+        form_credentials.insertBefore(form_credentials_prepend, form_credentials.firstChild);
 
         var form_credentials_pruebas_append = "<div class='row pt-20 mb-15'>\
             <div class='col-md-12'>\
@@ -108,10 +106,10 @@
                 form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_produccion_append);
             }
         }
-        
+
 
         // ----- homolog form ----- //
-        var form_homolog = document.querySelector("#module_form_2 .panel .form-wrapper");
+        var form_homolog = document.querySelector("#module_form_4 .panel .form-wrapper");
 
         form_homolog.innerHTML = "<div class='row'>\
             <div class='col-md-12 pb-10'>\
@@ -128,7 +126,51 @@
         </div>";
 
 
+        // ----- store information form ------ //
+        var form_store_prepend = document.createElement("div");
+        var form_store = document.querySelector("#module_form_0 .panel .form-wrapper");
+        var form_store_group = document.querySelectorAll("#module_form_0 .panel .form-wrapper .form-group");
+
+        form_store_prepend.innerHTML = "<div class='row pb-25'>\
+            <div class='col-md-12'>\
+                <h4 class='title-checkout-body'>{l s='Información básica de la tienda' mod='mercadopago'}</h4>\
+                <p class='text-credenciais pb-10'>{l s='Ingresa los datos de tu negocio en el módulo:' mod='mercadopago'}</p>\
+            </div>\
+        </div>";
+        form_store.insertBefore(form_store_prepend, form_store.firstChild);
+
+        var form_store_append = "<hr class='mt-15'>\
+        <div class='row mb-15'>\
+            <div class='col-md-12'>\
+                <h4 class='title-checkout-body'>{l s='¿Eres un partner de Mercado Pago?' mod='mercadopago'}</h4>\
+            </div>\
+        </div>";
+
+        for (i=0; i < form_store_group.length; i++) {
+            if(i == 1){
+                form_store_group[i].insertAdjacentHTML('afterend', form_store_append);
+            }
+            else if(i == 2){
+                form_store_group[i].querySelector("p").style.width = "400px";
+            }
+        }
+
+
         // ----- basic configuration form ------ //
+        //standard form header
+        document.querySelector("#module_form_1 .panel").style.borderTopLeftRadius = 0;
+        var form_standard_header_prepend = document.createElement("div");
+        var form_standard_header = document.querySelector("#module_form_1 .panel .panel-heading");
+        form_standard_header.style.height = "auto";
+
+        form_standard_header_prepend.innerHTML = "<ul class='checkout-list'>\
+            <li><span>{l s='Ofrece todos los medios de pago.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Experiencia de compra en el sitio de Mercado Pago.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Tus clientes pueden pagar como invitados o ingresando a su cuenta de Mercado Pago.' mod='mercadopago'}</span></li>\
+        </ul>";
+        form_standard_header.insertBefore(form_standard_header_prepend, form_standard_header.firstChild);
+
+        //standard form body
         var checkbox = document.querySelectorAll(".checkbox");
         for (var ii=0; ii < checkbox.length; ii++) {
             checkbox[ii].id = "checkbox_"+ii;
@@ -136,19 +178,18 @@
             checkbox[ii].style.padding = "10px";
         }
 
-        var form_basic = document.querySelector("#module_form_3 .panel .form-wrapper");
-        var form_basic_prepend = document.createElement("div");
+        var form_standard_prepend = document.createElement("div");
+        var form_standard = document.querySelector("#module_form_1 .panel .form-wrapper");
+        var form_standard_group = document.querySelectorAll("#module_form_1 .panel .form-wrapper .form-group");
 
-        form_basic_prepend.innerHTML = "<div class='row pb-25'>\
+        form_standard_prepend.innerHTML = "<div class='row pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Hagamos que tu cliente termine su compra de forma rápida, fácil y segura.' mod='mercadopago'}</h4>\
+                <h4 class='title-checkout-body'>{l s='Haz que tu cliente termine su compra de forma rápida, fácil y segura' mod='mercadopago'}</h4>\
             </div>\
         </div>";
+        form_standard.insertBefore(form_standard_prepend, form_standard.firstChild);
 
-        form_basic.insertBefore(form_basic_prepend, form_basic.firstChild);
-
-
-        // ----- online payments configuration form ------ //
+        // online payments configuration form
         var onlineChecked = "";
         var countOnlineChecked = 0;
         var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
@@ -163,13 +204,12 @@
 
         var checkbox_online = document.querySelector("#checkbox_0");
         var checkbox_online_prepend = "<div class='all_checkbox'>\
-                <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-                <label for='checkmeon'><b class='pointer pl-5'>{l s='Selecciona pagos online' mod='mercadopago'}</b></label>\
+            <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
+            <label for='checkmeon'><b class='pointer pl-5'>{l s='Selecciona pagos online' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
 
-
-        // ----- offline payments configuration form ------ //
+        // offline payments configuration form
         var offlineChecked = "";
         var countOfflineChecked = 0;
         var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
@@ -185,80 +225,68 @@
         var countOnlineInputs = document.querySelectorAll(".payment-online-checkbox").length;
         var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
         var checkbox_offline_prepend = "<div class='all_checkbox'>\
-                <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-                <label for='checkmeoff'><b class='pointer pl-5'>{l s='Selecciona pagos presenciales' mod='mercadopago'}</b></label>\
+            <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
+            <label for='checkmeoff'><b class='pointer pl-5'>{l s='Selecciona pagos presenciales' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
-
-        // ----- advanced configuration form ------ //
-        var form_module = document.querySelector("#module_form_4 .panel .panel-heading");
-        var collapse_body = document.querySelector("#module_form_4 .panel .form-wrapper");
-        var collapse_body_prepend = document.createElement("div");
-        var collapse_footer = document.querySelector("#module_form_4 .panel .panel-footer");
-        var collapse_panel = document.querySelector("#module_form_4 .panel");
-        var form_group = document.querySelectorAll("#module_form_4 .panel .form-wrapper .form-group");
-
-        var form_group_append = "<hr class='mt-15'>\
-        <div class='row mb-15'>\
+        //advanced configuration
+        var form_standard_append = "<div class='panel-heading panel-advanced-config'>\
+            <i class='icon-cogs'></i> Advanced Configuration\
+            <span class='btn-collapsible' id='header_plus_standard' style='display:block'>+</span>\
+            <span class='btn-collapsible' id='header_less_standard' style='display:none'>-</span>\
+        </div>\
+        <div class='row text-standard-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='¿Eres un partner de Mercado Pago?' mod='mercadopago'}</h4>\
+                <h4 class='title-checkout-body mp-input-collapsible'>{l s='Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
-        for (i=0; i < form_group.length; i++) {
-            if(i == 2){
-                form_group[i].insertAdjacentHTML('afterend', form_group_append);
+        for (i=0; i < form_standard_group.length; i++) {
+            if(i == 3){
+                form_standard_group[i].insertAdjacentHTML('afterend', form_standard_append);
             }
-            else if(i == 3){
-                form_group[i].querySelector("p").style.width = "400px";
+            else if(i > 3) {
+                form_standard_group[i].classList.add("mp-input-collapsible");
             }
         }
 
-        form_module.style.cursor = "pointer";
-        form_module.innerHTML += "<span class='btn-collapsible' id='header_plus' style='display:block'>+</span>\
-            <span class='btn-collapsible' id='header_less' style='display:none'>-</span>";
+        var style_collapsible = false;
+        var header_plus_standard = document.querySelector("#header_plus_standard");
+        var header_less_standard = document.querySelector("#header_less_standard");
+        var form_standard_collapsible = document.querySelector("#module_form_1 .panel .panel-advanced-config");
+        var form_standard_collapsible_body = document.querySelectorAll(".mp-input-collapsible");
+        var form_standard_collapsible_footer = document.querySelector("#module_form_1 .panel .panel-footer");
 
-        collapse_body_prepend.innerHTML = "<div class='row pb-25'>\
-            <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar.' mod='mercadopago'}</h4>\
-            </div>\
-        </div>";
+        form_standard_collapsible_footer.style.marginTop = "-2px";
 
-        collapse_body.insertBefore(collapse_body_prepend, collapse_body.firstChild);
+        form_standard_collapsible.onclick = function(){
+            if(style_collapsible == false){
+                style_collapsible = true;
+                header_less_standard.style.display = "block";
+                header_plus_standard.style.display = "none";
+                form_standard_collapsible_footer.style.marginTop = "15px";
+                document.querySelector(".text-standard-advanced").style.paddingTop = "20px";
+                document.querySelector(".text-standard-advanced").style.paddingBottom = "25px";
 
-        var header_plus = document.querySelector("#header_plus");
-        var header_less = document.querySelector("#header_less");
-
-        collapse_body.style.display = "none";
-        collapse_footer.style.display = "none";
-        form_module.style.borderBottom = "0";
-        form_module.style.marginBottom = "0";
-        collapse_panel.style.paddingBottom = "0";
-
-        form_module.onclick = function(){
-            if(collapse_body.style.display == "none"){
-                collapse_body.style.display = "block";
-                collapse_footer.style.display = "block";
-                header_less.style.display = "block";
-                header_plus.style.display = "none";
-
-                form_module.style.borderBottom = "1px solid #eee";
-                form_module.style.marginBottom = "15px";
-                collapse_panel.style.paddingBottom = "20px";
+                for(i=0; i<form_standard_collapsible_body.length; i++){
+                    form_standard_collapsible_body[i].style.display = "block";
+                }
             }
             else{
-                collapse_body.style.display = "none";
-                collapse_footer.style.display = "none";
-                header_less.style.display = "none";
-                header_plus.style.display = "block";
+                style_collapsible = false;
+                header_less_standard.style.display = "none";
+                header_plus_standard.style.display = "block";
+                form_standard_collapsible_footer.style.marginTop = "-2px";
+                document.querySelector(".text-standard-advanced").style.paddingTop = "0px";
+                document.querySelector(".text-standard-advanced").style.paddingBottom = "0px";
 
-                form_module.style.borderBottom = "0";
-                form_module.style.marginBottom = "0";
-                collapse_panel.style.paddingBottom = "0";
+                for(i=0; i<form_standard_collapsible_body.length; i++){
+                    form_standard_collapsible_body[i].style.display = "none";
+                }
             }
-
         }
+
     }
 
     //Online payments

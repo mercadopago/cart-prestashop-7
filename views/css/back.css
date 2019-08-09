@@ -246,7 +246,8 @@
 .btn-collapsible{
     float: right;
     font-size: 25px;
-    padding: 0 5px 0 0;
+    padding: 0 13px 0 0;
+    margin-top: -1px;
 }
 
 .panel-landing{
@@ -655,6 +656,28 @@
     font-weight: 600 !important;
     font-size: 15px !important;
     text-transform: none !important;
+}
+
+.checkout-list{
+    font-size: 13px;
+    font: 400 12px/1.42857 Open Sans,Helvetica,Arial,sans-serif;
+    text-transform: none;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0px !important;
+    margin-left: -5px !important;
+}
+
+.panel-advanced-config{
+    cursor: pointer;
+    margin-top: 0 !important;
+    margin-bottom: 0px !important;
+    border-top: 1px solid #eee !important;
+    user-select: none;
+}
+
+.mp-input-collapsible{
+    display: none;
 }
 
 @media (max-width: 768px) {
