@@ -27,7 +27,7 @@
     <h2 class="title-checkout">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</h2>
     
     {if $credito != 0}
-    <div class="col-xs-12 col-md-12">
+    <div class="col-xs-12 col-md-12 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">
                 {l s='Tarjetas de crédito' mod='mercadopago'} 
@@ -46,7 +46,7 @@
     {/if}
     
     {if $debito != 0}
-	<div class="col-xs-6 col-md-6">
+	<div class="col-xs-12 col-lg-6 col-md-6 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
             
@@ -60,7 +60,7 @@
     {/if}
     
     {if $efectivo != 0}
-    <div class="col-xs-6 col-md-6">
+    <div class="col-xs-12 col-lg-6 col-md-6 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
             
