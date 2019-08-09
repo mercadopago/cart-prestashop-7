@@ -38,12 +38,20 @@
     padding-right: 20px !important;
 }
 
+.pt-5{
+    padding-top: 5px !important;
+}
+
 .pt-10{
     padding-top: 10px !important;
 }
 
 .pt-15{
     padding-top: 15px !important;
+}
+
+.pt-20{
+    padding-top: 20px !important;
 }
 
 .pt-25{
@@ -60,6 +68,10 @@
 
 .pb-25{
     padding-bottom: 25px !important;
+}
+
+.pb-30{
+    padding-bottom: 30px !important;
 }
 
 .px-10{
@@ -197,6 +209,13 @@
 
 .alert-token{
     color: #CD0000;
+}
+
+.title-credenciais{
+    font-size: 15px;
+    margin-bottom: 0 !important;
+    line-height: 1.5;
+    font-weight: 600;
 }
 
 .text-credenciais{

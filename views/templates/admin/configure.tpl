@@ -51,8 +51,9 @@
             element[i].id = "module_form_" + i;
         }
         
-        //country form
-        var form_credentials = document.querySelector("#module_form_0 .panel .form-wrapper");
+
+        // ----- country form ----- //
+        var form_country = document.querySelector("#module_form_0 .panel .form-wrapper");
         var form_prepend = document.createElement("div");
 
         form_prepend.innerHTML = "<div class='row'>\
@@ -61,28 +62,55 @@
             </div>\
         </div>";
 
-        form_credentials.insertBefore(form_prepend, form_credentials.firstChild);
+        form_country.insertBefore(form_prepend, form_country.firstChild);
 
-        //credentials form
-        var form_credentials = document.querySelector("#module_form_1 .panel .form-wrapper");
+
+        // ----- credentials form ----- //
         var form_prepend = document.createElement("div");
+        var form_credentials = document.querySelector("#module_form_1 .panel .form-wrapper");
+        var form_credentials_inputs = document.querySelectorAll("#module_form_1 .panel .form-wrapper .form-group");
 
         form_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Activa tus credenciales según lo que quieras hacer' mod='mercadopago'}</h4>\
+                <h4 class='title-checkout-body'>{l s='Ingresa tus credenciales y elige cómo operar' mod='mercadopago'}</h4>\
             </div>\
         </div>\
-        <div class='row pt-15 pb-25'>\
+        <div class='row pt-5 pb-30'>\
             <div class='col-md-12'>\
-                <p class='text-credenciais'>{l s='Realiza pruebas antes de salir al mundo.' mod='mercadopago'} <b>{l s='Opera de dos formas' mod='mercadopago'}</b>:</p>\
-                <p class='text-credenciais'>{l s='Por defecto te dejamos' mod='mercadopago'} <b>{l s='el modo Sandbox activo' mod='mercadopago'}</b> {l s='para que hagas testeos antes de empezar a vender.' mod='mercadopago'}</p>\
-                <p class='text-credenciais'>{l s='¿Todo va bien?' mod='mercadopago'} <b>{l s='Desactiva Sandbox' mod='mercadopago'}</b> {l s='al final de la configuración y abre paso a tus ventas online.' mod='mercadopago'}</p>\
+                <p class='text-credenciais'><b>{l s='Modo Pruebas' mod='mercadopago'}</b></p>\
+                <p class='text-credenciais'>{l s='Por defecto te dejamos el modo Sandbox activo para que hagas testeos antes de empezar a vender.' mod='mercadopago'}</p>\
+                <p class='text-credenciais pt-15'><b>{l s='Modo Producción' mod='mercadopago'}</b></p>\
+                <p class='text-credenciais'>{l s='Cuando veas que todo va bien, desactivá Sandbox, prendé Producción y abrí paso a tus ventas online.' mod='mercadopago'}</p>\
             </div>\
         </div>";
 
         form_credentials.insertBefore(form_prepend, form_credentials.firstChild);
+
+        var form_credentials_pruebas_append = "<div class='row pt-20 mb-15'>\
+            <div class='col-md-12'>\
+                <p class='title-credenciais'>{l s='Credenciales de Prueba' mod='mercadopago'}</p>\
+                <p class='text-credenciais pt-5 pb-10'>{l s='Con estas claves podrás hacer las pruebas que quieras.' mod='mercadopago'}</p>\
+            </div>\
+        </div>";
+
+        var form_credentials_produccion_append = "<div class='row pt-20 mb-15'>\
+            <div class='col-md-12'>\
+                <p class='title-credenciais'>{l s='Credenciales para producción' mod='mercadopago'}</p>\
+                <p class='text-credenciais pt-5 pb-10'>{l s='Con estas claves podrás recibir pagos reales de tus clientes.' mod='mercadopago'}</p>\
+            </div>\
+        </div>";
+
+        for (var i=0; i < form_credentials_inputs.length; i++) {
+            if(i == 1){
+                form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_pruebas_append);
+            }
+            else if(i == 3){
+                form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_produccion_append);
+            }
+        }
         
-        //homolog form
+
+        // ----- homolog form ----- //
         var form_homolog = document.querySelector("#module_form_2 .panel .form-wrapper");
 
         form_homolog.innerHTML = "<div class='row'>\
@@ -99,7 +127,8 @@
             </div>\
         </div>";
 
-        //basic configuration form
+
+        // ----- basic configuration form ------ //
         var checkbox = document.querySelectorAll(".checkbox");
         for (var ii=0; ii < checkbox.length; ii++) {
             checkbox[ii].id = "checkbox_"+ii;
@@ -118,7 +147,8 @@
 
         form_basic.insertBefore(form_basic_prepend, form_basic.firstChild);
 
-        //online payments configuration form
+
+        // ----- online payments configuration form ------ //
         var onlineChecked = "";
         var countOnlineChecked = 0;
         var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
@@ -138,7 +168,8 @@
         </div>";
         checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
 
-        //offline payments configuration form
+
+        // ----- offline payments configuration form ------ //
         var offlineChecked = "";
         var countOfflineChecked = 0;
         var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
@@ -159,7 +190,8 @@
         </div>";
         checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
-        //advanced configuration form
+
+        // ----- advanced configuration form ------ //
         var form_module = document.querySelector("#module_form_4 .panel .panel-heading");
         var collapse_body = document.querySelector("#module_form_4 .panel .form-wrapper");
         var collapse_body_prepend = document.createElement("div");

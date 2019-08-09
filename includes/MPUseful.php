@@ -68,60 +68,6 @@ class MPUseful
     }
 
     /**
-     * Get mercadopago categories
-     *
-     * @return void
-     */
-    public function getCategories()
-    {
-        $categories = array();
-        $categories[] = array('id' => 'others', 'name' => 'Other categories');
-        $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
-        $categories[] = array(
-            'id' => 'baby',
-            'name' => 'Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats'
-        );
-        $categories[] = array('id' => 'coupons', 'name' => 'Coupons');
-        $categories[] = array('id' => 'donations', 'name' => 'Donations');
-        $categories[] = array('id' => 'computing', 'name' => 'Computers & Tablets');
-        $categories[] = array('id' => 'cameras', 'name' => 'Cameras & Photography');
-        $categories[] = array('id' => 'video_games', 'name' => 'Video Games & Consoles');
-        $categories[] = array('id' => 'television', 'name' => 'LCD, LED, Smart TV, Plasmas, TVs');
-        $categories[] = array(
-            'id' => 'car_electronics',
-            'name' => 'Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC'
-        );
-        $categories[] = array('id' => 'electronics', 'name' => 'Audio & Surveillance, Video & GPS, Others');
-        $categories[] = array('id' => 'automotive', 'name' => 'Parts & Accessories');
-        $categories[] = array(
-            'id' => 'entertainment',
-            'name' => 'Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys'
-        );
-        $categories[] = array(
-            'id' => 'fashion',
-            'name' => 'Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches'
-        );
-        $categories[] = array('id' => 'games', 'name' => 'Online Games & Credits');
-        $categories[] = array('id' => 'home', 'name' => 'Home appliances. Home & Garden');
-        $categories[] = array('id' => 'musical', 'name' => 'Instruments & Gear');
-        $categories[] = array('id' => 'phones', 'name' => 'Cell Phones & Accessories');
-        $categories[] = array('id' => 'services', 'name' => 'General services');
-        $categories[] = array('id' => 'learnings', 'name' => 'Trainings, Conferences, Workshops');
-        $categories[] = array(
-            'id' => 'tickets',
-            'name' => 'Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more'
-        );
-        $categories[] = array('id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers');
-        $categories[] = array(
-            'id' => 'virtual_goods',
-            'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be 
-            electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge'
-        );
-
-        return $categories;
-    }
-
-    /**
      * Get default sponsor_id
      *
      * @param [string] $country
@@ -222,21 +168,5 @@ class MPUseful
         );
 
         return $protect_link[$country];
-    }
-
-    /**
-     * Get installments
-     *
-     * @param [type] $max
-     * @return void
-     */
-    public function getInstallments($max)
-    {
-        $installments = array();
-        for ($i = $max; $i > 0; $i--) {
-            $installments[] = array('id' => $i, 'name' => $i);
-        }
-
-        return $installments;
     }
 }

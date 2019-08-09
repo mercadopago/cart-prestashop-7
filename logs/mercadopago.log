@@ -1,0 +1,14 @@
+[2019-08-07 20:42:16] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2019-08-07 20:42:17] [WARNING]: Invalid APP_USR credentials submitted
+[2019-08-07 20:42:53] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2019-08-07 20:42:54] [WARNING]: Invalid APP_USR credentials submitted
+[2019-08-07 20:43:33] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2019-08-07 20:43:34] [WARNING]: Invalid APP_USR credentials submitted
+[2019-08-07 20:44:11] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2019-08-07 20:44:12] [WARNING]: Invalid APP_USR credentials submitted
+[2019-08-07 20:44:17] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-07 20:44:17] [INFO]: Credentials saved successfully
+[2019-08-07 20:44:31] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-07 20:44:31] [INFO]: Credentials saved successfully
+[2019-08-07 20:45:55] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-07 20:45:55] [INFO]: Credentials saved successfully

@@ -141,14 +141,6 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         // get cart items
         $items = array();
         $products = $cart->getProducts();
-
-        //verify country for round
-        $round = false;
-        $localization = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
-
-        if ($localization == 'mco' || $localization == 'mlc') {
-            $round = true;
-        }
         
         foreach ($products as $product) {
             $image = Image::getCover($product['id_product']);
@@ -164,14 +156,14 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => $product['quantity'],
                 "currency_id" => $this->context->currency->iso_code,
-                'unit_price' => $round ? round($product['price_wt']) : $product['price_wt'],
+                'unit_price' => $product['price_wt'],
             );
             
             $items[] = $item;
         }
         
         // include wrapping cost
-        $wrapping_cost = (integer) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
+        $wrapping_cost = (double) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
             $item = array(
                 'title' => 'Wrapping',
@@ -179,7 +171,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => 1,
                 'currency_id' => $this->context->currency->iso_code,
-                'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $wrapping_cost,
             );
             $items[] = $item;
         }
@@ -192,7 +184,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'description' => 'Discount provided by store',
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => 1,
-                'unit_price' => $round ? round(-$discounts) : -$discounts,
+                'unit_price' => -$discounts,
             );
             $items[] = $item;
         }
@@ -205,7 +197,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                 'description' => 'Shipping service used by store',
                 'category_id' => $mercadopagoSettings['category_id'],
                 'quantity' => 1,
-                'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
+                'unit_price' => $shipping_cost,
             );
             $items[] = $item;
         }
