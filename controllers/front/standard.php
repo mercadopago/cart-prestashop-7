@@ -277,7 +277,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
     {
         $mercadoPagoSettings = array();
         $mercadoPagoSettings['accessToken'] = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
-        $mercadoPagoSettings['standard_active'] = Configuration::get('MERCADOPAGO_CHECKOUT_STATUS');
+        $mercadoPagoSettings['standard_active'] = Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT');
         $mercadoPagoSettings['site_id'] = Configuration::get('MERCADOPAGO_SITE_ID');
         $mercadoPagoSettings['category_id'] = Configuration::get('MERCADOPAGO_STORE_CATEGORY');
         $mercadoPagoSettings['installments'] = Configuration::get('MERCADOPAGO_INSTALLMENTS');
@@ -294,7 +294,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         }
         
         $mercadoPagoSettings['binary_mode'] = false;
-        if (Configuration::get('MERCADOPAGO_BINARY_MODE') == 1) {
+        if (Configuration::get('MERCADOPAGO_STANDARD_BINARY_MODE') == 1) {
             $mercadoPagoSettings['binary_mode'] = true;
         }
         

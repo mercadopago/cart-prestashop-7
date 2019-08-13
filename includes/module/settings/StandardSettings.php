@@ -53,17 +53,17 @@ class StandardSettings extends AbstractSettings
             array(
                 'type' => 'switch',
                 'label' => $this->module->l('Activate checkout'),
-                'name' => 'MERCADOPAGO_CHECKOUT_STATUS',
+                'name' => 'MERCADOPAGO_STANDARD_CHECKOUT',
                 'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.'),
                 'is_bool' => true,
                 'values' => array(
                     array(
-                        'id' => 'MERCADOPAGO_CHECKOUT_STATUS_ON',
+                        'id' => 'MERCADOPAGO_STANDARD_CHECKOUT_ON',
                         'value' => true,
                         'label' => $this->module->l('Active')
                     ),
                     array(
-                        'id' => 'MERCADOPAGO_CHECKOUT_STATUS_OFF',
+                        'id' => 'MERCADOPAGO_STANDARD_CHECKOUT_OFF',
                         'value' => false,
                         'label' => $this->module->l('Inactive')
                     )
@@ -130,7 +130,7 @@ class StandardSettings extends AbstractSettings
             array(
                 'type' => 'switch',
                 'label' => $this->module->l('Binary Mode'),
-                'name' => 'MERCADOPAGO_BINARY_MODE',
+                'name' => 'MERCADOPAGO_STANDARD_BINARY_MODE',
                 'is_bool' => true,
                 'desc' => $this->module->l('Accept and reject payments automatically. Do you want us to activate it? '),
                 'hint' => $this->module->l('If you activate the binary mode ') .
@@ -139,12 +139,12 @@ class StandardSettings extends AbstractSettings
                     $this->module->l('Leave it inactive to be protected by our own tool.'),
                 'values' => array(
                     array(
-                        'id' => 'MERCADOPAGO_BINARY_MODE_ON',
+                        'id' => 'MERCADOPAGO_STANDARD_BINARY_MODE_ON',
                         'value' => true,
                         'label' => $this->module->l('Active')
                     ),
                     array(
-                        'id' => 'MERCADOPAGO_BINARY_MODE_OFF',
+                        'id' => 'MERCADOPAGO_STANDARD_BINARY_MODE_OFF',
                         'value' => false,
                         'label' => $this->module->l('Inactive')
                     )
@@ -152,7 +152,7 @@ class StandardSettings extends AbstractSettings
             ),
             array(
                 'col' => 2,
-                'suffix' => 'horas',
+                'suffix' => 'hours',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_EXPIRATION_DATE_TO',
                 'label' => $this->module->l('Save payment preferences during '),
@@ -175,15 +175,11 @@ class StandardSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $expiration_date = Tools::getValue('MERCADOPAGO_EXPIRATION_DATE_TO');
+        $this->validate = (['MERCADOPAGO_EXPIRATION_DATE_TO' => 'expiration_preference']);
 
-        if ($expiration_date != '' && !is_numeric($expiration_date)) {
-            Mercadopago::$form_alert = 'alert-danger';
-            Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
-            MPLog::generate('Invalid expiration_date_to submitted', 'warning');
-        } else {
-            parent::postFormProcess();
-        }
+        parent::postFormProcess();
+
+        Configuration::updateValue('MERCADOPAGO_STANDARD', true);
 
         $this->sendSettingsInfo();
         MPLog::generate('Standard checkout configuration saved successfully');
@@ -198,9 +194,9 @@ class StandardSettings extends AbstractSettings
     {
         $form_values = array(
             'MERCADOPAGO_INSTALLMENTS' => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
-            'MERCADOPAGO_CHECKOUT_STATUS' => Configuration::get('MERCADOPAGO_CHECKOUT_STATUS'),
+            'MERCADOPAGO_STANDARD_CHECKOUT' => Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT'),
             'MERCADOPAGO_AUTO_RETURN' => Configuration::get('MERCADOPAGO_AUTO_RETURN'),
-            'MERCADOPAGO_BINARY_MODE' => Configuration::get('MERCADOPAGO_BINARY_MODE'),
+            'MERCADOPAGO_STANDARD_BINARY_MODE' => Configuration::get('MERCADOPAGO_STANDARD_BINARY_MODE'),
             'MERCADOPAGO_EXPIRATION_DATE_TO' => Configuration::get('MERCADOPAGO_EXPIRATION_DATE_TO'),
         );
 

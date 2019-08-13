@@ -25,8 +25,8 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-// error_reporting(E_ALL);
-// ini_set('display_errors','On');
+error_reporting(E_ALL);
+ini_set('display_errors','On');
 
 define('MP_VERSION', '4.0.1');
 define('MP_ROOT_URL', dirname(__FILE__));
@@ -155,12 +155,16 @@ class Mercadopago extends PaymentModule
 
         $store = new StoreSettings();
         $rating = new RatingSettings();
+        $custom = new CustomSettings();
+        $ticket = new TicketSettings();
         $standard = new StandardSettings();
         $credentials = new CredentialsSettings();
         $localization = new LocalizationSettings();
         $homologation = new HomologationSettings();
 
         $store = $this->renderForm($store->submit, $store->values, $store->form);
+        $custom = $this->renderForm($custom->submit, $custom->values, $custom->form);
+        $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
         $standard = $this->renderForm($standard->submit, $standard->values, $standard->form);
         $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
         $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
@@ -177,6 +181,8 @@ class Mercadopago extends PaymentModule
             'homolog_form' => $homologation,
             'store_form' => $store,
             'standard_form' => $standard,
+            'custom_form' => $custom,
+            'ticket_form' => $ticket,
             'access_token' => Configuration::get('MERCADOPAGO_ACCESS_TOKEN'),
             'sandbox_status' => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
             'sandbox_access_token' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN'),
@@ -215,6 +221,8 @@ class Mercadopago extends PaymentModule
         require_once MP_ROOT_URL . '/includes/module/settings/StoreSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/RatingSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/CustomSettings.php';
+        require_once MP_ROOT_URL . '/includes/module/settings/TicketSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
         require_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
@@ -345,7 +353,7 @@ class Mercadopago extends PaymentModule
 
         $this->smarty->assign('module_dir', $this->_path);
 
-        if (Configuration::get('MERCADOPAGO_CHECKOUT_STATUS') == true) {
+        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
             $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
             $redirect = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
                 '?fc=module&module=mercadopago&controller=standard&checkout=standard';
@@ -395,7 +403,7 @@ class Mercadopago extends PaymentModule
             return;
         }
 
-        if (Configuration::get('MERCADOPAGO_CHECKOUT_STATUS') == true) {
+        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
             $debito = 0;
             $credito = 0;
             $efectivo = 0;

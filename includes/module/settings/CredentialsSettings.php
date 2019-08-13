@@ -124,30 +124,17 @@ class CredentialsSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $access_token = Tools::getValue('MERCADOPAGO_ACCESS_TOKEN');
-        $sandbox_access_token = Tools::getValue('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        $this->validate = ([
+            'MERCADOPAGO_ACCESS_TOKEN' => 'credentials',
+            'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => 'credentials'
+        ]);
 
-        //validate the tokens
-        $token_validation = $this->mercadopago->isValidAccessToken($access_token);
-        $sandbox_token_validation = $this->mercadopago->isValidAccessToken($sandbox_access_token);
-
-        if ($access_token == '' || $token_validation == false) {
-            Mercadopago::$form_alert = 'alert-danger';
-            MPLog::generate('Invalid APP_USR credentials submitted', 'warning');
-        } elseif ($sandbox_access_token == '' || $sandbox_token_validation == false) {
-            Mercadopago::$form_alert = 'alert-danger';
-            MPLog::generate('Invalid TEST credentials submitted', 'warning');
-        } else {
-            parent::postFormProcess();
-        }
+        parent::postFormProcess();
 
         //activate checkout
-        if (Mercadopago::$form_alert == 'alert-danger') {
-            Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
-        } else {
-            if (Configuration::get('MERCADOPAGO_CHECKOUT_STATUS') == '') {
-
-                Configuration::updateValue('MERCADOPAGO_CHECKOUT_STATUS', true);
+        if (Mercadopago::$form_alert != 'alert-danger') {
+            if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == '') {
+                Configuration::updateValue('MERCADOPAGO_STANDARD_CHECKOUT', true);
                 $payment_methods = $this->mercadopago->getPaymentMethods();
                 foreach ($payment_methods as $payment_method) {
                     $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
@@ -155,7 +142,6 @@ class CredentialsSettings extends AbstractSettings
                 }
             }
 
-            Mercadopago::$form_alert = 'alert-success';
             Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.');
 
             $this->sendSettingsInfo();

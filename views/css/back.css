@@ -115,6 +115,10 @@
     cursor: pointer !important;
 }
 
+.no-select{
+    user-select: none !important;
+}
+
 .hr-mp-modal{
     margin-top: 25px !important;
     border-top: 1px solid #ccc !important;
@@ -676,7 +680,7 @@
     user-select: none;
 }
 
-.mp-input-collapsible{
+.mp-input-collapsible, .mp-custom-input-collapsible, .mp-ticket-input-collapsible{
     display: none;
 }
 

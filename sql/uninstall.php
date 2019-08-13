@@ -38,4 +38,4 @@ Configuration::deleteByName('MERCADOPAGO_PUBLIC_KEY');
 //new version
 Configuration::deleteByName('MERCADOPAGO_ACCESS_TOKEN');
 Configuration::deleteByName('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
-Configuration::deleteByName('MERCADOPAGO_CHECKOUT_STATUS');
+Configuration::deleteByName('MERCADOPAGO_STANDARD_CHECKOUT');

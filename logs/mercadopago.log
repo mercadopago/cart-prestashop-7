@@ -57,3 +57,204 @@
 [2019-08-09 22:31:34] [ERROR]: API application_search_owner_id error: 
 [2019-08-09 22:31:47] [ERROR]: API application_search_owner_id error: 
 [2019-08-09 22:35:12] [ERROR]: API application_search_owner_id error: 
+[2019-08-12 20:55:32] [INFO]: Custom checkout configuration saved successfully
+[2019-08-12 20:57:49] [INFO]: Custom checkout configuration saved successfully
+[2019-08-12 21:31:28] [INFO]: Store information saved successfully
+[2019-08-12 21:31:31] [INFO]: Store information saved successfully
+[2019-08-12 21:32:12] [INFO]: Store information saved successfully
+[2019-08-12 21:35:48] [INFO]: Store information saved successfully
+[2019-08-12 21:36:07] [INFO]: Store information saved successfully
+[2019-08-12 21:38:41] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 21:38:41] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 21:38:41] [INFO]: Store information saved successfully
+[2019-08-12 22:00:12] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 22:00:12] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 22:00:12] [INFO]: Store information saved successfully
+[2019-08-12 22:00:28] [INFO]: Store information saved successfully
+[2019-08-12 22:08:47] [INFO]: Store information saved successfully
+[2019-08-12 22:09:47] [INFO]: Store information saved successfully
+[2019-08-12 22:10:04] [INFO]: Store information saved successfully
+[2019-08-12 22:15:13] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 22:15:13] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 22:15:13] [INFO]: Store information saved successfully
+[2019-08-12 22:15:27] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 22:15:27] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 22:15:27] [INFO]: Store information saved successfully
+[2019-08-12 22:15:36] [INFO]: Store information saved successfully
+[2019-08-12 22:16:07] [INFO]: Store information saved successfully
+[2019-08-12 22:17:37] [INFO]: Store information saved successfully
+[2019-08-12 22:17:48] [INFO]: Store information saved successfully
+[2019-08-12 22:21:31] [INFO]: Store information saved successfully
+[2019-08-12 22:23:38] [INFO]: Store information saved successfully
+[2019-08-12 22:24:38] [INFO]: Store information saved successfully
+[2019-08-12 22:25:19] [INFO]: Store information saved successfully
+[2019-08-12 22:25:26] [INFO]: Store information saved successfully
+[2019-08-12 22:25:59] [INFO]: Store information saved successfully
+[2019-08-12 22:30:28] [INFO]: Store information saved successfully
+[2019-08-12 22:30:51] [INFO]: Store information saved successfully
+[2019-08-12 23:02:49] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:02:49] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:02:49] [INFO]: Store information saved successfully
+[2019-08-12 23:04:39] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:04:39] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:04:39] [INFO]: Store information saved successfully
+[2019-08-12 23:05:41] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:05:41] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:05:41] [INFO]: Store information saved successfully
+[2019-08-12 23:05:52] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:05:52] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:05:52] [INFO]: Store information saved successfully
+[2019-08-12 23:06:08] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:06:08] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:06:08] [INFO]: Store information saved successfully
+[2019-08-12 23:06:26] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:06:26] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:06:26] [INFO]: Store information saved successfully
+[2019-08-12 23:09:55] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:09:55] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:09:55] [INFO]: Store information saved successfully
+[2019-08-12 23:11:12] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:11:12] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:11:12] [INFO]: Store information saved successfully
+[2019-08-12 23:11:58] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:11:58] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:11:58] [INFO]: Store information saved successfully
+[2019-08-12 23:12:48] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:12:48] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:12:48] [INFO]: Store information saved successfully
+[2019-08-12 23:13:00] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:13:00] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:13:00] [INFO]: Store information saved successfully
+[2019-08-12 23:13:35] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:13:35] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:13:35] [INFO]: Store information saved successfully
+[2019-08-12 23:14:53] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:14:53] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:14:53] [INFO]: Store information saved successfully
+[2019-08-12 23:15:08] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:15:08] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:15:08] [INFO]: Store information saved successfully
+[2019-08-12 23:17:43] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:17:43] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:17:43] [INFO]: Store information saved successfully
+[2019-08-12 23:18:06] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:18:06] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:18:06] [INFO]: Store information saved successfully
+[2019-08-12 23:20:47] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:20:47] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:20:47] [INFO]: Store information saved successfully
+[2019-08-12 23:21:09] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:21:09] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:21:09] [INFO]: Store information saved successfully
+[2019-08-12 23:21:22] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:21:22] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:21:22] [INFO]: Store information saved successfully
+[2019-08-12 23:22:58] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:22:58] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:22:58] [INFO]: Store information saved successfully
+[2019-08-12 23:23:10] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:23:10] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:23:10] [INFO]: Store information saved successfully
+[2019-08-12 23:28:35] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:28:35] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:28:35] [INFO]: Store information saved successfully
+[2019-08-12 23:28:44] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:28:44] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:28:44] [INFO]: Store information saved successfully
+[2019-08-12 23:28:58] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:28:58] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:28:58] [INFO]: Store information saved successfully
+[2019-08-12 23:29:06] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:29:06] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:29:06] [INFO]: Store information saved successfully
+[2019-08-12 23:29:46] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:29:46] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:29:46] [INFO]: Store information saved successfully
+[2019-08-12 23:30:00] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:30:00] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:30:00] [INFO]: Store information saved successfully
+[2019-08-12 23:30:10] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:30:10] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:30:10] [INFO]: Store information saved successfully
+[2019-08-12 23:30:21] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:30:21] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:30:21] [INFO]: Store information saved successfully
+[2019-08-12 23:30:29] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:30:29] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:30:29] [INFO]: Store information saved successfully
+[2019-08-12 23:31:16] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:31:16] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:31:16] [INFO]: Store information saved successfully
+[2019-08-12 23:31:57] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:31:57] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:31:57] [INFO]: Store information saved successfully
+[2019-08-12 23:32:11] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:32:11] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:32:11] [INFO]: Store information saved successfully
+[2019-08-12 23:34:00] [INFO]: Store information saved successfully
+[2019-08-12 23:35:06] [INFO]: Store information saved successfully
+[2019-08-12 23:35:18] [ERROR]: API valid_sponsor_id error: 
+[2019-08-12 23:35:18] [WARNING]: Invalid sponsor_id submitted
+[2019-08-12 23:35:18] [INFO]: Store information saved successfully
+[2019-08-12 23:35:27] [INFO]: Store information saved successfully
+[2019-08-12 23:43:20] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:43:20] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:44:19] [WARNING]: Invalid expiration_date_to submitted
+[2019-08-12 23:44:20] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:44:20] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:44:40] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:44:40] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:45:04] [WARNING]: Invalid expiration_date_to submitted
+[2019-08-12 23:45:05] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:45:05] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:45:36] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:45:36] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:46:35] [WARNING]: Invalid expiration_date_to submitted
+[2019-08-12 23:46:36] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:46:36] [INFO]: Standard checkout configuration saved successfully
+[2019-08-12 23:46:53] [WARNING]: Invalid expiration_date_to submitted
+[2019-08-12 23:46:54] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-12 23:46:54] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 00:01:47] [ERROR]: API valid_sponsor_id error: 
+[2019-08-13 00:01:47] [WARNING]: Invalid sponsor_id submitted
+[2019-08-13 00:01:47] [INFO]: Store information saved successfully
+[2019-08-13 00:02:42] [ERROR]: API valid_sponsor_id error: 
+[2019-08-13 00:02:42] [WARNING]: Invalid sponsor_id submitted
+[2019-08-13 00:02:42] [INFO]: Store information saved successfully
+[2019-08-13 00:03:06] [INFO]: Store information saved successfully
+[2019-08-13 00:03:16] [ERROR]: API valid_sponsor_id error: 
+[2019-08-13 00:03:16] [WARNING]: Invalid sponsor_id submitted
+[2019-08-13 00:03:16] [INFO]: Store information saved successfully
+[2019-08-13 00:03:27] [INFO]: Store information saved successfully
+[2019-08-13 00:12:24] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-13 00:12:24] [INFO]: Credentials saved successfully
+[2019-08-13 00:12:36] [ERROR]: API valid_access_token error: invalid_token
+[2019-08-13 00:12:36] [WARNING]: Invalid TEST_USR or APP_USR credentials submitted
+[2019-08-13 00:13:11] [ERROR]: API valid_access_token error: invalid_token
+[2019-08-13 00:13:11] [WARNING]: Invalid TEST_USR or APP_USR credentials submitted
+[2019-08-13 00:13:22] [ERROR]: API save_api_settings error: Internal server error
+[2019-08-13 00:13:22] [INFO]: Credentials saved successfully
+[2019-08-13 15:39:17] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 15:42:34] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 15:44:57] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 15:45:14] [WARNING]: Invalid commission or discount submitted
+[2019-08-13 15:45:14] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 16:13:56] [WARNING]: Invalid commission or discount submitted
+[2019-08-13 16:13:56] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 16:20:23] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 16:20:58] [WARNING]: Invalid commission or discount submitted
+[2019-08-13 16:20:58] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 16:21:14] [INFO]: Custom checkout configuration saved successfully
+[2019-08-13 18:51:39] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 18:51:41] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 18:51:57] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 18:51:59] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 19:52:48] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 19:52:49] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 19:53:13] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 19:53:15] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 19:54:04] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 19:54:23] [INFO]: Standard checkout configuration saved successfully
+[2019-08-13 19:54:39] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 19:55:00] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-13 21:13:20] [INFO]: Ticket checkout configuration saved successfully

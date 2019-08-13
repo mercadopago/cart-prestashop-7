@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2018 PrestaShop.
  *
@@ -32,6 +33,7 @@ class AbstractSettings
     public $submit;
     public $process;
     public $mercadopago;
+    protected $validate;
 
     public function __construct()
     {
@@ -66,7 +68,8 @@ class AbstractSettings
      *
      * @return void
      */
-    public function verifyPostProcess(){
+    public function verifyPostProcess()
+    {
         if (((bool) Tools::isSubmit($this->submit)) == true) {
             return $this->postFormProcess();
         }
@@ -79,18 +82,78 @@ class AbstractSettings
      */
     public function postFormProcess()
     {
-        $form_values = array();
+        $form_alert = false;
 
         foreach (array_keys($this->values) as $key) {
             $value = Tools::getValue($key);
-            $form_values[$key] = $value;
+
+            if (!$this->validateInput($key, $value)) {
+                $form_alert = true;
+                continue;
+            }
+
+            $this->values[$key] = $value;
             Configuration::updateValue($key, $value);
         }
 
-        Mercadopago::$form_alert = 'alert-success';
-        Mercadopago::$form_message = $this->module->l('Settings saved successfully.');
+        if ($form_alert == false) {
+            Mercadopago::$form_alert = 'alert-success';
+            Mercadopago::$form_message = $this->module->l('Settings saved successfully.');
+        }
+    }
 
-        $this->values = $form_values;
+    /**
+     * Validate input for submit
+     *
+     * @param mixed $input
+     * @return void
+     */
+    public function validateInput($input, $value)
+    {
+        if (array_key_exists($input, $this->validate)) {
+            switch ($this->validate[$input]) {
+                case "sponsor_id":
+                    if ($value != '' && !$this->mercadopago->isValidSponsorId($value)) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message .= $this->module->l('Sponsor ID must be valid and ') . $this->module->l('must be from the same country as the seller.');
+                        MPLog::generate('Invalid sponsor_id submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "expiration_preference";
+                    if ($value != '' && !is_numeric($value)) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
+                        MPLog::generate('Invalid expiration_date_to submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "credentials":
+                    if ($value != '' && !$this->mercadopago->isValidAccessToken($value)) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        MPLog::generate('Invalid TEST_USR or APP_USR credentials submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "percentage":
+                    if ($value != '' && !is_int($value) && $value > 99) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message = $this->module->l('Commission and discount must be an integer and less than 100%');
+                        MPLog::generate('Invalid commission or discount submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                default:
+                    return true;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -98,9 +161,9 @@ class AbstractSettings
      *
      * @return void
      */
-    protected function sendSettingsInfo()
+    public function sendSettingsInfo()
     {
-        $checkout_basic = (Configuration::get('MERCADOPAGO_CHECKOUT_STATUS') == true) ? 'true' : 'false';
+        $checkout_basic = (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) ? 'true' : 'false';
 
         $data = array(
             "platform" => "PrestaShop",

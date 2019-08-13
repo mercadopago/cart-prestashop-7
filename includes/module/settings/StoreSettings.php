@@ -91,15 +91,9 @@ class StoreSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $sponsor_id = Tools::getValue('MERCADOPAGO_SPONSOR_ID');
+        $this->validate = (['MERCADOPAGO_SPONSOR_ID' => 'sponsor_id']);
 
-        if ($sponsor_id != '' && !$this->mercadopago->isValidSponsorId($sponsor_id)) {
-            Mercadopago::$form_alert = 'alert-danger';
-            Mercadopago::$form_message .= $this->module->l('Sponsor ID must be valid and ') . $this->module->l('must be from the same country as the seller.');
-            MPLog::generate('Invalid sponsor_id submitted', 'warning');
-        } else {
-            parent::postFormProcess();
-        }
+        parent::postFormProcess();
 
         MPLog::generate('Store information saved successfully');
     }
