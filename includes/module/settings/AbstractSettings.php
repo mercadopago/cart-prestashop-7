@@ -110,7 +110,7 @@ class AbstractSettings
      */
     public function validateInput($input, $value)
     {
-        if (array_key_exists($input, $this->validate)) {
+        if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
                 case "sponsor_id":
                     if ($value != '' && !$this->mercadopago->isValidSponsorId($value)) {
@@ -144,6 +144,15 @@ class AbstractSettings
                         Mercadopago::$form_alert = 'alert-danger';
                         Mercadopago::$form_message = $this->module->l('Commission and discount must be an integer and less than 100%');
                         MPLog::generate('Invalid commission or discount submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "payment_due";
+                    if ($value != '' && !is_numeric($value)) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message .= $this->module->l('The payment due must be an integer.');
+                        MPLog::generate('Invalid payment_due submitted', 'warning');
                         return false;
                     }
                     break;

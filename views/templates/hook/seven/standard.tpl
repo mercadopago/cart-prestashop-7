@@ -26,7 +26,7 @@
 <div class="row">
     <h2 class="title-checkout">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</h2>
     
-    {if $credito != 0}
+    {if count($credit) != 0}
     <div class="col-xs-12 col-md-12 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">
@@ -36,38 +36,32 @@
                 </span>
             </p>
             
-            {foreach $tarjetas as $tarjeta}
-                {if $tarjeta['type'] == 'credit_card' && Configuration::get($tarjeta['config']) == 'on'}
-                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
-                {/if}
+            {foreach $credit as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
             {/foreach}
         </div>
     </div>
     {/if}
     
-    {if $debito != 0}
+    {if count($debit) != 0}
 	<div class="col-xs-12 col-lg-6 col-md-6 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
             
-            {foreach $tarjetas as $tarjeta}
-                {if $tarjeta['type'] == 'debit_card' && Configuration::get($tarjeta['config']) == 'on' || $tarjeta['type'] == 'prepaid_card' && Configuration::get($tarjeta['config']) == 'on'}
-                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
-                {/if}
+            {foreach $debit as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
             {/foreach}
         </div>
 	</div>
     {/if}
     
-    {if $efectivo != 0}
+    {if count($ticket) != 0}
     <div class="col-xs-12 col-lg-6 col-md-6 col-12">
         <div class="frame-tarjetas">
             <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
             
-            {foreach $tarjetas as $tarjeta}
-                {if $tarjeta['type'] != 'credit_card' && $tarjeta['type'] != 'debit_card' && $tarjeta['type'] != 'prepaid_card' && Configuration::get($tarjeta['config']) == 'on'}
-                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
-                {/if}
+            {foreach $ticket as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
             {/foreach}
         </div>
 	</div>

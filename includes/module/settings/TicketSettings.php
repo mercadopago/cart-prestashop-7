@@ -143,7 +143,7 @@ class TicketSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = (['MERCADOPAGO_TICKET_EXPIRATION' => 'expiration_preference']);
+        $this->validate = (['MERCADOPAGO_TICKET_EXPIRATION' => 'payment_due']);
 
         parent::postFormProcess();
 

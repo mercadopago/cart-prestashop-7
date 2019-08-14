@@ -56,7 +56,6 @@ class Mercadopago extends PaymentModule
     public function __construct()
     {
         $this->loadFiles();
-        $this->loadSettings();
         $this->mercadopago = MPApi::getInstance();
         $this->mpuseful = MPUseful::getInstance();
 
@@ -151,8 +150,7 @@ class Mercadopago extends PaymentModule
         }
 
         //return forms for admin views
-        $country_link = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
-
+        $this->loadSettings();
         $store = new StoreSettings();
         $rating = new RatingSettings();
         $custom = new CustomSettings();
@@ -169,6 +167,8 @@ class Mercadopago extends PaymentModule
         $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
         $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
         $homologation = $this->renderForm($homologation->submit, $homologation->values, $homologation->form);
+
+        $country_link = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         $output = $this->context->smarty->assign(array(
             'alert' => self::$form_alert,
@@ -403,40 +403,52 @@ class Mercadopago extends PaymentModule
             return;
         }
 
+        $payment_options = [
+            $this->getStandardCheckout()
+        ];
+
+        return $payment_options;
+    }
+
+    /**
+     * Get standard checkout
+     *
+     * @return void
+     */
+    public function getStandardCheckout()
+    {
         if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
-            $debito = 0;
-            $credito = 0;
-            $efectivo = 0;
+            $debit = array();
+            $credit = array();
+            $ticket = array();
             $tarjetas = $this->mercadopago->getPaymentMethods();
             foreach ($tarjetas as $tarjeta) {
                 if (Configuration::get($tarjeta['config']) != "") {
                     if ($tarjeta['type'] == 'credit_card') {
-                        $credito += 1;
+                        $credit[] = $tarjeta;
                     } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
-                        $debito += 1;
+                        $debit[] = $tarjeta;
                     } else {
-                        $efectivo += 1;
+                        $ticket[] = $tarjeta;
                     }
                 }
             }
 
             $infoTemplate = $this->context->smarty->assign(array(
-                "debito" => $debito,
-                "credito" => $credito,
-                "efectivo" => $efectivo,
-                "tarjetas" => $tarjetas,
+                "debit" => $debit,
+                "credit" => $credit,
+                "ticket" => $ticket,
                 "module_dir" => $this->_path,
                 "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
-            ))
-                ->fetch('module:mercadopago/views/templates/hook/payment_seven.tpl');
+            ))->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
 
-            $newOption = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $newOption->setCallToActionText($this->l('I want to pay with Mercado Pago without additional cost.'))
+            $standardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+            $standardCheckout->setCallToActionText($this->l('I want to pay with Mercado Pago without additional cost.'))
                 ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
                 ->setAdditionalInformation($infoTemplate)
                 ->setAction($this->context->link->getModuleLink($this->name, 'standard'));
 
-            return [$newOption];
+            return $standardCheckout;
         }
     }
 
