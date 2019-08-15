@@ -129,6 +129,25 @@ class StandardSettings extends AbstractSettings
             ),
             array(
                 'type' => 'switch',
+                'label' => $this->module->l('Modal checkout'),
+                'name' => 'MERCADOPAGO_STANDARD_MODAL',
+                'is_bool' => true,
+                'desc' => $this->module->l('Activate this option for modal checkout.'),
+                'values' => array(
+                    array(
+                        'id' => 'MERCADOPAGO_STANDARD_MODAL_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Active')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_STANDARD_MODAL_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Inactive')
+                    )
+                ),
+            ),
+            array(
+                'type' => 'switch',
                 'label' => $this->module->l('Binary Mode'),
                 'name' => 'MERCADOPAGO_STANDARD_BINARY_MODE',
                 'is_bool' => true,
@@ -196,6 +215,7 @@ class StandardSettings extends AbstractSettings
             'MERCADOPAGO_INSTALLMENTS' => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
             'MERCADOPAGO_STANDARD_CHECKOUT' => Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT'),
             'MERCADOPAGO_AUTO_RETURN' => Configuration::get('MERCADOPAGO_AUTO_RETURN'),
+            'MERCADOPAGO_STANDARD_MODAL' => Configuration::get('MERCADOPAGO_STANDARD_MODAL'),
             'MERCADOPAGO_STANDARD_BINARY_MODE' => Configuration::get('MERCADOPAGO_STANDARD_BINARY_MODE'),
             'MERCADOPAGO_EXPIRATION_DATE_TO' => Configuration::get('MERCADOPAGO_EXPIRATION_DATE_TO'),
         );

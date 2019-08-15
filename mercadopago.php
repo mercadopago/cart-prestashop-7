@@ -404,7 +404,7 @@ class Mercadopago extends PaymentModule
         }
 
         $payment_options = [
-            $this->getStandardCheckout()
+            $this->getStandardCheckout(),
         ];
 
         return $payment_options;
@@ -434,21 +434,48 @@ class Mercadopago extends PaymentModule
                 }
             }
 
+            $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+            $redirect = $this->context->link->getModuleLink($this->name, 'standard');
+
             $infoTemplate = $this->context->smarty->assign(array(
                 "debit" => $debit,
                 "credit" => $credit,
                 "ticket" => $ticket,
+                "modal" => $modal,
+                "redirect" => $redirect,
                 "module_dir" => $this->_path,
+                "public_key" => Configuration::get('MERCADOPAGO_PUBLIC_KEY'),
                 "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
             ))->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
 
             $standardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $standardCheckout->setCallToActionText($this->l('I want to pay with Mercado Pago without additional cost.'))
-                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
-                ->setAdditionalInformation($infoTemplate)
-                ->setAction($this->context->link->getModuleLink($this->name, 'standard'));
+            $standardCheckout->setForm($infoTemplate)
+                ->setCallToActionText($this->l('I want to pay with Standard Checkout.'))
+                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
             return $standardCheckout;
+        }
+    }
+
+    /**
+     * Get standard checkout
+     *
+     * @return void
+     */
+    public function getCustomCheckout()
+    {
+        if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
+            $infoTemplate = $this->context->smarty->assign(array(
+                "module_dir" => $this->_path,
+            ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
+
+            $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+            $customCheckout->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
+                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
+                ->setAdditionalInformation($infoTemplate)
+                ->setAction($this->context->link->getModuleLink($this->name, 'custom'));
+
+            return $customCheckout;
         }
     }
 
