@@ -25,7 +25,9 @@
 
 <form id="mp_standard_checkout" method="post" action="{$redirect}">
     <div class="row frame-checkout-seven">
-        <h2 class="title-checkout">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</h2>
+        <div class="col-xs-12 col-md-12 col-12">
+            <h2 class="title-checkout">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</h2>
+        </div>
 
         {if count($credit) != 0}
         <div class="col-xs-12 col-md-12 col-12">

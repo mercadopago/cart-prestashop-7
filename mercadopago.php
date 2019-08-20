@@ -26,7 +26,7 @@
  */
 
 error_reporting(E_ALL);
-ini_set('display_errors','On');
+ini_set('display_errors', 'On');
 
 define('MP_VERSION', '4.0.1');
 define('MP_ROOT_URL', dirname(__FILE__));
@@ -405,6 +405,8 @@ class Mercadopago extends PaymentModule
 
         $payment_options = [
             $this->getStandardCheckout(),
+            $this->getCustomCheckout(),
+            $this->getTicketCheckout(),
         ];
 
         return $payment_options;
@@ -465,17 +467,67 @@ class Mercadopago extends PaymentModule
     public function getCustomCheckout()
     {
         if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
+            $debit = array();
+            $credit = array();
+            $tarjetas = $this->mercadopago->getPaymentMethods();
+            foreach ($tarjetas as $tarjeta) {
+                if (Configuration::get($tarjeta['config']) != "") {
+                    if ($tarjeta['type'] == 'credit_card') {
+                        $credit[] = $tarjeta;
+                    } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                        $debit[] = $tarjeta;
+                    }
+                }
+            }
+
             $infoTemplate = $this->context->smarty->assign(array(
+                "debit" => $debit,
+                "credit" => $credit,
                 "module_dir" => $this->_path,
             ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 
             $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $customCheckout->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
-                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
-                ->setAdditionalInformation($infoTemplate)
-                ->setAction($this->context->link->getModuleLink($this->name, 'custom'));
+            $customCheckout->setForm($infoTemplate)
+                ->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
+                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
             return $customCheckout;
+        }
+    }
+
+    /**
+     * Get standard checkout
+     *
+     * @return void
+     */
+    public function getTicketCheckout()
+    {
+        $ticket = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if (
+                    $tarjeta['type'] != 'credit_card' &&
+                    $tarjeta['type'] != 'debit_card' &&
+                    $tarjeta['type'] != 'prepaid_card'
+                ) {
+                    $ticket[] = $tarjeta;
+                }
+            }
+        }
+
+        if (Configuration::get('MERCADOPAGO_TICKET_CHECKOUT') == true) {
+            $infoTemplate = $this->context->smarty->assign(array(
+                "ticket" => $ticket,
+                "module_dir" => $this->_path,
+            ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
+
+            $ticketCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+            $ticketCheckout->setForm($infoTemplate)
+                ->setCallToActionText($this->l('I want to pay with Ticket Checkout.'))
+                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+
+            return $ticketCheckout;
         }
     }
 

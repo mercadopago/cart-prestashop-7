@@ -26,6 +26,7 @@
 
 class MercadoPagoStandardModuleFrontController extends ModuleFrontController
 {
+    protected $mpuseful;
     protected $mercadopago;
     
     public function __construct()
