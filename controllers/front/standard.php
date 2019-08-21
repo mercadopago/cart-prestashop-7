@@ -25,9 +25,9 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
+require_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
 
-class MercadoPagoStandardModuleFrontController extends AbstractPreference
+class MercadoPagoStandardModuleFrontController extends ModuleFrontController
 {
     public function __construct()
     {
@@ -42,20 +42,27 @@ class MercadoPagoStandardModuleFrontController extends AbstractPreference
     public function postProcess()
     {
         $cart = $this->context->cart;
+        $preference = new StandardPreference();
+        $preference->verifyModuleParameters();
 
-        $preference = $this->getCommonPreference($cart);
-        $preference['items'] = $this->getCartItems($cart);
-        $preference['payer'] = $this->getCustomerData($cart);
-        $preference['shipments'] = $this->getShipment();
-        $preference['back_urls'] = $this->getBackUrls($cart);
-        $preference['payment_methods'] = $this->getPaymentOptions();
-        $preference['auto_return'] = $this->getAutoReturn();
-        $preference['binary_mode'] = $this->getBinaryMode();
-        $preference['expires'] = $this->getExpirationStatus();
-        $preference['expiration_date_to'] = $this->getExpirationDate();
+        //modal checkout
+        if ($preference->settings['MERCADOPAGO_STANDARD_MODAL'] != "") {
+            return $this->standardModalCheckout($preference);
+        }
 
-        $preference = Tools::jsonEncode($preference);
-        $createPreference = $this->mercadopago->createPreference($preference);
+        //redirect checkout
+        return $this->standardRedirectCheckout($cart, $preference);
+    }
+
+    /**
+     * Verify if standard checkout is redirect
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function standardRedirectCheckout($cart, $preference)
+    {
+        $createPreference = $preference->createPreference($cart);
 
         //save data in mercadopago table
         $mp_module = new MPModule();
@@ -90,156 +97,23 @@ class MercadoPagoStandardModuleFrontController extends AbstractPreference
         }
 
         //failure redirect link
-        return $this->redirectError();
+        return $preference->redirectError();
     }
 
     /**
-     * Get customer data
-     *
-     * @return array
-     */
-    public function getCustomerData($cart)
-    {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
-
-        $customer_data = array(
-            'name' => $customer_fields['firstname'],
-            'surname' => $customer_fields['lastname'],
-            'email' => $customer_fields['email'],
-            'phone' => array(
-                'area_code' => '',
-                'number' => $address_invoice->phone,
-            ),
-            'identification' => array(
-                'type' => '',
-                'number' => '',
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
-                'street_number' => '',
-            ),
-            'date_created' => date("c", strtotime($customer_fields['date_add'])),
-        );
-
-        return $customer_data;
-    }
-
-    /**
-     * Get Mercado Pago payments options
-     *
-     * @return array
-     */
-    public function getPaymentOptions()
-    {
-        $excluded_payment_methods = array();
-        $payment_methods = $this->mercadopago->getPaymentMethods();
-
-        foreach ($payment_methods as $payment_method) {
-            $pm_variable_name = 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($payment_method['id']);
-            $value = Configuration::get($pm_variable_name);
-
-            if ($value != "on") {
-                $excluded_payment_methods[] = array(
-                    'id' => Tools::strtolower($payment_method['id']),
-                );
-            }
-        }
-
-        $payment_options = array(
-            'installments' => (integer) $this->settings['MERCADOPAGO_INSTALLMENTS'],
-            'excluded_payment_types' => array(),
-            'excluded_payment_methods' => $excluded_payment_methods,
-        );
-
-        return $payment_options;
-    }
-
-    /**
-     * Get store shipment
-     *
-     * @return array
-     */
-    public function getShipment()
-    {
-        return array(
-            'mode' => 'not_specified'
-        );
-    }
-
-    /**
-     * Get back urls for preference callback
+     * Verify if standard checkout is modal
      *
      * @param mixed $cart
-     * @return array
+     * @return void
      */
-    public function getBackUrls($cart)
+    public function standardModalCheckout($preference)
     {
-        return array(
-            'success' => $this->getReturnUrl($cart, 'success'),
-            'failure' => $this->getReturnUrl($cart, 'failure'),
-            'pending' => $this->getReturnUrl($cart, 'pending'),
-        );
-    }
+        $back_url = Tools::getValue('back_url');
 
-    /**
-     * Get auto_return for preference
-     *
-     * @return mixed
-     */
-    public function getAutoReturn()
-    {
-        if ($this->settings['MERCADOPAGO_AUTO_RETURN'] == 1) {
-            return $this->settings['MERCADOPAGO_AUTO_RETURN'] = 'approved';
-        }
-    }
-
-    /**
-     * Get binary_mode for preference
-     *
-     * @return mixed
-     */
-    public function getBinaryMode()
-    {
-        if ($this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] == 1) {
-            return $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] = true;
+        if(isset($back_url)){
+            return Tools::redirectLink($back_url);
         }
 
-        return $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] = false;
-    }
-
-    /**
-     * Define if expiration preference status
-     *
-     * @return mixed
-     */
-    public function getExpirationStatus()
-    {
-        if ($this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] != "") {
-            return $this->settings['MERCADOPAGO_EXPIRATION'] = true;
-        }
-
-        return $this->settings['MERCADOPAGO_EXPIRATION'] = false;
-    }
-
-    /**
-     * Get expiration_date_to for preference
-     *
-     * @return mixed
-     */
-    public function getExpirationDate()
-    {
-        if ($this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] != "") {
-            return $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] = date(
-                'Y-m-d\TH:i:s.000O',
-                strtotime('+' . $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] . ' hours')
-            );
-        }
-
-        return $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
+        return $preference->redirectError();
     }
 }

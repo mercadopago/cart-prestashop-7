@@ -25,18 +25,19 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-class AbstractPreference extends ModuleFrontController
+class AbstractPreference
 {
+    public $module;
     public $settings;
     public $mpuseful;
     public $mercadopago;
 
     public function __construct()
     {
-        parent::__construct();
-        $this->mercadopago = MPApi::getInstance();
-        $this->mpuseful = MPUseful::getInstance();
+        $this->module = Module::getInstanceByName('mercadopago');
         $this->settings = $this->getMercadoPagoSettings();
+        $this->mpuseful = MPUseful::getInstance();
+        $this->mercadopago = MPApi::getInstance();
     }
 
     /**
@@ -46,7 +47,7 @@ class AbstractPreference extends ModuleFrontController
      */
     public function verifyModuleParameters()
     {
-        $cart = $this->context->cart;
+        $cart = $this->module->context->cart;
         $authorized = false;
 
         if (
@@ -112,7 +113,7 @@ class AbstractPreference extends ModuleFrontController
                 'unit_price' => $product['price_wt'],
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                "currency_id" => $this->context->currency->iso_code,
+                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => strip_tags($product['description_short']),
             );
 
@@ -127,7 +128,7 @@ class AbstractPreference extends ModuleFrontController
                 'quantity' => 1,
                 'unit_price' => $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'currency_id' => $this->context->currency->iso_code,
+                'currency_id' => $this->module->context->currency->iso_code,
                 'description' => 'Wrapping service used by store',
             );
             $items[] = $item;

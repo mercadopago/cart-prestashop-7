@@ -122,9 +122,9 @@ class MPUseful
     }
 
     /**
-     * Get default country
+     * Get default currency
      *
-     * @param [string] $country
+     * @param string $currency
      * @return string
      */
     public function setMPCurrency($currency)
@@ -145,6 +145,32 @@ class MPUseful
         }
 
         return 'mld';
+    }
+
+    /**
+     * Get modal link
+     *
+     * @param string $localization
+     * @return string
+     */
+    public function getModalLink($localization)
+    {
+        $site_id = array(
+            'MCO' => 'https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js',
+            'MLA' => 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js',
+            'MLB' => 'https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js',
+            'MLC' => 'https://www.mercadopago.cl/integrations/v1/web-payment-checkout.js',
+            'MLM' => 'https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js',
+            'MLU' => 'https://www.mercadopago.com.uy/integrations/v1/web-payment-checkout.js',
+            'MLV' => 'https://www.mercadopago.com.ve/integrations/v1/web-payment-checkout.js',
+            'MPE' => 'https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js',
+        );
+
+        if (array_key_exists($localization, $site_id)) {
+            return $site_id[$localization];
+        }
+
+        return 'ar';
     }
 
     /**

@@ -37,18 +37,19 @@ if (!defined('_PS_VERSION_')) {
 
 class Mercadopago extends PaymentModule
 {
-    public $mercadopago;
-    public $mpuseful;
-    public $name;
     public $tab;
-    public $version;
+    public $name;
     public $author;
-    public $need_instance;
+    public $version;
+    public $context;
+    public $mpuseful;
     public $bootstrap;
+    public $mercadopago;
+    public $module_key;
     public $displayName;
     public $description;
+    public $need_instance;
     public $confirmUninstall;
-    public $module_key;
     public $ps_versions_compliancy;
     public static $form_alert;
     public static $form_message;
@@ -207,6 +208,7 @@ class Mercadopago extends PaymentModule
         require_once MP_ROOT_URL . '/includes/MPLog.php';
         require_once MP_ROOT_URL . '/includes/MPUseful.php';
         require_once MP_ROOT_URL . '/includes/MPRestCli.php';
+        require_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
         require_once MP_ROOT_URL . '/model/MPModule.php';
         require_once MP_ROOT_URL . '/model/MPTransaction.php';
     }
@@ -403,8 +405,10 @@ class Mercadopago extends PaymentModule
             return;
         }
 
+        $cart = $this->context->cart;
+
         $payment_options = [
-            $this->getStandardCheckout(),
+            $this->getStandardCheckout($cart),
             $this->getCustomCheckout(),
             $this->getTicketCheckout(),
         ];
@@ -417,7 +421,7 @@ class Mercadopago extends PaymentModule
      *
      * @return void
      */
-    public function getStandardCheckout()
+    public function getStandardCheckout($cart)
     {
         if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
             $debit = array();
@@ -438,6 +442,19 @@ class Mercadopago extends PaymentModule
 
             $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
             $redirect = $this->context->link->getModuleLink($this->name, 'standard');
+            $preference_id = "";
+            $modal_link = "";
+
+            if($modal != ""){
+                $preference = new StandardPreference();
+                $preference = $preference->createPreference($cart);
+
+                if (array_key_exists('init_point', $preference)) {
+                    $preference_id = $preference['id'];
+                    $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
+                    MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
+                }
+            }
 
             $infoTemplate = $this->context->smarty->assign(array(
                 "debit" => $debit,
@@ -446,7 +463,9 @@ class Mercadopago extends PaymentModule
                 "modal" => $modal,
                 "redirect" => $redirect,
                 "module_dir" => $this->_path,
-                "public_key" => Configuration::get('MERCADOPAGO_PUBLIC_KEY'),
+                "modal_link" => $modal_link,
+                "preference" => $preference_id,
+                "public_key" => $this->mercadopago->getPublicKey(),
                 "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
             ))->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
 

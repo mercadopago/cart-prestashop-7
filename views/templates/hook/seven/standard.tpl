@@ -78,20 +78,21 @@
         </div>
     </div>
 
-    {if $modal == true}
-    <script src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js"
+    {if $modal == true && $preference != ""}
+    <script src="{$modal_link}"
         data-public-key="{$public_key}"
-        data-preference-id="416158914-31f52ae7-ad05-45f4-b3ef-9eb874d1b45d">
+        data-preference-id="{$preference}">
     </script>
     {/if}
 </form>
 
-{if $modal == true}
+{if $modal == true && $preference != ""}
 <script>
-    // document.querySelector('.mercadopago-button').style.display = 'none';
+    var mercadopago_button = document.querySelector('.mercadopago-button');
+    mercadopago_button.style.display = 'none';
     document.forms['mp_standard_checkout'].onsubmit = function () { 
-        document.querySelector(".mercadopago-button").click();
-        return false; 
+        mercadopago_button.click();
+        return false;
     }
 </script>
 {/if}

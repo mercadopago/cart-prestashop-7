@@ -59,6 +59,20 @@ class MPApi
     }
 
     /**
+     * Get public key
+     *
+     * @return void
+     */
+    public function getPublicKey()
+    {
+        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+        }
+
+        return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
+    }
+
+    /**
      * Get payment methods
      *
      * @return void
