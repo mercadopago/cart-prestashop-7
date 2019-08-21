@@ -27,6 +27,7 @@
 
 class AbstractPreference extends ModuleFrontController
 {
+    public $settings;
     public $mpuseful;
     public $mercadopago;
 
@@ -35,6 +36,7 @@ class AbstractPreference extends ModuleFrontController
         parent::__construct();
         $this->mercadopago = MPApi::getInstance();
         $this->mpuseful = MPUseful::getInstance();
+        $this->settings = $this->getMercadoPagoSettings();
     }
 
     /**
@@ -66,40 +68,23 @@ class AbstractPreference extends ModuleFrontController
     }
 
     /**
-     * Get customer data
+     * Return the common fields in preference
      *
-     * @return array
+     * @return void
      */
-    public function getCustomerData()
+    public function getCommonPreference($cart)
     {
-        $cart = $this->context->cart;
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
-
-        $customer_data = array(
-            'name' => $customer_fields['firstname'],
-            'surname' => $customer_fields['lastname'],
-            'email' => $customer_fields['email'],
-            'phone' => array(
-                'area_code' => '',
-                'number' => $address_invoice->phone,
-            ),
-            'identification' => array(
-                'type' => '',
-                'number' => '',
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
-                'street_number' => '',
-            ),
-            'date_created' => date("c", strtotime($customer_fields['date_add'])),
+        $preference = array(
+            'external_reference' => $cart->id,
+            'notification_url' => $this->getNotificationUrl($cart),
+            'statement_descriptor' => $this->settings['MERCADOPAGO_INVOICE_NAME'],
         );
 
-        return $customer_data;
+        if (!$this->mercadopago->isTestUser()) {
+            $preference['sponsor_id'] = $this->getSponsorId();
+        }
+
+        return $preference;
     }
 
     /**
@@ -107,12 +92,10 @@ class AbstractPreference extends ModuleFrontController
      *
      * @return array
      */
-    public function getCartItems()
+    public function getCartItems($cart)
     {
         $items = array();
-        $cart = $this->context->cart;
         $products = $cart->getProducts();
-        $mp_category = Configuration::get('MERCADOPAGO_STORE_CATEGORY');
 
         //Products
         foreach ($products as $product) {
@@ -125,12 +108,12 @@ class AbstractPreference extends ModuleFrontController
             $item = array(
                 'id' => $product['id_product'],
                 'title' => $product['name'],
-                'description' => strip_tags($product['description_short']),
-                'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
-                'category_id' => $mp_category,
                 'quantity' => $product['quantity'],
-                "currency_id" => $this->context->currency->iso_code,
                 'unit_price' => $product['price_wt'],
+                'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
+                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                "currency_id" => $this->context->currency->iso_code,
+                'description' => strip_tags($product['description_short']),
             );
 
             $items[] = $item;
@@ -141,11 +124,11 @@ class AbstractPreference extends ModuleFrontController
         if ($wrapping_cost > 0) {
             $item = array(
                 'title' => 'Wrapping',
-                'description' => 'Wrapping service used by store',
-                'category_id' => $mp_category,
                 'quantity' => 1,
-                'currency_id' => $this->context->currency->iso_code,
                 'unit_price' => $wrapping_cost,
+                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                'currency_id' => $this->context->currency->iso_code,
+                'description' => 'Wrapping service used by store',
             );
             $items[] = $item;
         }
@@ -155,10 +138,10 @@ class AbstractPreference extends ModuleFrontController
         if ($discounts > 0) {
             $item = array(
                 'title' => 'Discount',
-                'description' => 'Discount provided by store',
-                'category_id' => $mp_category,
                 'quantity' => 1,
                 'unit_price' => -$discounts,
+                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                'description' => 'Discount provided by store',
             );
             $items[] = $item;
         }
@@ -168,10 +151,10 @@ class AbstractPreference extends ModuleFrontController
         if ($shipping_cost > 0) {
             $item = array(
                 'title' => 'Shipping',
-                'description' => 'Shipping service used by store',
-                'category_id' => $mp_category,
                 'quantity' => 1,
                 'unit_price' => $shipping_cost,
+                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                'description' => 'Shipping service used by store',
             );
             $items[] = $item;
         }
@@ -180,56 +163,120 @@ class AbstractPreference extends ModuleFrontController
     }
 
     /**
-     * Create preference json
+     * Get notification url
      *
-     * @return array
+     * @return void
      */
-    public function createJson()
+    public function getNotificationUrl($cart)
     {
-        $cart = $this->context->cart;
         $customer = new Customer((int) $cart->id_customer);
-        $mp_settings = array();
 
-        $json = array(
-            'items' => $this->getCartItems(),
-            'payer' => $this->getCustomerData(),
-            'external_reference' => $cart->id,
-
-            'binary_mode' => $mp_settings['binary_mode'],
-            'statement_descriptor' => $mp_settings['statement_descriptor'],
-
-            'payment_methods' => array(
-                'excluded_payment_methods' => $this->getExcludedPaymentMethods(),
-                'excluded_payment_types' => array(),
-                'installments' => (integer) $mp_settings['installments'],
-            ),
-
-            'shipments' => array(
-                'mode'=> 'not_specified'
-            ),
-
-            'back_urls'=> array(
-                'success' => $this->getURLReturn($cart->id, 'success'),
-                'failure' => $this->getURLReturn($cart->id, 'failure'),
-                'pending' => $this->getURLReturn($cart->id, 'pending'),
-            ),
-
-            'auto_return' => $mp_settings['auto_return'],
-            'expires' => $mp_settings['expires'],
-            'expiration_date_to' => $mp_settings['expiration_date_to'],
-        );
-        
-        if (!strrpos($this->getURLSite(), 'localhost')) {
-            $json['notification_url'] = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.
-                '?fc=module&module=mercadopago&controller=notification&'.
-                'checkout=standard&cart_id='.$cart->id.'&customer='.$customer->secure_key.
+        if (!strrpos($this->getSiteUrl(), 'localhost')) {
+            $notifification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
+                '?fc=module&module=mercadopago&controller=notification&' .
+                'checkout=standard&cart_id=' . $cart->id . '&customer=' . $customer->secure_key .
                 '&notification=ipn';
-            
-            if (!$this->mercadopago->isTestUser()) {
-                $json['sponsor_id'] = $mp_settings['sponsor_id'];
-            }
+
+            return $notifification_url;
         }
-        
-        return Tools::jsonEncode($json);
+    }
+
+    /**
+     * Get site url
+     *
+     * @return void
+     */
+    public function getSiteUrl()
+    {
+        $url = Tools::htmlentitiesutf8(('https://' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__);
+
+        return $url;
+    }
+
+    /**
+     * Get return url
+     *
+     * @param mixed $cart
+     * @param string $typeReturn
+     * @return string
+     */
+    public function getReturnUrl($cart, $typeReturn)
+    {
+        $return_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
+            '?fc=module&module=mercadopago&controller=validationstandard&' .
+            'checkout=standard&cart_id=' . $cart->id . '&typeReturn=' . $typeReturn;
+
+        return $return_url;
+    }
+
+    /**
+     * Get sponsor_id for preference
+     *
+     * @return mixed
+     */
+    public function getSponsorId()
+    {
+        $sponsor_id = $this->mpuseful->getCountryConfigs($this->settings['MERCADOPAGO_SITE_ID']);
+
+        if ($this->settings['MERCADOPAGO_SPONSOR_ID'] == "") {
+            return $this->settings['MERCADOPAGO_SPONSOR_ID'] = $sponsor_id;
+        }
+    }
+
+    /**
+     * Get Mercado Pago settings
+     *
+     * @return void
+     */
+    public function getMercadoPagoSettings()
+    {
+        //localization
+        $this->settings['MERCADOPAGO_SITE_ID'] = Configuration::get('MERCADOPAGO_SITE_ID');
+        $this->settings['MERCADOPAGO_COUNTRY_LINK'] = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
+
+        //credentials
+        $this->settings['MERCADOPAGO_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_PUBLIC_KEY');
+        $this->settings['MERCADOPAGO_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        $this->settings['MERCADOPAGO_SANDBOX_STATUS'] = Configuration::get('MERCADOPAGO_SANDBOX_STATUS');
+        $this->settings['MERCADOPAGO_SANDBOX_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+        $this->settings['MERCADOPAGO_SANDBOX_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+
+        //store info
+        $this->settings['MERCADOPAGO_SPONSOR_ID'] = Configuration::get('MERCADOPAGO_SPONSOR_ID');
+        $this->settings['MERCADOPAGO_INVOICE_NAME'] = Configuration::get('MERCADOPAGO_INVOICE_NAME');
+        $this->settings['MERCADOPAGO_STORE_CATEGORY'] = Configuration::get('MERCADOPAGO_STORE_CATEGORY');
+
+        //standard checkout
+        $this->settings['MERCADOPAGO_AUTO_RETURN'] = Configuration::get('MERCADOPAGO_AUTO_RETURN');
+        $this->settings['MERCADOPAGO_INSTALLMENTS'] = Configuration::get('MERCADOPAGO_INSTALLMENTS');
+        $this->settings['MERCADOPAGO_STANDARD_MODAL'] = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+        $this->settings['MERCADOPAGO_STANDARD_CHECKOUT'] = Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT');
+        $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] = Configuration::get('MERCADOPAGO_EXPIRATION_DATE_TO');
+        $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] = Configuration::get('MERCADOPAGO_STANDARD_BINARY_MODE');
+
+        //custom checkout
+        $this->settings['MERCADOPAGO_CUSTOM_COUPON'] = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
+        $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] = Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT');
+        $this->settings['MERCADOPAGO_CUSTOM_COMISSION'] = Configuration::get('MERCADOPAGO_CUSTOM_COMISSION');
+        $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] = Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE');
+
+        //ticket checkout
+        $this->settings['MERCADOPAGO_TICKET_COUPON'] = Configuration::get('MERCADOPAGO_TICKET_COUPON');
+        $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] = Configuration::get('MERCADOPAGO_TICKET_CHECKOUT');
+        $this->settings['MERCADOPAGO_TICKET_INVENTORY'] = Configuration::get('MERCADOPAGO_TICKET_INVENTORY');
+        $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
+
+        return $this->settings;
+    }
+
+    /**
+     * Redirect if any errors occurs
+     *
+     * @return void
+     */
+    public function redirectError()
+    {
+        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
     }
 }

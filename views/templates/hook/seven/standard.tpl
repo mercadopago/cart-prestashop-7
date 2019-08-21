@@ -88,7 +88,7 @@
 
 {if $modal == true}
 <script>
-    document.querySelector('.mercadopago-button').style.display = 'none';
+    // document.querySelector('.mercadopago-button').style.display = 'none';
     document.forms['mp_standard_checkout'].onsubmit = function () { 
         document.querySelector(".mercadopago-button").click();
         return false; 
