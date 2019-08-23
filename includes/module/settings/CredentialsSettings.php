@@ -125,8 +125,10 @@ class CredentialsSettings extends AbstractSettings
     public function postFormProcess()
     {
         $this->validate = ([
-            'MERCADOPAGO_ACCESS_TOKEN' => 'credentials',
-            'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => 'credentials'
+            'MERCADOPAGO_PUBLIC_KEY' => 'public_key',
+            'MERCADOPAGO_ACCESS_TOKEN' => 'access_token',
+            'MERCADOPAGO_SANDBOX_PUBLIC_KEY' => 'public_key',
+            'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => 'access_token',
         ]);
 
         parent::postFormProcess();
@@ -163,5 +165,29 @@ class CredentialsSettings extends AbstractSettings
             'MERCADOPAGO_SANDBOX_PUBLIC_KEY' => Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY'),
             'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN')
         );
+    }
+
+    /**
+     * Validate credentials and save seller information
+     *
+     * @param string $input
+     * @param string $value
+     * @return boolean
+     */
+    public function validateCredentials($input, $value)
+    {
+        $token_validation = $this->mercadopago->isValidAccessToken($value);
+        if (!$token_validation) {
+            return false;
+        }
+
+        if ($input == 'MERCADOPAGO_ACCESS_TOKEN') {
+            $application_id = explode('-', $value);
+            Configuration::updateValue('MERCADOPAGO_APPLICATION_ID', $application_id[1]);
+            Configuration::updateValue('MERCADOPAGO_SELLER_ID', $token_validation['id']);
+            Configuration::updateValue('MERCADOPAGO_SITE_ID', $token_validation['site_id']);
+        }
+
+        return true;
     }
 }

@@ -130,11 +130,20 @@ class AbstractSettings
                     }
                     break;
 
-                case "credentials":
-                    if ($value != '' && !$this->mercadopago->isValidAccessToken($value)) {
+                case "public_key":
+                    if ($value == '') {
                         Mercadopago::$form_alert = 'alert-danger';
                         Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
-                        MPLog::generate('Invalid TEST_USR or APP_USR credentials submitted', 'warning');
+                        MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
+                        return false;
+                    }
+                    break;
+
+                case "access_token":
+                    if (!$this->validateCredentials($input, $value)) {
+                        Mercadopago::$form_alert = 'alert-danger';
+                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
                     break;

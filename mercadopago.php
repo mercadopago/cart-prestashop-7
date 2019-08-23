@@ -28,7 +28,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-define('MP_VERSION', '4.0.1');
+define('MP_VERSION', '4.0.2');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -67,7 +67,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.0.1';
+        $this->version = '4.0.2';
 
         parent::__construct();
 
@@ -209,8 +209,8 @@ class Mercadopago extends PaymentModule
         require_once MP_ROOT_URL . '/includes/MPUseful.php';
         require_once MP_ROOT_URL . '/includes/MPRestCli.php';
         require_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
-        require_once MP_ROOT_URL . '/model/MPModule.php';
-        require_once MP_ROOT_URL . '/model/MPTransaction.php';
+        require_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
+        require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
     }
 
     /**

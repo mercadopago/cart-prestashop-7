@@ -79,10 +79,7 @@
     </div>
 
     {if $modal == true && $preference != ""}
-    <script src="{$modal_link}"
-        data-public-key="{$public_key}"
-        data-preference-id="{$preference}">
-    </script>
+        <script src="{$modal_link}" data-public-key="{$public_key}" data-preference-id="{$preference}"></script>
     {/if}
 </form>
 
