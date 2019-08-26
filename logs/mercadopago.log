@@ -42,3 +42,7 @@
 [2019-08-23 20:25:47] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
 [2019-08-23 20:25:47] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
 [2019-08-23 20:25:51] [INFO]: Credentials saved successfully
+[2019-08-23 22:58:35] [INFO]: Store information saved successfully
+[2019-08-23 22:58:49] [INFO]: Custom checkout configuration saved successfully
+[2019-08-23 22:59:05] [INFO]: Ticket checkout configuration saved successfully
+[2019-08-23 23:00:07] [INFO]: Standard checkout configuration saved successfully
