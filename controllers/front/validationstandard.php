@@ -31,12 +31,12 @@ class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontCont
     {
         $mercadopago = MPApi::getInstance();
         $payments_id = Tools::getValue('collection_id');
-        
+
         //failure payments
-        if (Tools::getValue('typeReturn') == 'failure' && $payments_id == 'null') {
+        if (Tools::getValue('typeReturn') == 'failure') {
             $this->redirectError();
         }
-        
+
         //aproved and pending payments
         if (isset($payments_id) && $payments_id != 'null') {
             //treatment for payments data
@@ -70,40 +70,40 @@ class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontCont
                     $status_details[] = $payment_info['status_detail'];
                     $cards_holder_name[] = $payment_info['card']['cardholder']['name'];
                     $statement_descriptors[] = $payment_info['statement_descriptor'];
-                    $four_digits[] = '**** **** **** '.$payment_info['card']['last_four_digits'];
+                    $four_digits[] = '**** **** **** ' . $payment_info['card']['last_four_digits'];
                 }
             }
-            
+
             //order confirmation redirect
             $cart = new Cart($cart_id);
             $total = $cart->getOrderTotal();
             $order_id = Order::getOrderByCartId($cart->id);
             $order = new Order($order_id);
-            
-            $uri = __PS_BASE_URI__.'index.php?controller=order-confirmation';
-            $uri .= '&id_cart='.$order->id_cart;
-            $uri .= '&key='.$order->secure_key;
-            $uri .= '&id_order='.$order->id;
-            $uri .= '&id_module='.$this->module->id;
-            $uri .= '&typeReturn='.Tools::getValue('typeReturn');
-            $uri .= '&payment_id='.implode(',', $payments_id);
-            $uri .= '&payment_type='.implode(',', $payments_type);
-            $uri .= '&payment_method='.implode(',', $payments_method);
-            $uri .= '&payment_status='.implode(',', $payments_status);
-            $uri .= '&payment_amount='.implode(',', $payments_amount);
-            $uri .= '&amount='.$total;
+
+            $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
+            $uri .= '&id_cart=' . $order->id_cart;
+            $uri .= '&key=' . $order->secure_key;
+            $uri .= '&id_order=' . $order->id;
+            $uri .= '&id_module=' . $this->module->id;
+            $uri .= '&typeReturn=' . Tools::getValue('typeReturn');
+            $uri .= '&payment_id=' . implode(',', $payments_id);
+            $uri .= '&payment_type=' . implode(',', $payments_type);
+            $uri .= '&payment_method=' . implode(',', $payments_method);
+            $uri .= '&payment_status=' . implode(',', $payments_status);
+            $uri .= '&payment_amount=' . implode(',', $payments_amount);
+            $uri .= '&amount=' . $total;
             if ($payment_type_id == 'credit_card') {
-                $uri .= '&card_holder_name='.implode(',', $cards_holder_name);
-                $uri .= '&four_digits='.implode(',', $four_digits);
-                $uri .= '&statement_descriptor='.implode(',', $statement_descriptors);
-                $uri .= '&status_detail='.implode(',', $status_details);
+                $uri .= '&card_holder_name=' . implode(',', $cards_holder_name);
+                $uri .= '&four_digits=' . implode(',', $four_digits);
+                $uri .= '&statement_descriptor=' . implode(',', $statement_descriptors);
+                $uri .= '&status_detail=' . implode(',', $status_details);
             }
-            
+
             //redirect to order confirmation page
             Tools::redirect($uri);
         }
     }
-    
+
     protected function redirectError()
     {
         MPLog::generate('The callback failed', 'error');

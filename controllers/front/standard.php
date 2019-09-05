@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2018 PrestaShop.
  *
@@ -110,7 +109,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
     {
         $back_url = Tools::getValue('back_url');
 
-        if(isset($back_url)){
+        if (isset($back_url)) {
             return Tools::redirectLink($back_url);
         }
 

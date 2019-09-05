@@ -54,7 +54,7 @@
 
         // ----- country form ----- //
         var form_country_prepend = document.createElement("div");
-        var form_country = document.querySelector("#module_form_5 .panel .form-wrapper");
+        var form_country = document.querySelector("#module_form_0 .panel .form-wrapper");
 
         form_country_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12 pb-25'>\
@@ -66,8 +66,8 @@
 
         // ----- credentials form ----- //
         var form_credentials_prepend = document.createElement("div");
-        var form_credentials = document.querySelector("#module_form_4 .panel .form-wrapper");
-        var form_credentials_inputs = document.querySelectorAll("#module_form_4 .panel .form-wrapper .form-group");
+        var form_credentials = document.querySelector("#module_form_1 .panel .form-wrapper");
+        var form_credentials_inputs = document.querySelectorAll("#module_form_1 .panel .form-wrapper .form-group");
 
         form_credentials_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12'>\
@@ -109,7 +109,7 @@
 
 
         // ----- homolog form ----- //
-        var form_homolog = document.querySelector("#module_form_6 .panel .form-wrapper");
+        var form_homolog = document.querySelector("#module_form_2 .panel .form-wrapper");
 
         form_homolog.innerHTML = "<div class='row'>\
             <div class='col-md-12 pb-10'>\
@@ -128,8 +128,8 @@
 
         // ----- store information form ------ //
         var form_store_prepend = document.createElement("div");
-        var form_store = document.querySelector("#module_form_0 .panel .form-wrapper");
-        var form_store_group = document.querySelectorAll("#module_form_0 .panel .form-wrapper .form-group");
+        var form_store = document.querySelector("#module_form_3 .panel .form-wrapper");
+        var form_store_group = document.querySelectorAll("#module_form_3 .panel .form-wrapper .form-group");
 
         form_store_prepend.innerHTML = "<div class='row pb-25'>\
             <div class='col-md-12'>\
@@ -158,9 +158,9 @@
 
         // ----- basic configuration form ------ //
         //standard form header
-        document.querySelector("#module_form_3 .panel").style.borderTopLeftRadius = 0;
+        document.querySelector("#module_form_4 .panel").style.borderTopLeftRadius = 0;
         var form_standard_header_prepend = document.createElement("div");
-        var form_standard_header = document.querySelector("#module_form_3 .panel .panel-heading");
+        var form_standard_header = document.querySelector("#module_form_4 .panel .panel-heading");
         form_standard_header.style.height = "auto";
 
         form_standard_header_prepend.innerHTML = "<ul class='checkout-list'>\
@@ -179,8 +179,8 @@
         }
 
         var form_standard_prepend = document.createElement("div");
-        var form_standard = document.querySelector("#module_form_3 .panel .form-wrapper");
-        var form_standard_group = document.querySelectorAll("#module_form_3 .panel .form-wrapper .form-group");
+        var form_standard = document.querySelector("#module_form_4 .panel .form-wrapper");
+        var form_standard_group = document.querySelectorAll("#module_form_4 .panel .form-wrapper .form-group");
 
         form_standard_prepend.innerHTML = "<div class='row pb-25'>\
             <div class='col-md-12'>\
@@ -254,9 +254,9 @@
         var style_collapsible = false;
         var header_plus_standard = document.querySelector("#header_plus_standard");
         var header_less_standard = document.querySelector("#header_less_standard");
-        var form_standard_collapsible = document.querySelector("#module_form_3 .panel .panel-advanced-config");
+        var form_standard_collapsible = document.querySelector("#module_form_4 .panel .panel-advanced-config");
         var form_standard_collapsible_body = document.querySelectorAll(".mp-input-collapsible");
-        var form_standard_collapsible_footer = document.querySelector("#module_form_3 .panel .panel-footer");
+        var form_standard_collapsible_footer = document.querySelector("#module_form_4 .panel .panel-footer");
 
         form_standard_collapsible_footer.style.marginTop = "-2px";
 
@@ -290,9 +290,9 @@
 
         // ----- custom configuration form ------ //
         //custom form header
-        document.querySelector("#module_form_1 .panel").style.borderTopLeftRadius = 0;
+        document.querySelector("#module_form_5 .panel").style.borderTopLeftRadius = 0;
         var form_custom_header_prepend = document.createElement("div");
-        var form_custom_header = document.querySelector("#module_form_1 .panel .panel-heading");
+        var form_custom_header = document.querySelector("#module_form_5 .panel .panel-heading");
         form_custom_header.style.height = "auto";
 
         form_custom_header_prepend.innerHTML = "<ul class='checkout-list'>\
@@ -303,8 +303,8 @@
         form_custom_header.insertBefore(form_custom_header_prepend, form_custom_header.firstChild);
 
         var form_custom_prepend = document.createElement("div");
-        var form_custom = document.querySelector("#module_form_1 .panel .form-wrapper");
-        var form_custom_group = document.querySelectorAll("#module_form_1 .panel .form-wrapper .form-group");
+        var form_custom = document.querySelector("#module_form_5 .panel .form-wrapper");
+        var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
 
         form_custom_prepend.innerHTML = "<div class='row pb-25'>\
             <div class='col-md-12'>\
@@ -350,9 +350,9 @@
         var style_collapsible_custom = false;
         var header_plus_custom = document.querySelector("#header_plus_custom");
         var header_less_custom = document.querySelector("#header_less_custom");
-        var form_custom_collapsible = document.querySelector("#module_form_1 .panel .panel-advanced-config");
+        var form_custom_collapsible = document.querySelector("#module_form_5 .panel .panel-advanced-config");
         var form_custom_collapsible_body = document.querySelectorAll(".mp-custom-input-collapsible");
-        var form_custom_collapsible_footer = document.querySelector("#module_form_1 .panel .panel-footer");
+        var form_custom_collapsible_footer = document.querySelector("#module_form_5 .panel .panel-footer");
 
         form_custom_collapsible_footer.style.marginTop = "-18px";
 
@@ -386,9 +386,9 @@
 
         // ----- ticket configuration form ------ //
         //ticket form header
-        document.querySelector("#module_form_2 .panel").style.borderTopLeftRadius = 0;
+        document.querySelector("#module_form_6 .panel").style.borderTopLeftRadius = 0;
         var form_ticket_header_prepend = document.createElement("div");
-        var form_ticket_header = document.querySelector("#module_form_2 .panel .panel-heading");
+        var form_ticket_header = document.querySelector("#module_form_6 .panel .panel-heading");
         form_ticket_header.style.height = "auto";
 
         form_ticket_header_prepend.innerHTML = "<ul class='checkout-list'>\
@@ -399,8 +399,8 @@
         form_ticket_header.insertBefore(form_ticket_header_prepend, form_ticket_header.firstChild);
 
         var form_ticket_prepend = document.createElement("div");
-        var form_ticket = document.querySelector("#module_form_2 .panel .form-wrapper");
-        var form_ticket_group = document.querySelectorAll("#module_form_2 .panel .form-wrapper .form-group");
+        var form_ticket = document.querySelector("#module_form_6 .panel .form-wrapper");
+        var form_ticket_group = document.querySelectorAll("#module_form_6 .panel .form-wrapper .form-group");
 
         form_ticket_prepend.innerHTML = "<div class='row pb-25'>\
             <div class='col-md-12'>\
@@ -456,9 +456,9 @@
         var style_collapsible_ticket = false;
         var header_plus_ticket = document.querySelector("#header_plus_ticket");
         var header_less_ticket = document.querySelector("#header_less_ticket");
-        var form_ticket_collapsible = document.querySelector("#module_form_2 .panel .panel-advanced-config");
+        var form_ticket_collapsible = document.querySelector("#module_form_6 .panel .panel-advanced-config");
         var form_ticket_collapsible_body = document.querySelectorAll(".mp-ticket-input-collapsible");
-        var form_ticket_collapsible_footer = document.querySelector("#module_form_2 .panel .panel-footer");
+        var form_ticket_collapsible_footer = document.querySelector("#module_form_6 .panel .panel-footer");
 
         form_ticket_collapsible_footer.style.marginTop = "-2px";
 

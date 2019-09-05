@@ -174,7 +174,7 @@
 {html_entity_decode($country_form|escape:'html':'UTF-8')}
 {html_entity_decode($credentials|escape:'html':'UTF-8')}
 
-{if $access_token != '' && $sandbox_access_token != ''}
+{if $access_token != '' && $public_key != ''  && $sandbox_access_token != '' && $sandbox_public_key != ''}
   
     {if $sandbox_status == true || $seller_homolog == true}
         <div style="display: none">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>

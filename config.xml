@@ -2,7 +2,7 @@
 <module>
     <name>mercadopago</name>
     <displayName><![CDATA[Mercado Pago]]></displayName>
-    <version><![CDATA[4.0.2]]></version>
+    <version><![CDATA[4.2.0]]></version>
     <description><![CDATA[Customize the payment experience of your customers in your online store.]]></description>
     <author><![CDATA[mercadopago]]></author>
     <tab><![CDATA[payments_gateways]]></tab>

@@ -188,6 +188,13 @@ body#checkout section.checkout-step .payment-options label {
     color: #333333 !important;
 }
 
+.subtitle-standard-checkout{
+    padding: 10px 0px 0px;
+    margin: 0px 0 5px !important;
+    text-transform: uppercase;
+    font-family: sans-serif !important;
+}
+
 /* custom chckout */
 .frame-checkout-custom-seven{
     padding: 10px 0px 0px;

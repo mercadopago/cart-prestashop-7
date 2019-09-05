@@ -45,29 +45,6 @@ class MPUseful
     }
 
     /**
-     * Get notification payment status
-     *
-     * @param [string] $state
-     * @return void
-     */
-    public function getNotificationPaymentState($state)
-    {
-        $payment_states = array(
-            'in_process' => 'MERCADOPAGO_STATUS_0',
-            'approved' => 'MERCADOPAGO_STATUS_1',
-            'cancelled' => 'MERCADOPAGO_STATUS_2',
-            'rejected' => 'MERCADOPAGO_STATUS_3',
-            'refunded' => 'MERCADOPAGO_STATUS_4',
-            'charged_back' => 'MERCADOPAGO_STATUS_5',
-            'in_mediation' => 'MERCADOPAGO_STATUS_6',
-            'pending' => 'MERCADOPAGO_STATUS_7',
-            'authorized' => 'MERCADOPAGO_STATUS_8'
-        );
-
-        return Configuration::get($payment_states[$state]);
-    }
-
-    /**
      * Get default sponsor_id
      *
      * @param [string] $country

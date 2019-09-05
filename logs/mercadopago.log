@@ -1,48 +1,64 @@
-[2019-08-23 20:11:20] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:11:21] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:11:22] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:11:24] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
-[2019-08-23 20:12:13] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:12:13] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:12:14] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:12:16] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
-[2019-08-23 20:12:43] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:12:44] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:12:45] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:12:48] [INFO]: Credentials saved successfully
-[2019-08-23 20:13:15] [ERROR]: API valid_access_token error: The User ID must match the consultant's
-[2019-08-23 20:13:15] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
-[2019-08-23 20:13:29] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
-[2019-08-23 20:14:00] [INFO]: Credentials saved successfully
-[2019-08-23 20:15:22] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-08-23 20:15:22] [INFO]: Mercadopago plugin installed in the store
-[2019-08-23 20:15:44] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:15:44] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:15:45] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:16:22] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:16:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:16:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:16:27] [INFO]: Credentials saved successfully
-[2019-08-23 20:16:53] [INFO]: Credentials saved successfully
-[2019-08-23 20:20:03] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-08-23 20:20:03] [INFO]: Mercadopago plugin installed in the store
-[2019-08-23 20:20:22] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:20:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:20:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:22:37] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-08-23 20:22:37] [INFO]: Mercadopago plugin installed in the store
-[2019-08-23 20:24:34] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:24:34] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:24:35] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:24:53] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:24:54] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:24:55] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:24:55] [INFO]: Localization saved successfully
-[2019-08-23 20:25:46] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-08-23 20:25:47] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:25:47] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-08-23 20:25:51] [INFO]: Credentials saved successfully
-[2019-08-23 22:58:35] [INFO]: Store information saved successfully
-[2019-08-23 22:58:49] [INFO]: Custom checkout configuration saved successfully
-[2019-08-23 22:59:05] [INFO]: Ticket checkout configuration saved successfully
-[2019-08-23 23:00:07] [INFO]: Standard checkout configuration saved successfully
+[2019-09-04 18:32:41] [INFO]: Mercadopago plugin installed in the store
+[2019-09-04 18:32:56] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 18:32:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:32:59] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:36:15] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 18:36:16] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:36:17] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:39:34] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:39:35] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:40:12] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:40:12] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 18:55:21] [INFO]: Localization saved successfully
+[2019-09-04 19:32:10] [INFO]: Localization saved successfully
+[2019-09-04 19:33:06] [ERROR]: API valid_access_token error: invalid_token
+[2019-09-04 19:33:06] [WARNING]: Invalid MERCADOPAGO_ACCESS_TOKEN submitted
+[2019-09-04 19:33:07] [ERROR]: API valid_access_token error: invalid_token
+[2019-09-04 19:33:07] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
+[2019-09-04 19:33:19] [INFO]: Credentials saved successfully
+[2019-09-04 19:36:15] [INFO]: Credentials saved successfully
+[2019-09-04 19:37:42] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-04 19:37:42] [INFO]: Mercadopago plugin installed in the store
+[2019-09-04 19:37:57] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 19:37:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 19:37:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 19:39:41] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 19:39:43] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 19:39:44] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 19:41:35] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 19:41:37] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 19:41:37] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 22:54:09] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 22:54:10] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 22:54:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 22:58:07] [INFO]: Localization saved successfully
+[2019-09-04 22:58:23] [INFO]: Credentials saved successfully
+[2019-09-04 23:00:50] [INFO]: Credentials saved successfully
+[2019-09-04 23:01:42] [INFO]: Credentials saved successfully
+[2019-09-04 23:02:50] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-04 23:02:50] [INFO]: Mercadopago plugin installed in the store
+[2019-09-04 23:03:10] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 23:03:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:03:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:03:24] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-04 23:03:24] [INFO]: Mercadopago plugin installed in the store
+[2019-09-04 23:04:53] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-04 23:04:53] [INFO]: Mercadopago plugin installed in the store
+[2019-09-04 23:05:22] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 23:05:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:05:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:06:05] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 23:06:07] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:06:08] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:06:19] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 23:06:20] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:06:21] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-04 23:06:43] [ERROR]: API application_search_owner_id error: You must send a parameter to search
+[2019-09-04 23:06:47] [INFO]: Credentials saved successfully
+[2019-09-04 23:19:47] [INFO]: Store information saved successfully
+[2019-09-04 23:20:01] [INFO]: Credentials saved successfully
+[2019-09-04 23:22:03] [INFO]: Localization saved successfully
+[2019-09-04 23:25:27] [INFO]: Custom checkout configuration saved successfully
+[2019-09-04 23:25:38] [INFO]: Ticket checkout configuration saved successfully
+[2019-09-05 15:28:13] [INFO]: Standard checkout configuration saved successfully
+[2019-09-05 16:07:15] [INFO]: Cart id 6 - Preference created successfully

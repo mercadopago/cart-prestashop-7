@@ -28,7 +28,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-define('MP_VERSION', '4.0.2');
+define('MP_VERSION', '4.2.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -67,7 +67,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.0.2';
+        $this->version = '4.2.0';
 
         parent::__construct();
 
@@ -143,56 +143,67 @@ class Mercadopago extends PaymentModule
         $mp_transaction = new MPTransaction();
         $count_test = $mp_transaction->where('is_payment_test', '=', 1)->andWhere('received_webhook', '=', 1)->count();
 
+        $public_key = Configuration::get('MERCADOPAGO_PUBLIC_KEY');
+        $homologated = Configuration::get('MERCADOPAGO_HOMOLOGATION');
+        $country_link = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
+        $access_token = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        $sandbox_public_key = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+        $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+
         //verify if seller is homologated
-        if (Configuration::get('MERCADOPAGO_HOMOLOGATION') == false) {
-            if (in_array('payments', $this->mercadopago->homologValidate())) {
+        if ($access_token != '' && $sandbox_access_token != '') {
+            if ($homologated == false && in_array('payments', $this->mercadopago->homologValidate())) {
                 Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
         }
 
         //return forms for admin views
         $this->loadSettings();
+        new RatingSettings();
+
+        $localization = new LocalizationSettings();
+        $credentials = new CredentialsSettings();
+        $homologation = new HomologationSettings();
         $store = new StoreSettings();
-        $rating = new RatingSettings();
         $custom = new CustomSettings();
         $ticket = new TicketSettings();
         $standard = new StandardSettings();
-        $credentials = new CredentialsSettings();
-        $localization = new LocalizationSettings();
-        $homologation = new HomologationSettings();
 
+        $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
+        $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
+        $homologation = $this->renderForm($homologation->submit, $homologation->values, $homologation->form);
         $store = $this->renderForm($store->submit, $store->values, $store->form);
         $custom = $this->renderForm($custom->submit, $custom->values, $custom->form);
         $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
         $standard = $this->renderForm($standard->submit, $standard->values, $standard->form);
-        $credentials = $this->renderForm($credentials->submit, $credentials->values, $credentials->form);
-        $localization = $this->renderForm($localization->submit, $localization->values, $localization->form);
-        $homologation = $this->renderForm($homologation->submit, $homologation->values, $homologation->form);
-
-        $country_link = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         $output = $this->context->smarty->assign(array(
+            //module requirements
             'alert' => self::$form_alert,
             'message' => self::$form_message,
             'url_base' => __PS_BASE_URI__,
+            'country_link' => $country_link,
+            'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
+            'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
+            'sandbox_status' => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
+            'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
+            //credentials
+            'public_key' => $public_key,
+            'access_token' => $access_token,
+            'sandbox_public_key' => $sandbox_public_key,
+            'sandbox_access_token' => $sandbox_access_token,
+            //test flow
             'count_test' => $count_test,
-            'seller_homolog' => Configuration::get('MERCADOPAGO_HOMOLOGATION'),
+            'seller_homolog' => $homologated,
+            //forms
             'country_form' => $localization,
             'credentials' => $credentials,
             'homolog_form' => $homologation,
             'store_form' => $store,
             'standard_form' => $standard,
             'custom_form' => $custom,
-            'ticket_form' => $ticket,
-            'access_token' => Configuration::get('MERCADOPAGO_ACCESS_TOKEN'),
-            'sandbox_status' => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
-            'sandbox_access_token' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN'),
-            'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
-            'country_link' => $country_link,
-            'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
-            'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link)
-        ))
-            ->fetch($this->local_path . 'views/templates/admin/configure.tpl');
+            'ticket_form' => $ticket
+        ))->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
         return $output;
     }

@@ -23,16 +23,13 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_standard_checkout" method="post" action="{$redirect}">
+<form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
     <div class="row frame-checkout-seven">
-        <div class="col-xs-12 col-md-12 col-12">
-            <h2 class="title-checkout">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</h2>
-        </div>
 
         {if count($credit) != 0}
         <div class="col-xs-12 col-md-12 col-12">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">
+                <p class="subtitle-standard-checkout">
                     {l s='Tarjetas de crédito' mod='mercadopago'}
                     <span class="badge-checkout">
                         {l s='Hasta' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='cuotas' mod='mercadopago'}
@@ -49,7 +46,7 @@
         {if count($debit) != 0}
         <div class="col-xs-12 col-lg-6 col-md-6 col-12">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                <p class="subtitle-standard-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
 
                 {foreach $debit as $tarjeta}
                 <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
@@ -70,16 +67,18 @@
         </div>
         {/if}
 
+        {if $modal != true && $preference == ""}
         <div class="col-md-12 pt-20">
             <div class="redirect-frame">
                 <img src="{$module_dir|escape:'html':'UTF-8'}views/img/redirect_checkout.png" class="img-fluid" />
                 <p>{l s='Te llevamos a nuestro sitio para completar el pago' mod='mercadopago'}</p>
             </div>
         </div>
+        {/if}
     </div>
 
     {if $modal == true && $preference != ""}
-        <script src="{$modal_link}" data-public-key="{$public_key}" data-preference-id="{$preference}"></script>
+        <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
     {/if}
 </form>
 
