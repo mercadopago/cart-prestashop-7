@@ -280,4 +280,24 @@ class AbstractPreference
     {
         Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
     }
+
+    
+    /**
+     * Create the array for medatada informations
+     * @return array
+     */
+    public function getInternalMetadata()
+    {
+        $internal_metadata = array(
+            "platform" => MPRestCli::PLATAFORM_ID,
+            "plataform_version" => _PS_VERSION_,
+            "module_version" => WC_WooMercadoPago_Constants::VERSION,
+            "site" => Configuration::get('MERCADOPAGO_SITE_ID'),
+            "sponsor_id" => Configuration::get('MERCADOPAGO_SPONSOR_ID'),
+            "collector" => Configuration::get('MERCADOPAGO_SELLER_ID'),
+            "test_mode" => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
+            "details" => "",       
+        );
+        return $internal_metadata;
+    }
 }
