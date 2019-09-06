@@ -291,7 +291,7 @@ class AbstractPreference
         $internal_metadata = array(
             "platform" => MPRestCli::PLATAFORM_ID,
             "plataform_version" => _PS_VERSION_,
-            "module_version" => WC_WooMercadoPago_Constants::VERSION,
+            "module_version" => MP_VERSION,
             "site" => Configuration::get('MERCADOPAGO_SITE_ID'),
             "sponsor_id" => Configuration::get('MERCADOPAGO_SPONSOR_ID'),
             "collector" => Configuration::get('MERCADOPAGO_SELLER_ID'),

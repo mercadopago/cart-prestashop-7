@@ -50,7 +50,7 @@ class MPRestCli
         $connect = curl_init($uri_base . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v4.0.1');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
@@ -80,7 +80,7 @@ class MPRestCli
         $connect = curl_init(self::API_BASE_URL . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v4.0.1');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
