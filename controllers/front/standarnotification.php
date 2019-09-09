@@ -45,12 +45,13 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         $customer = new Customer((int) $cart->id_customer);
         $customer_secure_key = $customer->secure_key;
 
+        $notification = new IpnNotification($merchant_order_id, $customer_secure_key);
+
         if ($checkout == 'standard' && $topic == 'merchant_order' && $customer_secure_key == $secure_key) {
-            $notification = new IpnNotification($merchant_order_id, $customer_secure_key);
             $notification = $notification->receiveNotification($cart);
         } else {
             MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');
-            $this->getNotificationResponse("The notification does not have the necessary parameters", 422);
+            $notification->getNotificationResponse("The notification does not have the necessary parameters", 422);
         }
     }
 }
