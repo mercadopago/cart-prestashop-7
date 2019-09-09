@@ -39,6 +39,36 @@ class AbstractPreference
     }
 
     /**
+     * Verify if received notification and save on BD
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function verifyWebhook($cart)
+    {
+        $mp_transaction = new MPTransaction();
+        $mp_transaction->where('cart_id', '=', $cart->id)->update([
+            "received_webhook" => true
+        ]);
+
+        MPLog::generate('Notification received on cart id '.$cart->id);
+    }
+
+    public function validateOrderState()
+    {
+        //validate order state
+        if ($amount_apro >= $total) {
+            $amount = $amount_apro;
+            $order_state = $this->getNotificationPaymentState('approved');
+        } elseif ($amount_pend >= $total) {
+            $amount = $amount_pend;
+            $order_state = $this->getNotificationPaymentState('in_process');
+        } else {
+            $order_state = $this->getNotificationPaymentState($status);
+        }
+    }
+
+    /**
      * Get notification payment status
      *
      * @param string $state

@@ -204,7 +204,7 @@ class AbstractPreference
     public function getReturnUrl($cart, $typeReturn)
     {
         $return_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-            '?fc=module&module=mercadopago&controller=validationstandard&' .
+            '?fc=module&module=mercadopago&controller=standardvalidation&' .
             'checkout=standard&cart_id=' . $cart->id . '&typeReturn=' . $typeReturn;
 
         return $return_url;
