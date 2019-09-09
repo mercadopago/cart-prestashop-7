@@ -27,6 +27,7 @@
 class MPRestCli
 {
     const PRODUCT_ID = 'BC32CCRU643001OI39AG';
+    const PLATAFORM_ID = 'Prestashop';    
     const API_BASE_URL = 'https://api.mercadopago.com';
     const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
     const API_CONFIG_BASE_URL = 'https://api.mercadopago.com/account';
@@ -49,7 +50,7 @@ class MPRestCli
         $connect = curl_init($uri_base . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v4.0.1');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
@@ -79,7 +80,7 @@ class MPRestCli
         $connect = curl_init(self::API_BASE_URL . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v4.0.1');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
@@ -90,9 +91,11 @@ class MPRestCli
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
                 'X-Tracking-Id:' . $trackingID,
+                'x-platform-id:' . self::PLATAFORM_ID,
+                'x-integrator-id:' . Configuration::get('MERCADOPAGO_SPONSOR_ID')
             )
         );
-
+ 
         return $connect;
     }
 

@@ -53,6 +53,10 @@ class StandardPreference extends AbstractPreference
         $preference['expires'] = $this->getExpirationStatus();
         $preference['expiration_date_to'] = $this->getExpirationDate();
 
+        $internal_metadata = $this->getInternalMetadata();
+        $internal_metadata = $this->getInternalMetadataStandard($internal_metadata);
+        $preference['metadata'] = $internal_metadata;        
+
         $preference = Tools::jsonEncode($preference);
         $createPreference = $this->mercadopago->createPreference($preference);
 
@@ -207,5 +211,17 @@ class StandardPreference extends AbstractPreference
         }
 
         return $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
+    }
+
+    /**
+     * @return array
+     */
+    public function getInternalMetadataStandard()
+    {
+        $internal_metadata = array(
+            "checkout" => "smart",
+            "checkout_type" => Configuration::get('MERCADOPAGO_STANDARD_MODAL')
+        );
+        return $internal_metadata;
     }
 }

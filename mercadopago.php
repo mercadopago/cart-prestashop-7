@@ -589,8 +589,53 @@ class Mercadopago extends PaymentModule
      */
     public function hookPaymentReturn($params)
     {
-        if ($this->active == false) {
+        if (!$this->active) {
             return;
+        }
+        if (Tools::getValue('payment_method_id') == 'bolbradesco' ||
+            Tools::getValue('payment_type') == 'bank_transfer' ||
+            Tools::getValue('payment_type') == 'atm' || Tools::getValue('payment_type') == 'ticket') {
+            $boleto_url = Tools::getValue('boleto_url');
+            if (Configuration::get('PS_SSL_ENABLED')) {
+                $boleto_url = str_replace("http", "https", $boleto_url);
+            }
+            $this->context->smarty->assign(
+                array(
+                    'payment_id' => Tools::getValue('payment_id'),
+                    'boleto_url' => Tools::getValue('boleto_url'),
+                    'this_path_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://') .
+                    htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__,
+                )
+            );
+            return $this->display(__file__, '/views/templates/hook/boleto_payment_return.tpl');
+        } else {
+            $this->context->controller->addCss($this->_path . 'views/css/mercadopago_core.css', 'all');
+            $this->context->smarty->assign(
+                array(
+                    'payment_status' => Tools::getValue('payment_status'),
+                    'status_detail' => Tools::getValue('status_detail'),
+                    'card_holder_name' => Tools::getValue('card_holder_name'),
+                    'four_digits' => Tools::getValue('four_digits'),
+                    'payment_method_id' => $this->setNamePaymentType(Tools::getValue('payment_type')),
+                    'installments' => Tools::getValue('installments'),
+                    'transaction_amount' => Tools::displayPrice(
+                        Tools::getValue('amount'),
+                        $params['currencyObj'],
+                        false
+                    ),
+                    'statement_descriptor' => Tools::getValue('statement_descriptor'),
+                    'payment_id' => Tools::getValue('payment_id'),
+                    'amount' => Tools::displayPrice(
+                        Tools::getValue('amount'),
+                        $params['currencyObj'],
+                        false
+                    ),
+                    'this_path_ssl' => (
+                        Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://'
+                    ) . htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8') . __PS_BASE_URI__,
+                )
+            );
+            return $this->display(__file__, '/views/templates/hook/creditcard_payment_return.tpl');
         }
     }
 
