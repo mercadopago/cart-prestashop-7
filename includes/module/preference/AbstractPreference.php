@@ -174,7 +174,7 @@ class AbstractPreference
 
         if (!strrpos($this->getSiteUrl(), 'localhost')) {
             $notifification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-                '?fc=module&module=mercadopago&controller=notification&' .
+                '?fc=module&module=mercadopago&controller=standardnotification&' .
                 'checkout=standard&cart_id=' . $cart->id . '&customer=' . $customer->secure_key .
                 '&notification=ipn';
 
