@@ -29,10 +29,48 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractPreference
 {
-    public function __construct()
+    public $total;
+    public $amount;
+    public $status;
+    public $order_id;
+    public $order_state;
+    public $payments_data;
+    public $merchant_order_id;
+    public $customer_secure_key;
+
+    public function __construct($merchant_order_id, $customer_secure_key)
     {
         parent::__construct();
+        $this->merchant_order_id = $merchant_order_id;
+        $this->customer_secure_key = $customer_secure_key;
     }
-    
-    
+
+    /**
+     * Receive and trear the notification
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function receiveNotification($cart)
+    {
+        $this->amount = array();
+        $this->amount['apro'] = 0;
+        $this->amount['pend'] = 0;
+
+        $merchant_order = $this->mercadopago->getMerchantOrder($this->merchant_order_id);
+        $payments = $merchant_order['payments'];
+
+        $this->total = (float) $cart->getOrderTotal();
+        $this->order_id = Order::getOrderByCartId(Tools::getValue('cart_id'));
+
+        $this->verifyWebhook($cart);
+        $this->verifyPayments($payments);
+        $this->validateOrderState();
+
+        if ($this->order_id == 0 && $this->amount['total'] >= $this->total && $this->status != 'rejected') {
+            $this->createOrder($cart);
+        }else{
+            $this->updateOrder($cart);
+        }
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2018 PrestaShop.
  *
@@ -39,13 +40,17 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         $checkout = Tools::getValue('checkout');
         $secure_key = Tools::getValue('customer');
         $merchant_order_id = Tools::getValue('id');
-      
+
         $cart = new Cart(Tools::getValue('cart_id'));
         $customer = new Customer((int) $cart->id_customer);
         $customer_secure_key = $customer->secure_key;
 
         if ($checkout == 'standard' && $topic == 'merchant_order' && $customer_secure_key == $secure_key) {
-            
+            $notification = new IpnNotification($merchant_order_id, $customer_secure_key);
+            $notification = $notification->receiveNotification($cart);
+        } else {
+            MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');
+            $this->getNotificationResponse("The notification does not have the necessary parameters", 422);
         }
     }
 }
