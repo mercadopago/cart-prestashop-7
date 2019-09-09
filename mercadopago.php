@@ -464,11 +464,11 @@ class Mercadopago extends PaymentModule
             $preference_id = "";
             $modal_link = "";
 
-            if($modal != ""){
+            if ($modal != "") {
                 $preference = new StandardPreference();
                 $createPreference = $preference->createPreference($cart);
 
-                if (array_key_exists('init_point', $createPreference)) {
+                if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
                     $preference_id = $createPreference['id'];
                     $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
                     $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
