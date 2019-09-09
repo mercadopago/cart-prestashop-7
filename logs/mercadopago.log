@@ -1,106 +1,26 @@
-[2019-09-04 18:32:41] [INFO]: Mercadopago plugin installed in the store
-[2019-09-04 18:32:56] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 18:32:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:32:59] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:36:15] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 18:36:16] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:36:17] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:39:34] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:39:35] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:40:12] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:40:12] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 18:55:21] [INFO]: Localization saved successfully
-[2019-09-04 19:32:10] [INFO]: Localization saved successfully
-[2019-09-04 19:33:06] [ERROR]: API valid_access_token error: invalid_token
-[2019-09-04 19:33:06] [WARNING]: Invalid MERCADOPAGO_ACCESS_TOKEN submitted
-[2019-09-04 19:33:07] [ERROR]: API valid_access_token error: invalid_token
-[2019-09-04 19:33:07] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
-[2019-09-04 19:33:19] [INFO]: Credentials saved successfully
-[2019-09-04 19:36:15] [INFO]: Credentials saved successfully
-[2019-09-04 19:37:42] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-09-04 19:37:42] [INFO]: Mercadopago plugin installed in the store
-[2019-09-04 19:37:57] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 19:37:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 19:37:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 19:39:41] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 19:39:43] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 19:39:44] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 19:41:35] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 19:41:37] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 19:41:37] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 22:54:09] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 22:54:10] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 22:54:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 22:58:07] [INFO]: Localization saved successfully
-[2019-09-04 22:58:23] [INFO]: Credentials saved successfully
-[2019-09-04 23:00:50] [INFO]: Credentials saved successfully
-[2019-09-04 23:01:42] [INFO]: Credentials saved successfully
-[2019-09-04 23:02:50] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-09-04 23:02:50] [INFO]: Mercadopago plugin installed in the store
-[2019-09-04 23:03:10] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 23:03:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:03:11] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:03:24] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-09-04 23:03:24] [INFO]: Mercadopago plugin installed in the store
-[2019-09-04 23:04:53] [INFO]: Mercadopago plugin uninstalled in the store
-[2019-09-04 23:04:53] [INFO]: Mercadopago plugin installed in the store
-[2019-09-04 23:05:22] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 23:05:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:05:23] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:06:05] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 23:06:07] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:06:08] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:06:19] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 23:06:20] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:06:21] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
-[2019-09-04 23:06:43] [ERROR]: API application_search_owner_id error: You must send a parameter to search
-[2019-09-04 23:06:47] [INFO]: Credentials saved successfully
-[2019-09-04 23:19:47] [INFO]: Store information saved successfully
-[2019-09-04 23:20:01] [INFO]: Credentials saved successfully
-[2019-09-04 23:22:03] [INFO]: Localization saved successfully
-[2019-09-04 23:25:27] [INFO]: Custom checkout configuration saved successfully
-[2019-09-04 23:25:38] [INFO]: Ticket checkout configuration saved successfully
-[2019-09-05 15:28:13] [INFO]: Standard checkout configuration saved successfully
-[2019-09-05 16:07:15] [INFO]: Cart id 6 - Preference created successfully
-[2019-09-09 19:33:55] [INFO]: Notification received on cart id 
-[2019-09-09 19:33:55] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:34:40] [INFO]: Notification received on cart id 
-[2019-09-09 19:34:40] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:35:32] [INFO]: Notification received on cart id 
-[2019-09-09 19:35:32] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:06] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:06] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:07] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:07] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:07] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:07] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:07] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:07] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:07] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:07] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:08] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:08] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:08] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:08] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:08] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:08] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:08] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:08] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:36:10] [INFO]: Notification received on cart id 
-[2019-09-09 19:36:10] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:46:52] [INFO]: Notification received on cart id 
-[2019-09-09 19:46:52] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:00] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:00] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:00] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:00] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:01] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:01] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:02] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:02] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:02] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:02] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:06] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:06] [ERROR]: The notification does not have the necessary parameters to create an order
-[2019-09-09 19:47:22] [INFO]: Notification received on cart id 
-[2019-09-09 19:47:22] [ERROR]: The notification does not have the necessary parameters to create an order
+[2019-09-09 22:15:08] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:15:31] [ERROR]: The callback failed
+[2019-09-09 22:27:56] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:28:05] [ERROR]: The callback failed
+[2019-09-09 22:28:35] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:30:46] [INFO]: Standard checkout configuration saved successfully
+[2019-09-09 22:32:14] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:32:32] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:32:39] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:32:46] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-09 22:34:08] [INFO]: Standard checkout configuration saved successfully
+[2019-09-09 22:44:58] [INFO]: Credentials saved successfully
+[2019-09-09 22:45:18] [INFO]: Credentials saved successfully
+[2019-09-09 22:53:56] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-09 22:53:56] [INFO]: Mercadopago plugin installed in the store
+[2019-09-09 22:54:09] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-09 22:54:09] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-09 22:54:27] [INFO]: Credentials saved successfully
+[2019-09-09 22:58:16] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-09 22:58:16] [INFO]: Mercadopago plugin installed in the store
+[2019-09-09 22:58:57] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-09 22:58:58] [ERROR]: API get_payment_methods error: neither a public key nor caller id were provided
+[2019-09-09 23:00:03] [INFO]: Credentials saved successfully
+[2019-09-09 23:05:02] [INFO]: Mercadopago plugin uninstalled in the store
+[2019-09-09 23:05:03] [INFO]: Mercadopago plugin installed in the store
+[2019-09-09 23:06:47] [INFO]: Credentials saved successfully

@@ -25,7 +25,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-class AbstractPreference
+class AbstractNotification
 {
     public $module;
     public $mercadopago;
@@ -128,12 +128,14 @@ class AbstractPreference
                 $this->customer_secure_key
             );
 
-            $this->saveCreateOrderData($cart);
-
-            $order = new Order($this->order_id);
+            $order = Order::getOrderByCartId($cart->id);
+            $order = new Order($order);
+            
             $payments = $order->getOrderPaymentCollection();
             $payments[0]->transaction_id = $this->merchant_order_id;
             $payments[0]->update();
+
+            $this->saveCreateOrderData($cart);
 
             MPLog::generate('Order created successfully on cart id ' . $cart->id);
             $this->getNotificationResponse("The order has been created", 201);

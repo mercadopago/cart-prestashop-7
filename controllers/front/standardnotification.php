@@ -27,7 +27,7 @@
 
 require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
-class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
+class MercadoPagoStandardNotificationModuleFrontController extends ModuleFrontController
 {
     /**
      * Default function of Prestashop for init the controller

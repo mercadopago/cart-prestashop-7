@@ -63,39 +63,12 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
     {
         $createPreference = $preference->createPreference($cart);
 
-        //save data in mercadopago table
-        $mp_module = new MPModule();
-        $mp_module = $mp_module->where('version', '=', MP_VERSION)->get();
-        $payment_test = Configuration::get('MERCADOPAGO_SANDBOX_STATUS');
-
-        $mp_transaction = new MPTransaction();
-        $count = $mp_transaction->where('cart_id', '=', $cart->id)->count();
-
-        if ($count == 0) {
-            $mp_transaction->create([
-                'total' => $cart->getOrderTotal(),
-                'cart_id' => $cart->id,
-                'customer_id' => $cart->id_customer,
-                'notification_url' => $createPreference['notification_url'],
-                'is_payment_test' => $payment_test,
-                'mp_module_id' => $mp_module['id_mp_module']
-            ]);
-        } else {
-            $mp_transaction->where('cart_id', '=', $cart->id)->update([
-                'total' => $cart->getOrderTotal(),
-                'customer_id' => $cart->id_customer,
-                'notification_url' => $createPreference['notification_url'],
-                'is_payment_test' => $payment_test
-            ]);
-        }
-
-        //success redirect link for sandbox and production mode
         if (array_key_exists('init_point', $createPreference)) {
+            $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
             MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
             return Tools::redirectLink($createPreference['init_point']);
         }
 
-        //failure redirect link
         return $preference->redirectError();
     }
 

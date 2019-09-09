@@ -173,12 +173,12 @@ class AbstractPreference
         $customer = new Customer((int) $cart->id_customer);
 
         if (!strrpos($this->getSiteUrl(), 'localhost')) {
-            $notifification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
+            $notification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
                 '?fc=module&module=mercadopago&controller=standardnotification&' .
                 'checkout=standard&cart_id=' . $cart->id . '&customer=' . $customer->secure_key .
                 '&notification=ipn';
 
-            return $notifification_url;
+            return $notification_url;
         }
     }
 
@@ -221,6 +221,61 @@ class AbstractPreference
 
         if ($this->settings['MERCADOPAGO_SPONSOR_ID'] == "") {
             return $this->settings['MERCADOPAGO_SPONSOR_ID'] = $sponsor_id;
+        }
+    }
+
+    /**
+     * Create the array for medatada informations
+     * 
+     * @return array
+     */
+    public function getInternalMetadata()
+    {
+        $internal_metadata = array(
+            "platform" => MPRestCli::PLATAFORM_ID,
+            "platform_version" => _PS_VERSION_,
+            "module_version" => MP_VERSION,
+            "sponsor_id" => $this->getSponsorId(),
+            "site" => Configuration::get('MERCADOPAGO_SITE_ID'),
+            "collector" => Configuration::get('MERCADOPAGO_SELLER_ID'),
+            "test_mode" => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
+            "details" => "",
+        );
+
+        return $internal_metadata;
+    }
+
+    /**
+     * Save payments primary info on mp_transaction table
+     *
+     * @param mixed $cart
+     * @param mixed $notification_url
+     * @return void
+     */
+    public function saveCreatePreferenceData($cart, $notification_url)
+    {
+        $mp_module = new MPModule();
+        $mp_module = $mp_module->where('version', '=', MP_VERSION)->get();
+
+        $mp_transaction = new MPTransaction();
+        $count = $mp_transaction->where('cart_id', '=', $cart->id)->count();
+
+        if ($count == 0) {
+            $mp_transaction->create([
+                'total' => $cart->getOrderTotal(),
+                'cart_id' => $cart->id,
+                'customer_id' => $cart->id_customer,
+                'mp_module_id' => $mp_module['id_mp_module'],
+                'notification_url' => $notification_url,
+                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+            ]);
+        } else {
+            $mp_transaction->where('cart_id', '=', $cart->id)->update([
+                'total' => $cart->getOrderTotal(),
+                'customer_id' => $cart->id_customer,
+                'notification_url' => $notification_url,
+                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+            ]);
         }
     }
 
@@ -279,25 +334,5 @@ class AbstractPreference
     public function redirectError()
     {
         Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
-    }
-
-    
-    /**
-     * Create the array for medatada informations
-     * @return array
-     */
-    public function getInternalMetadata()
-    {
-        $internal_metadata = array(
-            "platform" => MPRestCli::PLATAFORM_ID,
-            "plataform_version" => _PS_VERSION_,
-            "module_version" => MP_VERSION,
-            "site" => Configuration::get('MERCADOPAGO_SITE_ID'),
-            "sponsor_id" => Configuration::get('MERCADOPAGO_SPONSOR_ID'),
-            "collector" => Configuration::get('MERCADOPAGO_SELLER_ID'),
-            "test_mode" => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
-            "details" => "",       
-        );
-        return $internal_metadata;
     }
 }

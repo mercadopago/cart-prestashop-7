@@ -27,7 +27,7 @@
 
 require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
 
-class IpnNotification extends AbstractPreference
+class IpnNotification extends AbstractNotification
 {
     public $total;
     public $amount;
@@ -68,9 +68,9 @@ class IpnNotification extends AbstractPreference
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount['total'] >= $this->total && $this->status != 'rejected') {
-            $this->createOrder($cart);
+            return $this->createOrder($cart);
         }else{
-            $this->updateOrder($cart);
+            return $this->updateOrder($cart);
         }
     }
 }

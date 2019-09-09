@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-class MercadoPagoValidationStandardModuleFrontController extends ModuleFrontController
+class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
 
     public function initContent()
