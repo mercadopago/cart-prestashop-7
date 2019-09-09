@@ -173,7 +173,7 @@ class Mercadopago extends PaymentModule
                 Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
 
-            // return checkout forms
+            //return checkout forms
             $store = new StoreSettings();
             $standard = new StandardSettings();
             $custom = new CustomSettings();
