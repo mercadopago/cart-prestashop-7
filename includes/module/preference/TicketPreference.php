@@ -62,7 +62,7 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
         }
 
-        $preference['additional_info']['items'] = $this->getCartItems($cart);
+        $preference['additional_info']['items'] = $this->getCartItems($cart, true);
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 

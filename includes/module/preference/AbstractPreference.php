@@ -93,7 +93,7 @@ class AbstractPreference
      *
      * @return array
      */
-    public function getCartItems($cart)
+    public function getCartItems($cart, $custom = false)
     {
         $items = array();
         $products = $cart->getProducts();
@@ -113,60 +113,67 @@ class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image['id_image'], "");
 
-            $item = array(
+            $items[] = array(
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
                 'unit_price' => $round ? round($product['price_wt']) : $product['price_wt'],
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => strip_tags($product['description_short']),
             );
 
-            $items[] = $item;
+            if($custom == false){
+                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            }
         }
 
         //Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
-            $item = array(
+            $items[] = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
                 'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'currency_id' => $this->module->context->currency->iso_code,
                 'description' => 'Wrapping service used by store',
             );
-            $items[] = $item;
+
+            if($custom == false){
+                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            }
         }
 
         //Discounts
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
         if ($discounts > 0) {
-            $item = array(
+            $items[] = array(
                 'title' => 'Discount',
                 'quantity' => 1,
                 'unit_price' => $round ? round(-$discounts) : -$discounts,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => 'Discount provided by store',
             );
-            $items[] = $item;
+
+            if($custom == false){
+                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            }
         }
 
         //Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
-            $item = array(
+            $items[] = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => 'Shipping service used by store',
             );
-            $items[] = $item;
+
+            if($custom == false){
+                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            }
         }
 
         return $items;
