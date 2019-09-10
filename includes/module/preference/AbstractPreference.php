@@ -89,73 +89,6 @@ class AbstractPreference
     }
 
     /**
-     * Get customer email
-     *
-     * @return array
-     */
-    public function getCustomerEmail()
-    {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $customer_email = $customer_fields['email'];
-        return $customer_email;
-    }
-
-    /**
-     * Get customer data for custom checkout
-     *
-     * @return array
-     */
-    public function getCustomCustomerData($cart)
-    {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
-
-        $customer_data = array(
-            'first_name' => $customer_fields['firstname'],
-            'last_name' => $customer_fields['lastname'],
-            'phone' => array(
-                'area_code' => '-',
-                'number' => $address_invoice->phone,
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
-                'street_number' => '-',
-            )
-        );
-
-        return $customer_data;
-    }
-
-    /**
-     * Get shippment address
-     *
-     * @return array
-     */
-    public function getShipmentAddress($cart)
-    {
-        $address_invoice = new Address((int) $cart->id_address_invoice);
-
-        $shipment = array(
-            'receiver_address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
-                'street_number' => '-',
-                'apartment' => '-',
-                'floor' => '-',
-            ),
-        );
-
-        return $shipment;
-    }
-
-    /**
      * Get all cart items
      *
      * @return array
@@ -240,25 +173,6 @@ class AbstractPreference
     }
 
     /**
-     * Get all cart items
-     *
-     * @return array
-     */
-    public function getPreferenceDescription($cart)
-    {
-        $items = array();
-        $products = $cart->getProducts();
-
-        foreach ($products as $product) {
-            $items[] = $product['name'] . ' x ' . $product['quantity'];
-        }
-
-        $items = implode(', ', $items);
-
-        return $items;
-    }
-
-    /**
      * Get notification url
      *
      * @return void
@@ -317,6 +231,92 @@ class AbstractPreference
         if ($this->settings['MERCADOPAGO_SPONSOR_ID'] == "") {
             return $this->settings['MERCADOPAGO_SPONSOR_ID'] = $sponsor_id;
         }
+    }
+
+    /**
+     * Get customer email
+     *
+     * @return array
+     */
+    public function getCustomerEmail()
+    {
+        $customer_fields = Context::getContext()->customer->getFields();
+        $customer_email = $customer_fields['email'];
+        return $customer_email;
+    }
+
+    /**
+     * Get customer data for custom checkout
+     *
+     * @return array
+     */
+    public function getCustomCustomerData($cart)
+    {
+        $customer_fields = Context::getContext()->customer->getFields();
+        $address_invoice = new Address((int) $cart->id_address_invoice);
+
+        $customer_data = array(
+            'first_name' => $customer_fields['firstname'],
+            'last_name' => $customer_fields['lastname'],
+            'phone' => array(
+                'area_code' => '-',
+                'number' => $address_invoice->phone,
+            ),
+            'address' => array(
+                'zip_code' => $address_invoice->postcode,
+                'street_name' => $address_invoice->address1 . ' - ' .
+                    $address_invoice->address2 . ' - ' .
+                    $address_invoice->city . ' - ' .
+                    $address_invoice->country,
+                'street_number' => '-',
+            )
+        );
+
+        return $customer_data;
+    }
+
+    /**
+     * Get shippment address
+     *
+     * @return array
+     */
+    public function getShipmentAddress($cart)
+    {
+        $address_invoice = new Address((int) $cart->id_address_invoice);
+
+        $shipment = array(
+            'receiver_address' => array(
+                'zip_code' => $address_invoice->postcode,
+                'street_name' => $address_invoice->address1 . ' - ' .
+                    $address_invoice->address2 . ' - ' .
+                    $address_invoice->city . ' - ' .
+                    $address_invoice->country,
+                'street_number' => '-',
+                'apartment' => '-',
+                'floor' => '-',
+            ),
+        );
+
+        return $shipment;
+    }
+
+    /**
+     * Get items description
+     *
+     * @return array
+     */
+    public function getPreferenceDescription($cart)
+    {
+        $items = array();
+        $products = $cart->getProducts();
+
+        foreach ($products as $product) {
+            $items[] = $product['name'] . ' x ' . $product['quantity'];
+        }
+
+        $items = implode(', ', $items);
+
+        return $items;
     }
 
     /**
