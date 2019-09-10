@@ -89,6 +89,73 @@ class AbstractPreference
     }
 
     /**
+     * Get customer email
+     *
+     * @return array
+     */
+    public function getCustomerEmail()
+    {
+        $customer_fields = Context::getContext()->customer->getFields();
+        $customer_email = $customer_fields['email'];
+        return $customer_email;
+    }
+
+    /**
+     * Get customer data for custom checkout
+     *
+     * @return array
+     */
+    public function getCustomCustomerData($cart)
+    {
+        $customer_fields = Context::getContext()->customer->getFields();
+        $address_invoice = new Address((int) $cart->id_address_invoice);
+
+        $customer_data = array(
+            'first_name' => $customer_fields['firstname'],
+            'last_name' => $customer_fields['lastname'],
+            'phone' => array(
+                'area_code' => '-',
+                'number' => $address_invoice->phone,
+            ),
+            'address' => array(
+                'zip_code' => $address_invoice->postcode,
+                'street_name' => $address_invoice->address1 . ' - ' .
+                    $address_invoice->address2 . ' - ' .
+                    $address_invoice->city . ' - ' .
+                    $address_invoice->country,
+                'street_number' => '-',
+            )
+        );
+
+        return $customer_data;
+    }
+
+    /**
+     * Get shippment address
+     *
+     * @return array
+     */
+    public function getShipmentAddress($cart)
+    {
+        $address_invoice = new Address((int) $cart->id_address_invoice);
+
+        $shipment = array(
+            'receiver_address' => array(
+                'zip_code' => $address_invoice->postcode,
+                'street_name' => $address_invoice->address1 . ' - ' .
+                    $address_invoice->address2 . ' - ' .
+                    $address_invoice->city . ' - ' .
+                    $address_invoice->country,
+                'street_number' => '-',
+                'apartment' => '-',
+                'floor' => '-',
+            ),
+        );
+
+        return $shipment;
+    }
+
+    /**
      * Get all cart items
      *
      * @return array
@@ -97,6 +164,13 @@ class AbstractPreference
     {
         $items = array();
         $products = $cart->getProducts();
+
+        //verify country for round
+        $round = false;
+        $localization = $this->settings['MERCADOPAGO_COUNTRY_LINK'];
+        if ($localization == 'mco' || $localization == 'mlc') {
+            $round = true;
+        }
 
         //Products
         foreach ($products as $product) {
@@ -110,7 +184,7 @@ class AbstractPreference
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $product['price_wt'],
+                'unit_price' => $round ? round($product['price_wt']) : $product['price_wt'],
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 "currency_id" => $this->module->context->currency->iso_code,
@@ -126,7 +200,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $wrapping_cost,
+                'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'currency_id' => $this->module->context->currency->iso_code,
                 'description' => 'Wrapping service used by store',
@@ -140,8 +214,9 @@ class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => -$discounts,
+                'unit_price' => $round ? round(-$discounts) : -$discounts,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => 'Discount provided by store',
             );
             $items[] = $item;
@@ -153,12 +228,32 @@ class AbstractPreference
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $shipping_cost,
+                'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
+                "currency_id" => $this->module->context->currency->iso_code,
                 'description' => 'Shipping service used by store',
             );
             $items[] = $item;
         }
+
+        return $items;
+    }
+
+    /**
+     * Get all cart items
+     *
+     * @return array
+     */
+    public function getPreferenceDescription($cart)
+    {
+        $items = array();
+        $products = $cart->getProducts();
+
+        foreach ($products as $product) {
+            $items[] = $product['name'] . ' x ' . $product['quantity'];
+        }
+
+        $items = implode(', ', $items);
 
         return $items;
     }

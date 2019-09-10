@@ -109,7 +109,7 @@ class MPApi
     /**
      * Create preference
      *
-     * @param [array] $preference
+     * @param array $preference
      * @return void
      */
     public function createPreference($preference)
@@ -125,6 +125,33 @@ class MPApi
         //in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API create_preferences error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
+    }
+
+    /**
+     * Create payment
+     *
+     * @param array $preference
+     * @return void
+     */
+    public function createPayment($preference)
+    {
+        $access_token = $this->getAccessToken();
+        $tracking_id = "platform:desktop,type:prestashop,so:1.0.0";
+        $response = MPRestCli::postTracking(
+            '/v1/payments?access_token=' . $access_token,
+            $preference,
+            $tracking_id
+        );
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
             return false;
         }
 

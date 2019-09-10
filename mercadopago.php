@@ -442,60 +442,58 @@ class Mercadopago extends PaymentModule
      */
     public function getStandardCheckout($cart)
     {
-        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
-            $debit = array();
-            $credit = array();
-            $ticket = array();
-            $tarjetas = $this->mercadopago->getPaymentMethods();
-            foreach ($tarjetas as $tarjeta) {
-                if (Configuration::get($tarjeta['config']) != "") {
-                    if ($tarjeta['type'] == 'credit_card') {
-                        $credit[] = $tarjeta;
-                    } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
-                        $debit[] = $tarjeta;
-                    } else {
-                        $ticket[] = $tarjeta;
-                    }
+        $debit = array();
+        $credit = array();
+        $ticket = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if ($tarjeta['type'] == 'credit_card') {
+                    $credit[] = $tarjeta;
+                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                    $debit[] = $tarjeta;
+                } else {
+                    $ticket[] = $tarjeta;
                 }
             }
-
-            $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
-            $redirect = $this->context->link->getModuleLink($this->name, 'standard');
-            $preference_id = "";
-            $modal_link = "";
-
-            if ($modal != "") {
-                $preference = new StandardPreference();
-                $createPreference = $preference->createPreference($cart);
-
-                if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
-                    $preference_id = $createPreference['id'];
-                    $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
-                    $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
-                    MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
-                }
-            }
-
-            $infoTemplate = $this->context->smarty->assign(array(
-                "debit" => $debit,
-                "credit" => $credit,
-                "ticket" => $ticket,
-                "modal" => $modal,
-                "redirect" => $redirect,
-                "module_dir" => $this->_path,
-                "modal_link" => $modal_link,
-                "preference" => $preference_id,
-                "public_key" => $this->mercadopago->getPublicKey(),
-                "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
-            ))->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
-
-            $standardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $standardCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Standard Checkout.'))
-                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
-
-            return $standardCheckout;
         }
+
+        $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+        $redirect = $this->context->link->getModuleLink($this->name, 'standard');
+        $preference_id = "";
+        $modal_link = "";
+
+        if ($modal != "") {
+            $preference = new StandardPreference();
+            $createPreference = $preference->createPreference($cart);
+
+            if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
+                $preference_id = $createPreference['id'];
+                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+                $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
+                MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
+            }
+        }
+
+        $infoTemplate = $this->context->smarty->assign(array(
+            "debit" => $debit,
+            "credit" => $credit,
+            "ticket" => $ticket,
+            "modal" => $modal,
+            "redirect" => $redirect,
+            "module_dir" => $this->_path,
+            "modal_link" => $modal_link,
+            "preference" => $preference_id,
+            "public_key" => $this->mercadopago->getPublicKey(),
+            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
+        ))->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
+
+        $standardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+        $standardCheckout->setForm($infoTemplate)
+            ->setCallToActionText($this->l('I want to pay with Standard Checkout.'))
+            ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+
+        return $standardCheckout;
     }
 
     /**
@@ -505,33 +503,31 @@ class Mercadopago extends PaymentModule
      */
     public function getCustomCheckout()
     {
-        if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
-            $debit = array();
-            $credit = array();
-            $tarjetas = $this->mercadopago->getPaymentMethods();
-            foreach ($tarjetas as $tarjeta) {
-                if (Configuration::get($tarjeta['config']) != "") {
-                    if ($tarjeta['type'] == 'credit_card') {
-                        $credit[] = $tarjeta;
-                    } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
-                        $debit[] = $tarjeta;
-                    }
+        $debit = array();
+        $credit = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if ($tarjeta['type'] == 'credit_card') {
+                    $credit[] = $tarjeta;
+                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                    $debit[] = $tarjeta;
                 }
             }
-
-            $infoTemplate = $this->context->smarty->assign(array(
-                "debit" => $debit,
-                "credit" => $credit,
-                "module_dir" => $this->_path,
-            ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
-
-            $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $customCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
-                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
-
-            return $customCheckout;
         }
+
+        $infoTemplate = $this->context->smarty->assign(array(
+            "debit" => $debit,
+            "credit" => $credit,
+            "module_dir" => $this->_path,
+        ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
+
+        $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+        $customCheckout->setForm($infoTemplate)
+            ->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
+            ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+
+        return $customCheckout;
     }
 
     /**
@@ -555,19 +551,20 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        if (Configuration::get('MERCADOPAGO_TICKET_CHECKOUT') == true) {
-            $infoTemplate = $this->context->smarty->assign(array(
-                "ticket" => $ticket,
-                "module_dir" => $this->_path,
-            ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
+        $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
 
-            $ticketCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
-            $ticketCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Ticket Checkout.'))
-                ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+        $infoTemplate = $this->context->smarty->assign(array(
+            "ticket" => $ticket,
+            "redirect" => $redirect,
+            "module_dir" => $this->_path,
+        ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
 
-            return $ticketCheckout;
-        }
+        $ticketCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+        $ticketCheckout->setForm($infoTemplate)
+            ->setCallToActionText($this->l('I want to pay with Ticket Checkout.'))
+            ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+
+        return $ticketCheckout;
     }
 
     /**

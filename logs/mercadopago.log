@@ -1,0 +1,8 @@
+[2019-09-10 15:05:52] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-10 15:05:59] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-10 15:06:09] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-10 15:14:33] [INFO]: Cart id 6 - Preference created successfully
+[2019-09-10 15:14:45] [INFO]: Standard checkout configuration saved successfully
+[2019-09-10 20:00:22] [INFO]: Ticket checkout configuration saved successfully
+[2019-09-10 20:16:26] [ERROR]: API create_preferences error: items needed
+[2019-09-10 20:33:16] [ERROR]: API create_preferences error: items needed
