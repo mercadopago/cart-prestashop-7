@@ -67,9 +67,6 @@ class TicketPreference extends AbstractPreference
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 
         $preference = Tools::jsonEncode($preference);
-        return $preference;
-
-        $preference = Tools::jsonEncode($preference);
         $createPreference = $this->mercadopago->createPayment($preference);
 
         return $createPreference;

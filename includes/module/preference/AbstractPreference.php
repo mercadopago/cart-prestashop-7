@@ -214,7 +214,6 @@ class AbstractPreference
     public function getSiteUrl()
     {
         $url = Tools::htmlentitiesutf8(('https://' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__);
-
         return $url;
     }
 
@@ -390,6 +389,16 @@ class AbstractPreference
     }
 
     /**
+     * Redirect if any errors occurs
+     *
+     * @return void
+     */
+    public function redirectError()
+    {
+        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
+    }
+
+    /**
      * Get Mercado Pago settings
      *
      * @return void
@@ -434,15 +443,5 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
         return $this->settings;
-    }
-
-    /**
-     * Redirect if any errors occurs
-     *
-     * @return void
-     */
-    public function redirectError()
-    {
-        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
     }
 }

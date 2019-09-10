@@ -25,38 +25,19 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-require_once MP_ROOT_URL . '/includes/module/preference/TicketPreference.php';
-require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
+require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
 
-class MercadoPagoTicketModuleFrontController extends ModuleFrontController
+class WebhookNotification extends AbstractNotification
 {
+    public $total;
+    public $status;
+    public $payment;
+    public $order_state;
+
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Default function of Prestashop for init the controller
-     *
-     * @return void
-     */
-    public function postProcess()
-    {
-        $cart = $this->context->cart;
-        $preference = new TicketPreference();
-        $preference->verifyModuleParameters();
 
-        $ticket_info = Tools::getValue('mercadopago_ticket');
-        $payment = $preference->createPreference($cart, $ticket_info);
-
-        var_dump($payment);
-
-        if (is_array($payment) && array_key_exists('transaction_details', $payment)) {
-
-            $transaction_details = $payment['transaction_details'];
-            $preference->saveCreatePreferenceData($cart, $transaction_details['external_resource_url']);
-            MPLog::generate('Cart id ' . $cart->id . ' - Ticket payment created successfully');
-
-        }
-    }
 }
