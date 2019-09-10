@@ -113,7 +113,7 @@ class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image['id_image'], "");
 
-            $items[] = array(
+            $item = array(
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
@@ -123,15 +123,17 @@ class AbstractPreference
                 'description' => strip_tags($product['description_short']),
             );
 
-            if($custom == false){
-                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
             }
+
+            $items[] = $item;
         }
 
         //Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
-            $items[] = array(
+            $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
                 'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
@@ -139,15 +141,17 @@ class AbstractPreference
                 'description' => 'Wrapping service used by store',
             );
 
-            if($custom == false){
-                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
             }
+
+            $items[] = $item;
         }
 
         //Discounts
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
         if ($discounts > 0) {
-            $items[] = array(
+            $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
                 'unit_price' => $round ? round(-$discounts) : -$discounts,
@@ -155,15 +159,17 @@ class AbstractPreference
                 'description' => 'Discount provided by store',
             );
 
-            if($custom == false){
-                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
             }
+
+            $items[] = $item;
         }
 
         //Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
-            $items[] = array(
+            $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
                 'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
@@ -171,9 +177,11 @@ class AbstractPreference
                 'description' => 'Shipping service used by store',
             );
 
-            if($custom == false){
-                $items[]['currency_id'] = $this->module->context->currency->iso_code;
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
             }
+
+            $items[] = $item;
         }
 
         return $items;
