@@ -43,7 +43,7 @@ class IpnNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->total = (float) $cart->getOrderTotal();
-        $this->order_id = Order::getOrderByCartId(Tools::getValue('cart_id'));
+        $this->order_id = Order::getOrderByCartId($cart->id);
 
         $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
         $payments = $merchant_order['payments'];
@@ -52,7 +52,7 @@ class IpnNotification extends AbstractNotification
         $this->verifyPayments($payments);
         $this->validateOrderState();
 
-        if ($this->order_id == 0 && $this->amount['total'] >= $this->total && $this->status != 'rejected') {
+        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             return $this->createOrder($cart);
         }else{
             return $this->updateOrder($cart);
