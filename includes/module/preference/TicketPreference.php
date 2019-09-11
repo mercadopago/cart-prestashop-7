@@ -102,7 +102,5 @@ class TicketPreference extends AbstractPreference
                 strtotime('+' . $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] . ' hours')
             );
         }
-
-        return $this->settings['MERCADOPAGO_TICKET_EXPIRATION'];
     }
 }

@@ -41,3 +41,7 @@
 [2019-09-11 21:11:41] [INFO]: Order created successfully on cart id 13
 [2019-09-11 21:37:25] [INFO]: Cart id 14 - Ticket payment created successfully
 [2019-09-11 21:37:26] [INFO]: Order created successfully on cart id 14
+[2019-09-12 00:30:59] [INFO]: Ticket checkout configuration saved successfully
+[2019-09-12 00:31:47] [ERROR]: API create_custom_payment error: The following parameters must be valid date and format (yyyy-MM-dd'T'HH:mm:ssz): date_of_expiration
+[2019-09-12 00:35:26] [INFO]: Cart id 15 - Ticket payment created successfully
+[2019-09-12 00:35:27] [INFO]: Order created successfully on cart id 15
