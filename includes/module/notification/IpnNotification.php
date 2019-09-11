@@ -29,20 +29,9 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractNotification
 {
-    public $total;
-    public $amount;
-    public $status;
-    public $order_id;
-    public $order_state;
-    public $payments_data;
-    public $merchant_order_id;
-    public $customer_secure_key;
-
     public function __construct($merchant_order_id, $customer_secure_key)
     {
-        parent::__construct();
-        $this->merchant_order_id = $merchant_order_id;
-        $this->customer_secure_key = $customer_secure_key;
+        parent::__construct($merchant_order_id, $customer_secure_key);
     }
 
     /**
@@ -53,15 +42,11 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->amount = array();
-        $this->amount['apro'] = 0;
-        $this->amount['pend'] = 0;
-
-        $merchant_order = $this->mercadopago->getMerchantOrder($this->merchant_order_id);
-        $payments = $merchant_order['payments'];
-
         $this->total = (float) $cart->getOrderTotal();
         $this->order_id = Order::getOrderByCartId(Tools::getValue('cart_id'));
+
+        $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
+        $payments = $merchant_order['payments'];
 
         $this->verifyWebhook($cart);
         $this->verifyPayments($payments);
@@ -71,6 +56,39 @@ class IpnNotification extends AbstractNotification
             return $this->createOrder($cart);
         }else{
             return $this->updateOrder($cart);
+        }
+    }
+
+    /**
+     * Verify merchant order payments
+     *
+     * @param mixed $payments
+     * @return void
+     */
+    public function verifyPayments($payments)
+    {
+        $this->payments_data['payments_id'] = array();
+        $this->payments_data['payments_type'] = array();
+        $this->payments_data['payments_method'] = array();
+        $this->payments_data['payments_status'] = array();
+        $this->payments_data['payments_amount'] = array();
+
+        foreach ($payments as $payment) {
+            $payment_info = $this->mercadopago->getPaymentStandard($payment['id']);
+            $payment_info = $payment_info['response'];
+            $this->status = $payment_info['status'];
+
+            $this->payments_data['payments_id'][] = $payment_info['id'];
+            $this->payments_data['payments_type'][] = $payment_info['payment_type_id'];
+            $this->payments_data['payments_method'][] = $payment_info['payment_method_id'];
+            $this->payments_data['payments_amount'][] = $payment_info['transaction_amount'];
+            $this->payments_data['payments_status'][] = $this->status;
+
+            if ($this->status == 'approved') {
+                $this->approved += $payment_info['transaction_amount'];
+            } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
+                $this->pending += $payment_info['transaction_amount'];
+            }
         }
     }
 }

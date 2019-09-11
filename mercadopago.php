@@ -598,6 +598,17 @@ class Mercadopago extends PaymentModule
         if (!$this->active) {
             return;
         }
+
+        if (Tools::getIsset('payment_ticket')) {
+            $ticket_url = Tools::getValue('payment_ticket'); 
+            
+            $this->context->smarty->assign(array(
+                "ticket_url" => $ticket_url,
+                "module_dir" => $this->_path,
+            ))->fetch('module:mercadopago/views/templates/hook/ticket_return.tpl');
+
+            return $this->display(__FILE__, 'views/templates/hook/ticket_return.tpl');
+        }
     }
 
     /**

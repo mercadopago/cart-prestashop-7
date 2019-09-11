@@ -27,15 +27,31 @@
 
 class AbstractNotification
 {
+    public $total;
     public $module;
+    public $status;
+    public $amount;
+    public $aproved;
+    public $pending;
+    public $order_id;
     public $mercadopago;
+    public $order_state;
+    public $payments_data;
+    public $transaction_id;
     public $mp_transaction;
+    public $customer_secure_key;
 
-    public function __construct()
+    public function __construct($transaction_id, $customer_secure_key)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
         $this->mp_transaction = new MPTransaction();
+        $this->transaction_id = $transaction_id;
+        $this->customer_secure_key = $customer_secure_key;
+
+        $this->amount = 0;
+        $this->pending = 0;
+        $this->approved = 0;
     }
 
     /**
@@ -53,39 +69,6 @@ class AbstractNotification
     }
 
     /**
-     * Verify payments
-     *
-     * @param mixed $payments
-     * @return void
-     */
-    public function verifyPayments($payments)
-    {
-        $this->payments_data['payments_id'] = array();
-        $this->payments_data['payments_type'] = array();
-        $this->payments_data['payments_method'] = array();
-        $this->payments_data['payments_status'] = array();
-        $this->payments_data['payments_amount'] = array();
-
-        foreach ($payments as $payment) {
-            $payment_info = $this->mercadopago->getPaymentStandard($payment['id']);
-            $payment_info = $payment_info['response'];
-            $this->status = $payment_info['status'];
-
-            $this->payments_data['payments_id'][] = $payment_info['id'];
-            $this->payments_data['payments_type'][] = $payment_info['payment_type_id'];
-            $this->payments_data['payments_method'][] = $payment_info['payment_method_id'];
-            $this->payments_data['payments_status'][] = $payment_info['transaction_amount'];
-            $this->payments_data['payments_amount'][] = $this->status;
-
-            if ($this->status == 'approved') {
-                $this->amount['apro'] += $payment_info['transaction_amount'];
-            } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
-                $this->amount['pend'] += $payment_info['transaction_amount'];
-            }
-        }
-    }
-
-    /**
      * Validate order state
      *
      * @param string $status
@@ -93,11 +76,11 @@ class AbstractNotification
      */
     public function validateOrderState()
     {
-        if ($this->amount['apro'] >= $this->total) {
-            $this->amount['total'] = $this->amount['apro'];
+        if ($this->approved >= $this->total) {
+            $this->amount = $this->approved;
             $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->amount['pend'] >= $this->total) {
-            $this->amount['total'] = $this->amount['pend'];
+        } elseif ($this->pending >= $this->total) {
+            $this->amount = $this->pending;
             $this->order_state = $this->getNotificationPaymentState('in_process');
         } else {
             $this->order_state = $this->getNotificationPaymentState($this->status);
@@ -113,7 +96,7 @@ class AbstractNotification
      * @param float $total
      * @return void
      */
-    public function createOrder($cart)
+    public function createOrder($cart, $custom = false)
     {
         try {
             $this->module->validateOrder(
@@ -128,23 +111,29 @@ class AbstractNotification
                 $this->customer_secure_key
             );
 
-            $order = Order::getOrderByCartId($cart->id);
-            $order = new Order($order);
-            
+            $this->order_id = Order::getOrderByCartId($cart->id);
+            $order = new Order($this->order_id);
+
             $payments = $order->getOrderPaymentCollection();
-            $payments[0]->transaction_id = $this->merchant_order_id;
+            $payments[0]->transaction_id = $this->transaction_id;
             $payments[0]->update();
 
             $this->saveCreateOrderData($cart);
 
             MPLog::generate('Order created successfully on cart id ' . $cart->id);
-            $this->getNotificationResponse("The order has been created", 201);
+
+            if ($custom != true) {
+                $this->getNotificationResponse("The order has been created", 201);
+            }
         } catch (Exception $e) {
             MPLog::generate(
                 'The order has not been created on cart id ' . $cart->id . ' - ' . $e->getMessage(),
                 'error'
             );
-            $this->getNotificationResponse("The order has not been created", 422);
+
+            if ($custom != true) {
+                $this->getNotificationResponse("The order has not been created", 422);
+            }
         }
     }
 
@@ -158,16 +147,16 @@ class AbstractNotification
     {
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
-        
+
         if ($this->order_state != $actual_status) {
             try {
                 $order->setCurrentState($this->order_state);
                 $this->saveUpdateOrderData($cart);
-                MPLog::generate('Updated order '.$this->order_id.' for the status of '.$this->order_state);
+                MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
                 $this->getNotificationResponse("The order has been updated", 201);
             } catch (Exception $e) {
                 MPLog::generate(
-                    'The order has not been updated on cart id '.$cart->id.' - '.$e->getMessage(),
+                    'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
                     'error'
                 );
                 $this->getNotificationResponse("The order has not been updated", 422);
@@ -188,15 +177,21 @@ class AbstractNotification
      */
     public function saveCreateOrderData($cart)
     {
+        $payments_id = $this->payments_data['payments_id'];
+        $payments_type = $this->payments_data['payments_type'];
+        $payments_method = $this->payments_data['payments_method'];
+        $payments_status = $this->payments_data['payments_status'];
+        $payments_amount = $this->payments_data['payments_amount'];
+
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
             "order_id" => $this->order_id,
-            "payment_id" => implode(',', $this->payments_data['payments_id']),
-            "payment_type" => implode(',', $this->payments_data['payments_type']),
-            "payment_method" => implode(',', $this->payments_data['payments_method']),
-            "payment_status" => implode(',', $this->payments_data['payments_status']),
-            "payment_amount" => implode(',', $this->payments_data['payments_amount']),
+            "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+            "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+            "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+            "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
             "notification_url" => $_SERVER['REQUEST_URI'],
-            "merchant_order_id" => $this->merchant_order_id,
+            "merchant_order_id" => $this->transaction_id,
             "received_webhook" => true,
         ]);
     }

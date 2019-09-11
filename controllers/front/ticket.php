@@ -43,20 +43,41 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
     public function postProcess()
     {
         $cart = $this->context->cart;
+        $cart_id = $cart->id;
+        $customer_secure_key = $cart->secure_key;
+
         $preference = new TicketPreference();
         $preference->verifyModuleParameters();
 
         $ticket_info = Tools::getValue('mercadopago_ticket');
         $payment = $preference->createPreference($cart, $ticket_info);
 
-        var_dump($payment);
-
         if (is_array($payment) && array_key_exists('transaction_details', $payment)) {
-
+            //payment created
             $transaction_details = $payment['transaction_details'];
             $preference->saveCreatePreferenceData($cart, $transaction_details['external_resource_url']);
             MPLog::generate('Cart id ' . $cart->id . ' - Ticket payment created successfully');
 
+            //create order
+            $notification = new WebhookNotification($payment, $customer_secure_key);
+            $notification->createCustomOrder($cart);
+
+            //order confirmation redirect
+            $old_cart = new Cart($cart_id);
+            $order = Order::getOrderByCartId($old_cart->id);
+            $order = new Order($order);
+
+            $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
+            $uri .= '&id_cart=' . $order->id_cart;
+            $uri .= '&key=' . $order->secure_key;
+            $uri .= '&id_order=' . $order->id;
+            $uri .= '&id_module=' . $this->module->id;
+            $uri .= '&payment_id=' . $payment['id'];
+            $uri .= '&payment_status=' . $payment['status'];
+            $uri .= '&payment_ticket=' . urlencode($transaction_details['external_resource_url']);
+
+            //redirect to order confirmation page
+            Tools::redirect($uri);
         }
     }
 }

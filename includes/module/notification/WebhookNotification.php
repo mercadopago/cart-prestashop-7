@@ -29,15 +29,43 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class WebhookNotification extends AbstractNotification
 {
-    public $total;
-    public $status;
     public $payment;
-    public $order_state;
 
-    public function __construct()
+    public function __construct($payment, $customer_secure_key)
     {
-        parent::__construct();
+        parent::__construct($payment['id'], $customer_secure_key);
+        $this->payment = $payment;
     }
 
+    /**
+     * Create ordem for custom payments wihtout notification
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function createCustomOrder($cart)
+    {
+        $this->total = (float) $cart->getOrderTotal();
+        $this->verifyCustomPayment();
+        $this->validateOrderState();
+        
+        return $this->createOrder($cart, true);
+    }
 
+    /**
+     * Verify custom payments
+     *
+     * @return void
+     */
+    public function verifyCustomPayment()
+    {
+        $this->status = $this->payment['status'];
+        $this->pending += $this->payment['transaction_amount'];
+
+        $this->payments_data['payments_id'] = $this->payment['id'];
+        $this->payments_data['payments_type'] = $this->payment['payment_type_id'];
+        $this->payments_data['payments_method'] = $this->payment['payment_method_id'];
+        $this->payments_data['payments_amount'] = $this->payment['transaction_amount'];
+        $this->payments_data['payments_status'] = $this->status;
+    }
 }

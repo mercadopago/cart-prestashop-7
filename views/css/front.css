@@ -83,6 +83,10 @@
     padding-left: 10px !important;
 }
 
+.mp-hg-100{
+    height: 100% !important;
+}
+
 .fl-left{
     float: left !important;
 }
@@ -284,6 +288,23 @@ body#checkout section.checkout-step .payment-options label {
 .text-ticket-tarjeta{
     font-weight: bold;
     padding-left: 10px;
+}
+
+.mp-ticket-frame{
+    height: 500px;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.mp-ticket-frame a{
+    margin: 10px 0;
+    padding: 10px 30px;
+    margin: 20px 0 15px;
+}
+
+.mp-ticket-frame iframe{
+    width: 100%;
+    height: 100%;
 }
 
 /* --- mobile --- */

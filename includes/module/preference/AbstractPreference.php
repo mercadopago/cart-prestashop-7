@@ -113,6 +113,10 @@ class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image['id_image'], "");
 
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
+
             $item = array(
                 'id' => $product['id_product'],
                 'title' => $product['name'],
@@ -123,16 +127,16 @@ class AbstractPreference
                 'description' => strip_tags($product['description_short']),
             );
 
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
             $items[] = $item;
         }
 
         //Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
+            
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
@@ -141,16 +145,16 @@ class AbstractPreference
                 'description' => 'Wrapping service used by store',
             );
 
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
             $items[] = $item;
         }
 
         //Discounts
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
         if ($discounts > 0) {
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
+
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
@@ -159,16 +163,16 @@ class AbstractPreference
                 'description' => 'Discount provided by store',
             );
 
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
             $items[] = $item;
         }
 
         //Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
+
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
@@ -176,10 +180,6 @@ class AbstractPreference
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
             );
-
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
 
             $items[] = $item;
         }
@@ -201,7 +201,6 @@ class AbstractPreference
                 '?fc=module&module=mercadopago&controller=standardnotification&' .
                 'checkout=standard&cart_id=' . $cart->id . '&customer=' . $customer->secure_key .
                 '&notification=ipn';
-
             return $notification_url;
         }
     }
@@ -229,7 +228,6 @@ class AbstractPreference
         $return_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
             '?fc=module&module=mercadopago&controller=standardvalidation&' .
             'checkout=standard&cart_id=' . $cart->id . '&typeReturn=' . $typeReturn;
-
         return $return_url;
     }
 
