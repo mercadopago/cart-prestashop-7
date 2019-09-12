@@ -32,6 +32,7 @@ class StandardPreference extends AbstractPreference
     public function __construct()
     {
         parent::__construct();
+        $this->checkout = 'standard';
     }
 
     /**

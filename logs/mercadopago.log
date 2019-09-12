@@ -1,47 +1,27 @@
-[2019-09-10 22:01:01] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:02:12] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:02:58] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:04:25] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-10 22:05:06] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:32:50] [ERROR]: The order has not been created on cart id 6 - Can't load Order status
-[2019-09-10 22:32:50] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:35:26] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-10 22:36:28] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-10 22:37:22] [ERROR]: The order has not been created on cart id 6 - Can't load Order status
-[2019-09-10 22:37:22] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:39:36] [ERROR]: The order has not been created on cart id 6 - Can't load Order status
-[2019-09-10 22:39:36] [INFO]: Cart id 6 - Ticket payment created successfully
-[2019-09-10 22:44:35] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-10 22:51:51] [INFO]: Cart id 7 - Ticket payment created successfully
-[2019-09-11 15:13:31] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-11 15:14:09] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-11 15:19:13] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 16:25:38] [INFO]: Cart id 8 - Preference created successfully
-[2019-09-11 16:48:59] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 19:58:12] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 20:21:48] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 20:27:20] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 20:32:18] [INFO]: Cart id 8 - Ticket payment created successfully
-[2019-09-11 20:32:18] [ERROR]: The order has not been created on cart id 8 - Property OrderPayment->amount is empty.
-[2019-09-11 20:36:33] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-11 20:37:29] [INFO]: Cart id 9 - Ticket payment created successfully
-[2019-09-11 20:37:29] [ERROR]: The order has not been created on cart id 9 - Can't load Order status
-[2019-09-11 20:46:54] [INFO]: Cart id 9 - Ticket payment created successfully
-[2019-09-11 20:46:54] [ERROR]: The order has not been created on cart id 9 - Can't load Order status
-[2019-09-11 20:49:32] [INFO]: Cart id 9 - Ticket payment created successfully
-[2019-09-11 20:49:33] [INFO]: Order created successfully on cart id 9
-[2019-09-11 21:00:55] [INFO]: Cart id 10 - Ticket payment created successfully
-[2019-09-11 21:00:56] [INFO]: Order created successfully on cart id 10
-[2019-09-11 21:05:05] [INFO]: Cart id 11 - Ticket payment created successfully
-[2019-09-11 21:05:06] [INFO]: Order created successfully on cart id 11
-[2019-09-11 21:05:19] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-11 21:07:17] [INFO]: Cart id 12 - Ticket payment created successfully
-[2019-09-11 21:07:17] [INFO]: Order created successfully on cart id 12
-[2019-09-11 21:11:40] [INFO]: Cart id 13 - Ticket payment created successfully
-[2019-09-11 21:11:41] [INFO]: Order created successfully on cart id 13
-[2019-09-11 21:37:25] [INFO]: Cart id 14 - Ticket payment created successfully
-[2019-09-11 21:37:26] [INFO]: Order created successfully on cart id 14
-[2019-09-12 00:30:59] [INFO]: Ticket checkout configuration saved successfully
-[2019-09-12 00:31:47] [ERROR]: API create_custom_payment error: The following parameters must be valid date and format (yyyy-MM-dd'T'HH:mm:ssz): date_of_expiration
-[2019-09-12 00:35:26] [INFO]: Cart id 15 - Ticket payment created successfully
-[2019-09-12 00:35:27] [INFO]: Order created successfully on cart id 15
+[2019-09-12 19:42:57] [INFO]: Cart id 16 - Ticket payment created successfully
+[2019-09-12 19:42:58] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
+[2019-09-12 19:44:10] [INFO]: Cart id 16 - Ticket payment created successfully
+[2019-09-12 19:44:10] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
+[2019-09-12 19:45:30] [INFO]: Cart id 16 - Ticket payment created successfully
+[2019-09-12 19:45:31] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
+[2019-09-12 19:55:12] [INFO]: Cart id 16 - Ticket payment created successfully
+[2019-09-12 19:55:14] [INFO]: Order created successfully on cart id 16
+[2019-09-12 19:56:02] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 19:56:10] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 20:08:57] [INFO]: Cart id 17 - Ticket payment created successfully
+[2019-09-12 20:08:59] [INFO]: Order created successfully on cart id 17
+[2019-09-12 20:11:17] [INFO]: Cart id 18 - Ticket payment created successfully
+[2019-09-12 20:11:18] [INFO]: Order created successfully on cart id 18
+[2019-09-12 20:47:13] [INFO]: Cart id 19 - Preference created successfully
+[2019-09-12 22:05:54] [INFO]: Cart id 19 - Ticket payment created successfully
+[2019-09-12 22:05:56] [INFO]: Order created successfully on cart id 19
+[2019-09-12 22:06:55] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:07:08] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:07:22] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:07:38] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:08:42] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:08:53] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:09:18] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:10:22] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-12 22:11:21] [INFO]: Cart id 20 - Ticket payment created successfully
+[2019-09-12 22:11:23] [INFO]: Order created successfully on cart id 20

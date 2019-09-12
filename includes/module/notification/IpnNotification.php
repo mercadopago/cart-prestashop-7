@@ -29,13 +29,13 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractNotification
 {
-    public function __construct($merchant_order_id, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key)
     {
-        parent::__construct($merchant_order_id, $customer_secure_key);
+        parent::__construct($transaction_id, $customer_secure_key);
     }
 
     /**
-     * Receive and trear the notification
+     * Receive and treat the notification
      *
      * @param mixed $cart
      * @return void
@@ -75,7 +75,6 @@ class IpnNotification extends AbstractNotification
 
         foreach ($payments as $payment) {
             $payment_info = $this->mercadopago->getPaymentStandard($payment['id']);
-            $payment_info = $payment_info['response'];
             $this->status = $payment_info['status'];
 
             $this->payments_data['payments_id'][] = $payment_info['id'];

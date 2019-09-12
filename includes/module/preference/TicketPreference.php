@@ -32,6 +32,7 @@ class TicketPreference extends AbstractPreference
     public function __construct()
     {
         parent::__construct();
+        $this->checkout = 'custom';
     }
 
     /**

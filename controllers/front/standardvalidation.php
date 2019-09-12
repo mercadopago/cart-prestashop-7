@@ -46,32 +46,19 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
             $payments_method = array();
             $payments_status = array();
             $payments_amount = array();
-            $status_details = array();
-            $cards_holder_name = array();
-            $statement_descriptors = array();
-            $four_digits = array();
 
             foreach ($collection_ids as $collection_id) {
                 $payment_info = $mercadopago->getPaymentStandard($collection_id);
-                if ($payment_info['status'] != 200) {
+                if ($payment_info == false) {
                     continue;
                 }
 
-                $payment_info = $payment_info['response'];
                 $payments_id[] = $payment_info['id'];
                 $payments_type[] = $payment_info['payment_type_id'];
                 $payments_method[] = $payment_info['payment_method_id'];
                 $payments_status[] = $payment_info['status'];
                 $payments_amount[] = $payment_info['transaction_amount'];
-                $payment_type_id = $payment_info['payment_type_id'];
                 $cart_id = $payment_info['external_reference'];
-
-                if ($payment_type_id == 'credit_card') {
-                    $status_details[] = $payment_info['status_detail'];
-                    $cards_holder_name[] = $payment_info['card']['cardholder']['name'];
-                    $statement_descriptors[] = $payment_info['statement_descriptor'];
-                    $four_digits[] = '**** **** **** ' . $payment_info['card']['last_four_digits'];
-                }
             }
 
             //order confirmation redirect
@@ -92,12 +79,6 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
             $uri .= '&payment_status=' . implode(',', $payments_status);
             $uri .= '&payment_amount=' . implode(',', $payments_amount);
             $uri .= '&amount=' . $total;
-            if ($payment_type_id == 'credit_card') {
-                $uri .= '&card_holder_name=' . implode(',', $cards_holder_name);
-                $uri .= '&four_digits=' . implode(',', $four_digits);
-                $uri .= '&statement_descriptor=' . implode(',', $statement_descriptors);
-                $uri .= '&status_detail=' . implode(',', $status_details);
-            }
 
             //redirect to order confirmation page
             Tools::redirect($uri);

@@ -161,15 +161,15 @@ class MPApi
     }
 
     /**
-     * Get payment standard
+     * Get standard payment
      *
-     * @param [integer] $collection_id
+     * @param integer $transaction_id
      * @return void
      */
-    public function getPaymentStandard($collection_id)
+    public function getPaymentStandard($transaction_id)
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payments/' . $collection_id . '?access_token=' . $access_token);
+        $response = MPRestCli::get('/v1/payments/' . $transaction_id . '?access_token=' . $access_token);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -178,7 +178,7 @@ class MPApi
         }
 
         //response treatment
-        $result = $response;
+        $result = $response['response'];
         return $result;
     }
 

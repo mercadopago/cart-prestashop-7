@@ -96,7 +96,7 @@ class AbstractNotification
      * @param float $total
      * @return void
      */
-    public function createOrder($cart, $custom = false)
+    public function createOrder($cart, $custom_create_order = false)
     {
         try {
             $this->module->validateOrder(
@@ -122,7 +122,7 @@ class AbstractNotification
 
             MPLog::generate('Order created successfully on cart id ' . $cart->id);
 
-            if ($custom != true) {
+            if ($custom_create_order != true) {
                 $this->getNotificationResponse("The order has been created", 201);
             }
         } catch (Exception $e) {
@@ -131,7 +131,7 @@ class AbstractNotification
                 'error'
             );
 
-            if ($custom != true) {
+            if ($custom_create_order != true) {
                 $this->getNotificationResponse("The order has not been created", 422);
             }
         }
@@ -205,8 +205,10 @@ class AbstractNotification
      */
     public function saveUpdateOrderData($cart)
     {
+        $payments_status = $this->payments_data['payments_status'];
+
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
-            "payment_status" => implode(',', $this->payments_data['payments_status'])
+            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
         ]);
     }
 

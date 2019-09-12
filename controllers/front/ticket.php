@@ -59,8 +59,9 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
             MPLog::generate('Cart id ' . $cart->id . ' - Ticket payment created successfully');
 
             //create order
-            $notification = new WebhookNotification($payment, $customer_secure_key);
-            $notification->createCustomOrder($cart);
+            $transaction_id = $payment['id'];
+            $notification = new WebhookNotification($transaction_id, $customer_secure_key);
+            $notification = $notification->createCustomOrder($cart);
 
             //order confirmation redirect
             $old_cart = new Cart($cart_id);

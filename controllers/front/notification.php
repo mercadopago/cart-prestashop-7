@@ -26,8 +26,9 @@
  */
 
 require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
+require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
 
-class MercadoPagoStandardNotificationModuleFrontController extends ModuleFrontController
+class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
 {
     /**
      * Default function of Prestashop for init the controller
@@ -39,15 +40,17 @@ class MercadoPagoStandardNotificationModuleFrontController extends ModuleFrontCo
         $topic = Tools::getValue('topic');
         $checkout = Tools::getValue('checkout');
         $secure_key = Tools::getValue('customer');
-        $merchant_order_id = Tools::getValue('id');
+        $transaction_id = Tools::getValue('id');
 
         $cart = new Cart(Tools::getValue('cart_id'));
         $customer = new Customer((int) $cart->id_customer);
         $customer_secure_key = $customer->secure_key;
 
-        $notification = new IpnNotification($merchant_order_id, $customer_secure_key);
-
         if ($checkout == 'standard' && $topic == 'merchant_order' && $customer_secure_key == $secure_key) {
+            $notification = new IpnNotification($transaction_id, $customer_secure_key);
+            $notification->receiveNotification($cart);
+        } elseif ($checkout == 'custom' && $topic == 'payment' && $customer_secure_key == $secure_key) {
+            $notification = new WebhookNotification($transaction_id, $customer_secure_key);
             $notification->receiveNotification($cart);
         } else {
             MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');

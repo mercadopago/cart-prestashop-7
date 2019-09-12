@@ -31,10 +31,26 @@ class WebhookNotification extends AbstractNotification
 {
     public $payment;
 
-    public function __construct($payment, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key)
     {
-        parent::__construct($payment['id'], $customer_secure_key);
-        $this->payment = $payment;
+        parent::__construct($transaction_id, $customer_secure_key);
+        $this->payment = $this->mercadopago->getPaymentStandard($transaction_id);
+    }
+
+    /**
+     * Receive and treat the notification
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function receiveNotification($cart)
+    {
+        $this->order_id = Order::getOrderByCartId($cart->id);
+        $this->total = (float) $cart->getOrderTotal();
+        $this->verifyCustomPayment();
+        $this->validateOrderState();
+
+        return $this->updateOrder($cart);
     }
 
     /**
@@ -49,7 +65,9 @@ class WebhookNotification extends AbstractNotification
         $this->verifyCustomPayment();
         $this->validateOrderState();
         
-        return $this->createOrder($cart, true);
+        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
+            return $this->createOrder($cart, true);
+        }
     }
 
     /**
