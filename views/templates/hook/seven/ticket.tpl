@@ -23,8 +23,10 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_ticket_checkout" method="post" action="{$redirect}">
+<form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
     <div class="row frame-checkout-custom-seven">
+
+        {if $coupon != true}
         <div id="mercadopago-form-ticket-coupon" class="col-xs-12 col-md-12 col-12">
             <h3 class="title-custom-checkout">{l s='Ingresa tu cupón de descuento' mod='mercadopago'}</h3>
 
@@ -38,10 +40,11 @@
                 </div>
             </div>
         </div>
+        {/if}
 
         <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
             <div class="form-group">
-                <div class="col-md-12 col-12 pb-30 px-0">
+                <div class="col-md-12 col-12 pb-20 px-0">
                     <div class="form-check mp-form-check">
                         <div class="col-md-4 col-4 col-xs-6 pl-0">
                             <input class="form-check-input mp-checkbox" type="radio" value="CPF" id="defaultRadio1" name="mercadopago_ticket[docType]">
@@ -105,7 +108,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 col-xs-12 col-12 px-0 pb-10 mp-m-col">
+            <div class="col-md-12 col-xs-12 col-12 px-0 mp-m-col">
                 <p class="all-required">{l s='Completa todos los campos, son obligatorios.' mod='mercadopago'}</p>
             </div>
 
@@ -118,8 +121,8 @@
                     {foreach $ticket as $tarjeta}
                         <div class="col-md-6 col-6 col-xs-6 px-0 mp-m-col">
                             <div class="form-check mp-form-check">
-                                <input name="mercadopago_ticket[paymentMethodId]" class="form-check-input mp-checkbox" type="radio" value="{Tools::strtolower($tarjeta['id'])}">
-                                <label class="form-check-label pb-20" for="">
+                                <input name="mercadopago_ticket[paymentMethodId]" id="{$tarjeta['id']}" class="form-check-input mp-checkbox" value="{Tools::strtolower($tarjeta['id'])}"type="radio">
+                                <label class="form-check-label pb-20" for="{$tarjeta['id']}">
                                     <img src="{$tarjeta['image']}" alt="{$tarjeta['name']}" />
                                     <span class="text-ticket-tarjeta">{$tarjeta['name']}</span>
                                 </label>

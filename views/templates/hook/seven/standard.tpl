@@ -23,7 +23,7 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
+<form id="mp_standard_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'html':'UTF-8'}">
     <div class="row frame-checkout-seven">
 
         {if count($credit) != 0}

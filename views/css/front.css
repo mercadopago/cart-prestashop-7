@@ -43,6 +43,10 @@
     padding-right: 0px !important;
 }
 
+.pt-0{
+    padding-top: 0px !important;
+}
+
 .pt-5{
     padding-top: 5px !important;
 }
@@ -135,7 +139,7 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .frame-checkout-seven{
-    padding: 5px 0px 20px;
+    padding: 0px 0px 20px;
 }
 
 .frame-checkout-six{
@@ -200,8 +204,13 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 /* custom chckout */
+#mercadopago-form-custom-coupon{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .frame-checkout-custom-seven{
-    padding: 10px 0px 0px;
+    padding: 10px 0px 10px;
 }
 
 .mp-form-control{
@@ -219,8 +228,8 @@ body#checkout section.checkout-step .payment-options label {
     color: #1a8196 !important;
 }
 
-#mercadopago-form-coupon, #mercadopago-form{
-    padding-top: 25px;
+.mp-checkout-form{
+    padding: 0px 40px;
 }
 
 .frame-title{
@@ -278,7 +287,7 @@ body#checkout section.checkout-step .payment-options label {
 
 /* ticket checkout */
 #mercadopago-form-ticket-coupon{
-    padding-top: 5px;
+    padding-bottom: 15px;
 }
 
 .mp-form-check{

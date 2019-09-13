@@ -354,6 +354,7 @@ class Mercadopago extends PaymentModule
     public function hookHeader()
     {
         $this->context->controller->addJS($this->_path . '/views/js/front.js');
+        $this->context->controller->addJS($this->_path . '/views/js/ticket.js');
         $this->context->controller->addCSS($this->_path . '/views/css/front.css');
     }
 
@@ -516,9 +517,12 @@ class Mercadopago extends PaymentModule
             }
         }
 
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
             "credit" => $credit,
+            "site_id" => $site_id,
             "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 
@@ -540,9 +544,8 @@ class Mercadopago extends PaymentModule
         $ticket = array();
         $tarjetas = $this->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
-            if (Configuration::get($tarjeta['config']) != "") {
-                if (
-                    $tarjeta['type'] != 'credit_card' &&
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_'.$tarjeta['id']) != "") {
+                if ($tarjeta['type'] != 'credit_card' &&
                     $tarjeta['type'] != 'debit_card' &&
                     $tarjeta['type'] != 'prepaid_card'
                 ) {
@@ -551,10 +554,12 @@ class Mercadopago extends PaymentModule
             }
         }
 
+        $coupon = Configuration::get('MERCADOPAGO_TICKET_CHECKOUT');
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
+            "coupon" => $coupon,
             "redirect" => $redirect,
             "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');

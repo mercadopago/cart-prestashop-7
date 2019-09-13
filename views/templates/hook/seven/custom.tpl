@@ -23,11 +23,17 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_standard_checkout" method="post" action="{$redirect}">
+<form id="mp_custom_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
     <div class="row frame-checkout-custom-seven">
         <div class="col-xs-12 col-md-12 col-12">
-            <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar' mod='mercadopago'} ⌵ </a> |
-            <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas" target="_blank">{l s='Ver promociones vigentes' mod='mercadopago'}</a>
+            <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar' mod='mercadopago'} ⌵ </a>
+            
+            {if $site_id == "mla"}
+                <span> | </span>
+                <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas" target="_blank">
+                    {l s='Ver promociones vigentes' mod='mercadopago'}
+                </a>
+            {/if}
         </div>
 
         <div class="col-xs-12 col-md-12 col-12">
@@ -48,7 +54,7 @@
             </div>
         </div>
 
-        <div id="mercadopago-form-coupon" class="col-xs-12 col-md-12 col-12">
+        <div id="mercadopago-form-custom-coupon" class="col-xs-12 col-md-12 col-12">
             <h3 class="title-custom-checkout">{l s='Ingresa tu cupón de descuento' mod='mercadopago'}</h3>
 
             <div class="form-group">
