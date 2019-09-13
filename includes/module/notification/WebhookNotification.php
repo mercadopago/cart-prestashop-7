@@ -78,12 +78,16 @@ class WebhookNotification extends AbstractNotification
     public function verifyCustomPayment()
     {
         $this->status = $this->payment['status'];
-        $this->pending += $this->payment['transaction_amount'];
-
         $this->payments_data['payments_id'] = $this->payment['id'];
         $this->payments_data['payments_type'] = $this->payment['payment_type_id'];
         $this->payments_data['payments_method'] = $this->payment['payment_method_id'];
         $this->payments_data['payments_amount'] = $this->payment['transaction_amount'];
         $this->payments_data['payments_status'] = $this->status;
+
+        if ($this->status == 'approved') {
+            $this->approved += $this->payment['transaction_amount'];
+        } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
+            $this->pending += $this->payment['transaction_amount'];
+        }
     }
 }
