@@ -30,3 +30,16 @@
 [2019-09-16 20:40:15] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
 [2019-09-16 20:41:33] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
 [2019-09-16 21:06:15] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
+[2019-09-17 16:34:07] [INFO]: Cart id 21 - Preference created successfully
+[2019-09-17 16:36:49] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
+[2019-09-17 16:37:16] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 18:10:01] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 18:10:18] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 18:42:05] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 18:43:49] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
+[2019-09-17 18:56:55] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 18:59:49] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 19:14:05] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 19:22:07] [ERROR]: API create_custom_payment error: Invalid user identification number
+[2019-09-17 19:22:54] [INFO]: Cart id 21 - Ticket payment created successfully
+[2019-09-17 19:22:56] [INFO]: Order created successfully on cart id 21

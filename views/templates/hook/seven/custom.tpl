@@ -28,7 +28,7 @@
         <div class="col-xs-12 col-md-12 col-12">
             <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar' mod='mercadopago'} ⌵ </a>
             
-            {if $site_id == "mla"}
+            {if $site_id == "MLA"}
                 <span> | </span>
                 <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas" target="_blank">
                     {l s='Ver promociones vigentes' mod='mercadopago'}

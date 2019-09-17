@@ -214,6 +214,7 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-form-control{
+    padding: .5rem .5rem;
     background-color: #fff !important;
 }
 

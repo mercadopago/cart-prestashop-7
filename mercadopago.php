@@ -554,12 +554,14 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        $coupon = Configuration::get('MERCADOPAGO_TICKET_CHECKOUT');
+        $coupon = Configuration::get('MERCADOPAGO_TICKET_COUPON');
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
             "coupon" => $coupon,
+            "site_id" => $site_id,
             "redirect" => $redirect,
             "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
