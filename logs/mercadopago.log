@@ -43,3 +43,5 @@
 [2019-09-17 19:22:07] [ERROR]: API create_custom_payment error: Invalid user identification number
 [2019-09-17 19:22:54] [INFO]: Cart id 21 - Ticket payment created successfully
 [2019-09-17 19:22:56] [INFO]: Order created successfully on cart id 21
+[2019-09-17 19:26:10] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-17 19:26:43] [ERROR]: API create_custom_payment error: internal_error

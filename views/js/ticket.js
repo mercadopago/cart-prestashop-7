@@ -21,33 +21,6 @@ var MPv1Ticket = {
     terms: "conditions_to_approve[terms-and-conditions]"
 }
 
-//ticket form submit
-function mpTicketSubmitForm(site_id) {
-    document.forms['mp_ticket_checkout'].onsubmit = function () {
-        if (site_id == 'MLB') {
-            var submit = false;
-            var array_inputs = MPv1Ticket.inputs;
-
-            //inputs validation
-            count_inputs = inputsValidate(array_inputs);
-            if(array_inputs.length == count_inputs){
-                submit = true;
-            } else {
-                submit = false;
-            }
-
-            // docNumber validation
-            if (cpf_number.checked == true) {
-                submit = cpfValidate(document.getElementById(MPv1Ticket.inputs[5]));
-            } else {
-                submit = cnpjValidate(document.getElementById(MPv1Ticket.inputs[5]));
-            }
-
-            return submit;
-        }
-    }
-}
-
 //select cpf or cnpj
 var cpf_number = document.getElementById(MPv1Ticket.docs.cpf_number);
 var cpf_label = document.getElementById(MPv1Ticket.docs.cpf_label);
@@ -252,4 +225,38 @@ function inputsValidate(array_inputs){
     });
 
     return count;
+}
+
+//ticket form submit
+function mpTicketSubmitForm(site_id) {
+    document.forms['mp_ticket_checkout'].onsubmit = function () {
+        if (site_id == 'MLB') {
+            var submit = false;
+            var doc_validate = false;
+            var input_validate = false;
+            var array_inputs = MPv1Ticket.inputs;
+
+            //inputs validation
+            count_inputs = inputsValidate(array_inputs);
+            if(array_inputs.length == count_inputs){
+                input_validate = true;
+            } else {
+                input_validate = false;
+            }
+
+            // docNumber validation
+            if (cpf_number.checked == true) {
+                doc_validate = cpfValidate(document.getElementById(MPv1Ticket.inputs[5]));
+            } else {
+                doc_validate = cnpjValidate(document.getElementById(MPv1Ticket.inputs[5]));
+            }
+
+            //verify submit
+            if(doc_validate == true && input_validate == true){
+                submit = true;
+            }
+
+            return submit;
+        }
+    }
 }
