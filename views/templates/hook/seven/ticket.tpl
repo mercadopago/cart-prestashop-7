@@ -26,17 +26,23 @@
 <form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
     <div class="row frame-checkout-custom-seven">
 
-        {if $coupon != true}
+        {if $coupon == true}
         <div id="mercadopago-form-ticket-coupon" class="col-xs-12 col-md-12 col-12">
             <h3 class="title-custom-checkout">{l s='Ingresa tu cupón de descuento' mod='mercadopago'}</h3>
 
             <div class="form-group">
                 <div class="col-md-9 col-xs-8 pb-10 pl-0 mp-m-col">
-                    <input type="text" id="couponCode" class="form-control mp-form-control" autocomplete="off" maxlength="24" placeholder="{l s='Ingresá tu cupón' mod='mercadopago'}" />
+                    <input type="text" id="couponCodeTicket" name="mercadopago_ticket[coupon_code]" class="form-control mp-form-control" autocomplete="off" maxlength="24" 
+                    placeholder="{l s='Ingresá tu cupón' mod='mercadopago'}" />
+
+                    <small class="mp-sending-coupon" id="mpSendingCouponTicket">{l s='Validando cupón de descuento...' mod='mercadopago'}</small>
+                    <small class="mp-success-coupon" id="mpCouponApplyedTicket">{l s='Cupón de descuento aplicado!' mod='mercadopago'}</small>
+                    <small class="mp-erro-febraban" id="mpCouponErrorTicket">{l s='El código que ingresaste no es válido!' mod='mercadopago'}</small>
+                    <small class="mp-erro-febraban" id="mpResponseErrorTicket">{l s='Lo sentimos, ocurrió un error. Por favor, inténtelo de nuevo.' mod='mercadopago'}</small>
                 </div>
 
                 <div class="col-md-3 col-xs-4 pb-10 pr-0 text-center mp-m-col">
-                    <input type="button" class="btn btn-primary mp-btn" id="applyCoupon" value="{l s='Aplicar' mod='mercadopago'}">
+                    <input type="button" class="btn btn-primary mp-btn" id="applyCouponTicket" onclick="mpTicketApplyAjax()" value="{l s='Aplicar' mod='mercadopago'}" />
                 </div>
             </div>
         </div>
@@ -65,12 +71,12 @@
                     <div id="mp-firstname" class="col-md-4 col-4 col-xs-6 pb-10 pl-0">
                         <label for="" id="mp-name-label" class="pb-5">{l s='Nombre' mod='mercadopago'} <em class="mp-required">*</em></label>
                         <label for="" id="mp-social-label" class="pb-5">{l s='Razón social' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_firstname" name="mercadopago_ticket[firstname]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_firstname" name="mercadopago_ticket[firstname]" class="form-control mp-form-control" value="{$customer['firstname']}" autocomplete="off" />
                     </div>
 
                     <div id="mp-lastname" class="col-md-4 col-4 col-xs-6 pb-10 m-pr-0">
                         <label for="" class="pb-5">{l s='Apellido' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_lastname" name="mercadopago_ticket[lastname]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_lastname" name="mercadopago_ticket[lastname]" class="form-control mp-form-control" value="{$customer['lastname']}" autocomplete="off" />
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-12 pb-10 pr-0 mp-m-col">
@@ -84,7 +90,7 @@
                 <div class="form-group">
                     <div class="col-md-8 col-8 col-xs-8 pb-20 pl-0">
                         <label for="" class="pb-5">{l s='Dirección' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_address" name="mercadopago_ticket[address]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_address" name="mercadopago_ticket[address]" class="form-control mp-form-control" value="{$address->address1}" autocomplete="off" />
                         <small class="mp-erro-febraban" id="mp_address_error">{l s='This field can not be null' mod='mercadopago'}</small>
                     </div>
 
@@ -97,7 +103,7 @@
                 <div class="form-group">
                     <div class="col-md-4 col-4 col-xs-6 pb-20 pl-0">
                         <label for="" class="pb-5">{l s='Ciudad' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_city" name="mercadopago_ticket[city]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_city" name="mercadopago_ticket[city]" class="form-control mp-form-control" value="{$address->city}" autocomplete="off" />
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-6 pb-20 m-pr-0">
@@ -136,7 +142,7 @@
 
                     <div class="col-md-4 col-4 col-xs-12 pb-20 pr-0 mp-m-col">
                         <label for="" class="pb-5">{l s='Código postal' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_zipcode" name="mercadopago_ticket[zipcode]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_zipcode" name="mercadopago_ticket[zipcode]" class="form-control mp-form-control" value="{$address->postcode}" autocomplete="off" />
                     </div>
                 </div>
 
@@ -166,12 +172,20 @@
             </div>
         </div>
 
+        <div id="mercadopago-utilities">
+            <input type="hidden" id="campaignIdTicket" name="mercadopago_ticket[campaign_id]" />
+            <input type="hidden" id="couponPercentTicket" name="mercadopago_ticket[percent_off]" />
+            <input type="hidden" id="couponAmountTicket" name="mercadopago_ticket[coupon_amount]" />
+        </div>
+
     </div>
 </form>
 
 <script type="text/javascript">
     window.onload = function() {
         var site_id = '{$site_id}';
-        mpTicketSubmitForm(site_id);
+        var coupon_url = '{$coupon_url}';
+        mpValidateParams(site_id, coupon_url)
+        mpTicketSubmitForm();
     }
 </script>

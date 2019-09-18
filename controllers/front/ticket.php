@@ -51,7 +51,7 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 
         $ticket_info = Tools::getValue('mercadopago_ticket');
         $payment = $preference->createPreference($cart, $ticket_info);
-
+        
         if (is_array($payment) && array_key_exists('transaction_details', $payment)) {
             //payment created
             $transaction_details = $payment['transaction_details'];

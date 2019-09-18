@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2015 PrestaShop
  *
@@ -27,8 +28,7 @@
 class MPApi
 {
     public function __construct()
-    {
-    }
+    { }
 
     /**
      * Instance the class
@@ -49,7 +49,7 @@ class MPApi
      *
      * @return void
      */
-    protected function getAccessToken()
+    public function getAccessToken()
     {
         if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
             return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
@@ -221,7 +221,8 @@ class MPApi
 
         //response treatment
         $result = $response['response'];
-        if ($result['site_id'] != Configuration::get('MERCADOPAGO_SITE_ID') ||
+        if (
+            $result['site_id'] != Configuration::get('MERCADOPAGO_SITE_ID') ||
             $result['id'] == Configuration::get('MERCADOPAGO_SELLER_ID')
         ) {
             return false;
@@ -327,5 +328,32 @@ class MPApi
         $result = $response['response'];
 
         return $result['scopes'];
+    }
+
+    /**
+     * Get coupon discount
+     *
+     * @param array $params
+     * @return void
+     */
+    public function getCouponDiscount($params)
+    {
+        $access_token = $this->getAccessToken();
+
+        $response_uri = '/discount_campaigns';
+        $response_uri .= '?transaction_amount=' . $params['transaction_amount'];
+        $response_uri .= '&payer_email=' . $params['payer_email'];
+        $response_uri .= '&coupon_code=' . $params['coupon_code'];
+        $response_uri .= '&access_token=' . $access_token;
+
+        $response = MPRestCli::get($response_uri);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_coupon_discount error: ' . $response['response']['message'], 'error');
+        }
+
+        //response treatment
+        return $response;
     }
 }

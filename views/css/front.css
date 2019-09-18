@@ -26,76 +26,76 @@
 * to avoid any conflicts with others containers.
 */
 
-.pd-0{
+.pd-0 {
     padding: 0px !important;
 }
 
-.px-0{
+.px-0 {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
 
-.pl-0{
+.pl-0 {
     padding-left: 0px !important;
 }
 
-.pr-0{
+.pr-0 {
     padding-right: 0px !important;
 }
 
-.pt-0{
+.pt-0 {
     padding-top: 0px !important;
 }
 
-.pt-5{
+.pt-5 {
     padding-top: 5px !important;
 }
 
-.pt-10{
+.pt-10 {
     padding-top: 10px !important;
 }
 
-.pt-20{
+.pt-20 {
     padding-top: 20px !important;
 }
 
-.pb-5{
+.pb-5 {
     padding-bottom: 5px !important;
 }
 
-.pb-10{
+.pb-10 {
     padding-bottom: 10px !important;
 }
 
-.pb-15{
+.pb-15 {
     padding-bottom: 15px !important;
 }
 
-.pb-20{
+.pb-20 {
     padding-bottom: 20px !important;
 }
 
-.pb-30{
+.pb-30 {
     padding-bottom: 30px !important;
 }
 
-.pl-0{
+.pl-0 {
     padding-left: 0px !important;
 }
 
-.pl-10{
+.pl-10 {
     padding-left: 10px !important;
 }
 
-.mp-hg-100{
+.mp-hg-100 {
     height: 100% !important;
 }
 
-.fl-left{
+.fl-left {
     float: left !important;
 }
 
-.pointer{
+.pointer {
     cursor: pointer !important;
 }
 
@@ -103,18 +103,18 @@ body#checkout section.checkout-step .payment-options label {
     text-align: left !important;
 }
 
-.title-checkout{
+.title-checkout {
     padding: 5px 0 0px;
 }
 
-.subtitle-checkout{
+.subtitle-checkout {
     padding: 20px 0px 0px;
     margin: 0px 0 5px !important;
     text-transform: uppercase;
     font-family: sans-serif !important;
 }
 
-.badge-checkout{
+.badge-checkout {
     padding: 5px 10px;
     margin-left: 5px;
     display: inline-block;
@@ -124,44 +124,44 @@ body#checkout section.checkout-step .payment-options label {
     border-radius: 2px;
 }
 
-.img-tarjetas{
+.img-tarjetas {
     padding: 10px;
     max-height: 40px;
     width: auto !important;
 }
 
-.redirect-checkout-six{
+.redirect-checkout-six {
     display: block;
 }
 
-.redirect-checkout-six:hover{
+.redirect-checkout-six:hover {
     background-color: #eee;
 }
 
-.frame-checkout-seven{
+.frame-checkout-seven {
     padding: 0px 0px 20px;
 }
 
-.frame-checkout-six{
+.frame-checkout-six {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 25px 20px 20px;
     margin: 0px 0px 10px;
 }
 
-.title-checkout-six p{
+.title-checkout-six p {
     display: inline-block;
     margin: 0;
     font-size: 16px;
     font-weight: bold;
-    color: #000;    
+    color: #000;
 }
 
-.title-checkout-six img{
-    padding-right: 10px;   
+.title-checkout-six img {
+    padding-right: 10px;
 }
 
-.subtitle-checkout-six{
+.subtitle-checkout-six {
     font-size: 22px;
     font-weight: 600;
     font-style: normal;
@@ -173,17 +173,17 @@ body#checkout section.checkout-step .payment-options label {
     margin: 0px;
 }
 
-.redirect-frame{
+.redirect-frame {
     text-align: center;
     background-color: #f5f5f5;
     padding: 25px 0 10px;
 }
 
-.redirect-frame img{
+.redirect-frame img {
     max-width: 160px !important;
 }
 
-.redirect-frame p{
+.redirect-frame p {
     padding-top: 15px !important;
     font-family: sans-serif !important;
     font-size: 14px !important;
@@ -196,7 +196,7 @@ body#checkout section.checkout-step .payment-options label {
     color: #333333 !important;
 }
 
-.subtitle-standard-checkout{
+.subtitle-standard-checkout {
     padding: 10px 0px 0px;
     margin: 0px 0 5px !important;
     text-transform: uppercase;
@@ -204,16 +204,16 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 /* custom chckout */
-#mercadopago-form-custom-coupon{
+
+#mercadopago-form-custom-coupon {
     padding-top: 20px;
-    padding-bottom: 20px;
 }
 
-.frame-checkout-custom-seven{
+.frame-checkout-custom-seven {
     padding: 10px 0px 10px;
 }
 
-.mp-form-control{
+.mp-form-control {
     padding: .5rem .5rem;
     background-color: #fff !important;
 }
@@ -222,54 +222,54 @@ body#checkout section.checkout-step .payment-options label {
     border: 2px solid #f04449 !important;
 }
 
-.link-checkout-custom{
+.link-checkout-custom {
     color: #2fb5d2 !important;
     font-size: 14px;
     cursor: pointer;
     user-select: none;
 }
 
-.link-checkout-custom:hover{
+.link-checkout-custom:hover {
     color: #1a8196 !important;
 }
 
-.mp-checkout-form{
+.mp-checkout-form {
     padding: 0px 40px;
 }
 
-.frame-title{
+.frame-title {
     padding: 10px 0px 0px;
 }
 
-.title-custom-checkout{
+.title-custom-checkout {
     padding: 0px 0px 10px;
 }
 
-.mp-required{
+.mp-required {
     color: #f04449 !important;
     font-size: 18px !important;
     font-weight: bold;
     font-family: "Merriweather, Georgia";
 }
 
-.mp-checkbox{
+.mp-checkbox {
     position: relative !important;
     margin-top: 0.15rem !important;
     margin-left: 0 !important;
     float: left;
 }
 
-.mp-select{
+.mp-select {
     border-radius: 0 !important;
 }
 
-.all-required{
+.all-required {
     color: #f04449 !important;
     font-weight: bold;
     font-size: 13px;
 }
 
-.mp-btn{
+.mp-btn {
     width: 100%;
 }
 
@@ -280,7 +280,7 @@ body#checkout section.checkout-step .payment-options label {
     padding: 10px 10px 10px;
 }
 
-.subtitle-payments{
+.subtitle-payments {
     font-size: 13px !important;
     font-family: sans-serif !important;
     color: #7a7a7a;
@@ -291,32 +291,33 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 /* ticket checkout */
-#mercadopago-form-ticket-coupon{
+
+#mercadopago-form-ticket-coupon {
     padding-bottom: 15px;
 }
 
-.mp-form-check{
+.mp-form-check {
     margin-bottom: 0px !important;
 }
 
-.text-ticket-tarjeta{
+.text-ticket-tarjeta {
     font-weight: bold;
     padding-left: 10px;
 }
 
-.mp-ticket-frame{
+.mp-ticket-frame {
     height: 500px;
     text-align: center;
     padding: 15px 0;
 }
 
-.mp-ticket-frame a{
+.mp-ticket-frame a {
     margin: 10px 0;
     padding: 10px 30px;
     margin: 20px 0 15px;
 }
 
-.mp-ticket-frame iframe{
+.mp-ticket-frame iframe {
     width: 100%;
     height: 100%;
 }
@@ -329,25 +330,56 @@ body#checkout section.checkout-step .payment-options label {
     line-height: 1.29;
     letter-spacing: normal;
     color: #f04449 !important;
+    display: none;
+    padding-top: 5px;
+    padding-left: 2px;
+}
+
+.mp-sending-coupon {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #999 !important;
     text-align: justify;
     display: none;
     padding-top: 5px;
+    padding-left: 2px;
+    font-weight: bold !important;
+}
+
+.mp-success-coupon {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #339933 !important;
+    text-align: justify;
+    display: none;
+    padding-top: 5px;
+    padding-left: 2px;
+    font-weight: bold !important;
 }
 
 /* --- mobile --- */
+
 @media (max-width: 767.98px) {
-    .m-pr-0{
+    .m-pr-0 {
         padding-right: 0px !important;
     }
-    .redirect-frame{
+    .redirect-frame {
         display: inline-block;
         margin-top: 20px;
     }
-    .mp-m-col{
+    .mp-m-col {
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
-    .fl-left{
+    .fl-left {
         float: none !important;
     }
 }

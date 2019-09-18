@@ -69,7 +69,7 @@
         </div>
 
         <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
-            <h3 class="title-custom-checkout">{l s='Ingresa los datos de tu tarjeta' mod='mercadopago'}</h3>
+            <h3 class="title-custom-checkout pt-20">{l s='Ingresa los datos de tu tarjeta' mod='mercadopago'}</h3>
 
             <div class="form-group">
                 <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">

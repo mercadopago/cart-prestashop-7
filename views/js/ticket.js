@@ -1,4 +1,8 @@
 var MPv1Ticket = {
+    params: {
+        site_id: "",
+        coupon_url: "",
+    },
     inputs: [
         "mp_zipcode",
         "mp_state",
@@ -18,7 +22,24 @@ var MPv1Ticket = {
         mp_firstname: "mp-firstname",
         social_label: "mp-social-label",
     },
+    coupon: {
+        couponCode: "#couponCodeTicket",
+        couponError: "#mpCouponErrorTicket",
+        couponSending: "#mpSendingCouponTicket",
+        couponSuccess: "#mpCouponApplyedTicket",
+        responseError: "#mpResponseErrorTicket",
+        inputCampaignId: "#campaignIdTicket",
+        inputCouponAmount: "#couponAmountTicket",
+        inputCouponPercent: "#couponPercentTicket",
+        buttonApplyCoupon: "#applyCouponTicket",
+    },
     terms: "conditions_to_approve[terms-and-conditions]"
+}
+
+//validate params
+function mpValidateParams(site_id, coupon_url) {
+    MPv1Ticket.params.site_id = site_id;
+    MPv1Ticket.params.coupon_url = coupon_url.replace(/&amp;/g, "&");
 }
 
 //select cpf or cnpj
@@ -210,7 +231,7 @@ function cnpjValidate(strCNPJ) {
 }
 
 //inputs validation
-function inputsValidate(array_inputs){
+function inputsValidate(array_inputs) {
     var count = 0;
     var terms = document.getElementById(MPv1Ticket.terms);
 
@@ -219,7 +240,7 @@ function inputsValidate(array_inputs){
         if (input.value == "") {
             input.focus();
             terms.checked = false;
-        } else{
+        } else {
             count++;
         }
     });
@@ -228,9 +249,9 @@ function inputsValidate(array_inputs){
 }
 
 //ticket form submit
-function mpTicketSubmitForm(site_id) {
+function mpTicketSubmitForm() {
     document.forms['mp_ticket_checkout'].onsubmit = function () {
-        if (site_id == 'MLB') {
+        if (MPv1Ticket.params.site_id == 'MLB') {
             var submit = false;
             var doc_validate = false;
             var input_validate = false;
@@ -238,7 +259,7 @@ function mpTicketSubmitForm(site_id) {
 
             //inputs validation
             count_inputs = inputsValidate(array_inputs);
-            if(array_inputs.length == count_inputs){
+            if (array_inputs.length == count_inputs) {
                 input_validate = true;
             } else {
                 input_validate = false;
@@ -252,11 +273,64 @@ function mpTicketSubmitForm(site_id) {
             }
 
             //verify submit
-            if(doc_validate == true && input_validate == true){
+            if (doc_validate == true && input_validate == true) {
                 submit = true;
             }
 
             return submit;
         }
     }
+}
+
+//apply coupon
+function mpTicketApplyAjax() {
+    var couponCode = document.querySelector(MPv1Ticket.coupon.couponCode);
+    var couponError = document.querySelector(MPv1Ticket.coupon.couponError);
+    var couponSuccess = document.querySelector(MPv1Ticket.coupon.couponSuccess);
+    var couponSending = document.querySelector(MPv1Ticket.coupon.couponSending);
+    var responseError = document.querySelector(MPv1Ticket.coupon.responseError);
+    var inputCampaignId = document.querySelector(MPv1Ticket.coupon.inputCampaignId);
+    var inputCouponAmount = document.querySelector(MPv1Ticket.coupon.inputCouponAmount);
+    var inputCouponPercent = document.querySelector(MPv1Ticket.coupon.inputCouponPercent);
+    var buttonApplyCoupon = document.querySelector(MPv1Ticket.coupon.buttonApplyCoupon);
+
+    $.ajax({
+        url: MPv1Ticket.params.coupon_url,
+        type: 'POST',
+        data: {
+            coupon: couponCode.value,
+        },
+        beforeSend: function () {
+            couponError.style.display = "none";
+            couponSuccess.style.display = "none";
+            couponSending.style.display = "block";
+        },
+        success: function (success) {
+            console.log(success);
+            couponSending.style.display = "none";
+            responseError.style.display = "none";
+
+            if(success.code > 202){
+                couponError.style.display = "block";
+                couponSuccess.style.display = "none";
+            }
+            else{
+                couponError.style.display = "none";
+                couponSuccess.style.display = "block";
+                couponCode.readOnly = true;
+                buttonApplyCoupon.disabled = true;
+                couponCode.style.cssText = 'background-color:#f8f8f8 !important';
+                inputCampaignId.value = success.message.id;
+                inputCouponAmount.value = success.message.coupon_amount;
+                inputCouponPercent.value = success.message.percent_off;
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            couponError.style.display = "none";
+            ouponSending.style.display = "none";
+            couponSuccess.style.display = "none";
+            responseError.style.display = "block";
+        }
+    });
 }

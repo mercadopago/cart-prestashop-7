@@ -67,6 +67,16 @@ class TicketPreference extends AbstractPreference
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 
+        if ($this->settings['MERCADOPAGO_TICKET_COUPON'] == true && $ticket_info['coupon_code'] != "") {
+            if($ticket_info['percent_off'] == 0){
+                $preference['campaign_id'] = $ticket_info['campaign_id'];
+                $preference['coupon_amount'] = $ticket_info['coupon_amount'];
+            }
+            else{
+                $preference['coupon_code'] = $ticket_info['coupon_code'];
+            }
+        }
+
         $preference = Tools::jsonEncode($preference);
         $createPreference = $this->mercadopago->createPayment($preference);
 

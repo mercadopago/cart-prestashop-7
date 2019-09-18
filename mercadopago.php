@@ -429,8 +429,8 @@ class Mercadopago extends PaymentModule
 
         $payment_options = [
             $this->getStandardCheckout($cart),
-            $this->getCustomCheckout(),
-            $this->getTicketCheckout(),
+            $this->getCustomCheckout($cart),
+            $this->getTicketCheckout($cart),
         ];
 
         return $payment_options;
@@ -502,7 +502,7 @@ class Mercadopago extends PaymentModule
      *
      * @return void
      */
-    public function getCustomCheckout()
+    public function getCustomCheckout($cart)
     {
         $debit = array();
         $credit = array();
@@ -539,7 +539,7 @@ class Mercadopago extends PaymentModule
      *
      * @return void
      */
-    public function getTicketCheckout()
+    public function getTicketCheckout($cart)
     {
         $ticket = array();
         $tarjetas = $this->mercadopago->getPaymentMethods();
@@ -554,15 +554,23 @@ class Mercadopago extends PaymentModule
             }
         }
 
+        $amount = (float) $cart->getOrderTotal();
         $coupon = Configuration::get('MERCADOPAGO_TICKET_COUPON');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $address = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer->getFields();
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
+        $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
+            "amount" => $amount,
             "coupon" => $coupon,
             "site_id" => $site_id,
+            "address" => $address,
+            "customer" => $customer,
             "redirect" => $redirect,
+            "coupon_url" => $coupon_url,
             "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
 
@@ -612,9 +620,9 @@ class Mercadopago extends PaymentModule
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url,
                 "module_dir" => $this->_path,
-            ))->fetch('module:mercadopago/views/templates/hook/ticket_return.tpl');
+            ))->fetch('module:mercadopago/views/templates/hook/seven/ticket_return.tpl');
 
-            return $this->display(__FILE__, 'views/templates/hook/ticket_return.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
         }
     }
 
