@@ -94,6 +94,11 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
+            //ticket open for fix
+            if ($value['id'] == "pec") {
+                continue;
+            }
+
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
