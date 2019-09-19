@@ -110,26 +110,12 @@ class TicketSettings extends AbstractSettings
                 ),
             ),
             array(
-                'col' => 4,
-                'type' => 'switch',
-                'label' => $this->module->l('Reduce inventory'),
-                'name' => 'MERCADOPAGO_TICKET_INVENTORY',
-                'is_bool' => true,
-                'desc' => $this->module->l('Active the inventory reduction while creating an order, ').
-                    $this->module->l('if approved or not the final payment. '). 
-                    $this->module->l('Disable this option to reduce it only when payments are approved.'),
-                'values' => array(
-                    array(
-                        'id' => 'MERCADOPAGO_TICKET_COUPON_ON',
-                        'value' => true,
-                        'label' => $this->module->l('Active')
-                    ),
-                    array(
-                        'id' => 'MERCADOPAGO_TICKET_COUPON_OFF',
-                        'value' => false,
-                        'label' => $this->module->l('Inactive')
-                    )
-                ),
+                'col' => 2,
+                'suffix' => '%',
+                'type' => 'text',
+                'name' => 'MERCADOPAGO_TICKET_DISCOUNT',
+                'label' => $this->module->l('Discount for paying in one installment'),
+                'desc' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             ),
         );
 
@@ -143,7 +129,10 @@ class TicketSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = (['MERCADOPAGO_TICKET_EXPIRATION' => 'payment_due']);
+        $this->validate = ([
+            'MERCADOPAGO_TICKET_DISCOUNT' => 'percentage',
+            'MERCADOPAGO_TICKET_EXPIRATION' => 'payment_due',
+        ]);
 
         parent::postFormProcess();
 
@@ -159,10 +148,10 @@ class TicketSettings extends AbstractSettings
     public function getFormValues()
     {
         $form_values = array(
-            'MERCADOPAGO_TICKET_CHECKOUT' => Configuration::get('MERCADOPAGO_TICKET_CHECKOUT'),
-            'MERCADOPAGO_TICKET_EXPIRATION' => Configuration::get('MERCADOPAGO_TICKET_EXPIRATION'),
             'MERCADOPAGO_TICKET_COUPON' => Configuration::get('MERCADOPAGO_TICKET_COUPON'),
-            'MERCADOPAGO_TICKET_INVENTORY' => Configuration::get('MERCADOPAGO_TICKET_INVENTORY'),
+            'MERCADOPAGO_TICKET_CHECKOUT' => Configuration::get('MERCADOPAGO_TICKET_CHECKOUT'),
+            'MERCADOPAGO_TICKET_DISCOUNT' => Configuration::get('MERCADOPAGO_TICKET_DISCOUNT'),
+            'MERCADOPAGO_TICKET_EXPIRATION' => Configuration::get('MERCADOPAGO_TICKET_EXPIRATION'),
         );
 
         $payment_methods = $this->mercadopago->getPaymentMethods();

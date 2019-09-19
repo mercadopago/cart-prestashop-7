@@ -154,11 +154,11 @@ class CustomSettings extends AbstractSettings
     public function getFormValues()
     {
         return array(
-            'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
-            'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),
             'MERCADOPAGO_CUSTOM_COUPON' => Configuration::get('MERCADOPAGO_CUSTOM_COUPON'),
+            'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
             'MERCADOPAGO_CUSTOM_DISCOUNT' => Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'),
             'MERCADOPAGO_CUSTOM_COMISSION' => Configuration::get('MERCADOPAGO_CUSTOM_COMISSION'),
+            'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),
         );
     }
 }

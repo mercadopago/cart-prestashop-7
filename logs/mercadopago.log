@@ -1,131 +1,31 @@
-[2019-09-12 19:42:57] [INFO]: Cart id 16 - Ticket payment created successfully
-[2019-09-12 19:42:58] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
-[2019-09-12 19:44:10] [INFO]: Cart id 16 - Ticket payment created successfully
-[2019-09-12 19:44:10] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
-[2019-09-12 19:45:30] [INFO]: Cart id 16 - Ticket payment created successfully
-[2019-09-12 19:45:31] [ERROR]: The order has not been created on cart id 16 - Can't load Order status
-[2019-09-12 19:55:12] [INFO]: Cart id 16 - Ticket payment created successfully
-[2019-09-12 19:55:14] [INFO]: Order created successfully on cart id 16
-[2019-09-12 19:56:02] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 19:56:10] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 20:08:57] [INFO]: Cart id 17 - Ticket payment created successfully
-[2019-09-12 20:08:59] [INFO]: Order created successfully on cart id 17
-[2019-09-12 20:11:17] [INFO]: Cart id 18 - Ticket payment created successfully
-[2019-09-12 20:11:18] [INFO]: Order created successfully on cart id 18
-[2019-09-12 20:47:13] [INFO]: Cart id 19 - Preference created successfully
-[2019-09-12 22:05:54] [INFO]: Cart id 19 - Ticket payment created successfully
-[2019-09-12 22:05:56] [INFO]: Order created successfully on cart id 19
-[2019-09-12 22:06:55] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:07:08] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:07:22] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:07:38] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:08:42] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:08:53] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:09:18] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:10:22] [ERROR]: API create_custom_payment error: transaction_amount must be positive
-[2019-09-12 22:11:21] [INFO]: Cart id 20 - Ticket payment created successfully
-[2019-09-12 22:11:23] [INFO]: Order created successfully on cart id 20
-[2019-09-13 20:55:40] [INFO]: Ticket checkout configuration saved successfully
-[2019-09-13 23:32:54] [INFO]: Ticket checkout configuration saved successfully
-[2019-09-16 20:40:15] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
-[2019-09-16 20:41:33] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
-[2019-09-16 21:06:15] [ERROR]: API create_custom_payment error: payment_method_id attribute can't be null
-[2019-09-17 16:34:07] [INFO]: Cart id 21 - Preference created successfully
-[2019-09-17 16:36:49] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-17 16:37:16] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 18:10:01] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 18:10:18] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 18:42:05] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 18:43:49] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-17 18:56:55] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 18:59:49] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 19:14:05] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 19:22:07] [ERROR]: API create_custom_payment error: Invalid user identification number
-[2019-09-17 19:22:54] [INFO]: Cart id 21 - Ticket payment created successfully
-[2019-09-17 19:22:56] [INFO]: Order created successfully on cart id 21
-[2019-09-17 19:26:10] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 19:26:43] [ERROR]: API create_custom_payment error: internal_error
-[2019-09-17 19:29:22] [INFO]: Cart id 22 - Ticket payment created successfully
-[2019-09-17 19:29:23] [INFO]: Order created successfully on cart id 22
-[2019-09-17 19:57:15] [ERROR]: API save_api_settings error: Internal server error
-[2019-09-17 19:57:15] [INFO]: Ticket checkout configuration saved successfully
-[2019-09-17 21:03:03] [ERROR]: API save_api_settings error: Internal server error
-[2019-09-17 21:03:03] [INFO]: Credentials saved successfully
-[2019-09-17 21:03:17] [INFO]: Cart id 23 - Preference created successfully
-[2019-09-17 21:03:33] [ERROR]: API save_api_settings error: Internal server error
-[2019-09-17 21:03:33] [INFO]: Standard checkout configuration saved successfully
-[2019-09-17 21:03:45] [INFO]: Cart id 23 - Preference created successfully
-[2019-09-17 21:06:36] [ERROR]: API save_api_settings error: Internal server error
-[2019-09-17 21:06:36] [INFO]: Standard checkout configuration saved successfully
-[2019-09-18 18:27:51] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:28:27] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:28:57] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:29:30] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:30:03] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:31:10] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:32:00] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:34:58] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:38:56] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:39:14] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:40:30] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:40:42] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-18 18:41:24] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name
-[2019-09-18 18:42:29] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:48:35] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 18:55:57] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:10:16] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:14:17] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:19:35] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:20:44] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:22:03] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:22:30] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:23:22] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:24:10] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:33:15] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:39:12] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:40:07] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:41:33] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:41:51] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:42:00] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:43:40] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:46:42] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:47:08] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:47:47] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:47:57] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:49:08] [INFO]: Credentials saved successfully
-[2019-09-18 19:49:24] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:49:53] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:49:55] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:50:18] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:50:45] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:51:01] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:51:07] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:51:49] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:53:32] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 19:54:35] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 19:55:36] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 19:56:12] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 19:57:50] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 19:58:08] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:13] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:24] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:27] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:28] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:29] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:29] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:29:58] [ERROR]: API get_coupon_discount error: The campaign is expired
-[2019-09-18 20:31:13] [INFO]: Credentials saved successfully
-[2019-09-18 20:32:26] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 20:49:22] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
-[2019-09-18 21:28:45] [ERROR]: API create_custom_payment error: 
-[2019-09-18 21:29:32] [ERROR]: API create_custom_payment error: 
-[2019-09-18 21:30:12] [ERROR]: API create_custom_payment error: 
-[2019-09-18 21:36:44] [ERROR]: API create_custom_payment error: 
-[2019-09-18 21:40:17] [INFO]: Cart id 23 - Ticket payment created successfully
-[2019-09-18 21:40:19] [INFO]: Order created successfully on cart id 23
-[2019-09-18 21:41:56] [ERROR]: API save_api_settings error: Internal server error
-[2019-09-18 21:41:56] [INFO]: Credentials saved successfully
-[2019-09-18 22:25:14] [INFO]: Cart id 24 - Ticket payment created successfully
-[2019-09-18 22:25:15] [INFO]: Order created successfully on cart id 24
-[2019-09-18 22:26:10] [INFO]: Cart id 25 - Ticket payment created successfully
-[2019-09-18 22:26:11] [INFO]: Order created successfully on cart id 25
+[2019-09-19 23:44:05] [INFO]: Cart id 28 - Ticket payment created successfully
+[2019-09-19 23:45:52] [INFO]: Cart id 28 - Ticket payment created successfully
+[2019-09-19 23:51:32] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:51:54] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:52:34] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:53:05] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:53:23] [INFO]: Cart id 28 - Ticket payment created successfully
+[2019-09-19 23:53:25] [INFO]: Order created successfully on cart id 28
+[2019-09-19 23:54:50] [ERROR]: API create_custom_payment error: transaction_amount must be positive
+[2019-09-19 23:59:14] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:59:23] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:59:29] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-19 23:59:45] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 00:00:45] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 00:00:59] [INFO]: Cart id 29 - Ticket payment created successfully
+[2019-09-20 00:17:03] [INFO]: Cart id 29 - Ticket payment created successfully
+[2019-09-20 00:17:53] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 00:19:31] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 00:20:05] [INFO]: Cart id 29 - Ticket payment created successfully
+[2019-09-20 00:23:23] [INFO]: Cart id 29 - Ticket payment created successfully
+[2019-09-20 00:27:09] [INFO]: Cart id 29 - Ticket payment created successfully
+[2019-09-20 00:27:11] [INFO]: Order created successfully on cart id 29
+[2019-09-20 00:37:09] [INFO]: Mercado Pago ticket discount applied to cart30
+[2019-09-20 00:37:15] [INFO]: Cart id 30 - Ticket payment created successfully
+[2019-09-20 00:37:17] [INFO]: Order created successfully on cart id 30
+[2019-09-20 00:40:45] [INFO]: Mercado Pago ticket discount applied to cart31
+[2019-09-20 00:40:50] [INFO]: Cart id 31 - Ticket payment created successfully
+[2019-09-20 00:40:51] [INFO]: Order created successfully on cart id 31
+[2019-09-20 00:42:18] [INFO]: Mercado Pago ticket discount applied to cart32
+[2019-09-20 00:42:24] [INFO]: Cart id 32 - Ticket payment created successfully
+[2019-09-20 00:42:25] [INFO]: Order created successfully on cart id 32

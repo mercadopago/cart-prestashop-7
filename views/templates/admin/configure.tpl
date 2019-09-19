@@ -449,6 +449,7 @@
                 form_ticket_group[i].insertAdjacentHTML('afterend', form_ticket_append);
             }
             if(i > 2) {
+                form_ticket_group[i].querySelector("p").style.width = "400px";
                 form_ticket_group[i].classList.add("mp-ticket-input-collapsible");
             }
         }

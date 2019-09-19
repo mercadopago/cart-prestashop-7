@@ -554,21 +554,21 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        $amount = (float) $cart->getOrderTotal();
         $coupon = Configuration::get('MERCADOPAGO_TICKET_COUPON');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $address = new Address((int) $cart->id_address_invoice);
         $customer = Context::getContext()->customer->getFields();
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
         $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
-            "amount" => $amount,
             "coupon" => $coupon,
             "site_id" => $site_id,
             "address" => $address,
             "customer" => $customer,
+            "discount" => $discount,
             "redirect" => $redirect,
             "coupon_url" => $coupon_url,
             "module_dir" => $this->_path,

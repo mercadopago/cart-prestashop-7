@@ -149,10 +149,10 @@ class AbstractSettings
                     break;
 
                 case "percentage":
-                    if ($value != '' && !is_int($value) && $value > 99) {
+                    if ($value != '' && is_numeric($value) && $value > 99 || $value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Commission and discount must be an integer and less than 100%');
-                        MPLog::generate('Invalid commission or discount submitted', 'warning');
+                        Mercadopago::$form_message = $this->module->l('Discount must be an integer and less than 100%');
+                        MPLog::generate('Invalid discount submitted', 'warning');
                         return false;
                     }
                     break;
