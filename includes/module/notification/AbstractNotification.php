@@ -250,7 +250,7 @@ class AbstractNotification
             "message" => $message
         );
 
-        echo json_encode($response);
+        echo Tools::jsonEncode($response);
         return var_dump(http_response_code($code));
     }
 }
