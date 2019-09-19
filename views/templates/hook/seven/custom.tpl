@@ -94,7 +94,7 @@
             <div class="form-group">
                 <div class="col-md-6 col-6 pb-20 pl-0 mp-m-col">
                     <label for="" class="pb-5">{l s='Fecha de vencimiento' mod='mercadopago'} <em class="mp-required">*</em></label>
-                    <input type="text" class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA" onkeyup="maskInput(this, mdate);" />
+                    <input type="text" class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA" onkeyup="maskInput(this, mdate);" maxlength="7"/>
                 </div>
 
                 <div class="col-md-6 col-6 pb-20 pr-0 mp-m-col">
