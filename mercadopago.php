@@ -518,12 +518,20 @@ class Mercadopago extends PaymentModule
         }
 
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
-
+        $coupon = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
+        $public_key = $this->mercadopago->getPublicKey();
+        $redirect = $this->context->link->getModuleLink($this->name, 'custom');
+        $amount = (float) $cart->getOrderTotal();
+      
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
             "credit" => $credit,
             "site_id" => $site_id,
+            "coupon" => $coupon,
+            "redirect" => $redirect,
             "module_dir" => $this->_path,
+            "public_key" => $public_key,
+            "amount" => $amount,
         ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 
         $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
