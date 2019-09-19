@@ -29,3 +29,8 @@
 [2019-09-20 00:42:18] [INFO]: Mercado Pago ticket discount applied to cart32
 [2019-09-20 00:42:24] [INFO]: Cart id 32 - Ticket payment created successfully
 [2019-09-20 00:42:25] [INFO]: Order created successfully on cart id 32
+[2019-09-20 00:45:37] [INFO]: Custom checkout configuration saved successfully
+[2019-09-20 00:50:43] [INFO]: Custom checkout configuration saved successfully
+[2019-09-20 00:59:16] [INFO]: Mercado Pago ticket discount applied to cart 33
+[2019-09-20 00:59:19] [INFO]: Cart id 33 - Ticket payment created successfully
+[2019-09-20 00:59:20] [INFO]: Order created successfully on cart id 33

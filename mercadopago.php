@@ -526,12 +526,12 @@ class Mercadopago extends PaymentModule
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
             "credit" => $credit,
-            "site_id" => $site_id,
             "coupon" => $coupon,
-            "redirect" => $redirect,
-            "module_dir" => $this->_path,
-            "public_key" => $public_key,
             "amount" => $amount,
+            "site_id" => $site_id,
+            "redirect" => $redirect,
+            "public_key" => $public_key,
+            "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 
         $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
