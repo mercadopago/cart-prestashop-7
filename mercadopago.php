@@ -526,12 +526,12 @@ class Mercadopago extends PaymentModule
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
             "credit" => $credit,
-            "site_id" => $site_id,
             "coupon" => $coupon,
-            "redirect" => $redirect,
-            "module_dir" => $this->_path,
-            "public_key" => $public_key,
             "amount" => $amount,
+            "site_id" => $site_id,
+            "redirect" => $redirect,
+            "public_key" => $public_key,
+            "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 
         $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
@@ -562,21 +562,21 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        $amount = (float) $cart->getOrderTotal();
         $coupon = Configuration::get('MERCADOPAGO_TICKET_COUPON');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $address = new Address((int) $cart->id_address_invoice);
         $customer = Context::getContext()->customer->getFields();
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
         $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
-            "amount" => $amount,
             "coupon" => $coupon,
             "site_id" => $site_id,
             "address" => $address,
             "customer" => $customer,
+            "discount" => $discount,
             "redirect" => $redirect,
             "coupon_url" => $coupon_url,
             "module_dir" => $this->_path,

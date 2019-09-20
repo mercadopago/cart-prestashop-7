@@ -96,7 +96,7 @@
 
                     <div class="col-md-4 col-4 col-xs-4 pb-20 pr-0">
                         <label for="" class="pb-5">{l s='Número' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_number" name="mercadopago_ticket[number]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_number" name="mercadopago_ticket[number]" class="form-control mp-form-control" onkeyup="maskInput(this, minteger);" autocomplete="off" />
                     </div>
                 </div>
 

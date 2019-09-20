@@ -45,7 +45,6 @@ class TicketPreference extends AbstractPreference
     {
         $preference = $this->getCommonPreference($cart);
         $preference['date_of_expiration'] = $this->getExpirationDate();
-        $preference['transaction_amount'] = $this->getTransactionAmount($cart);
         $preference['description'] = $this->getPreferenceDescription($cart);
         $preference['payment_method_id'] = $ticket_info['paymentMethodId'];
         $preference['payer']['email'] = $this->getCustomerEmail();
@@ -63,20 +62,30 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
         }
 
-        $preference['additional_info']['items'] = $this->getCartItems($cart, true);
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 
+        $preference['additional_info']['items'] = $this->getCartItems(
+            $cart,
+            true,
+            $this->settings['MERCADOPAGO_TICKET_DISCOUNT']
+        );
+
+        //Validate mercadopago coupon
         if ($this->settings['MERCADOPAGO_TICKET_COUPON'] == true && $ticket_info['coupon_code'] != "") {
-            if($ticket_info['percent_off'] == 0){
+            if ($ticket_info['percent_off'] == 0) {
                 $preference['campaign_id'] = $ticket_info['campaign_id'];
                 $preference['coupon_amount'] = $ticket_info['coupon_amount'];
-            }
-            else{
+            } else {
                 $preference['coupon_code'] = $ticket_info['coupon_code'];
             }
         }
 
+        //Update cart total with CartRule()
+        $this->setTicketCartRule($cart);
+        $preference['transaction_amount'] = $this->getTransactionAmount($cart);
+
+        //Create preference
         $preference = Tools::jsonEncode($preference);
         $createPreference = $this->mercadopago->createPayment($preference);
 
@@ -98,6 +107,39 @@ class TicketPreference extends AbstractPreference
         }
 
         return $total;
+    }
+
+    public function setTicketCartRule($cart)
+    {
+        if ($this->settings['MERCADOPAGO_TICKET_DISCOUNT'] != "") {
+            $rules = $cart->getCartRules();
+            $mp_code = 'MPDISCOUNT' . $cart->id;
+            $store_name = Configuration::get('PS_LANG_DEFAULT');
+            $discount_name = $this->module->l('Mercado Pago discount applied to cart ' . $cart->id);
+
+            foreach ($rules as $value) {
+                if ($value['code'] == $mp_code) {
+                    return $value['id_cart_rule'];
+                }
+            }
+
+            $cart_rule = new CartRule();
+            $cart_rule->date_from = date('Y-m-d H:i:s');
+            $cart_rule->date_to = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"), date("d"), date("Y") + 10));
+            $cart_rule->name[$store_name] = $discount_name;
+            $cart_rule->quantity = 1;
+            $cart_rule->code = $mp_code;
+            $cart_rule->quantity_per_user = 1;
+            $cart_rule->reduction_percent = $this->settings['MERCADOPAGO_TICKET_DISCOUNT'];
+            $cart_rule->reduction_amount = 0;
+            $cart_rule->active = true;
+            $cart_rule->save();
+
+            MPLog::generate('Mercado Pago ticket discount applied to cart ' . $cart->id);
+
+            $cart->addCartRule($cart_rule->id);
+            return $cart_rule->id;
+        }
     }
 
     /**

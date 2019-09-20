@@ -94,7 +94,7 @@ class AbstractPreference
      *
      * @return array
      */
-    public function getCartItems($cart, $custom = false)
+    public function getCartItems($cart, $custom = false, $percent = null)
     {
         $items = array();
         $products = $cart->getProducts();
@@ -118,11 +118,16 @@ class AbstractPreference
                 $item['currency_id'] = $this->module->context->currency->iso_code;
             }
 
+            $product_price = $product['price_wt'];
+            if($percent != null){
+                $product_price = (float) $product_price - ($product_price * ($percent / 100));
+            }
+
             $item = array(
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? round($product['price_wt']) : $product['price_wt'],
+                'unit_price' => $round ? round($product_price) : $product_price,
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
@@ -439,7 +444,7 @@ class AbstractPreference
         //ticket checkout
         $this->settings['MERCADOPAGO_TICKET_COUPON'] = Configuration::get('MERCADOPAGO_TICKET_COUPON');
         $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] = Configuration::get('MERCADOPAGO_TICKET_CHECKOUT');
-        $this->settings['MERCADOPAGO_TICKET_INVENTORY'] = Configuration::get('MERCADOPAGO_TICKET_INVENTORY');
+        $this->settings['MERCADOPAGO_TICKET_DISCOUNT'] = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
         return $this->settings;
