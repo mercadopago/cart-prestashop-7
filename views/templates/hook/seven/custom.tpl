@@ -36,7 +36,7 @@
                     <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar'
                         mod='mercadopago'} ⌵ </a>
     
-                    {if $site_id == "mla"}
+                    {if $site_id == "MLA"}
                     <span> | </span>
                     <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas"
                         target="_blank">
@@ -83,7 +83,18 @@
     
                 <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
                     <h3 class="title-custom-checkout">{l s='Ingresa los datos de tu tarjeta' mod='mercadopago'}</h3>
-    
+
+                    {if $site_id == 'MLM' || $site_id == 'MPE'}
+                    <div class="form-group">
+                      <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">
+                        <label for="credit_option" class="pb-5">{l s='Card Type' mod='mercadopago'}
+                          <em class="mp-required">*</em>
+                                        </label>
+                        <select id="credit_option"  class="form-control mp-form-control mp-select pointer" name="credit_option" type="text"></select>
+                      </div>
+                    </div>
+                    {/if}
+
                     <div class="form-group">
                         <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">
                             <label for="" class="pb-5">{l s='Número de Tarjeta' mod='mercadopago'} <em
