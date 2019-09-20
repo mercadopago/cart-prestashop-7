@@ -101,8 +101,8 @@ class AbstractPreference
 
         //verify country for round
         $round = false;
-        $localization = $this->settings['MERCADOPAGO_COUNTRY_LINK'];
-        if ($localization == 'mco' || $localization == 'mlc') {
+        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
+        if ($localization == 'MCO' || $localization == 'MLC') {
             $round = true;
         }
 
@@ -346,14 +346,14 @@ class AbstractPreference
     public function getInternalMetadata()
     {
         $internal_metadata = array(
+            "details" => "",
             "platform" => MPRestCli::PLATAFORM_ID,
             "platform_version" => _PS_VERSION_,
             "module_version" => MP_VERSION,
             "sponsor_id" => $this->getSponsorId(),
-            "site" => Configuration::get('MERCADOPAGO_SITE_ID'),
-            "collector" => Configuration::get('MERCADOPAGO_SELLER_ID'),
-            "test_mode" => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
-            "details" => "",
+            "collector" => $this->settings['MERCADOPAGO_SELLER_ID'],
+            "test_mode" => $this->validateSandboxMode(),
+            "site" => $this->settings['MERCADOPAGO_SITE_ID'],
         );
 
         return $internal_metadata;
@@ -394,6 +394,20 @@ class AbstractPreference
     }
 
     /**
+     * Get validate sandbox mode
+     *
+     * @return void
+     */
+    public function validateSandboxMode()
+    {
+        if($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Redirect if any errors occurs
      *
      * @return void
@@ -412,6 +426,7 @@ class AbstractPreference
     {
         //localization
         $this->settings['MERCADOPAGO_SITE_ID'] = Configuration::get('MERCADOPAGO_SITE_ID');
+        $this->settings['MERCADOPAGO_SELLER_ID'] = Configuration::get('MERCADOPAGO_SELLER_ID');
         $this->settings['MERCADOPAGO_COUNTRY_LINK'] = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         //credentials
@@ -436,9 +451,8 @@ class AbstractPreference
 
         //custom checkout
         $this->settings['MERCADOPAGO_CUSTOM_COUPON'] = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
-        $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
         $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] = Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT');
-        $this->settings['MERCADOPAGO_CUSTOM_COMISSION'] = Configuration::get('MERCADOPAGO_CUSTOM_COMISSION');
+        $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
         $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] = Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE');
 
         //ticket checkout

@@ -159,15 +159,6 @@
                     </div>
                 </div>
     
-                <div class="form-group">
-                    <div class="form-check">
-                        <div class="col-md-12 col-xs-12 col-12 pb-10 px-0 mp-m-col">
-                            <input class="form-check-input mp-checkbox" type="checkbox" value="" id="defaultCheck1">
-                            <label class="form-check-label fl-left pl-10" for="defaultCheck1">{l s='Guardar la tarjeta' mod='mercadopago'}</label>
-                        </div>
-                    </div>
-                </div>
-    
                 <div class="col-md-12 col-xs-12 col-12 px-0 mp-m-col">
                     <p class="all-required"><em class="mp-required text-bold">*</em> {l s='Campo obligatorio' mod='mercadopago'}</p>
                 </div>

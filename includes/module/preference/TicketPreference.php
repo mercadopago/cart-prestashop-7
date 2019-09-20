@@ -48,6 +48,7 @@ class TicketPreference extends AbstractPreference
         $preference['description'] = $this->getPreferenceDescription($cart);
         $preference['payment_method_id'] = $ticket_info['paymentMethodId'];
         $preference['payer']['email'] = $this->getCustomerEmail();
+        $preference['metadata'] = $this->getInternalMetadata(); 
 
         if ($this->module->context->currency->iso_code == 'BRL') {
             $preference['payer']['first_name'] = $ticket_info['firstname'];
@@ -101,14 +102,20 @@ class TicketPreference extends AbstractPreference
     public function getTransactionAmount($cart)
     {
         $total = (float) $cart->getOrderTotal();
-        $localization = $this->settings['MERCADOPAGO_COUNTRY_LINK'];
-        if ($localization == 'mco' || $localization == 'mlc') {
+        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
+        if ($localization == 'MCO' || $localization == 'MLC') {
             return round($total);
         }
 
         return $total;
     }
 
+    /**
+     * Set ticket discount on CartRule()
+     *
+     * @param mixed $cart
+     * @return void
+     */
     public function setTicketCartRule($cart)
     {
         if ($this->settings['MERCADOPAGO_TICKET_DISCOUNT'] != "") {
@@ -155,5 +162,19 @@ class TicketPreference extends AbstractPreference
                 strtotime('+' . $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] . ' hours')
             );
         }
+    }
+
+    /**
+     * Get internal metadata
+     * 
+     * @return array
+     */
+    public function getInternalMetadata()
+    {
+        $internal_metadata = parent::getInternalMetadata();
+        $internal_metadata["checkout"] = "custom";
+        $internal_metadata["checkout_type"] = "ticket";
+        
+        return $internal_metadata;
     }
 }
