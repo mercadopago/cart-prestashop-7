@@ -271,6 +271,29 @@
         var cardBefore = "";
         var site_id = "{$site_id|escape:'javascript':'UTF-8'}";
 
+        // load issuers for Mexico and Peru
+        if (site_id === "MLM" || site_id === "MPE") {
+            var options_credit;
+            var options_debit;
+            var option = new Option("{l s='Choose...' mod='mercadopago'}", "", true, true);
+            $("#credit_option").append(option);
+            "{if count($credit) != 0}"
+                "{foreach $credit as $tarjeta}"
+                    options_credit = new Option("{$tarjeta['name']|escape:'htmlall':'UTF-8'} {l s='Credit' mod='mercadopago'}", "{$tarjeta['id']|escape:'htmlall':'UTF-8'}");
+                    $("#credit_option").append(options_credit);
+                    options_credit.setAttribute("payment_type_id", "{$tarjeta['type']|escape:'htmlall':'UTF-8'}");
+                "{/foreach}"
+            "{/if}"
+
+            "{if count($debit) != 0}"
+                "{foreach $debit as $tarjeta}"
+                    options_debit = new Option("{$tarjeta['name']|escape:'htmlall':'UTF-8'}", "{$tarjeta['id']|escape:'htmlall':'UTF-8'}");
+                    $("#credit_option").append(options_debit);
+                    options_debit.setAttribute("payment_type_id", "{$tarjeta['type']|escape:'htmlall':'UTF-8'}");
+                "{/foreach}"
+            "{/if}"
+        }
+
         $("input[data-checkout='cardNumber'], input[name='card-types']").bind("change", function () {
             loadCard();
         });
@@ -310,7 +333,6 @@
             var card = $("#id-card-number").val().replace(/ /g, '').replace(/-/g,
                 '').replace(/\./g, '');
             var bin = card.substr(0, 6);
-
             return bin;
         }
 
@@ -324,9 +346,6 @@
 
         // Estabeleça a informação do meio de pagamento obtido
         function setPaymentMethodInfo(status, result) {
-            console.log('setPaymentMethodInfo status:' + status);
-            console.log(result);
-
             if (status != 404 && status != 400 && result != undefined) {
                 //adiciona a imagem do meio de pagamento
                 var payment_method = result[0];
@@ -374,6 +393,32 @@
             }
         }
 
+
+        $("#credit_option").change(function (e) {
+            $("#id-card-number").val("");
+            loadCard();
+        });
+
+        function getPaymentMethods() {
+            var json = {};
+
+            if (site_id == "MLM" || site_id == "MPE") {
+                var credit_option = document.querySelector('select[name="credit_option"]');
+                console.info(credit_option[credit_option.options.selectedIndex]);
+                console.info(credit_option);
+                console.info("credit====" + credit_option[credit_option.options.selectedIndex].getAttribute('value'));
+                json.payment_method_id = credit_option[credit_option.options.selectedIndex].getAttribute('value');
+                var payment_type_id = credit_option[credit_option.options.selectedIndex].getAttribute('payment_type_id');
+                console.info("payment===" + payment_type_id);
+                json.payment_type_id = payment_type_id;
+            } else {
+                json.payment_method_id = $("#payment_method_id").val();
+                json.payment_type_id = $("#payment_type_id").val();
+            }
+            console.info("json paymentMethod" + json);
+            return json;
+        }
+
         function loadInstallments() {
             //load Installment
             var bin = getBin();
@@ -395,7 +440,6 @@
         }
 
         function returnAmount() {
-            console.log('returnAmount');
             return $("#amount").val();
         }
 
@@ -404,9 +448,6 @@
             if ($("#id-installments option") != undefined) {
                 $("#id-installments option").remove();
             }
-
-            console.log('setInstallmentInfo status: ' + status);
-            console.log(installments);
 
             if (status != 404 && status != 400 && installments.length > 0) {
                 var options = new Option("{l s='Choose...' mod='mercadopago'}", "", true, true);
