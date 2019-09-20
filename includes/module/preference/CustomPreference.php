@@ -41,8 +41,19 @@ class CustomPreference extends AbstractPreference
      * @param mixed $cart
      * @return mixed
      */
-    public function createPreference($cart, $ticket_info)
+    public function createPreference($cart, $custom_info)
     {
         $preference = $this->getCommonPreference($cart);
+        $preference['token'] = "7b478640ce96d0d0cdecd069d2d99d7c";
+        $preference['description'] = $this->getPreferenceDescription($cart);
+        $preference['installments'] = "";
+        $preference['payment_method_id'] = "";
+        $preference['payer']['email'] = $this->getCustomerEmail();
+
+
+        //Create preference
+        $preference = Tools::jsonEncode($preference);
+
+        return $preference;
     }
 }

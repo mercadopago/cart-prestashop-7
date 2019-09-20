@@ -34,3 +34,14 @@
 [2019-09-20 00:59:16] [INFO]: Mercado Pago ticket discount applied to cart 33
 [2019-09-20 00:59:19] [INFO]: Cart id 33 - Ticket payment created successfully
 [2019-09-20 00:59:20] [INFO]: Order created successfully on cart id 33
+[2019-09-20 15:29:00] [INFO]: Ticket checkout configuration saved successfully
+[2019-09-20 15:29:24] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 15:29:36] [ERROR]: API create_custom_payment error: internal_error
+[2019-09-20 15:29:52] [INFO]: Cart id 34 - Ticket payment created successfully
+[2019-09-20 15:29:54] [INFO]: Order created successfully on cart id 34
+[2019-09-20 15:50:08] [INFO]: Cart id 35 - Ticket payment created successfully
+[2019-09-20 15:50:10] [INFO]: Order created successfully on cart id 35
+[2019-09-20 15:50:50] [INFO]: Cart id 36 - Ticket payment created successfully
+[2019-09-20 15:50:52] [INFO]: Order created successfully on cart id 36
+[2019-09-20 16:56:35] [WARNING]: Invalid discount submitted
+[2019-09-20 16:56:35] [INFO]: Custom checkout configuration saved successfully

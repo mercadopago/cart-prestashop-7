@@ -48,5 +48,11 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
 
         $preference = new CustomPreference();
         $preference->verifyModuleParameters();
+
+        $custom_info = Tools::getValue('mercadopago_custom');
+        $payment = $preference->createPreference($cart, $custom_info);
+
+        var_dump($payment);
+        echo '<br>';
     }
 }

@@ -80,5 +80,7 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
             //redirect to order confirmation page
             Tools::redirect($uri);
         }
+
+        return $preference->redirectError();
     }
 }

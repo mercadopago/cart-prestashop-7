@@ -51,8 +51,10 @@ var mp_lastname = document.getElementById(MPv1Ticket.docs.mp_lastname);
 var name_label = document.getElementById(MPv1Ticket.docs.name_label);
 var social_label = document.getElementById(MPv1Ticket.docs.social_label);
 
-cnpj_label.style.display = 'none';
-social_label.style.display = 'none';
+if(MPv1Ticket.params.site_id == "MLB"){
+    cnpj_label.style.display = 'none';
+    social_label.style.display = 'none';
+}
 
 function selectDocumentType() {
     if (cpf_number.checked == true) {

@@ -325,22 +325,12 @@
             </div>\
         </div>";
 
-        var form_custom_append_comdesc = "<hr class='mt-15 mp-custom-input-collapsible'>\
-        <div class='row text-custom-advanced mb-15'>\
-            <div class='col-md-12'>\
-                <h4 class='title-checkout-body mp-custom-input-collapsible'>{l s='Solo si operas con tu número de comercio' mod='mercadopago'}</h4>\
-            </div>\
-        </div>";
-
         for (i=0; i < form_custom_group.length; i++) {
             if(i == 0){
                 form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append);
             }
             if(i > 0) {
                 form_custom_group[i].classList.add("mp-custom-input-collapsible");
-            }
-            if(i == 2){
-                form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append_comdesc);
             }
             if(i >= 3){
                 form_custom_group[i].querySelector("p").style.width = "400px";
@@ -354,7 +344,7 @@
         var form_custom_collapsible_body = document.querySelectorAll(".mp-custom-input-collapsible");
         var form_custom_collapsible_footer = document.querySelector("#module_form_5 .panel .panel-footer");
 
-        form_custom_collapsible_footer.style.marginTop = "-18px";
+        form_custom_collapsible_footer.style.marginTop = "-2px";
 
         form_custom_collapsible.onclick = function(){
             if(style_collapsible_custom == false){

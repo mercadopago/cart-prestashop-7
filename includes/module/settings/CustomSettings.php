@@ -113,16 +113,8 @@ class CustomSettings extends AbstractSettings
                 'suffix' => '%',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_CUSTOM_DISCOUNT',
-                'label' => $this->module->l('Discounts for purchase with Mercado Pago'),
-                'desc' => $this->module->l('Choose a percentage value that you want to discount ') . $this->module->l('your customers for paying with Mercado Pago.'),
-            ),
-            array(
-                'col' => 2,
-                'suffix' => '%',
-                'type' => 'text',
-                'name' => 'MERCADOPAGO_CUSTOM_COMISSION',
-                'label' => $this->module->l('Commission for purchase with Mercado Pago'),
-                'desc' => $this->module->l('Choose an additional percentage value that you want to charge ') . $this->module->l('as commission to your customers for paying with Mercado Pago.'),
+                'label' => $this->module->l('Discount for paying in one installment'),
+                'desc' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             ),
         );
 
@@ -137,8 +129,7 @@ class CustomSettings extends AbstractSettings
     public function postFormProcess()
     {
         $this->validate = ([
-            'MERCADOPAGO_CUSTOM_DISCOUNT' => 'percentage',
-            'MERCADOPAGO_CUSTOM_COMISSION' => 'percentage'
+            'MERCADOPAGO_CUSTOM_DISCOUNT' => 'percentage'
         ]);
 
         parent::postFormProcess();
@@ -157,7 +148,6 @@ class CustomSettings extends AbstractSettings
             'MERCADOPAGO_CUSTOM_COUPON' => Configuration::get('MERCADOPAGO_CUSTOM_COUPON'),
             'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
             'MERCADOPAGO_CUSTOM_DISCOUNT' => Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'),
-            'MERCADOPAGO_CUSTOM_COMISSION' => Configuration::get('MERCADOPAGO_CUSTOM_COMISSION'),
             'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),
         );
     }
