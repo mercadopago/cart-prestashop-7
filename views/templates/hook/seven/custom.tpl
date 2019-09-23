@@ -27,32 +27,30 @@
 
         <div class="row frame-checkout-custom-seven">
             <div class="col-xs-12 col-md-12 col-12">
-                <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar'
-                    mod='mercadopago'} ⌵ </a>
+                <a class="link-checkout-custom" id="button-show-payments">{l s='Con qué tarjetas puedo pagar' mod='mercadopago'} ⌵ </a>
 
                 {if $site_id == "MLA"}
-                <span> | </span>
-                <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas"
-                    target="_blank">
-                    {l s='Ver promociones vigentes' mod='mercadopago'}
-                </a>
+                    <span> | </span>
+                    <a class="link-checkout-custom" id="mp_checkout_link" href="https://www.mercadopago.com.ar/cuotas" target="_blank">
+                        {l s='Ver promociones vigentes' mod='mercadopago'}
+                    </a>
                 {/if}
             </div>
 
             <div class="col-xs-12 col-md-12 col-12">
                 <div class="frame-payments" id="frame-payments">
                     {if count($credit) != 0}
-                    <p class="subtitle-payments">{l s='Tarjetas de crédito' mod='mercadopago'}</p>
-                    {foreach $credit as $tarjeta}
-                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
-                    {/foreach}
+                        <p class="subtitle-payments">{l s='Tarjetas de crédito' mod='mercadopago'}</p>
+                        {foreach $credit as $tarjeta}
+                            <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
+                        {/foreach}
                     {/if}
 
                     {if count($debit) != 0}
-                    <p class="subtitle-payments pt-10">{l s='Tarjetas de débito' mod='mercadopago'}</p>
-                    {foreach $debit as $tarjeta}
-                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
-                    {/foreach}
+                        <p class="subtitle-payments pt-10">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                        {foreach $debit as $tarjeta}
+                            <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
+                        {/foreach}
                     {/if}
                 </div>
             </div>
@@ -63,71 +61,54 @@
 
                 <div class="form-group">
                     <div class="col-md-9 col-xs-8 pb-10 pl-0 mp-m-col">
-                        <input type="text" id="couponCode" class="form-control mp-form-control" autocomplete="off"
-                            maxlength="24" placeholder="{l s='Ingresá tu cupón' mod='mercadopago'}" />
+                        <input type="text" id="couponCode" class="form-control mp-form-control" autocomplete="off" maxlength="24" placeholder="{l s='Ingresá tu cupón' mod='mercadopago'}" />
                     </div>
 
                     <div class="col-md-3 col-xs-4 pb-10 pr-0 text-center mp-m-col">
-                        <input type="button" class="btn btn-primary mp-btn" id="applyCoupon"
-                            value="{l s='Aplicar' mod='mercadopago'}">
+                        <input type="button" class="btn btn-primary mp-btn" id="applyCoupon" value="{l s='Aplicar' mod='mercadopago'}">
                     </div>
                 </div>
             </div>
             {/if}
 
             <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
-                <h3 class="title-custom-checkout pt-20">{l s='Ingresa los datos de tu tarjeta'
-                    mod='mercadopago'}</h3>
+                <h3 class="title-custom-checkout pt-20">{l s='Ingresa los datos de tu tarjeta' mod='mercadopago'}</h3>
 
                 {if $site_id == 'MLM' || $site_id == 'MPE'}
                 <div class="form-group">
                     <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">
-                        <label for="credit_option" class="pb-5">{l s='Card Type' mod='mercadopago'} <em
-                                class="mp-required">*</em></label>
-                        <select id="credit_option" class="form-control mp-form-control mp-select pointer"
-                            name="credit_option" type="text"></select>
+                        <label for="credit_option" class="pb-5">{l s='Card Type' mod='mercadopago'} <em class="mp-required">*</em></label>
+                        <select id="credit_option" class="form-control mp-form-control mp-select pointer" name="credit_option" type="text"></select>
                     </div>
                 </div>
                 {/if}
 
                 <div class="form-group">
                     <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">
-                        <label for="id-card-number" class="pb-5">{l s='Número de Tarjeta' mod='mercadopago'} <em
-                                class="mp-required">*</em></label>
-                        <input id="id-card-number" data-checkout="cardNumber" type="text"
-                            class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24"
-                            autocomplete="off" />
+                        <label for="id-card-number" class="pb-5">{l s='Número de Tarjeta' mod='mercadopago'} <em class="mp-required">*</em></label>
+                        <input id="id-card-number" data-checkout="cardNumber" type="text" class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24" autocomplete="off" />
                         <div id="id-card-number-status" class="status"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-12 col-12 pb-10 px-0 mp-m-col">
-                        <label for="id-card-holder-name" class="pb-5">{l s='Nombre y apellido del titular de la tarjeta'
-                            mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
-                            class="form-control mp-form-control" autocomplete="off" />
+                        <label for="id-card-holder-name" class="pb-5">{l s='Nombre y apellido del titular de la tarjeta' mod='mercadopago'} <em class="mp-required">*</em></label>
+                        <input id="id-card-holder-name" data-checkout="cardholderName" type="text" class="form-control mp-form-control" autocomplete="off" />
                         <div id="id-card-holder-name-status" class="status"></div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-6 col-6 pb-20 pl-0 mp-m-col">
-                        <label for="id-card-expiration" class="pb-5">{l s='Fecha de vencimiento' mod='mercadopago'} <em
-                                class="mp-required">*</em></label>
-                        <input id="id-card-expiration" data-checkout="cardExpiration" type="text"
-                            class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA"
-                            onkeyup="maskInput(this, mdate);" maxlength="7" />
+                        <label for="id-card-expiration" class="pb-5">{l s='Fecha de vencimiento' mod='mercadopago'} <em class="mp-required">*</em></label>
+                        <input id="id-card-expiration" data-checkout="cardExpiration" type="text" class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA" onkeyup="maskInput(this, mdate);" maxlength="7" />
                         <div id="id-card-expiration-status" class="status"></div>
                     </div>
 
                     <div class="col-md-6 col-6 pb-20 pr-0 mp-m-col">
-                        <label for="id-security-code" class="pb-5">{l s='Código de seguridad' mod='mercadopago'} <em
-                                class="mp-required">*</em></label>
-                        <input id="id-security-code" data-checkout="securityCode" type="text"
-                            class="form-control mp-form-control" autocomplete="off"
-                            placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);"
-                            maxlength="4" />
+                        <label for="id-security-code" class="pb-5">{l s='Código de seguridad' mod='mercadopago'} <em class="mp-required">*</em></label>
+                        <input id="id-security-code" data-checkout="securityCode" type="text" class="form-control mp-form-control" autocomplete="off" placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);" maxlength="4" />
                         <div id="id-security-code-status" class="status"></div>
                         <small class="pt-5">{l s='Últimos 3 números del dorso' mod='mercadopago'}</small>
                     </div>
@@ -139,17 +120,13 @@
 
                 <div class="form-group">
                     <div id="container-issuers" class="issuers-options col-md-4 col-4 pb-20 pl-0 mp-m-col">
-                        <label for="id-issuers-options" class="issuers-options pb-5">{l s='Banco emisor'
-                            mod='mercadopago'}</label>
-                        <select class="issuers-options form-control mp-form-control mp-select pointer"
-                            id="id-issuers-options" data-checkout="issuer" name="issuersOptions" type="text"></select>
+                        <label for="id-issuers-options" class="issuers-options pb-5">{l s='Banco emisor' mod='mercadopago'}</label>
+                        <select class="issuers-options form-control mp-form-control mp-select pointer" id="id-issuers-options" data-checkout="issuer" name="issuersOptions" type="text"></select>
                     </div>
 
                     <div id="container-installments" class="col-md-8 col-8 pb-20 pr-0 mp-m-col">
-                        <label for="id-installments" class="pb-5">{l s='Seleccione el número de cotas'
-                            mod='mercadopago'}</label>
-                        <select class="form-control mp-form-control mp-select pointer" id="id-installments"
-                            data-checkout="installments" name="installments" type="text"></select>
+                        <label for="id-installments" class="pb-5">{l s='Seleccione el número de cotas' mod='mercadopago'}</label>
+                        <select class="form-control mp-form-control mp-select pointer" id="id-installments" data-checkout="installments" name="installments" type="text"></select>
                         <div id="id-installments-status" class="status"></div>
 
                         <div class="row">
@@ -174,14 +151,13 @@
                 <div class="form-group">
                     <div class="col-md-4 col-4 pb-20 pl-0 mp-m-col">
                         <label for="id-docType" class="pb-5">{l s='Tipo' mod='mercadopago'}</label>
-                        <select id="id-docType" name="docType" data-checkout="docType"
-                            class="form-control mp-form-control mp-select pointer"></select>
+                        <select id="id-docType" name="docType" data-checkout="docType" class="form-control mp-form-control mp-select pointer"></select>
                     </div>
 
                     <div class="col-md-8 col-8 pb-20 pr-0 mp-m-col">
                         <label for="id-doc-number" class="pb-5">{l s='Número de documento' mod='mercadopago'}</label>
-                        <input id="id-doc-number" data-checkout="docNumber" type="text"
-                            class="form-control mp-form-control" autocomplete="off" />
+                        <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control" onkeyup="maskInput(this, minteger);" autocomplete="off" />
+                        <small class="pt-5">{l s='Solo números' mod='mercadopago'}</small>
                         <div id="id-doc-number-status" class="status"></div>
                     </div>
                 </div>
