@@ -363,7 +363,7 @@
                 style_collapsible_custom = false;
                 header_less_custom.style.display = "none";
                 header_plus_custom.style.display = "block";
-                form_custom_collapsible_footer.style.marginTop = "-18px";
+                form_custom_collapsible_footer.style.marginTop = "-2px";
                 document.querySelector(".text-custom-advanced").style.paddingTop = "0px";
                 document.querySelector(".text-custom-advanced").style.paddingBottom = "0px";
 
