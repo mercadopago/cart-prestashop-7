@@ -50,14 +50,13 @@ class CustomPreference extends AbstractPreference
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
         $preference['metadata'] = $this->getInternalMetadata(); 
-        
-        //TODO:bring data from form
-        $preference['token'] = "b3a7dbec3eb0d71798c4f19fec445795";
-        $preference['installments'] = 1;
-        $preference['payment_method_id'] = "visa";
+        $preference['token'] = $custom_info['card_token_id'];
+        $preference['installments'] = (integer) $custom_info['installments'];
+        $preference['payment_method_id'] = $custom_info['payment_method_id'];
 
-        //TODO:validate issuer_id from $custom_info
-        // $preference['issuer_id'] = "";
+        if(isset($custom_info['issuer'])){
+            $preference['issuer_id'] = (integer) $custom_info['issuer'];
+        }
 
         $preference['additional_info']['items'] = $this->getCartItems(
             $cart,

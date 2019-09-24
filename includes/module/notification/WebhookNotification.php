@@ -45,8 +45,9 @@ class WebhookNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->order_id = Order::getOrderByCartId($cart->id);
         $this->total = (float) $cart->getOrderTotal();
+        $this->order_id = Order::getOrderByCartId($cart->id);
+        
         $this->verifyCustomPayment();
         $this->validateOrderState();
 

@@ -52,13 +52,9 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
         $custom_info = Tools::getValue('mercadopago_custom');
         $payment = $preference->createPreference($cart, $custom_info);
 
-        var_dump($payment);
-        echo '<br>';
-
-        if (is_array($payment) && array_key_exists('transaction_details', $payment)) {
+        if (is_array($payment) && array_key_exists('notification_url', $payment) && $payment['status'] != 'rejected') {
             //payment created
-            $transaction_details = $payment['transaction_details'];
-            $preference->saveCreatePreferenceData($cart, '');
+            $preference->saveCreatePreferenceData($cart, $payment['notification_url']);
             MPLog::generate('Cart id ' . $cart->id . ' - Custom payment created successfully');
 
             //create order
@@ -78,12 +74,11 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
             $uri .= '&id_module=' . $this->module->id;
             $uri .= '&payment_id=' . $payment['id'];
             $uri .= '&payment_status=' . $payment['status'];
-            $uri .= '&payment_ticket=' . urlencode($transaction_details['external_resource_url']);
 
             //redirect to order confirmation page
-            // Tools::redirect($uri);
+            Tools::redirect($uri);
         }
 
-        // return $preference->redirectError();
+        return $preference->redirectError();
     }
 }
