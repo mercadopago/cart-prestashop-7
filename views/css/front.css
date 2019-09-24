@@ -335,6 +335,23 @@ body#checkout section.checkout-step .payment-options label {
     padding-left: 2px;
 }
 
+.mp-erro-form {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #f04449 !important;
+    padding-top: 5px;
+    padding-left: 2px;
+    display: block;
+}
+
+.mp-erro-input {
+    border: 1px red solid;
+}
+
 .mp-sending-coupon {
     font-family: sans-serif !important;
     font-weight: normal !important;
