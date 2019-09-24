@@ -170,6 +170,7 @@
             <div id="mercadopago-utilities">
                 <input type="hidden" id="amount" value="{$amount|escape:'htmlall':'UTF-8'}" />
                 <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
+                <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
                 <input type="hidden" id="payment_method_id"  name="mercadopago_custom[payment_method_id]" />
                 <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
                 <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]" />
@@ -595,18 +596,17 @@
                 var jsonPaymentMethod = getPaymentMethods();
                 var cardNumber = $("#id-card-number").val();
                 var lastFourDigits = cardNumber.substring(cardNumber.length - 4);
-                document.getElementById("payment_method_id").value = jsonPaymentMethod.payment_method_id;
                 document.getElementById("payment_type_id").value = jsonPaymentMethod.payment_type_id;
+                document.getElementById("payment_method_id").value = jsonPaymentMethod.payment_method_id;
                 $form.append($('<input type="hidden" id="card_token_id" name="card_token_id"/>').val(card_token_id));
                 $form.append($('<input name="lastFourDigits" type="hidden" value="' + lastFourDigits + '"/>'));
-                $('#mp_custom_checkout').submit();
+                document.forms['mp_custom_checkout'].submit();
             }
         }
 
         document.forms['mp_custom_checkout'].onsubmit = function () {
             clearErrorStatus();
             if (validate()) {
-
                 var $form = $('#mp_custom_checkout');
                 Mercadopago.createToken($form, tokenResponseHandler);
             }
