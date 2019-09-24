@@ -186,6 +186,7 @@
         var site_id = '{$site_id}';
         var coupon_url = '{$coupon_url}';
         mpValidateParams(site_id, coupon_url);
+        validateBrazilDocuments();
         mpTicketSubmitForm();
     }
 </script>
