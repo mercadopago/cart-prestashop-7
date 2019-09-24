@@ -130,13 +130,13 @@
                             <small id="id-installments-status" class="mp-erro-form"></small>
     
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-12">
                                     <div class="mp-text-cft"></div>
                                 </div>
                             </div>
     
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md-12">
                                     <div class="mp-text-tea"></div>
                                 </div>
                             </div>
