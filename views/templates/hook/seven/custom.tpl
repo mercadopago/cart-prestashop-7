@@ -598,8 +598,7 @@
                 var lastFourDigits = cardNumber.substring(cardNumber.length - 4);
                 document.getElementById("payment_type_id").value = jsonPaymentMethod.payment_type_id;
                 document.getElementById("payment_method_id").value = jsonPaymentMethod.payment_method_id;
-                $form.append($('<input type="hidden" id="card_token_id" name="card_token_id"/>').val(card_token_id));
-                $form.append($('<input name="lastFourDigits" type="hidden" value="' + lastFourDigits + '"/>'));
+                document.getElementById("card_token_id").value = card_token_id;
                 document.forms['mp_custom_checkout'].submit();
             }
         }
