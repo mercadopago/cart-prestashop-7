@@ -297,7 +297,6 @@ function mpTicketApplyAjax() {
             couponSending.style.display = "block";
         },
         success: function (success) {
-            console.log(success);
             couponSending.style.display = "none";
             responseError.style.display = "none";
 

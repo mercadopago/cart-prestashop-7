@@ -517,11 +517,12 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
-        $coupon = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
-        $public_key = $this->mercadopago->getPublicKey();
-        $redirect = $this->context->link->getModuleLink($this->name, 'custom');
         $amount = (float) $cart->getOrderTotal();
+        $coupon = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $redirect = $this->context->link->getModuleLink($this->name, 'custom');
+        $public_key = $this->mercadopago->getPublicKey();
+        $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
       
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
@@ -531,6 +532,7 @@ class Mercadopago extends PaymentModule
             "site_id" => $site_id,
             "redirect" => $redirect,
             "public_key" => $public_key,
+            "coupon_url" => $coupon_url,
             "module_dir" => $this->_path,
         ))->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
 

@@ -1,2 +1,4 @@
 [2019-09-24 18:14:41] [ERROR]: API create_custom_payment error: Card Token not found
 [2019-09-24 18:20:31] [ERROR]: API create_custom_payment error: Card Token not found
+[2019-09-25 20:07:37] [INFO]: Custom checkout configuration saved successfully
+[2019-09-26 00:07:17] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
