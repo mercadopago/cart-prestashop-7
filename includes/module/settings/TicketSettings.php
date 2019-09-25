@@ -114,8 +114,11 @@ class TicketSettings extends AbstractSettings
                 'suffix' => '%',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_TICKET_DISCOUNT',
-                'label' => $this->module->l('Discount for paying in one installment'),
-                'desc' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                'label' => $this->module->l('Discount for paying with ticket'),
+                'desc' => $this->module->l('Choose the discount percentage that will apply to customers ') .
+                    $this->module->l('who want to pay you with ticket. ') .
+                    $this->module->l('Leave the field empty or complete with a “0” when you ') .
+                    $this->module->l('do not want to offer this discount.'),
             ),
         );
 

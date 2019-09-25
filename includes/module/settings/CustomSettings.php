@@ -114,7 +114,10 @@ class CustomSettings extends AbstractSettings
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_CUSTOM_DISCOUNT',
                 'label' => $this->module->l('Discount for paying in one installment'),
-                'desc' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                'desc' => $this->module->l('Choose the discount percentage that will apply to customers ') .
+                    $this->module->l('who want to pay you in a single installment. ') .
+                    $this->module->l('Leave the field empty or complete with a “0” when you ') .
+                    $this->module->l('do not want to offer this discount.'),
             ),
         );
 
@@ -133,7 +136,7 @@ class CustomSettings extends AbstractSettings
         ]);
 
         parent::postFormProcess();
-        
+
         MPLog::generate('Custom checkout configuration saved successfully');
     }
 
