@@ -82,7 +82,7 @@
                     <div class="col-md-4 col-4 col-xs-12 pb-10 pr-0 mp-m-col">
                         <label for="docNumberError" id="mp-cpf-label" class="pb-5">{l s='CPF' mod='mercadopago'} <em class="mp-required">*</em></label>
                         <label for="docNumberError" id="mp-cnpj-label" class="pb-5">{l s='CNPJ' mod='mercadopago'} <em class="mp-required">*</em></label>
-                        <input type="text" id="mp_docNumber" name="mercadopago_ticket[docNumber]" class="form-control mp-form-control" autocomplete="off" />
+                        <input type="text" id="mp_docNumber" name="mercadopago_ticket[docNumber]" class="form-control mp-form-control" onkeyup="maskInput(this, mcpf);" maxlength="14" autocomplete="off" />
                         <small class="mp-erro-febraban" id="mp_docNumber_error">{l s='The document must be valid' mod='mercadopago'}</small>
                     </div>
                 </div>

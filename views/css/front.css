@@ -99,6 +99,10 @@
     cursor: pointer !important;
 }
 
+.mp-small{
+    padding-left: 2px;
+}
+
 body#checkout section.checkout-step .payment-options label {
     text-align: left !important;
 }

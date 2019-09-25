@@ -16,6 +16,7 @@ var MPv1Ticket = {
     docs: {
         cpf_label: "mp-cpf-label",
         cpf_number: "mp_cpf",
+        doc_number: "mp_docNumber",
         name_label: "mp-name-label",
         cnpj_label: "mp-cnpj-label",
         mp_lastname: "mp-lastname",
@@ -43,12 +44,13 @@ function mpValidateParams(site_id, coupon_url) {
 }
 
 //select cpf or cnpj
-var cpf_number = document.getElementById(MPv1Ticket.docs.cpf_number);
 var cpf_label = document.getElementById(MPv1Ticket.docs.cpf_label);
-var cnpj_label = document.getElementById(MPv1Ticket.docs.cnpj_label);
-var mp_firstname = document.getElementById(MPv1Ticket.docs.mp_firstname);
-var mp_lastname = document.getElementById(MPv1Ticket.docs.mp_lastname);
 var name_label = document.getElementById(MPv1Ticket.docs.name_label);
+var cnpj_label = document.getElementById(MPv1Ticket.docs.cnpj_label);
+var cpf_number = document.getElementById(MPv1Ticket.docs.cpf_number);
+var doc_number = document.getElementById(MPv1Ticket.docs.doc_number);
+var mp_lastname = document.getElementById(MPv1Ticket.docs.mp_lastname);
+var mp_firstname = document.getElementById(MPv1Ticket.docs.mp_firstname);
 var social_label = document.getElementById(MPv1Ticket.docs.social_label);
 
 function validateBrazilDocuments(){
@@ -67,6 +69,8 @@ function selectDocumentType() {
         mp_firstname.classList.remove("col-md-8");
         name_label.style.display = 'table-cell';
         social_label.style.display = 'none';
+        doc_number.setAttribute("maxlength", "14");
+        doc_number.setAttribute("onkeyup", "maskInput(this, mcpf)");
     }
     else {
         cpf_label.style.display = 'none';
@@ -76,6 +80,8 @@ function selectDocumentType() {
         mp_firstname.classList.remove("col-md-4");
         name_label.style.display = 'none';
         social_label.style.display = 'table-cell';
+        doc_number.setAttribute("maxlength", "18");
+        doc_number.setAttribute("onkeyup", "maskInput(this, mcnpj)");
     }
 }
 
@@ -94,6 +100,7 @@ function cpfValidate(strCPF) {
         doc_error.style.display = 'block';
         terms.checked = false;
         element.focus();
+        element.classList.add("mp-erro-input");
         return false;
     }
 
@@ -107,6 +114,7 @@ function cpfValidate(strCPF) {
         doc_error.style.display = 'block';
         terms.checked = false;
         element.focus();
+        element.classList.add("mp-erro-input");
         return false;
     }
 
@@ -119,10 +127,12 @@ function cpfValidate(strCPF) {
         doc_error.style.display = 'block';
         terms.checked = false;
         element.focus();
+        element.classList.add("mp-erro-input");
         return false;
     }
 
     doc_error.style.display = 'none';
+    element.classList.remove("mp-erro-input");
     return true;
 }
 
@@ -144,6 +154,7 @@ function cnpjValidate(strCNPJ) {
         doc_error.style.display = 'block';
         terms.checked = false;
         element.focus();
+        element.classList.add("mp-erro-input");
         return false;
     }
     for (i = 0; i < strCNPJ.length - 1; i++) {
@@ -171,6 +182,7 @@ function cnpjValidate(strCNPJ) {
             doc_error.style.display = 'block';
             terms.checked = false;
             element.focus();
+            element.classList.add("mp-erro-input");
             return false;
         }
 
@@ -190,16 +202,19 @@ function cnpjValidate(strCNPJ) {
             doc_error.style.display = 'block';
             terms.checked = false;
             element.focus();
+            element.classList.add("mp-erro-input");
             return false;
         }
 
         doc_error.style.display = 'none';
+        element.classList.remove("mp-erro-input");
         return true;
     }
     else {
         doc_error.style.display = 'block';
         terms.checked = false;
         element.focus();
+        element.classList.add("mp-erro-input");
         return false;
     }
 }
@@ -213,9 +228,11 @@ function inputsValidate(array_inputs) {
         var input = document.getElementById(element);
         if (input.value == "") {
             input.focus();
+            input.classList.add("mp-erro-input");
             terms.checked = false;
         } else {
             count++;
+            input.classList.remove("mp-erro-input");
         }
     });
 

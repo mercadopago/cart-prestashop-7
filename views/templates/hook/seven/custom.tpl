@@ -109,8 +109,8 @@
                         <div class="col-md-6 col-6 pb-20 pr-0 mp-m-col">
                             <label for="id-security-code" class="pb-5">{l s='Código de seguridad' mod='mercadopago'} <em class="mp-required">*</em></label>
                             <input id="id-security-code" data-checkout="securityCode" type="text" class="form-control mp-form-control" autocomplete="off" placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);" maxlength="4" />
-                            <small class="pt-5">{l s='Últimos 3 números del dorso' mod='mercadopago'}</small>
-                            <small id="id-security-code-status" class="mp-erro-form"></small>
+                            <small class="mp-small pt-5">{l s='Últimos 3 números del dorso' mod='mercadopago'}</small>
+                            <small id="id-security-code-status" class="mp-erro-form pt-0"></small>
                         </div>
                     </div>
     
@@ -122,6 +122,7 @@
                         <div id="container-issuers" class="issuers-options col-md-4 col-4 pb-20 pl-0 mp-m-col">
                             <label for="id-issuers-options" class="issuers-options pb-5">{l s='Banco emisor' mod='mercadopago'}</label>
                             <select class="issuers-options form-control mp-form-control mp-select pointer" id="id-issuers-options" data-checkout="issuer" name="mercadopago_custom[issuer]" type="text"></select>
+                            <small id="id-issuer-status" class="mp-erro-form"></small>
                         </div>
     
                         <div id="container-installments" class="col-md-8 col-8 pb-20 pr-0 mp-m-col">
@@ -158,8 +159,8 @@
                         <div class="col-md-8 col-8 pb-20 pr-0 mp-m-col">
                             <label for="id-doc-number" class="pb-5">{l s='Número de documento' mod='mercadopago'}</label>
                             <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control" onkeyup="maskInput(this, minteger);" autocomplete="off" />
-                            <small class="pt-5">{l s='Solo números' mod='mercadopago'}</small>
-                            <small id="id-doc-number-status" class="mp-erro-form"></small>
+                            <small class="mp-small pt-5">{l s='Solo números' mod='mercadopago'}</small>
+                            <small id="id-doc-number-status" class="mp-erro-form pt-0"></small>
                         </div>
                     </div>
                   {/if}
@@ -453,19 +454,18 @@
             }
     
             function validate() {
-    
                 if ($("#id-card-number").val().length == 0) {
-                    $("#id-card-number-status").html("{l s='Card invalid' mod='mercadopago'}");
+                    $("#id-card-number-status").html("{l s='Invalid card number' mod='mercadopago'}");
                     $("#id-card-number").addClass("mp-erro-input");
                 }
     
                 if ($("#id-card-holder-name").val().length == 0) {
-                    $("#id-card-holder-name-status").html("{l s='Name invalid' mod='mercadopago'}");
+                    $("#id-card-holder-name-status").html("{l s='Invalid card holder name' mod='mercadopago'}");
                     $("#id-card-holder-name").addClass("mp-erro-input");
                 }
     
                 if ($("#id-security-code").val().length == 0) {
-                    $("#id-security-code-status").html("{l s='CVV invalid' mod='mercadopago'}");
+                    $("#id-security-code-status").html("{l s='Invalid security code' mod='mercadopago'}");
                     $("#id-security-code").addClass("mp-erro-input");
                 }
     
@@ -474,13 +474,18 @@
                 }
     
                 if ($("#id-installments").val() == null || $("#id-installments").val().length == 0) {
-                    $("#id-installments-status").html("{l s='Installments invalid' mod='mercadopago'}");
+                    $("#id-installments-status").html("{l s='You must select a installment' mod='mercadopago'}");
                     $("#id-installments").addClass("mp-erro-input");
+                }
+
+                if ($("#id-issuers-options").val() == null || $("#id-issuers-options").val().length == 0) {
+                    $("#id-issuer-status").html("{l s='You must select a issuer' mod='mercadopago'}");
+                    $("#id-issuers-options").addClass("mp-erro-input");
                 }
     
                 if (site_id != "MLM") {
                     if ($("#id-doc-number").val().length == 0) {
-                        $("#id-doc-number-status").html("{l s='Document invalid' mod='mercadopago'}");
+                        $("#id-doc-number-status").html("{l s='Invalid document number' mod='mercadopago'}");
                         $("#id-doc-number").addClass("mp-erro-input");
                     }
                 }
@@ -498,7 +503,7 @@
     
                 if (site_id == "MLB") {
                     if (!validateCpf($("#id-doc-number").val())) {
-                        $("#id-doc-number-status").html("{l s='Document invalid' mod='mercadopago'}");
+                        $("#id-doc-number-status").html("{l s='Invalid document number' mod='mercadopago'}");
                         $("#id-doc-number").addClass("mp-erro-input");
                         if (document.getElementById('conditions_to_approve[terms-and-conditions]') != undefined) {
                             document.getElementById('conditions_to_approve[terms-and-conditions]').checked = false;
@@ -578,26 +583,26 @@
                     $.each(response.cause, function (p, e) {
                         switch (e.code) {
                             case "E301":
-                                $("#id-card-number-status").html("{l s='Card invalid' mod='mercadopago'}");
+                                $("#id-card-number-status").html("{l s='Invalid card number' mod='mercadopago'}");
                                 $("#id-card-number").addClass("mp-erro-input");
                                 break;
                             case "E302":
-                                $("#id-security-code-status").html("{l s='CVV invalid' mod='mercadopago'}");
+                                $("#id-security-code-status").html("{l s='Invalid security code' mod='mercadopago'}");
                                 $("#id-security-code").addClass("mp-erro-input");
                                 break;
                             case "325":
                             case "326":
-                                $("#id-card-expiration-status").html("{l s='Date invalid' mod='mercadopago'}");
+                                $("#id-card-expiration-status").html("{l s='Invalid card expiration date' mod='mercadopago'}");
                                 $("#id-card-expiration").addClass("mp-erro-input");
                                 break;
                             case "316":
                             case "221":
-                                $("#id-card-holder-name-status").html("{l s='Name invalid' mod='mercadopago'}");
+                                $("#id-card-holder-name-status").html("{l s='Invalid card holder name' mod='mercadopago'}");
                                 $("#id-card-holder-name").addClass("mp-erro-input");
                                 break;
                             case "324":
                             case "214":
-                                $("#id-doc-number-status").html("{l s='Document invalid' mod='mercadopago'}");
+                                $("#id-doc-number-status").html("{l s='Invalid document number' mod='mercadopago'}");
                                 $("#id-doc-number").addClass("mp-erro-input");
                                 break;
                         }

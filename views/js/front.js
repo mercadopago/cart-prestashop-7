@@ -55,3 +55,20 @@ function mcc(v) {
     v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
     return v;
 }
+
+function mcpf(v){
+    v=v.replace(/\D/g,"")                    
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")            
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") 
+    return v
+}
+
+function mcnpj(v){
+    v=v.replace(/\D/g,"")                   
+    v=v.replace(/^(\d{2})(\d)/,"$1.$2")     
+    v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3") 
+    v=v.replace(/\.(\d{3})(\d)/,".$1/$2")           
+    v=v.replace(/(\d{4})(\d)/,"$1-$2")              
+    return v
+}
