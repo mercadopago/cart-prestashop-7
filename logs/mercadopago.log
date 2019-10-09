@@ -2,3 +2,12 @@
 [2019-09-24 18:20:31] [ERROR]: API create_custom_payment error: Card Token not found
 [2019-09-25 20:07:37] [INFO]: Custom checkout configuration saved successfully
 [2019-09-26 00:07:17] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
+[2019-09-26 00:17:03] [ERROR]: API get_coupon_discount error: doesn't find a campaign with the given code
+[2019-09-26 00:38:11] [INFO]: Ticket checkout configuration saved successfully
+[2019-09-26 00:38:25] [INFO]: Custom checkout configuration saved successfully
+[2019-09-30 16:54:43] [ERROR]: API save_api_settings error: Internal server error
+[2019-09-30 16:54:43] [INFO]: Standard checkout configuration saved successfully
+[2019-10-08 21:10:14] [INFO]: Cart id 37 - Preference created successfully
+[2019-10-09 18:59:26] [INFO]: Standard checkout configuration saved successfully
+[2019-10-09 19:49:21] [INFO]: Standard checkout configuration saved successfully
+[2019-10-09 19:49:38] [INFO]: Standard checkout configuration saved successfully

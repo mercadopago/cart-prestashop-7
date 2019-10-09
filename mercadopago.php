@@ -427,11 +427,19 @@ class Mercadopago extends PaymentModule
 
         $cart = $this->context->cart;
 
-        $payment_options = [
-            $this->getStandardCheckout($cart),
-            $this->getCustomCheckout($cart),
-            $this->getTicketCheckout($cart),
-        ];
+        $payment_options = array();
+
+        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
+            $payment_options[] = $this->getStandardCheckout($cart);
+        }
+
+        if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
+            $payment_options[] = $this->getCustomCheckout($cart);
+        }
+
+        if (Configuration::get('MERCADOPAGO_TICKET_CHECKOUT') == true) {
+            $payment_options[] = $this->getTicketCheckout($cart);
+        }
 
         return $payment_options;
     }
@@ -523,7 +531,10 @@ class Mercadopago extends PaymentModule
         $redirect = $this->context->link->getModuleLink($this->name, 'custom');
         $public_key = $this->mercadopago->getPublicKey();
         $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
-      
+        $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
             "credit" => $credit,
@@ -538,10 +549,12 @@ class Mercadopago extends PaymentModule
 
         $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
         $customCheckout->setForm($infoTemplate)
-            ->setCallToActionText($this->l('I want to pay with Custom Checkout.'))
+            ->setCallToActionText($this->l('I want to pay with Custom Checkout.') . $str_discount)
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $customCheckout;
+
+        return [];
     }
 
     /**
@@ -554,8 +567,9 @@ class Mercadopago extends PaymentModule
         $ticket = array();
         $tarjetas = $this->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
-            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_'.$tarjeta['id']) != "") {
-                if ($tarjeta['type'] != 'credit_card' &&
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
+                if (
+                    $tarjeta['type'] != 'credit_card' &&
                     $tarjeta['type'] != 'debit_card' &&
                     $tarjeta['type'] != 'prepaid_card'
                 ) {
@@ -568,9 +582,11 @@ class Mercadopago extends PaymentModule
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $address = new Address((int) $cart->id_address_invoice);
         $customer = Context::getContext()->customer->getFields();
-        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
         $coupon_url = $this->context->link->getModuleLink($this->name, 'coupon');
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
 
         $infoTemplate = $this->context->smarty->assign(array(
             "ticket" => $ticket,
@@ -578,7 +594,6 @@ class Mercadopago extends PaymentModule
             "site_id" => $site_id,
             "address" => $address,
             "customer" => $customer,
-            "discount" => $discount,
             "redirect" => $redirect,
             "coupon_url" => $coupon_url,
             "module_dir" => $this->_path,
@@ -586,10 +601,12 @@ class Mercadopago extends PaymentModule
 
         $ticketCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
         $ticketCheckout->setForm($infoTemplate)
-            ->setCallToActionText($this->l('I want to pay with Ticket Checkout.'))
+            ->setCallToActionText($this->l('I want to pay with Ticket Checkout.') . $str_discount)
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $ticketCheckout;
+
+        return [];
     }
 
     /**
@@ -625,8 +642,8 @@ class Mercadopago extends PaymentModule
         }
 
         if (Tools::getIsset('payment_ticket')) {
-            $ticket_url = Tools::getValue('payment_ticket'); 
-            
+            $ticket_url = Tools::getValue('payment_ticket');
+
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url,
                 "module_dir" => $this->_path,
