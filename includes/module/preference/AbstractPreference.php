@@ -31,6 +31,7 @@ class AbstractPreference
     public $checkout;
     public $settings;
     public $mpuseful;
+    public $cart_rule;
     public $mercadopago;
 
     public function __construct()
@@ -119,7 +120,7 @@ class AbstractPreference
             }
 
             $product_price = $product['price_wt'];
-            if($percent != null){
+            if ($percent != null) {
                 $product_price = (float) $product_price - ($product_price * ($percent / 100));
             }
 
@@ -400,11 +401,70 @@ class AbstractPreference
      */
     public function validateSandboxMode()
     {
-        if($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true){
+        if ($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Create and set ticket discount on CartRule()
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function setCartRule($cart, $discount)
+    {
+        $mp_code = 'MPDISCOUNT' . $cart->id;
+        $store_name = Configuration::get('PS_LANG_DEFAULT');
+        $discount_name = $this->module->l('Mercado Pago discount applied to cart ' . $cart->id);
+
+        $cart_rule = new CartRule();
+        $cart_rule->date_from = date('Y-m-d H:i:s');
+        $cart_rule->date_to = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"), date("d"), date("Y") + 10));
+        $cart_rule->name[$store_name] = $discount_name;
+        $cart_rule->quantity = 1;
+        $cart_rule->code = $mp_code;
+        $cart_rule->quantity_per_user = 1;
+        $cart_rule->reduction_percent = $discount;
+        $cart_rule->reduction_amount = 0;
+        $cart_rule->active = true;
+        $cart_rule->save();
+
+        $cart->addCartRule($cart_rule->id);
+        return $this->cart_rule = $cart_rule->id;
+    }
+
+    /**
+     * Disable cart rule when buyer completes purchase
+     *
+     * @return void
+     */
+    public function disableCartRule()
+    {
+        $cart_rule = new CartRule($this->cart_rule);
+        $cart_rule->active = false;
+        $cart_rule->save();
+    }
+
+    /**
+     * Delete cart rule if an error occurs
+     *
+     * @return void
+     */
+    public function deleteCartRule()
+    {
+        $sql = array();
+        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
+        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
+
+        foreach ($sql as $query) {
+            if (Db::getInstance()->execute($query) == false) {
+                MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
+                return false;
+            }
+        }
     }
 
     /**

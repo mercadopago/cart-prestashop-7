@@ -61,6 +61,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
             $transaction_id = $payment['id'];
             $notification = new WebhookNotification($transaction_id, $customer_secure_key);
             $notification = $notification->createCustomOrder($cart);
+            $preference->disableCartRule();
 
             //order confirmation redirect
             $old_cart = new Cart($cart_id);
@@ -79,6 +80,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
             Tools::redirect($uri);
         }
 
+        $preference->deleteCartRule();
         return $preference->redirectError();
     }
 }

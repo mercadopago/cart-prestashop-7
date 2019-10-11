@@ -75,7 +75,7 @@ class CustomPreference extends AbstractPreference
         }
 
         //Update cart total with CartRule()
-        $this->setCustomCartRule($cart);
+        $this->setCartRule($cart);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
 
         //Create preference
@@ -108,36 +108,35 @@ class CustomPreference extends AbstractPreference
      * @param mixed $cart
      * @return void
      */
-    public function setCustomCartRule($cart)
+    public function setCartRule($cart)
     {
         if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != "") {
-            $rules = $cart->getCartRules();
-            $mp_code = 'MPDISCOUNT' . $cart->id;
-            $store_name = Configuration::get('PS_LANG_DEFAULT');
-            $discount_name = $this->module->l('Mercado Pago discount applied to cart ' . $cart->id);
-
-            foreach ($rules as $value) {
-                if ($value['code'] == $mp_code) {
-                    return $value['id_cart_rule'];
-                }
-            }
-
-            $cart_rule = new CartRule();
-            $cart_rule->date_from = date('Y-m-d H:i:s');
-            $cart_rule->date_to = date('Y-m-d H:i:s', mktime(0, 0, 0, date("m"), date("d"), date("Y") + 10));
-            $cart_rule->name[$store_name] = $discount_name;
-            $cart_rule->quantity = 1;
-            $cart_rule->code = $mp_code;
-            $cart_rule->quantity_per_user = 1;
-            $cart_rule->reduction_percent = $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'];
-            $cart_rule->reduction_amount = 0;
-            $cart_rule->active = true;
-            $cart_rule->save();
-
+            parent::setCartRule($cart, $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']);
             MPLog::generate('Mercado Pago custom discount applied to cart ' . $cart->id);
+        }
+    }
 
-            $cart->addCartRule($cart_rule->id);
-            return $cart_rule->id;
+    /**
+     * Disable cart rule when buyer completes purchase
+     *
+     * @return void
+     */
+    public function disableCartRule()
+    {
+        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != "") {
+            parent::disableCartRule();
+        }
+    }
+
+    /**
+     * Delete cart rule if an error occurs
+     *
+     * @return void
+     */
+    public function deleteCartRule()
+    {
+        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != "") {
+            parent::deleteCartRule();
         }
     }
 

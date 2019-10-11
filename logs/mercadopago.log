@@ -11,3 +11,32 @@
 [2019-10-09 18:59:26] [INFO]: Standard checkout configuration saved successfully
 [2019-10-09 19:49:21] [INFO]: Standard checkout configuration saved successfully
 [2019-10-09 19:49:38] [INFO]: Standard checkout configuration saved successfully
+[2019-10-09 22:57:03] [INFO]: Cart id 37 - Ticket payment created successfully
+[2019-10-09 22:57:05] [INFO]: Order created successfully on cart id 37
+[2019-10-11 18:26:37] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 18:26:44] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 18:27:38] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 18:40:24] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 18:40:29] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 18:41:10] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 18:41:16] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 19:56:39] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 19:56:46] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:01:30] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:01:38] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:02:05] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:03:34] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:03:38] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:04:10] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:04:15] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:04:37] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:04:45] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:04:59] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:05:04] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:06:04] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:06:11] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:07:47] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:07:53] [ERROR]: API create_custom_payment error: internal_error
+[2019-10-11 20:11:42] [INFO]: Mercado Pago ticket discount applied to cart 38
+[2019-10-11 20:11:48] [INFO]: Cart id 38 - Ticket payment created successfully
+[2019-10-11 20:11:50] [INFO]: Order created successfully on cart id 38
