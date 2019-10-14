@@ -555,8 +555,6 @@ class Mercadopago extends PaymentModule
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $customCheckout;
-
-        return [];
     }
 
     /**
@@ -607,8 +605,6 @@ class Mercadopago extends PaymentModule
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $ticketCheckout;
-
-        return [];
     }
 
     /**
