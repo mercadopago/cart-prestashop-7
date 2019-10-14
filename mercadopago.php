@@ -525,7 +525,6 @@ class Mercadopago extends PaymentModule
             }
         }
 
-        $amount = (float) $cart->getOrderTotal();
         $coupon = Configuration::get('MERCADOPAGO_CUSTOM_COUPON');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $redirect = $this->context->link->getModuleLink($this->name, 'custom');
@@ -534,6 +533,9 @@ class Mercadopago extends PaymentModule
         $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
         $str_discount = ' (' . $discount . '% OFF) ';
         $str_discount = ($discount != "") ? $str_discount : '';
+
+        $amount = (float) $cart->getOrderTotal();
+        $amount = ($discount != "") ? $amount - ($amount * ($discount/100)) : $amount;
 
         $infoTemplate = $this->context->smarty->assign(array(
             "debit" => $debit,
