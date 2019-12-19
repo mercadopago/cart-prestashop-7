@@ -1,3 +1,6 @@
+<p align="center"><a href="https://www.mercadopago.com/"><img src="https://raw.githubusercontent.com/mercadopago/cart-woocommerce/master/assets/images/mplogo.png" height="80" width="auto" alt="MercadoPago">
+</a></p>
+
 # Prestashop 1.7.x - Mercado Pago Module (v4.0.1)
 
 With the official module of Mercado Pago you will have an integration, hundreds of solutions and thousands of sales. Maximize your conversions and make your customers return to your store by increasing their confidence in the shopping experience.
