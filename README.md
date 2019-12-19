@@ -1,8 +1,8 @@
-<div style="text-align=center">
+<p style="text-align=center">
   <a href="https://www.mercadopago.com/">
     <img src="https://raw.githubusercontent.com/mercadopago/cart-woocommerce/master/assets/images/mplogo.png" height="80" width="auto" alt="MercadoPago">
   </a>
-</div>
+</p>
 
 # Prestashop 1.7.x - Mercado Pago Module (v4.0.1)
 
