@@ -6,11 +6,11 @@ With the official module of Mercado Pago you will have an integration, hundreds 
 
 For a better experience, you will be redirected to our site by clicking on the links below:
 
-* [Introduction](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_introduction)
-* [Installation Requirements](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_installation_requirements)
-* [Installation](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_installation)
-* [Integration](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_integration)
-* [Receive Payments](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop17/#bookmark_receive_payments)
+* [Introduction](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop/#bookmark_introduction)
+* [Installation Requirements](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop/#bookmark_installation_requirements)
+* [Installation](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop/#bookmark_installation)
+* [Integration](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop/#bookmark_integration)
+* [Receive Payments](https://www.mercadopago.com.br/developers/en/plugins_sdks/plugins/official/prestashop/#bookmark_receive_payments)
 
 ## Support
 
