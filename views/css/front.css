@@ -1,0 +1,406 @@
+/**
+* 2007-2019 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2019 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+
+.pd-0 {
+    padding: 0px !important;
+}
+
+.px-0 {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
+
+.pr-0 {
+    padding-right: 0px !important;
+}
+
+.pt-0 {
+    padding-top: 0px !important;
+}
+
+.pt-5 {
+    padding-top: 5px !important;
+}
+
+.pt-10 {
+    padding-top: 10px !important;
+}
+
+.pt-20 {
+    padding-top: 20px !important;
+}
+
+.pb-5 {
+    padding-bottom: 5px !important;
+}
+
+.pb-10 {
+    padding-bottom: 10px !important;
+}
+
+.pb-15 {
+    padding-bottom: 15px !important;
+}
+
+.pb-20 {
+    padding-bottom: 20px !important;
+}
+
+.pb-30 {
+    padding-bottom: 30px !important;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
+
+.pl-10 {
+    padding-left: 10px !important;
+}
+
+.mp-hg-100 {
+    height: 100% !important;
+}
+
+.fl-left {
+    float: left !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.mp-small{
+    padding-left: 2px;
+}
+
+body#checkout section.checkout-step .payment-options label {
+    text-align: left !important;
+}
+
+.title-checkout {
+    padding: 5px 0 0px;
+}
+
+.subtitle-checkout {
+    padding: 20px 0px 0px;
+    margin: 0px 0 5px !important;
+    text-transform: uppercase;
+    font-family: sans-serif !important;
+}
+
+.badge-checkout {
+    padding: 5px 10px;
+    margin-left: 5px;
+    display: inline-block;
+    background-color: #2ec74b;
+    color: #fff;
+    text-transform: none;
+    border-radius: 2px;
+}
+
+.img-tarjetas {
+    padding: 10px;
+    max-height: 40px;
+    width: auto !important;
+}
+
+.redirect-checkout-six {
+    display: block;
+}
+
+.redirect-checkout-six:hover {
+    background-color: #eee;
+}
+
+.frame-checkout-seven {
+    padding: 0px 0px 20px;
+}
+
+.frame-checkout-six {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 25px 20px 20px;
+    margin: 0px 0px 10px;
+}
+
+.title-checkout-six p {
+    display: inline-block;
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+}
+
+.title-checkout-six img {
+    padding-right: 10px;
+}
+
+.subtitle-checkout-six {
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #04204c;
+    padding: 25px 0 0;
+    margin: 0px;
+}
+
+.redirect-frame {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 25px 0 10px;
+}
+
+.redirect-frame img {
+    max-width: 160px !important;
+}
+
+.redirect-frame p {
+    padding-top: 15px !important;
+    font-family: sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-stretch: normal !important;
+    line-height: 1.71 !important;
+    letter-spacing: normal !important;
+    text-align: center !important;
+    color: #333333 !important;
+}
+
+.subtitle-standard-checkout {
+    padding: 10px 0px 0px;
+    margin: 0px 0 5px !important;
+    text-transform: uppercase;
+    font-family: sans-serif !important;
+}
+
+/* custom chckout */
+
+#mercadopago-form-custom-coupon {
+    padding-top: 20px;
+}
+
+.frame-checkout-custom-seven {
+    padding: 10px 0px 10px;
+}
+
+.mp-form-control {
+    padding: .5rem .5rem;
+    background-color: #fff !important;
+}
+
+.mp-form-control-error {
+    border: 2px solid #f04449 !important;
+}
+
+.link-checkout-custom {
+    color: #2fb5d2 !important;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.link-checkout-custom:hover {
+    color: #1a8196 !important;
+}
+
+.mp-checkout-form {
+    padding: 0px 40px;
+}
+
+.frame-title {
+    padding: 10px 0px 0px;
+}
+
+.title-custom-checkout {
+    padding: 0px 0px 10px;
+}
+
+.mp-required {
+    color: #f04449 !important;
+    font-size: 18px !important;
+    font-weight: bold;
+    font-family: "Merriweather, Georgia";
+}
+
+.mp-checkbox {
+    position: relative !important;
+    margin-top: 0.15rem !important;
+    margin-left: 0 !important;
+    float: left;
+}
+
+.mp-select {
+    border-radius: 0 !important;
+}
+
+.all-required {
+    color: #f04449 !important;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.mp-btn {
+    width: 100%;
+}
+
+.frame-payments {
+    display: none;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+    padding: 10px 10px 10px;
+}
+
+.subtitle-payments {
+    font-size: 13px !important;
+    font-family: sans-serif !important;
+    color: #7a7a7a;
+    font-weight: 400;
+    padding: 00px 0px 0px;
+    margin: 0px 0 0px !important;
+    text-transform: uppercase;
+}
+
+/* ticket checkout */
+
+#mercadopago-form-ticket-coupon {
+    padding-bottom: 15px;
+}
+
+.mp-form-check {
+    margin-bottom: 0px !important;
+}
+
+.text-ticket-tarjeta {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.mp-ticket-frame {
+    height: 500px;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.mp-ticket-frame a {
+    margin: 10px 0;
+    padding: 10px 30px;
+    margin: 20px 0 15px;
+}
+
+.mp-ticket-frame iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.mp-erro-febraban {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #f04449 !important;
+    display: none;
+    padding-top: 5px;
+    padding-left: 2px;
+}
+
+.mp-erro-form {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #f04449 !important;
+    padding-top: 5px;
+    padding-left: 2px;
+    display: block;
+}
+
+.mp-erro-input {
+    border: 1px red solid;
+}
+
+.mp-sending-coupon {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #999 !important;
+    text-align: justify;
+    display: none;
+    padding-top: 5px;
+    padding-left: 2px;
+    font-weight: bold !important;
+}
+
+.mp-success-coupon {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+    color: #339933 !important;
+    text-align: justify;
+    display: none;
+    padding-top: 5px;
+    padding-left: 2px;
+    font-weight: bold !important;
+}
+
+/* --- mobile --- */
+
+@media (max-width: 767.98px) {
+    .m-pr-0 {
+        padding-right: 0px !important;
+    }
+    .redirect-frame {
+        display: inline-block;
+        margin-top: 20px;
+    }
+    .mp-m-col {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .fl-left {
+        float: none !important;
+    }
+}

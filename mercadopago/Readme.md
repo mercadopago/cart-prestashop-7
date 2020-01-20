@@ -1,1 +1,0 @@
-# Mercado Pago Payment
