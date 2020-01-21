@@ -94,11 +94,14 @@ class Mercadopago extends PaymentModule
         //Prestashop configuration table
         $mp_currency = $this->context->currency->iso_code;
         Configuration::updateValue('MERCADOPAGO_COUNTRY_LINK', $this->mpuseful->setMPCurrency($mp_currency));
-        Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
-        Configuration::updateValue('MERCADOPAGO_SANDBOX_STATUS', true);
-        Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
-        Configuration::updateValue('MERCADOPAGO_STANDARD', false);
-        Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
+
+        //Validate if is a new seller or a plugin upgrade
+        $access_token = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+
+        if ($access_token != '' && $sandbox_access_token != '') {
+            Configuration::updateValue('MERCADOPAGO_STANDARD_CHECKOUT', true);
+        }
 
         //Mercadopago configurations
         include(MP_ROOT_URL . '/sql/install.php');

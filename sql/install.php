@@ -83,3 +83,11 @@ if ($count == 0) {
     $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
     $mp_module->create(["version" => MP_VERSION]);
 }
+
+//Prestashop configuration table
+Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
+Configuration::updateValue('MERCADOPAGO_SANDBOX_STATUS', true);
+Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
+Configuration::updateValue('MERCADOPAGO_STANDARD', false);
+Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
+Configuration::updateValue('MERCADOPAGO_STANDARD_MODAL', true);

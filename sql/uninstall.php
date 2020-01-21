@@ -30,6 +30,7 @@
  * but does not want to loose all of the data associated to the module.
  */
 
-//old version
+//old versions
 Configuration::deleteByName('MERCADOPAGO_CLIENT_ID');
 Configuration::deleteByName('MERCADOPAGO_CLIENT_SECRET');
+Configuration::deleteByName('MERCADOPAGO_CHECKOUT_STATUS');
