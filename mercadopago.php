@@ -170,7 +170,7 @@ class Mercadopago extends PaymentModule
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
             if ($homologated == false && in_array('payments', $this->mercadopago->homologValidate())) {
-                Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
+                $homologated = Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
 
             //return checkout forms
