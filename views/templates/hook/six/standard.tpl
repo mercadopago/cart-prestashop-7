@@ -27,10 +27,10 @@
     <div class="row frame-checkout-six">
         <div class="title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-            <p>{l s='Quiero pagar con Mercado Pago sin costo adicional.' mod='mercadopago'}</p>
+            <p>{l s='Quiero pagar con Mercado Pago sin costo adicional' mod='mercadopago'}</p>
         </div>
 
-        <p class="subtitle-checkout-six">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</p>
+        <p class="subtitle-checkout-six">{l s='Usa el medio de pago que prefieras' mod='mercadopago'}</p>
 
         {if count($credit) != 0}
         <div class="col-xs-4 col-md-4">

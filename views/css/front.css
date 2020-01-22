@@ -35,8 +35,9 @@
     padding-right: 0px !important;
 }
 
-.pl-0 {
-    padding-left: 0px !important;
+.py-20 {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
 }
 
 .pr-0 {
@@ -55,8 +56,16 @@
     padding-top: 10px !important;
 }
 
+.pt-15 {
+    padding-top: 15px !important;
+}
+
 .pt-20 {
     padding-top: 20px !important;
+}
+
+.pt-25 {
+    padding-top: 25px !important;
 }
 
 .pb-5 {
@@ -140,6 +149,10 @@ body#checkout section.checkout-step .payment-options label {
 
 .redirect-checkout-six:hover {
     background-color: #eee;
+}
+
+.custom-checkout-six {
+    display: block;
 }
 
 .frame-checkout-seven {

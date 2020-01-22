@@ -394,7 +394,7 @@ class Mercadopago extends PaymentModule
             $payment_options[] = $this->getTicketCheckoutPS16($cart);
         }
 
-        return implode(',', $payment_options);
+        return implode('', $payment_options);
     }
 
     /**
@@ -461,7 +461,39 @@ class Mercadopago extends PaymentModule
      */
     public function getCustomCheckoutPS16($cart)
     {
-        
+        $debit = array();
+        $credit = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if ($tarjeta['type'] == 'credit_card') {
+                    $credit[] = $tarjeta;
+                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                    $debit[] = $tarjeta;
+                }
+            }
+        }
+
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $redirect = $this->context->link->getModuleLink($this->name, 'custom');
+        $public_key = $this->mercadopago->getPublicKey();
+        $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
+        $amount = (float) $cart->getOrderTotal();
+        $amount = ($discount != "") ? $amount - ($amount * ($discount/100)) : $amount;
+
+        $this->context->smarty->assign(array(
+            "debit" => $debit,
+            "credit" => $credit,
+            "amount" => $amount,
+            "site_id" => $site_id,
+            "redirect" => $redirect,
+            "public_key" => $public_key,
+        ));
+
+        return $this->display(__file__, 'views/templates/hook/six/custom.tpl');
     }
 
     /**
