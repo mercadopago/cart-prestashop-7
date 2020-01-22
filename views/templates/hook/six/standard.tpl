@@ -32,7 +32,7 @@
 
         <p class="subtitle-checkout-six">{l s='Usa el medio de pago que prefieras.' mod='mercadopago'}</p>
 
-        {if $credito != 0}
+        {if count($credit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
                 <p class="subtitle-checkout">
@@ -42,41 +42,54 @@
                     </span>
                 </p>
 
-                {foreach $tarjetas as $tarjeta}
-                    {if $tarjeta['type'] == 'credit_card' && Configuration::get($tarjeta['config']) == 'on'}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
-                    {/if}
+                {foreach $credit as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
                 {/foreach}
             </div>
         </div>
         {/if}
 
-        {if $debito != 0}
+        {if count($debit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
                 <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
 
-                {foreach $tarjetas as $tarjeta}
-                    {if $tarjeta['type'] == 'debit_card' && Configuration::get($tarjeta['config']) == 'on' || $tarjeta['type'] == 'prepaid_card' && Configuration::get($tarjeta['config']) == 'on'}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
-                    {/if}
+                {foreach $debit as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
                 {/foreach}
             </div>
         </div>
         {/if}
 
-        {if $efectivo != 0}
+        {if count($ticket) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
                 <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
 
-                {foreach $tarjetas as $tarjeta}
-                    {if $tarjeta['type'] != 'credit_card' && $tarjeta['type'] != 'debit_card' && $tarjeta['type'] != 'prepaid_card' && Configuration::get($tarjeta['config']) == 'on'}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
-                    {/if}
+                {foreach $ticket as $tarjeta}
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
                 {/foreach}
             </div>
         </div>
         {/if}
     </div>
+
+    {if $modal == true && $preference != ""}
+        <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
+    {/if}
 </a>
+
+{if $modal == true && $preference != ""}
+<script>
+    var mercadopago_button = document.querySelector('.mercadopago-button');
+    var mercadopago_redirect = document.querySelector('.redirect-checkout-six');
+    
+    mercadopago_button.style.display = 'none';
+    mercadopago_redirect.setAttribute('href', '#');
+
+    mercadopago_redirect.onclick = function () {
+        mercadopago_button.click();
+        return false;
+    }
+</script>
+{/if}

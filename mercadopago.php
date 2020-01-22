@@ -376,40 +376,59 @@ class Mercadopago extends PaymentModule
             return;
         }
 
+        $cart = $this->context->cart;
+
         $this->smarty->assign('module_dir', $this->_path);
 
-        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
-            $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
-            $redirect = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-                '?fc=module&module=mercadopago&controller=standard&checkout=standard';
-
-            $debito = 0;
-            $credito = 0;
-            $efectivo = 0;
+        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {            
+            $debit = array();
+            $credit = array();
+            $ticket = array();
             $tarjetas = $this->mercadopago->getPaymentMethods();
             foreach ($tarjetas as $tarjeta) {
                 if (Configuration::get($tarjeta['config']) != "") {
                     if ($tarjeta['type'] == 'credit_card') {
-                        $credito += 1;
+                        $credit[] = $tarjeta;
                     } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
-                        $debito += 1;
+                        $debit[] = $tarjeta;
                     } else {
-                        $efectivo += 1;
+                        $ticket[] = $tarjeta;
                     }
                 }
             }
 
+            $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
+            $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+            $redirect = $this->context->link->getModuleLink($this->name, 'standard');
+            $preference_id = "";
+            $modal_link = "";
+
+            if ($modal != "") {
+                $preference = new StandardPreference();
+                $createPreference = $preference->createPreference($cart);
+    
+                if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
+                    $preference_id = $createPreference['id'];
+                    $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+                    $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
+                    MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
+                }
+            }
+
             $this->context->smarty->assign(array(
-                "debito" => $debito,
+                "debit" => $debit,
+                "credit" => $credit,
+                "ticket" => $ticket,
                 "mp_logo" => $mp_logo,
-                "credito" => $credito,
-                "efectivo" => $efectivo,
-                "tarjetas" => $tarjetas,
+                "modal" => $modal,
                 "redirect" => $redirect,
+                "modal_link" => $modal_link,
+                "preference" => $preference_id,
+                "public_key" => $this->mercadopago->getPublicKey(),
                 "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
             ));
 
-            return $this->display(__file__, 'views/templates/hook/payment_six.tpl');
+            return $this->display(__file__, 'views/templates/hook/six/standard.tpl');
         }
     }
 
