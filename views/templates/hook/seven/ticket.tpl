@@ -171,21 +171,13 @@
                 {/if}
             </div>
         </div>
-
-        <div id="mercadopago-utilities">
-            <input type="hidden" id="campaignIdTicket" name="mercadopago_ticket[campaign_id]" />
-            <input type="hidden" id="couponPercentTicket" name="mercadopago_ticket[percent_off]" />
-            <input type="hidden" id="couponAmountTicket" name="mercadopago_ticket[coupon_amount]" />
-        </div>
-
     </div>
 </form>
 
 <script type="text/javascript">
     window.onload = function() {
         var site_id = '{$site_id}';
-        var coupon_url = '{$coupon_url}';
-        mpValidateParams(site_id, coupon_url);
+        mpValidateParams(site_id);
         validateBrazilDocuments();
         mpTicketSubmitForm();
     }

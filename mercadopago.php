@@ -503,7 +503,38 @@ class Mercadopago extends PaymentModule
      */
     public function getTicketCheckoutPS16($cart)
     {
+        $ticket = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
+                if (
+                    $tarjeta['type'] != 'credit_card' &&
+                    $tarjeta['type'] != 'debit_card' &&
+                    $tarjeta['type'] != 'prepaid_card'
+                ) {
+                    $ticket[] = $tarjeta;
+                }
+            }
+        }
 
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $address = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer->getFields();
+        $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
+        $this->context->smarty->assign(array(
+            "ticket" => $ticket,
+            "site_id" => $site_id,
+            "address" => $address,
+            "customer" => $customer,
+            "redirect" => $redirect,
+            "module_dir" => $this->_path,
+        ));
+
+        return $this->display(__file__, 'views/templates/hook/six/ticket.tpl');
     }
 
     /**

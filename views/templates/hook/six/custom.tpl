@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div action="" method="" class="custom-checkout-six">
+<form action="{$redirect}" method="post" class="custom-checkout-six">
     <div class="row frame-checkout-six">
         <div class="title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
@@ -155,7 +155,7 @@
             </div>
         </div>
     </div>
-</div>
+</form>
 
 <script type="text/javascript">
     //collapsible payments
