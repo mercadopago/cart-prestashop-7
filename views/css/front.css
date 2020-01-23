@@ -294,6 +294,46 @@ body#checkout section.checkout-step .payment-options label {
     text-transform: uppercase;
 }
 
+#container-issuers {
+   display: none;
+}
+
+#mp-doc-div-title  {
+   display: none;
+}
+
+#mp-doc-div  {
+   display: none;
+}
+
+#mp-doc-type-div {
+  display: none;
+}
+
+#mp-doc-number-div {
+  display: none;
+}
+
+.mp-text-tea {
+    color: #797979;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.29;
+    letter-spacing: normal;
+}
+
+.mp-text-cft {
+    font-size: 27px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #868686;
+}
+
 /* ticket checkout */
 
 #mercadopago-form-ticket-coupon {
@@ -349,7 +389,7 @@ body#checkout section.checkout-step .payment-options label {
     color: #f04449 !important;
     padding-top: 5px;
     padding-left: 2px;
-    display: block;
+    display: none;
 }
 
 .mp-erro-input {
