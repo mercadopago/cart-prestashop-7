@@ -356,6 +356,7 @@ class Mercadopago extends PaymentModule
         $this->context->controller->addJS($this->_path . '/views/js/front.js');
         $this->context->controller->addJS($this->_path . '/views/js/ticket.js');
         $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+        $this->context->controller->addJS($this->_path . '/views/js/custom-card.js');
     }
 
     /**
