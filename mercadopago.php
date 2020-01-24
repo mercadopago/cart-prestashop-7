@@ -474,6 +474,7 @@ class Mercadopago extends PaymentModule
             }
         }
 
+        $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $redirect = $this->context->link->getModuleLink($this->name, 'custom');
         $public_key = $this->mercadopago->getPublicKey();
@@ -488,6 +489,7 @@ class Mercadopago extends PaymentModule
             "debit" => $debit,
             "credit" => $credit,
             "amount" => $amount,
+            "mp_logo" => $mp_logo,
             "site_id" => $site_id,
             "redirect" => $redirect,
             "public_key" => $public_key,
@@ -517,6 +519,7 @@ class Mercadopago extends PaymentModule
             }
         }
 
+        $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $address = new Address((int) $cart->id_address_invoice);
         $customer = Context::getContext()->customer->getFields();
@@ -528,6 +531,7 @@ class Mercadopago extends PaymentModule
         $this->context->smarty->assign(array(
             "ticket" => $ticket,
             "site_id" => $site_id,
+            "mp_logo" => $mp_logo,
             "address" => $address,
             "customer" => $customer,
             "redirect" => $redirect,

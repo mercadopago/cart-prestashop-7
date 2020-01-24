@@ -313,6 +313,10 @@ body#checkout section.checkout-step .payment-options label {
     padding-bottom: 15px;
 }
 
+#mp_socialname_label, #mp_cnpj_label {
+    display: none;
+}
+
 .mp-form-check {
     margin-bottom: 0px !important;
 }
