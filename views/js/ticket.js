@@ -1,160 +1,210 @@
-var MPv1Ticket = {
-    params: {
-        site_id: "",
-        coupon_url: "",
-    },
-    inputs: [
-        "mp_zipcode",
-        "mp_state",
-        "mp_city",
-        "mp_number",
-        "mp_address",
-        "mp_docNumber",
-        "mp_lastname",
-        "mp_firstname",
-    ],
-    docs: {
-        cpf_label: "mp-cpf-label",
-        cpf_number: "mp_cpf",
-        doc_number: "mp_docNumber",
-        name_label: "mp-name-label",
-        cnpj_label: "mp-cnpj-label",
-        mp_lastname: "mp-lastname",
-        mp_firstname: "mp-firstname",
-        social_label: "mp-social-label",
-    },
-    coupon: {
-        couponCode: "#couponCodeTicket",
-        couponError: "#mpCouponErrorTicket",
-        couponSending: "#mpSendingCouponTicket",
-        couponSuccess: "#mpCouponApplyedTicket",
-        responseError: "#mpResponseErrorTicket",
-        inputCampaignId: "#campaignIdTicket",
-        inputCouponAmount: "#couponAmountTicket",
-        inputCouponPercent: "#couponPercentTicket",
-        buttonApplyCoupon: "#applyCouponTicket",
-    },
-    terms: "conditions_to_approve[terms-and-conditions]"
+var mercado_pago_docnumber = "CPF";
+var terms = document.getElementById("conditions_to_approve[terms-and-conditions]");
+
+var seller = {
+    site_id: ""
+};
+
+/**
+ * Validate site_id
+ */
+function mpValidateSiteId(site_id) {
+    seller.site_id = site_id;
 }
 
-//validate params
-function mpValidateParams(site_id, coupon_url) {
-    MPv1Ticket.params.site_id = site_id;
-    MPv1Ticket.params.coupon_url = coupon_url.replace(/&amp;/g, "&");
-}
+/**
+ * Validate input depending on document type
+ */
+function validateDocumentInputs() {
+    if (seller.site_id == "MLB") {
+        var mp_box_lastname = document.getElementById("mp_box_lastname");
+        var mp_box_firstname = document.getElementById("mp_box_firstname");
+        var mp_firstname_label = document.getElementById("mp_firstname_label");
+        var mp_socialname_label = document.getElementById("mp_socialname_label");
+        var mp_cpf_label = document.getElementById("mp_cpf_label");
+        var mp_cnpj_label = document.getElementById("mp_cnpj_label");
+        var mp_doc_number = document.getElementById("mp_doc_number");
+        var mp_doc_type = document.querySelectorAll('input[type=radio][name="mercadopago_ticket[docType]"]');
 
-//select cpf or cnpj
-var cpf_label = document.getElementById(MPv1Ticket.docs.cpf_label);
-var name_label = document.getElementById(MPv1Ticket.docs.name_label);
-var cnpj_label = document.getElementById(MPv1Ticket.docs.cnpj_label);
-var cpf_number = document.getElementById(MPv1Ticket.docs.cpf_number);
-var doc_number = document.getElementById(MPv1Ticket.docs.doc_number);
-var mp_lastname = document.getElementById(MPv1Ticket.docs.mp_lastname);
-var mp_firstname = document.getElementById(MPv1Ticket.docs.mp_firstname);
-var social_label = document.getElementById(MPv1Ticket.docs.social_label);
+        mp_cnpj_label.style.display = 'none';
+        mp_socialname_label.style.display = 'none';
 
-function validateBrazilDocuments(){
-    if(MPv1Ticket.params.site_id == "MLB"){
-        cnpj_label.style.display = 'none';
-        social_label.style.display = 'none';
+        for (var i = 0; i < mp_doc_type.length; i++) {
+            mp_doc_type[i].addEventListener('change', function() {
+                if (this.value == "CPF") {
+                    mp_cpf_label.style.display = "table-cell";
+                    mp_box_lastname.style.display = "block";
+                    mp_firstname_label.style.display = "table-cell";
+                    mp_cnpj_label.style.display = "none";
+                    mp_socialname_label.style.display = "none";
+                    mp_box_firstname.classList.add("col-md-4");
+                    mp_box_firstname.classList.remove("col-md-8");
+                    mp_doc_number.setAttribute("maxlength", "14");
+                    mp_doc_number.setAttribute("onkeyup", "maskinput(this, mcpf)");
+                    mercado_pago_docnumber = "CPF";
+                } else {
+                    mp_cpf_label.style.display = "none";
+                    mp_box_lastname.style.display = "none";
+                    mp_firstname_label.style.display = "none";
+                    mp_cnpj_label.style.display = "table-cell";
+                    mp_socialname_label.style.display = "table-cell";
+                    mp_box_firstname.classList.add("col-md-8");
+                    mp_box_firstname.classList.remove("col-md-4");
+                    mp_doc_number.setAttribute("maxlength", "18");
+                    mp_doc_number.setAttribute("onkeyup", "maskinput(this, mcnpj)");
+                    mercado_pago_docnumber = "CNPJ";
+                }
+            });
+        }
     }
 }
 
-function selectDocumentType() {
-    if (cpf_number.checked == true) {
-        cpf_label.style.display = 'table-cell';
-        cnpj_label.style.display = 'none';
-        mp_lastname.style.display = 'inline-block';
-        mp_firstname.classList.add("col-md-4");
-        mp_firstname.classList.remove("col-md-8");
-        name_label.style.display = 'table-cell';
-        social_label.style.display = 'none';
-        doc_number.setAttribute("maxlength", "14");
-        doc_number.setAttribute("onkeyup", "maskInput(this, mcpf)");
-    }
-    else {
-        cpf_label.style.display = 'none';
-        cnpj_label.style.display = 'table-cell';
-        mp_lastname.style.display = 'none';
-        mp_firstname.classList.add("col-md-8");
-        mp_firstname.classList.remove("col-md-4");
-        name_label.style.display = 'none';
-        social_label.style.display = 'table-cell';
-        doc_number.setAttribute("maxlength", "18");
-        doc_number.setAttribute("onkeyup", "maskInput(this, mcnpj)");
+/**
+ * Handler form submit
+ * @return {bool}
+ */
+function mercadoPagoFormHandlerTicket() {
+    if (document.forms['mp_ticket_checkout'] != undefined) {
+        document.forms['mp_ticket_checkout'].onsubmit = function () {
+            if (seller.site_id == "MLB") {
+                if (validateInputs() && validateDocumentNumber()) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
 
-//cpf validate
-function cpfValidate(strCPF) {
+/**
+ * Get form
+ */
+function getForm() {
+    return document.querySelector('#mp_ticket_checkout');
+}
+
+/**
+ * Validate if all inputs are valid
+ */
+function validateInputs() {
+    var form = getForm();
+    var form_inputs = form.querySelectorAll("[data-checkout]");
+    var small = form.querySelectorAll(".mp-erro-febraban");
+
+    //Show or hide error message and border
+    for (var i = 0; i < form_inputs.length; i++) {
+        var element = form_inputs[i];
+        var input = form.querySelector(small[i].getAttribute("data-main"));
+
+        if (element.parentNode.style.display != "none" && (element.value == -1 || element.value == "")) {
+            small[i].style.display = "inline-block";
+            input.classList.add("mp-form-control-error");
+        } else {
+            small[i].style.display = "none";
+            input.classList.remove("mp-form-control-error");
+        }
+    }
+
+    //Focus on the element with error
+    for (var i = 0; i < form_inputs.length; i++) {
+        var element = form_inputs[i];
+        if (element.parentNode.style.display != "none" && (element.value == -1 || element.value == "")) {
+            element.focus();
+            terms.checked = false;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Validate document number
+ * @return {bool}
+ */
+function validateDocumentNumber() {
+    var docnumber_input = document.getElementById("mp_doc_number");
+    var docnumber_error = document.getElementById("mp_error_docnumber");
+    var docnumber_validate = false;
+
+    if (mercado_pago_docnumber == "CPF") {
+        docnumber_validate = validateCPF(docnumber_input.value);
+    } else {
+        docnumber_validate = validateCNPJ(docnumber_input.value);
+    }
+
+    if (!docnumber_validate) {
+        docnumber_error.style.display = "block";
+        docnumber_input.classList.add("mp-form-control-error");
+        docnumber_input.focus();
+        terms.checked = false;
+    } else {
+        docnumber_error.style.display = "none";
+        docnumber_input.classList.remove("mp-form-control-error");
+        docnumber_validate = true;
+    }
+
+    return docnumber_validate;
+}
+
+/**
+ * Validate CPF
+ * @param {string} strCPF
+ * @return {bool}
+ */
+function validateCPF(strCPF) {
     var Soma;
     var Resto;
-    var element = strCPF;
-    var terms = document.getElementById(MPv1Ticket.terms);
-    var doc_error = document.getElementById('mp_docNumber_error');
-    strCPF = strCPF.value;
 
     Soma = 0;
     strCPF = strCPF.replace(/[.-\s]/g, "");
+
     if (strCPF == "00000000000") {
-        doc_error.style.display = 'block';
-        terms.checked = false;
-        element.focus();
-        element.classList.add("mp-erro-input");
         return false;
     }
 
-    for (i = 1; i <= 9; i++) {
+    for (var i = 1; i <= 9; i++) {
         Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
     }
 
     Resto = (Soma * 10) % 11;
     if ((Resto == 10) || (Resto == 11)) { Resto = 0; }
     if (Resto != parseInt(strCPF.substring(9, 10))) {
-        doc_error.style.display = 'block';
-        terms.checked = false;
-        element.focus();
-        element.classList.add("mp-erro-input");
         return false;
     }
 
     Soma = 0;
-    for (i = 1; i <= 10; i++) { Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i); }
+    for (var i = 1; i <= 10; i++) { Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i); }
 
     Resto = (Soma * 10) % 11;
     if ((Resto == 10) || (Resto == 11)) { Resto = 0; }
     if (Resto != parseInt(strCPF.substring(10, 11))) {
-        doc_error.style.display = 'block';
-        terms.checked = false;
-        element.focus();
-        element.classList.add("mp-erro-input");
         return false;
     }
 
-    doc_error.style.display = 'none';
-    element.classList.remove("mp-erro-input");
     return true;
 }
 
-//cnpj validate
-function cnpjValidate(strCNPJ) {
-    var element = strCNPJ;
-    var terms = document.getElementById(MPv1Ticket.terms);
-    var doc_error = document.getElementById('mp_docNumber_error');
+/**
+ * Validate CNPJ
+ * @param {string} strCNPJ
+ * @return {bool}
+ */
+function validateCNPJ(strCNPJ) {
     var numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais;
 
-    strCNPJ = strCNPJ.value;
     strCNPJ = strCNPJ.replace(".", "");
     strCNPJ = strCNPJ.replace(".", "");
     strCNPJ = strCNPJ.replace(".", "");
     strCNPJ = strCNPJ.replace("-", "");
     strCNPJ = strCNPJ.replace("/", "");
     digitos_iguais = 1;
+
     if (strCNPJ.length < 14 && strCNPJ.length < 15) {
-        doc_error.style.display = 'block';
-        terms.checked = false;
-        element.focus();
-        element.classList.add("mp-erro-input");
         return false;
     }
     for (i = 0; i < strCNPJ.length - 1; i++) {
@@ -179,10 +229,6 @@ function cnpjValidate(strCNPJ) {
 
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
         if (resultado != digitos.charAt(0)) {
-            doc_error.style.display = 'block';
-            terms.checked = false;
-            element.focus();
-            element.classList.add("mp-erro-input");
             return false;
         }
 
@@ -199,128 +245,12 @@ function cnpjValidate(strCNPJ) {
 
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
         if (resultado != digitos.charAt(1)) {
-            doc_error.style.display = 'block';
-            terms.checked = false;
-            element.focus();
-            element.classList.add("mp-erro-input");
             return false;
         }
 
-        doc_error.style.display = 'none';
-        element.classList.remove("mp-erro-input");
         return true;
     }
     else {
-        doc_error.style.display = 'block';
-        terms.checked = false;
-        element.focus();
-        element.classList.add("mp-erro-input");
         return false;
     }
-}
-
-//inputs validation
-function inputsValidate(array_inputs) {
-    var count = 0;
-    var terms = document.getElementById(MPv1Ticket.terms);
-
-    array_inputs.forEach(element => {
-        var input = document.getElementById(element);
-        if (input.value == "") {
-            input.focus();
-            input.classList.add("mp-erro-input");
-            terms.checked = false;
-        } else {
-            count++;
-            input.classList.remove("mp-erro-input");
-        }
-    });
-
-    return count;
-}
-
-//ticket form submit
-function mpTicketSubmitForm() {
-    document.forms['mp_ticket_checkout'].onsubmit = function () {
-        if (MPv1Ticket.params.site_id == 'MLB') {
-            var submit = false;
-            var doc_validate = false;
-            var input_validate = false;
-            var array_inputs = MPv1Ticket.inputs;
-
-            //inputs validation
-            count_inputs = inputsValidate(array_inputs);
-            if (array_inputs.length == count_inputs) {
-                input_validate = true;
-            } else {
-                input_validate = false;
-            }
-
-            // docNumber validation
-            if (cpf_number.checked == true) {
-                doc_validate = cpfValidate(document.getElementById(MPv1Ticket.inputs[5]));
-            } else {
-                doc_validate = cnpjValidate(document.getElementById(MPv1Ticket.inputs[5]));
-            }
-
-            //verify submit
-            if (doc_validate == true && input_validate == true) {
-                submit = true;
-            }
-
-            return submit;
-        }
-    }
-}
-
-//apply coupon
-function mpTicketApplyAjax() {
-    var couponCode = document.querySelector(MPv1Ticket.coupon.couponCode);
-    var couponError = document.querySelector(MPv1Ticket.coupon.couponError);
-    var couponSuccess = document.querySelector(MPv1Ticket.coupon.couponSuccess);
-    var couponSending = document.querySelector(MPv1Ticket.coupon.couponSending);
-    var responseError = document.querySelector(MPv1Ticket.coupon.responseError);
-    var inputCampaignId = document.querySelector(MPv1Ticket.coupon.inputCampaignId);
-    var inputCouponAmount = document.querySelector(MPv1Ticket.coupon.inputCouponAmount);
-    var inputCouponPercent = document.querySelector(MPv1Ticket.coupon.inputCouponPercent);
-    var buttonApplyCoupon = document.querySelector(MPv1Ticket.coupon.buttonApplyCoupon);
-
-    $.ajax({
-        url: MPv1Ticket.params.coupon_url,
-        type: 'POST',
-        data: {
-            coupon: couponCode.value,
-        },
-        beforeSend: function () {
-            couponError.style.display = "none";
-            couponSuccess.style.display = "none";
-            couponSending.style.display = "block";
-        },
-        success: function (success) {
-            couponSending.style.display = "none";
-            responseError.style.display = "none";
-
-            if(success.code > 202){
-                couponError.style.display = "block";
-                couponSuccess.style.display = "none";
-            }
-            else{
-                couponError.style.display = "none";
-                couponSuccess.style.display = "block";
-                couponCode.readOnly = true;
-                buttonApplyCoupon.disabled = true;
-                couponCode.style.cssText = 'background-color:#f8f8f8 !important';
-                inputCampaignId.value = success.message.id;
-                inputCouponAmount.value = success.message.coupon_amount;
-                inputCouponPercent.value = success.message.percent_off;
-            }
-        },
-        error: function (error) {
-            console.log(error);
-            couponError.style.display = "none";
-            ouponSending.style.display = "none";
-            couponSuccess.style.display = "none";
-            responseError.style.display = "block";
-        }
-    });
 }

@@ -65,7 +65,7 @@ class CustomPreference extends AbstractPreference
         );
 
         //Update cart total with CartRule()
-        $this->setCartRule($cart);
+        $this->setCartRule($cart, $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
 
         //Create preference
@@ -98,10 +98,10 @@ class CustomPreference extends AbstractPreference
      * @param mixed $cart
      * @return void
      */
-    public function setCartRule($cart)
+    public function setCartRule($cart, $discount)
     {
-        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != "") {
-            parent::setCartRule($cart, $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']);
+        if ($discount != "") {
+            parent::setCartRule($cart, $discount);
             MPLog::generate('Mercado Pago custom discount applied to cart ' . $cart->id);
         }
     }

@@ -75,7 +75,7 @@ class Mercadopago extends PaymentModule
         $this->description = $this->l('Customize the payment experience of your customers in your online store.');
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
     }
 
     /**
@@ -94,11 +94,14 @@ class Mercadopago extends PaymentModule
         //Prestashop configuration table
         $mp_currency = $this->context->currency->iso_code;
         Configuration::updateValue('MERCADOPAGO_COUNTRY_LINK', $this->mpuseful->setMPCurrency($mp_currency));
-        Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
-        Configuration::updateValue('MERCADOPAGO_SANDBOX_STATUS', true);
-        Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
-        Configuration::updateValue('MERCADOPAGO_STANDARD', false);
-        Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
+
+        //Validate if is a new seller or a plugin upgrade
+        $access_token = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+
+        if ($access_token != '' && $sandbox_access_token != '') {
+            Configuration::updateValue('MERCADOPAGO_STANDARD_CHECKOUT', true);
+        }
 
         //Mercadopago configurations
         include(MP_ROOT_URL . '/sql/install.php');
@@ -170,7 +173,7 @@ class Mercadopago extends PaymentModule
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
             if ($homologated == false && in_array('payments', $this->mercadopago->homologValidate())) {
-                Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
+                $homologated = Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
 
             //return checkout forms
@@ -374,41 +377,168 @@ class Mercadopago extends PaymentModule
             return;
         }
 
+        $cart = $this->context->cart;
         $this->smarty->assign('module_dir', $this->_path);
 
-        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
-            $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
-            $redirect = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-                '?fc=module&module=mercadopago&controller=standard&checkout=standard';
+        $payment_options = array();
 
-            $debito = 0;
-            $credito = 0;
-            $efectivo = 0;
-            $tarjetas = $this->mercadopago->getPaymentMethods();
-            foreach ($tarjetas as $tarjeta) {
-                if (Configuration::get($tarjeta['config']) != "") {
-                    if ($tarjeta['type'] == 'credit_card') {
-                        $credito += 1;
-                    } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
-                        $debito += 1;
-                    } else {
-                        $efectivo += 1;
-                    }
+        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {            
+            $payment_options[] = $this->getStandardCheckoutPS16($cart);
+        }
+
+        if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
+            $payment_options[] = $this->getCustomCheckoutPS16($cart);
+        }
+
+        if (Configuration::get('MERCADOPAGO_TICKET_CHECKOUT') == true) {
+            $payment_options[] = $this->getTicketCheckoutPS16($cart);
+        }
+
+        return implode('', $payment_options);
+    }
+
+    /**
+     * Get standard checkout to PS16
+     *
+     * @return void
+     */
+    public function getStandardCheckoutPS16($cart)
+    {
+        $debit = array();
+        $credit = array();
+        $ticket = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if ($tarjeta['type'] == 'credit_card') {
+                    $credit[] = $tarjeta;
+                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                    $debit[] = $tarjeta;
+                } else {
+                    $ticket[] = $tarjeta;
                 }
             }
-
-            $this->context->smarty->assign(array(
-                "debito" => $debito,
-                "mp_logo" => $mp_logo,
-                "credito" => $credito,
-                "efectivo" => $efectivo,
-                "tarjetas" => $tarjetas,
-                "redirect" => $redirect,
-                "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
-            ));
-
-            return $this->display(__file__, 'views/templates/hook/payment_six.tpl');
         }
+
+        $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
+        $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+        $redirect = $this->context->link->getModuleLink($this->name, 'standard');
+        $preference_id = "";
+        $modal_link = "";
+
+        if ($modal != "") {
+            $preference = new StandardPreference();
+            $createPreference = $preference->createPreference($cart);
+
+            if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
+                $preference_id = $createPreference['id'];
+                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+                $modal_link = $this->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
+                MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
+            }
+        }
+
+        $this->context->smarty->assign(array(
+            "debit" => $debit,
+            "credit" => $credit,
+            "ticket" => $ticket,
+            "mp_logo" => $mp_logo,
+            "modal" => $modal,
+            "redirect" => $redirect,
+            "modal_link" => $modal_link,
+            "preference" => $preference_id,
+            "public_key" => $this->mercadopago->getPublicKey(),
+            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
+        ));
+
+        return $this->display(__file__, 'views/templates/hook/six/standard.tpl');
+    }
+
+    /**
+     * Get custom checkout to PS16
+     *
+     * @return void
+     */
+    public function getCustomCheckoutPS16($cart)
+    {
+        $debit = array();
+        $credit = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
+                if ($tarjeta['type'] == 'credit_card') {
+                    $credit[] = $tarjeta;
+                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                    $debit[] = $tarjeta;
+                }
+            }
+        }
+
+        $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $redirect = $this->context->link->getModuleLink($this->name, 'custom');
+        $public_key = $this->mercadopago->getPublicKey();
+        $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
+        $amount = (float) $cart->getOrderTotal();
+        $amount = ($discount != "") ? $amount - ($amount * ($discount/100)) : $amount;
+
+        $this->context->smarty->assign(array(
+            "debit" => $debit,
+            "credit" => $credit,
+            "amount" => $amount,
+            "mp_logo" => $mp_logo,
+            "site_id" => $site_id,
+            "redirect" => $redirect,
+            "public_key" => $public_key,
+        ));
+
+        return $this->display(__file__, 'views/templates/hook/six/custom.tpl');
+    }
+
+    /**
+     * Get ticket checkout to PS16
+     *
+     * @return void
+     */
+    public function getTicketCheckoutPS16($cart)
+    {
+        $ticket = array();
+        $tarjetas = $this->mercadopago->getPaymentMethods();
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
+                if (
+                    $tarjeta['type'] != 'credit_card' &&
+                    $tarjeta['type'] != 'debit_card' &&
+                    $tarjeta['type'] != 'prepaid_card'
+                ) {
+                    $ticket[] = $tarjeta;
+                }
+            }
+        }
+
+        $mp_logo = _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png';
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $address = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer->getFields();
+        $redirect = $this->context->link->getModuleLink($this->name, 'ticket');
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
+        $this->context->smarty->assign(array(
+            "ticket" => $ticket,
+            "site_id" => $site_id,
+            "mp_logo" => $mp_logo,
+            "address" => $address,
+            "customer" => $customer,
+            "redirect" => $redirect,
+            "module_dir" => $this->_path,
+        ));
+
+        return $this->display(__file__, 'views/templates/hook/six/ticket.tpl');
     }
 
     /**
@@ -646,7 +776,7 @@ class Mercadopago extends PaymentModule
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url,
                 "module_dir" => $this->_path,
-            ))->fetch('module:mercadopago/views/templates/hook/seven/ticket_return.tpl');
+            ));
 
             return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
         }
