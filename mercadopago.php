@@ -377,7 +377,6 @@ class Mercadopago extends PaymentModule
         }
 
         $cart = $this->context->cart;
-
         $this->smarty->assign('module_dir', $this->_path);
 
         $payment_options = array();
