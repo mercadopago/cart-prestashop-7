@@ -64,16 +64,6 @@ class CustomPreference extends AbstractPreference
             $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']
         );
 
-        //Validate mercadopago coupon
-        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] == true && $custom_info['coupon_code'] != "") {
-            if ($custom_info['percent_off'] == 0) {
-                $preference['campaign_id'] = $custom_info['campaign_id'];
-                $preference['coupon_amount'] = $custom_info['coupon_amount'];
-            } else {
-                $preference['coupon_code'] = $custom_info['coupon_code'];
-            }
-        }
-
         //Update cart total with CartRule()
         $this->setCartRule($cart);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);

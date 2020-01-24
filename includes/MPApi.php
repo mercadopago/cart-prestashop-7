@@ -334,31 +334,4 @@ class MPApi
 
         return $result['scopes'];
     }
-
-    /**
-     * Get coupon discount
-     *
-     * @param array $params
-     * @return void
-     */
-    public function getCouponDiscount($params)
-    {
-        $access_token = $this->getAccessToken();
-
-        $response_uri = '/discount_campaigns';
-        $response_uri .= '?transaction_amount=' . $params['transaction_amount'];
-        $response_uri .= '&payer_email=' . $params['payer_email'];
-        $response_uri .= '&coupon_code=' . $params['coupon_code'];
-        $response_uri .= '&access_token=' . $access_token;
-
-        $response = MPRestCli::get($response_uri);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_coupon_discount error: ' . $response['response']['message'], 'error');
-        }
-
-        //response treatment
-        return $response;
-    }
 }

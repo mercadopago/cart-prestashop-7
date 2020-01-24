@@ -90,25 +90,6 @@ class CustomSettings extends AbstractSettings
                 ),
             ),
             array(
-                'type' => 'switch',
-                'label' => $this->module->l('Discount coupons'),
-                'name' => 'MERCADOPAGO_CUSTOM_COUPON',
-                'is_bool' => true,
-                'desc' => $this->module->l('Will you offer discount coupons to customers who buy with Mercado Pago?'),
-                'values' => array(
-                    array(
-                        'id' => 'MERCADOPAGO_CUSTOM_COUPON_ON',
-                        'value' => true,
-                        'label' => $this->module->l('Active')
-                    ),
-                    array(
-                        'id' => 'MERCADOPAGO_CUSTOM_COUPON_OFF',
-                        'value' => false,
-                        'label' => $this->module->l('Inactive')
-                    )
-                ),
-            ),
-            array(
                 'col' => 2,
                 'suffix' => '%',
                 'type' => 'text',
@@ -148,7 +129,6 @@ class CustomSettings extends AbstractSettings
     public function getFormValues()
     {
         return array(
-            'MERCADOPAGO_CUSTOM_COUPON' => Configuration::get('MERCADOPAGO_CUSTOM_COUPON'),
             'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
             'MERCADOPAGO_CUSTOM_DISCOUNT' => Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'),
             'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),

@@ -91,25 +91,6 @@ class TicketSettings extends AbstractSettings
                 'desc' => 'In how many days payments will expire.',
             ),
             array(
-                'type' => 'switch',
-                'label' => $this->module->l('Discount coupons'),
-                'name' => 'MERCADOPAGO_TICKET_COUPON',
-                'is_bool' => true,
-                'desc' => $this->module->l('Will you offer discount coupons to customers who buy with Mercado Pago?'),
-                'values' => array(
-                    array(
-                        'id' => 'MERCADOPAGO_TICKET_COUPON_ON',
-                        'value' => true,
-                        'label' => $this->module->l('Active')
-                    ),
-                    array(
-                        'id' => 'MERCADOPAGO_TICKET_COUPON_OFF',
-                        'value' => false,
-                        'label' => $this->module->l('Inactive')
-                    )
-                ),
-            ),
-            array(
                 'col' => 2,
                 'suffix' => '%',
                 'type' => 'text',
@@ -151,7 +132,6 @@ class TicketSettings extends AbstractSettings
     public function getFormValues()
     {
         $form_values = array(
-            'MERCADOPAGO_TICKET_COUPON' => Configuration::get('MERCADOPAGO_TICKET_COUPON'),
             'MERCADOPAGO_TICKET_CHECKOUT' => Configuration::get('MERCADOPAGO_TICKET_CHECKOUT'),
             'MERCADOPAGO_TICKET_DISCOUNT' => Configuration::get('MERCADOPAGO_TICKET_DISCOUNT'),
             'MERCADOPAGO_TICKET_EXPIRATION' => Configuration::get('MERCADOPAGO_TICKET_EXPIRATION'),
