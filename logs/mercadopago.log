@@ -1,6 +1,0 @@
-[2020-01-22 17:07:37] [INFO]: Standard checkout configuration saved successfully
-[2020-01-22 17:18:22] [INFO]: Cart id 6 - Preference created successfully
-[2020-01-22 19:03:21] [INFO]: Standard checkout configuration saved successfully
-[2020-01-24 15:53:31] [INFO]: Cart id 9 - Ticket payment created successfully
-[2020-01-24 15:53:36] [INFO]: Order created successfully on cart id 9
-[2020-01-24 17:41:31] [ERROR]: API create_custom_payment error: To generate a registered boleto the following parameters are required: payer.first_name , payer.last_name: Offline API Error

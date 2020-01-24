@@ -50,14 +50,14 @@
             </div>
 
             <div class="row">
-                <div id="mp-firstname" class="col-md-4 col-4 col-xs-6 pt-20">
+                <div class="col-md-4 col-4 col-xs-6 pt-20" id="mp_box_firstname">
                     <label for="" id="mp_firstname_label" class="pb-5">{l s='Nombre' mod='mercadopago'} <em class="mp-required">*</em></label>
                     <label for="" id="mp_socialname_label" class="pb-5">{l s='Razón social' mod='mercadopago'} <em class="mp-required">*</em></label>
                     <input type="text" id="mp_firstname" data-checkout="mp_firstname" name="mercadopago_ticket[firstname]" class="form-control mp-form-control" value="{$customer['firstname']}" autocomplete="off" />
                     <small class="mp-erro-febraban" data-main="#mp_firstname" id="error_firstname">{l s='You must inform your name' mod='mercadopago'}</small>
                 </div>
 
-                <div id="mp-lastname" class="col-md-4 col-4 col-xs-6 pt-20 m-pr-0">
+                <div class="col-md-4 col-4 col-xs-6 pt-20 m-pr-0" id="mp_box_lastname">
                     <label for="" class="pb-5">{l s='Apellido' mod='mercadopago'} <em class="mp-required">*</em></label>
                     <input type="text" id="mp_lastname" data-checkout="mp_lastname" name="mercadopago_ticket[lastname]" class="form-control mp-form-control" value="{$customer['lastname']}" autocomplete="off" />
                     <small class="mp-erro-febraban" data-main="#mp_lastname" id="error_lastname">{l s='You must inform last name' mod='mercadopago'}</small>
@@ -210,9 +210,9 @@
             for (var i = 0; i < mp_doc_type.length; i++) {
                 mp_doc_type[i].addEventListener('change', function() {
                     if (this.value == "CPF") {
-                        mp_cpf_label.style.display = "table-cell";
+                        mp_cpf_label.style.display = "inline-block";
                         mp_box_lastname.style.display = "block";
-                        mp_firstname_label.style.display = "table-cell";
+                        mp_firstname_label.style.display = "inline-block";
                         mp_cnpj_label.style.display = "none";
                         mp_socialname_label.style.display = "none";
                         mp_box_firstname.classList.add("col-md-4");
@@ -224,8 +224,8 @@
                         mp_cpf_label.style.display = "none";
                         mp_box_lastname.style.display = "none";
                         mp_firstname_label.style.display = "none";
-                        mp_cnpj_label.style.display = "table-cell";
-                        mp_socialname_label.style.display = "table-cell";
+                        mp_cnpj_label.style.display = "inline-block";
+                        mp_socialname_label.style.display = "inline-block";
                         mp_box_firstname.classList.add("col-md-8");
                         mp_box_firstname.classList.remove("col-md-4");
                         mp_doc_number.setAttribute("maxlength", "18");

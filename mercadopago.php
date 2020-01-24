@@ -75,7 +75,7 @@ class Mercadopago extends PaymentModule
         $this->description = $this->l('Customize the payment experience of your customers in your online store.');
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
     }
 
     /**
@@ -775,7 +775,7 @@ class Mercadopago extends PaymentModule
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url,
                 "module_dir" => $this->_path,
-            ))->fetch('module:mercadopago/views/templates/hook/seven/ticket_return.tpl');
+            ));
 
             return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
         }
