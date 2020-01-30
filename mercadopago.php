@@ -28,7 +28,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
-define('MP_VERSION', '4.2.0');
+define('MP_VERSION', '4.1.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {

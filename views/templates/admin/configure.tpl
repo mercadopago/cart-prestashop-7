@@ -343,6 +343,7 @@
         var form_custom_collapsible = document.querySelector("#module_form_5 .panel .panel-advanced-config");
         var form_custom_collapsible_body = document.querySelectorAll(".mp-custom-input-collapsible");
         var form_custom_collapsible_footer = document.querySelector("#module_form_5 .panel .panel-footer");
+        var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
 
         form_custom_collapsible_footer.style.marginTop = "-2px";
 
@@ -370,6 +371,12 @@
                 for(i=0; i<form_custom_collapsible_body.length; i++){
                     form_custom_collapsible_body[i].style.display = "none";
                 }
+            }
+        }
+
+        for (i=0; i < form_custom_group.length; i++) {
+            if(i == 2){
+                form_custom_group[i].querySelector("p").style.width = "400px";
             }
         }
 
