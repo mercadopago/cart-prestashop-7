@@ -67,7 +67,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.2.0';
+        $this->version = '4.1.0';
 
         parent::__construct();
 
@@ -192,6 +192,7 @@ class Mercadopago extends PaymentModule
             //module requirements
             'alert' => self::$form_alert,
             'message' => self::$form_message,
+            'mp_version' => MP_VERSION,
             'url_base' => __PS_BASE_URI__,
             'country_link' => $country_link,
             'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
