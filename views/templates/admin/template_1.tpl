@@ -119,57 +119,6 @@
 	</div>
 </div>
 
-<!-- Panel for MP Connect
-<div class="panel">
-    <div class="panel-heading">
-	    <i class="icon-cogs"></i> {l s='Credenciales' mod='mercadopago'}
-	</div>        
-    
-    <div class="mercadopago-content">
-		<div class="row">
-        <div class="col-md-12">
-            <h4 class="title-checkout-body">{l s='Activa tus credenciales según lo que quieras hacer.' mod='mercadopago'}</h4>
-        </div>
-		</div>
-        
-        <div class="row pt-15">
-            <div class="col-md-12">
-                <p class="text-credenciais">
-                    {l s='Realiza pruebas antes de salir al mundo.' mod='mercadopago'} 
-                    <b>{l s='Opera de dos formas:' mod='mercadopago'}</b>
-                </p>
-                <p class="text-credenciais">
-                    {l s='Por defecto te dejamos' mod='mercadopago'} 
-                    <b>{l s='el modo Sandbox activo' mod='mercadopago'}</b> 
-                    {l s='para que hagas testeos antes de empezar a vender.' mod='mercadopago'}
-                </p>
-                <p class="text-credenciais">
-                    {l s='¿Todo va bien?' mod='mercadopago'} 
-                    <b>{l s='Desactiva Sandbox' mod='mercadopago'}</b> 
-                    {l s='al final de la configuración y abre paso a tus ventas online.' mod='mercadopago'}
-                </p>
-            </div>
-        </div>
-        
-        <div class="row pt-25">
-            <div class="col-md-12">
-                <a class="btn btn-default btn-credenciais">{l s='Quiero mis credenciales' mod='mercadopago'}</a>
-            </div>
-        </div>
-        
-        <div class="row pt-25">
-            <div class="col-md-6">
-                <p class="text-branded lists-how-configure">
-                    <b>{l s='Atención:' mod='mercadopago'}</b> {l s='Crea una cuenta en Mercado Pago para obtener tus credenciales.' mod='mercadopago'}
-                    <a href="#" target="_blank">{l s='Homologa tu cuenta' mod='mercadopago'}</a> 
-                    {l s='en Mercado Pago para ir a Producción y cobrar en tu tienda.' mod='mercadopago'}
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
--->
-
 <!-- forms rendered via class from mercadopago.php -->
 {html_entity_decode($country_form|escape:'html':'UTF-8')}
 {html_entity_decode($credentials|escape:'html':'UTF-8')}

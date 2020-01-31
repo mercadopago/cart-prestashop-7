@@ -684,6 +684,18 @@
     display: none;
 }
 
+.mp-plugin-version {
+    float: right !important;
+    margin: 5px 5px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.mp-plugin-version span{
+    font-size: 20px;
+    font-weight: 800;
+}
+
 @media (max-width: 768px) {
     .pl-30{
         padding-left: 0px !important;
