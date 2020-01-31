@@ -107,8 +107,7 @@ class AbstractNotification
                 null,
                 array(),
                 (int) $cart->id_currency,
-                false,
-                $this->customer_secure_key
+                false
             );
 
             $this->order_id = Order::getOrderByCartId($cart->id);
