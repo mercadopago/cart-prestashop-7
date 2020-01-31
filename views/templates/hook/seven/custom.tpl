@@ -173,7 +173,7 @@
                 site_id: "{$site_id|escape:'javascript':'UTF-8'}",
                 select_choose: "{l s='Choose' mod='mercadopago'}..."
             };
-           initialiseCustom(custom)
+           initializeCustom(custom)
         }
       
         if (window.Mercadopago === undefined) {
