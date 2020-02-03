@@ -215,9 +215,6 @@
 
 {if $public_key != ''}
     <script type="text/javascript">
-        console.log("entrou public");
-
-
         window.onload = function () {
             var custom = {
                 site_id: "{$site_id|escape:'javascript':'UTF-8'}",

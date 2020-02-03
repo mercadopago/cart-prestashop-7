@@ -435,7 +435,7 @@ class Mercadopago extends PaymentModule
      */
     public function getStandardCheckout($cart, $version)
     {
-        if ($version == Mercadopago::PRESTA16) {
+        if ($version == self::PRESTA16) {
             $frontInformations = $this->standardCheckout->getStandardCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
             return $this->display(__file__, 'views/templates/hook/six/standard.tpl');
@@ -459,7 +459,7 @@ class Mercadopago extends PaymentModule
      */
     public function getCustomCheckout($cart, $version)
     {
-        if ($version == Mercadopago::PRESTA16) {
+        if ($version == self::PRESTA16) {
             $frontInformations = $this->customCheckout->getCustomCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
             return $this->display(__file__, 'views/templates/hook/six/custom.tpl');
@@ -488,7 +488,7 @@ class Mercadopago extends PaymentModule
      */
     public function getTicketCheckout($cart, $version)
     {
-        if ($version == Mercadopago::PRESTA16) {
+        if ($version == self::PRESTA16) {
             $frontInformations = $this->ticketCheckout->getTicketCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
             return $this->display(__file__, 'views/templates/hook/six/ticket.tpl');
