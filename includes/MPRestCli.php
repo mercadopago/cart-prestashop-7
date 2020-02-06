@@ -39,11 +39,11 @@ class MPRestCli
     /**
      * Get connect with cURL
      *
-     * @param [string] $uri
-     * @param [string] $method
-     * @param [string] $content_type
-     * @param [string] $uri_base
-     * @return void
+     * @param $uri
+     * @param $method
+     * @param $content_type
+     * @param $uri_base
+     * @return false|resource
      */
     private static function getConnect($uri, $method, $content_type, $uri_base)
     {
@@ -69,11 +69,11 @@ class MPRestCli
     /**
      * Get tracking connect with cURL
      *
-     * @param [string] $uri
-     * @param [string] $method
-     * @param [string] $content_type
-     * @param [string] $trackingID
-     * @return void
+     * @param $uri
+     * @param $method
+     * @param $content_type
+     * @param $trackingID
+     * @return false|resource
      */
     private static function getConnectTracking($uri, $method, $content_type, $trackingID)
     {
@@ -102,12 +102,13 @@ class MPRestCli
     /**
      * execTracking
      *
-     * @param [string] $method
-     * @param [string] $uri
-     * @param [string] $data
-     * @param [string] $content_type
-     * @param [string] $trackingID
-     * @return void
+     * @param $method
+     * @param $uri
+     * @param $data
+     * @param $content_type
+     * @param $trackingID
+     * @return array
+     * @throws Exception
      */
     private static function execTracking($method, $uri, $data, $content_type, $trackingID)
     {
@@ -132,10 +133,11 @@ class MPRestCli
     /**
      * setData
      *
-     * @param [string] $connect
-     * @param [string] $data
-     * @param [string] $content_type
+     * @param $connect
+     * @param $data
+     * @param $content_type
      * @return void
+     * @throws Exception
      */
     private static function setData($connect, $data, $content_type)
     {
@@ -160,12 +162,13 @@ class MPRestCli
     /**
      * exec
      *
-     * @param [string] $method
-     * @param [string] $uri
-     * @param [string] $data
-     * @param [string] $content_type
-     * @param [string] $uri_base
-     * @return void
+     * @param $method
+     * @param $uri
+     * @param $data
+     * @param $content_type
+     * @param $uri_base
+     * @return array
+     * @throws Exception
      */
     private static function exec($method, $uri, $data, $content_type, $uri_base)
     {
@@ -192,7 +195,8 @@ class MPRestCli
      *
      * @param string $uri
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function getConfig($uri, $content_type = 'application/json')
     {
@@ -204,19 +208,21 @@ class MPRestCli
      *
      * @param string $uri
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function get($uri, $content_type = 'application/json')
     {
         return self::exec('GET', $uri, null, $content_type, self::API_BASE_URL);
     }
-  
+
     /**
      * get mercado libre api
      *
      * @param string $uri
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function getMercadoLibre($uri, $content_type = 'application/json')
     {
@@ -229,7 +235,8 @@ class MPRestCli
      * @param string $uri
      * @param string $data
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function post($uri, $data, $content_type = 'application/json')
     {
@@ -243,7 +250,8 @@ class MPRestCli
      * @param string $data
      * @param string $trackingID
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function postTracking($uri, $data, $trackingID, $content_type = 'application/json')
     {
@@ -256,7 +264,8 @@ class MPRestCli
      * @param string $uri
      * @param string $data
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function put($uri, $data, $content_type = 'application/json')
     {
@@ -269,7 +278,8 @@ class MPRestCli
      * @param string $uri
      * @param string $data
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function putConfig($uri, $data, $content_type = 'application/json')
     {

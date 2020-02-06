@@ -26,28 +26,6 @@
 <form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
     <div class="row frame-checkout-custom-seven">
 
-        {if $coupon == true}
-        <div id="mercadopago-form-ticket-coupon" class="col-xs-12 col-md-12 col-12">
-            <h3 class="title-custom-checkout">{l s='Ingresa tu cupón de descuento' mod='mercadopago'}</h3>
-
-            <div class="form-group">
-                <div class="col-md-9 col-xs-8 pb-10 pl-0 mp-m-col">
-                    <input type="text" id="couponCodeTicket" name="mercadopago_ticket[coupon_code]" class="form-control mp-form-control" autocomplete="off" maxlength="24" 
-                    placeholder="{l s='Ingresá tu cupón' mod='mercadopago'}" />
-
-                    <small class="mp-sending-coupon" id="mpSendingCouponTicket">{l s='Validando cupón de descuento...' mod='mercadopago'}</small>
-                    <small class="mp-success-coupon" id="mpCouponApplyedTicket">{l s='Cupón de descuento aplicado!' mod='mercadopago'}</small>
-                    <small class="mp-erro-febraban" id="mpCouponErrorTicket">{l s='El código que ingresaste no es válido!' mod='mercadopago'}</small>
-                    <small class="mp-erro-febraban" id="mpResponseErrorTicket">{l s='Lo sentimos, ocurrió un error. Por favor, inténtelo de nuevo.' mod='mercadopago'}</small>
-                </div>
-
-                <div class="col-md-3 col-xs-4 pb-10 pr-0 text-center mp-m-col">
-                    <input type="button" class="btn btn-primary mp-btn" id="applyCouponTicket" onclick="mpTicketApplyAjax()" value="{l s='Aplicar' mod='mercadopago'}" />
-                </div>
-            </div>
-        </div>
-        {/if}
-
         <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
             {if $site_id == "MLB"}
                 <div class="form-group">

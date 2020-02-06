@@ -35,7 +35,7 @@ abstract class MPAbstractDB
      * Execute query for database without return
      *
      * @param [string] $query
-     * @return void
+     * @return bool
      */
     public function executeQuery($query)
     {
@@ -49,7 +49,7 @@ abstract class MPAbstractDB
      * Execute query for database with return
      *
      * @param [string] $query
-     * @return void
+     * @return array|bool|object|null
      */
     public function selectQuery($query)
     {
@@ -70,7 +70,7 @@ abstract class MPAbstractDB
     /**
      * Count method, needs where() method
      *
-     * @return void
+     * @return mixed
      */
     public function count()
     {
@@ -82,10 +82,10 @@ abstract class MPAbstractDB
     /**
      * Where method, needs be called with count() or get()
      *
-     * @param [string] $column
-     * @param [mixed] $operator
-     * @param [mixed] $value
-     * @return void
+     * @param $column
+     * @param $operator
+     * @param $value
+     * @return MPAbstractDB
      */
     public function where($column, $operator, $value)
     {
@@ -99,7 +99,7 @@ abstract class MPAbstractDB
      * @param [string] $column
      * @param [mixed] $operator
      * @param [mixed] $value
-     * @return void
+     * @return MPAbstractDB
      */
     public function andWhere($column, $operator, $value)
     {
@@ -112,7 +112,7 @@ abstract class MPAbstractDB
      *
      * @param [string] $column
      * @param [mixed] $operator
-     * @return void
+     * @return MPAbstractDB
      */
     public function orderBy($column, $operator)
     {
@@ -124,7 +124,7 @@ abstract class MPAbstractDB
      * Insert data in database
      *
      * @param [type] $array
-     * @return void
+     * @return bool|void
      */
     public function create($array)
     {
@@ -153,7 +153,7 @@ abstract class MPAbstractDB
      * Update data in database
      *
      * @param [type] $array
-     * @return void
+     * @return bool|void
      */
     public function update($array)
     {

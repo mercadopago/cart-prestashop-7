@@ -114,7 +114,8 @@ class Mercadopago extends PaymentModule
     /**
      * Install the module
      *
-     * @return void
+     * @return bool
+     * @throws PrestaShopException
      */
     public function install()
     {
@@ -154,7 +155,7 @@ class Mercadopago extends PaymentModule
     /**
      * Uninstall the module
      *
-     * @return void
+     * @return bool
      */
     public function uninstall()
     {
@@ -166,7 +167,8 @@ class Mercadopago extends PaymentModule
     /**
      * Load the configuration form
      *
-     * @return void
+     * @return mixed
+     * @throws Exception
      */
     public function getContent()
     {
@@ -274,7 +276,10 @@ class Mercadopago extends PaymentModule
     /**
      * Render forms
      *
-     * @return void
+     * @param $submit
+     * @param $values
+     * @param $form
+     * @return string
      */
     protected function renderForm($submit, $values, $form)
     {
@@ -304,7 +309,9 @@ class Mercadopago extends PaymentModule
     /**
      * Create the payment states
      *
-     * @return void
+     * @return bool
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     protected function createPaymentStates()
     {
@@ -394,7 +401,7 @@ class Mercadopago extends PaymentModule
      * Show payment options in version 1.7
      *
      * @param $params
-     * @return array|string|mixed
+     * @return array|string|void
      */
     public function hookPaymentOptions($params)
     {
@@ -431,7 +438,7 @@ class Mercadopago extends PaymentModule
     /**
      * @param $cart
      * @param $version
-     * @return \PrestaShop\PrestaShop\Core\Payment\PaymentOption
+     * @return PaymentOption | string
      */
     public function getStandardCheckout($cart, $version)
     {
@@ -455,7 +462,7 @@ class Mercadopago extends PaymentModule
     /**
      * @param $cart
      * @param $version
-     * @return \PrestaShop\PrestaShop\Core\Payment\PaymentOption
+     * @return PaymentOption | string
      */
     public function getCustomCheckout($cart, $version)
     {
@@ -484,7 +491,7 @@ class Mercadopago extends PaymentModule
     /**
      * @param $cart
      * @param $version
-     * @return \PrestaShop\PrestaShop\Core\Payment\PaymentOption
+     * @return PaymentOption | string
      */
     public function getTicketCheckout($cart, $version)
     {
@@ -514,6 +521,8 @@ class Mercadopago extends PaymentModule
      *
      * @param mixed $cart
      * @return boolean
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function checkCurrency($cart)
     {
@@ -533,7 +542,7 @@ class Mercadopago extends PaymentModule
      * This hook is used to display the order confirmation page.
      *
      * @param mixed $params
-     * @return void
+     * @return string
      */
     public function hookPaymentReturn($params)
     {
@@ -556,7 +565,7 @@ class Mercadopago extends PaymentModule
     /**
      * Display payment failure on version 1.6
      *
-     * @return void
+     * @return string
      */
     public function hookDisplayTopColumn()
     {
@@ -568,7 +577,7 @@ class Mercadopago extends PaymentModule
     /**
      * Display payment failure on version 1.7
      *
-     * @return void
+     * @return string
      */
     public function hookDisplayWrapperTop()
     {
