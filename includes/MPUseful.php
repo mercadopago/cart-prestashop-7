@@ -33,7 +33,7 @@ class MPUseful
     /**
      * Instance the class
      *
-     * @return void
+     * @return MPUseful
      */
     public static function getinstance()
     {

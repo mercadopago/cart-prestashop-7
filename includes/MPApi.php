@@ -28,12 +28,14 @@
 class MPApi
 {
     public function __construct()
-    { }
+    { 
+        
+    }
 
     /**
      * Instance the class
      *
-     * @return void
+     * @return MPApi
      */
     public static function getinstance()
     {
@@ -47,7 +49,7 @@ class MPApi
     /**
      * Get access token
      *
-     * @return void
+     * @return string
      */
     public function getAccessToken()
     {
@@ -61,7 +63,7 @@ class MPApi
     /**
      * Get public key
      *
-     * @return void
+     * @return string
      */
     public function getPublicKey()
     {
@@ -75,7 +77,8 @@ class MPApi
     /**
      * Get payment methods
      *
-     * @return void
+     * @return array|bool
+     * @throws Exception
      */
     public function getPaymentMethods()
     {
@@ -115,7 +118,8 @@ class MPApi
      * Create preference
      *
      * @param array $preference
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function createPreference($preference)
     {
@@ -142,7 +146,8 @@ class MPApi
      * Create payment
      *
      * @param array $preference
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function createPayment($preference)
     {
@@ -169,7 +174,8 @@ class MPApi
      * Get standard payment
      *
      * @param integer $transaction_id
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function getPaymentStandard($transaction_id)
     {
@@ -192,6 +198,7 @@ class MPApi
      *
      * @param [string] $access_token
      * @return boolean
+     * @throws Exception
      */
     public function isValidAccessToken($access_token)
     {
@@ -213,6 +220,7 @@ class MPApi
      *
      * @param [integer] $sponsor_id
      * @return boolean
+     * @throws Exception
      */
     public function isValidSponsorId($sponsor_id)
     {
@@ -240,6 +248,7 @@ class MPApi
      * Is test user
      *
      * @return boolean
+     * @throws Exception
      */
     public function isTestUser()
     {
@@ -262,7 +271,8 @@ class MPApi
      * Get merchant order
      *
      * @param [integer] $id
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function getMerchantOrder($id)
     {
@@ -284,7 +294,8 @@ class MPApi
      * Send platform info to settings api
      *
      * @param [array] $params
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function saveApiSettings($params)
     {
@@ -315,8 +326,8 @@ class MPApi
     /**
      * Get application_id
      *
-     * @param [integer] $seller
-     * @return int
+     * @return bool
+     * @throws Exception
      */
     public function homologValidate()
     {

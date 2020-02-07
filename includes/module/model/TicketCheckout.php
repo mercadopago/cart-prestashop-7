@@ -42,6 +42,7 @@ class TicketCheckout
     /**
      * @param $cart
      * @return array
+     * @throws PrestaShopException
      */
     public function getTicketCheckoutPS16($cart)
     {
@@ -54,6 +55,7 @@ class TicketCheckout
     /**
      * @param $cart
      * @return array
+     * @throws PrestaShopException
      */
     public function getTicketCheckoutPS17($cart)
     {
@@ -65,9 +67,11 @@ class TicketCheckout
     /**
      * @param $cart
      * @return array
+     * @throws PrestaShopException
      */
     public function getTicketCheckout($cart)
     {
+        $this->getTicketJS();
         $ticket = array();
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {

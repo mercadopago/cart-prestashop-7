@@ -200,8 +200,6 @@
             <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]"/>
             <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]"/>
             <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]"/>
-            <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]"/>
-            <input type="hidden" id="couponAmountCustom" name="mercadopago_custom[coupon_amount]"/>
         </div>
 
         <div class="row">
