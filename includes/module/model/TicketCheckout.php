@@ -68,12 +68,10 @@ class TicketCheckout
      * @param $cart
      * @return array
      * @throws PrestaShopException
-     * @throws Exception
      */
     public function getTicketCheckout($cart)
     {
         $this->getTicketJS();
-        
         $ticket = array();
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
