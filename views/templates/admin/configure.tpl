@@ -35,7 +35,7 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Configurar' mod='mercadopago'}</a></li>
     <li><a href="#template_2" role="tab" data-toggle="tab">{l s='Acerca de Mercado Pago' mod='mercadopago'}</a></li>
-    <li class="mp-plugin-version">{l s='Current version:' mod='mercadopago'} <span>v{$mp_version}</span></li>
+    <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version}</span></a></li>
 </ul>
 
 <!-- Tab panes -->

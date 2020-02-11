@@ -222,7 +222,7 @@ class MPApi
      * @return boolean
      * @throws Exception
      */
-    public function isValidSponsorId($sponsor_id)
+    public function isValidIntegratorId($sponsor_id)
     {
         $response = MPRestCli::get('/users/' . $sponsor_id);
 

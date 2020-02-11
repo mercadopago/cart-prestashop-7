@@ -686,14 +686,17 @@
 
 .mp-plugin-version {
     float: right !important;
-    margin: 5px 5px 0 0;
-    font-size: 14px;
-    font-weight: 600;
+    margin-bottom: -5px !important;
 }
 
-.mp-plugin-version span{
-    font-size: 20px;
+.mp-plugin-version a, .mp-plugin-version a:hover{
+    color: #555;
+}
+
+.mp-plugin-version span {
+    font-size: 16px;
     font-weight: 800;
+    text-transform: lowercase;
 }
 
 @media (max-width: 768px) {

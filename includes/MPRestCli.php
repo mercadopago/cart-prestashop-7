@@ -30,7 +30,6 @@ class MPRestCli
     const PLATAFORM_ID = 'Prestashop';    
     const API_BASE_URL = 'https://api.mercadopago.com';
     const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
-    const API_CONFIG_BASE_URL = 'https://api.mercadopago.com/account';
 
     public function __construct()
     {
@@ -60,6 +59,8 @@ class MPRestCli
                 $product_id,
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
+                'x-platform-id:' . self::PLATAFORM_ID,
+                'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
 
@@ -90,9 +91,9 @@ class MPRestCli
                 $product_id,
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
-                'X-Tracking-Id:' . $trackingID,
+                'X-tracking-id:' . $trackingID,
                 'x-platform-id:' . self::PLATAFORM_ID,
-                'x-integrator-id:' . Configuration::get('MERCADOPAGO_SPONSOR_ID')
+                'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
  
@@ -191,16 +192,16 @@ class MPRestCli
     }
 
     /**
-     * getConfig
+     * get mercado libre api
      *
      * @param string $uri
      * @param string $content_type
      * @return array
      * @throws Exception
      */
-    public static function getConfig($uri, $content_type = 'application/json')
+    public static function getMercadoLibre($uri, $content_type = 'application/json')
     {
-        return self::exec('GET', $uri, null, $content_type, self::API_CONFIG_BASE_URL);
+        return self::exec('GET', $uri, null, $content_type, self::API_BASE_MELI_URL);
     }
 
     /**
@@ -214,19 +215,6 @@ class MPRestCli
     public static function get($uri, $content_type = 'application/json')
     {
         return self::exec('GET', $uri, null, $content_type, self::API_BASE_URL);
-    }
-
-    /**
-     * get mercado libre api
-     *
-     * @param string $uri
-     * @param string $content_type
-     * @return array
-     * @throws Exception
-     */
-    public static function getMercadoLibre($uri, $content_type = 'application/json')
-    {
-        return self::exec('GET', $uri, null, $content_type, self::API_BASE_MELI_URL);
     }
 
     /**
@@ -270,19 +258,5 @@ class MPRestCli
     public static function put($uri, $data, $content_type = 'application/json')
     {
         return self::exec('PUT', $uri, $data, $content_type, self::API_BASE_URL);
-    }
-
-    /**
-     * putConfig
-     *
-     * @param string $uri
-     * @param string $data
-     * @param string $content_type
-     * @return array
-     * @throws Exception
-     */
-    public static function putConfig($uri, $data, $content_type = 'application/json')
-    {
-        return self::exec('PUT', $uri, $data, $content_type, self::API_CONFIG_BASE_URL);
     }
 }

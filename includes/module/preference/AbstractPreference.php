@@ -73,7 +73,8 @@ class AbstractPreference
     /**
      * Return the common fields in preference
      *
-     * @return void
+     * @param $cart
+     * @return array
      */
     public function getCommonPreference($cart)
     {
@@ -93,7 +94,12 @@ class AbstractPreference
     /**
      * Get all cart items
      *
+     * @param $cart
+     * @param bool $custom
+     * @param null $percent
      * @return array
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function getCartItems($cart, $custom = false, $percent = null)
     {
@@ -197,7 +203,8 @@ class AbstractPreference
     /**
      * Get notification url
      *
-     * @return void
+     * @param $cart
+     * @return string|void
      */
     public function getNotificationUrl($cart)
     {
@@ -248,15 +255,18 @@ class AbstractPreference
     {
         $sponsor_id = $this->mpuseful->getCountryConfigs($this->settings['MERCADOPAGO_SITE_ID']);
 
-        if ($this->settings['MERCADOPAGO_SPONSOR_ID'] == "") {
-            return $this->settings['MERCADOPAGO_SPONSOR_ID'] = $sponsor_id;
+        if ($this->settings['MERCADOPAGO_INTEGRATOR_ID'] == "") {
+            return $sponsor_id;
         }
+
+       return $this->settings['MERCADOPAGO_INTEGRATOR_ID'];
     }
 
     /**
      * Get customer email
      *
      * @return array
+     * @throws PrestaShopException
      */
     public function getCustomerEmail()
     {
@@ -269,6 +279,7 @@ class AbstractPreference
      * Get customer data for custom checkout
      *
      * @return array
+     * @throws PrestaShopException
      */
     public function getCustomCustomerData($cart)
     {
@@ -323,7 +334,7 @@ class AbstractPreference
     /**
      * Get items description
      *
-     * @return array
+     * @return array|string
      */
     public function getPreferenceDescription($cart)
     {
@@ -397,7 +408,7 @@ class AbstractPreference
     /**
      * Get validate sandbox mode
      *
-     * @return void
+     * @return bool
      */
     public function validateSandboxMode()
     {
@@ -412,7 +423,10 @@ class AbstractPreference
      * Create and set ticket discount on CartRule()
      *
      * @param mixed $cart
+     * @param $discount
      * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function setCartRule($cart, $discount)
     {
@@ -440,6 +454,8 @@ class AbstractPreference
      * Disable cart rule when buyer completes purchase
      *
      * @return void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
      */
     public function disableCartRule()
     {
@@ -451,7 +467,7 @@ class AbstractPreference
     /**
      * Delete cart rule if an error occurs
      *
-     * @return void
+     * @return bool
      */
     public function deleteCartRule()
     {
@@ -497,8 +513,8 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_SANDBOX_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
         //store info
-        $this->settings['MERCADOPAGO_SPONSOR_ID'] = Configuration::get('MERCADOPAGO_SPONSOR_ID');
         $this->settings['MERCADOPAGO_INVOICE_NAME'] = Configuration::get('MERCADOPAGO_INVOICE_NAME');
+        $this->settings['MERCADOPAGO_INTEGRATOR_ID'] = Configuration::get('MERCADOPAGO_INTEGRATOR_ID');
         $this->settings['MERCADOPAGO_STORE_CATEGORY'] = Configuration::get('MERCADOPAGO_STORE_CATEGORY');
 
         //standard checkout
