@@ -359,7 +359,7 @@ class AbstractPreference
     {
         $internal_metadata = array(
             "details" => "",
-            "platform" => MPRestCli::PLATAFORM_ID,
+            "platform" => MPRestCli::PLATFORM_ID,
             "platform_version" => _PS_VERSION_,
             "module_version" => MP_VERSION,
             "sponsor_id" => $this->getSponsorId(),

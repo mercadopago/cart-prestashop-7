@@ -27,7 +27,7 @@
 class MPRestCli
 {
     const PRODUCT_ID = 'BC32CCRU643001OI39AG';
-    const PLATAFORM_ID = 'Prestashop';    
+    const PLATFORM_ID = 'BP1EEMU0A3M001J8OJUG';
     const API_BASE_URL = 'https://api.mercadopago.com';
     const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
 
@@ -59,7 +59,7 @@ class MPRestCli
                 $product_id,
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
-                'x-platform-id:' . self::PLATAFORM_ID,
+                'x-platform-id:' . self::PLATFORM_ID,
                 'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
@@ -92,7 +92,7 @@ class MPRestCli
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
                 'X-tracking-id:' . $trackingID,
-                'x-platform-id:' . self::PLATAFORM_ID,
+                'x-platform-id:' . self::PLATFORM_ID,
                 'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
