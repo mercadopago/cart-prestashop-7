@@ -327,6 +327,10 @@ body#checkout section.checkout-step .payment-options label {
   display: none;
 }
 
+#mp-card-holder-div {
+    display: none;
+}
+
 .mp-text-tea {
     color: #797979;
     font-size: 12px;

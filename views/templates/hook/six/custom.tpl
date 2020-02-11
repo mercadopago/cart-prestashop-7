@@ -70,23 +70,25 @@
                     <input id="id-card-number" data-checkout="cardNumber" type="text"
                            class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24"
                            autocomplete="off"/>
-                    <small id="mp-error-205" class="mp-erro-form">{l s='Invalid card number' mod='mercadopago'}</small>
+                    <small id="mp-error-205" class="mp-erro-form" 
+                           data-main="#id-card-number">{l s='Invalid card number' mod='mercadopago'}</small>
                     <small id="mp-error-E301"
-                           class="mp-erro-form mp-error-E301">{l s='Invalid card number' mod='mercadopago'}</small>
+                           class="mp-erro-form mp-error-E301" 
+                           data-main="#id-card-number">{l s='Invalid card number' mod='mercadopago'}</small>
                 </div>
             </div>
 
 
             <!-- Input Name and Surname -->
-            <div class="row">
+            <div id="mp-card-holder-div" class="row">
                 <div class="col-md-12 col-12 pt-10 mp-m-col">
                     <label for="id-card-holder-name"
                            class="pb-5">{l s='Nombre y apellido del titular de la tarjeta' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
                            class="form-control mp-form-control" autocomplete="off"/>
-                    <small id="mp-error-221"
-                           class="mp-erro-form">{l s='Invalid card holder name' mod='mercadopago'}</small>
+                    <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
+                            {l s='Invalid card holder name' mod='mercadopago'}</small>
                 </div>
             </div>
 
@@ -98,14 +100,14 @@
                     <input id="id-card-expiration" data-checkout="cardExpiration" type="text"
                            class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA"
                            onkeyup="maskInput(this, mdate);" maxlength="7"/>
-                    <small id="mp-error-208"
-                           class="mp-erro-form">{l s='Invalid card expiration date' mod='mercadopago'}</small>
-                    <small id="mp-error-209"
-                           class="mp-erro-form">{l s='Invalid card expiration date' mod='mercadopago'}</small>
-                    <small id="mp-error-325"
-                           class="mp-erro-form">{l s='Invalid card expiration date' mod='mercadopago'}</small>
-                    <small id="mp-error-326"
-                           class="mp-erro-form">{l s='Invalid card expiration date' mod='mercadopago'}</small>
+                    <small id="mp-error-208" class="mp-erro-form" data-main="#id-card-expiration">
+                            {l s='Invalid card expiration date' mod='mercadopago'}</small>
+                    <small id="mp-error-209" class="mp-erro-form" data-main="#id-card-expiration">
+                            {l s='Invalid card expiration date' mod='mercadopago'}</small>
+                    <small id="mp-error-325" class="mp-erro-form" data-main="#id-card-expiration">
+                            {l s='Invalid card expiration date' mod='mercadopago'}</small>
+                    <small id="mp-error-326" class="mp-erro-form" data-main="#id-card-expiration">
+                            {l s='Invalid card expiration date' mod='mercadopago'}</small>
 
                 </div>
 
@@ -118,10 +120,10 @@
                            placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);"
                            maxlength="4"/>
                     <small class="mp-small pt-5">{l s='Últimos 3 números del dorso' mod='mercadopago'}</small>
-                    <small id="mp-error-224"
-                           class="mp-erro-form pt-0">{l s='Invalid card holder name' mod='mercadopago'}</small>
-                    <small id="mp-error-E302"
-                           class="mp-erro-form pt-0">{l s='Invalid card holder name' mod='mercadopago'}</small>
+                    <small id="mp-error-224" class="mp-erro-form pt-0" data-main="#id-security-code">
+                        {l s='Invalid card holder name' mod='mercadopago'}</small>
+                    <small id="mp-error-E302" class="mp-erro-form pt-0" data-main="#id-security-code">
+                        {l s='Invalid card holder name' mod='mercadopago'}</small>
                 </div>
             </div>
 
@@ -180,8 +182,8 @@
                     <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control"
                            onkeyup="maskInput(this, minteger);" autocomplete="off"/>
                     <small class="mp-small pt-5">{l s='Solo números' mod='mercadopago'}</small>
-                    <small id="mp-error-324"
-                           class="mp-erro-form pt-0">{l s='Invalid document number' mod='mercadopago'}</small>
+                    <small id="mp-error-324" class="mp-erro-form pt-0" data-main="#id-doc-number">
+                        {l s='Invalid document number' mod='mercadopago'}</small>
                 </div>
             </div>
 
