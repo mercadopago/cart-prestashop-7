@@ -215,30 +215,32 @@
 
 {if $public_key != ''}
     <script type="text/javascript">
-        window.onload = function () {
-            var custom = {
-                site_id: "{$site_id|escape:'javascript':'UTF-8'}",
-                select_choose: "{l s='Choose' mod='mercadopago'}..."
-            };
-            initializeCustom(custom)
-        }
+
+        var custom = {
+            site_id: '{$site_id|escape:"javascript":"UTF-8"}',
+            select_choose: '{l s="Choose" mod="mercadopago"}...'
+        };
+
+            jQuery(function () {
+            initializeCustom(custom);
+            });
 
         if (window.Mercadopago === undefined) {
-            $.getScript("https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js").done(function (script, textStatus) {
+            $.getScript('https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js').done(function (script, textStatus) {
                 // Set Public_key
-                Mercadopago.setPublishableKey("{$public_key|escape:'javascript':'UTF-8'}");
+                Mercadopago.setPublishableKey('{$public_key|escape:"javascript":"UTF-8"}');
             });
         }
 
         //collapsible payments cards acepteds
-        var show_payments = document.querySelector("#button-show-payments");
-        var frame_payments = document.querySelector("#frame-payments");
+        var show_payments = document.querySelector('#button-show-payments');
+        var frame_payments = document.querySelector('#frame-payments');
 
         show_payments.onclick = function () {
-            if (frame_payments.style.display == "block") {
-                frame_payments.style.display = "none";
+            if (frame_payments.style.display == 'block') {
+                frame_payments.style.display = 'none';
             } else {
-                frame_payments.style.display = "block";
+                frame_payments.style.display = 'block';
             }
         };
     </script>
