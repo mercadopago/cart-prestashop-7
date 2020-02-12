@@ -218,17 +218,17 @@ class MPApi
     /**
      * Is valid sponsor id
      *
-     * @param [integer] $sponsor_id
+     * @param $integrator_id
      * @return boolean
      * @throws Exception
      */
-    public function isValidSponsorId($sponsor_id)
+    public function isValidIntegratorId($integrator_id)
     {
-        $response = MPRestCli::get('/users/' . $sponsor_id);
+        $response = MPRestCli::get('/users/' . $integrator_id);
 
         //in case of failures
         if ($response['status'] > 202) {
-            MPLog::generate('API valid_sponsor_id error: ' . $response['response']['message'], 'error');
+            MPLog::generate('API valid_integrator_id error: ' . $response['response']['message'], 'error');
             return false;
         }
 

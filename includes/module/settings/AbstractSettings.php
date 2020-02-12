@@ -112,11 +112,12 @@ class AbstractSettings
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
-                case "sponsor_id":
-                    if ($value != '' && !$this->mercadopago->isValidSponsorId($value)) {
+                case "integrator_id":
+                    if ($value != '' && !$this->mercadopago->isValidIntegratorId($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('Sponsor ID must be valid and ') . $this->module->l('must be from the same country as the seller.');
-                        MPLog::generate('Invalid sponsor_id submitted', 'warning');
+                        Mercadopago::$form_message .= $this->module->l('Integrator ID must be valid and ') . 
+                            $this->module->l('must be from the same country as the seller.');
+                        MPLog::generate('Invalid integrator_id submitted', 'warning');
                         return false;
                     }
                     break;

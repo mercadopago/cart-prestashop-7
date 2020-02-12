@@ -74,8 +74,8 @@ class StoreSettings extends AbstractSettings
             array(
                 'col' => 2,
                 'type' => 'text',
-                'name' => 'MERCADOPAGO_SPONSOR_ID',
-                'label' => $this->module->l('Sponsor ID'),
+                'name' => 'MERCADOPAGO_INTEGRATOR_ID',
+                'label' => $this->module->l('Integrator ID'),
                 'desc' => $this->module->l('With this number we identify all your transactions ') .
                     $this->module->l('and we know how many sales we process with your account.'),
             ),
@@ -91,7 +91,7 @@ class StoreSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = (['MERCADOPAGO_SPONSOR_ID' => 'sponsor_id']);
+        $this->validate = (['MERCADOPAGO_INTEGRATOR_ID' => 'integrator_id']);
 
         parent::postFormProcess();
 
@@ -106,8 +106,8 @@ class StoreSettings extends AbstractSettings
     public function getFormValues()
     {
         return array(
-            'MERCADOPAGO_SPONSOR_ID' => Configuration::get('MERCADOPAGO_SPONSOR_ID'),
             'MERCADOPAGO_INVOICE_NAME' => Configuration::get('MERCADOPAGO_INVOICE_NAME'),
+            'MERCADOPAGO_INTEGRATOR_ID' => Configuration::get('MERCADOPAGO_INTEGRATOR_ID'),
             'MERCADOPAGO_STORE_CATEGORY' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
         );
     }

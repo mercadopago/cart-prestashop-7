@@ -103,7 +103,7 @@
                 {else}
                     <p class="number-checkout-body">5</p>
                 {/if}
-                <p class="text-checkout-body">{l s='Desactívalo cuando veas que todo va bien y ¡empieza a recibir pagos!' mod='mercadopago'}</p>
+                <p class="text-checkout-body">{l s='Desactívalo si estás listo para recibir pagos.' mod='mercadopago'}</p>
             </div>
 		</div>
 		
