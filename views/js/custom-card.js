@@ -138,6 +138,13 @@ jQuery(function () {
      * Check what information is necessary to pay and show inputs
      */
     function additionalInfoHandler() {
+
+        if (additionalInfoNeeded.cardholder_name) {
+            document.getElementById('mp-card-holder-div').style.display = "block";
+        } else {
+            document.getElementById('mp-card-holder-div').style.display = 'none';
+        }
+
         if (additionalInfoNeeded.issuer) {
             document.getElementById('container-issuers').style.display = 'block';
             document.getElementById('container-installments').classList.remove('col-md-12');
@@ -387,7 +394,39 @@ jQuery(function () {
      * @return bool
      */
     function validateInputsCreateToken() {
-        var form_inputs = getForm().querySelectorAll("[data-checkout]");
+        hideErrors();
+        var fixedInputs = validateFixedInputs();
+        var additionalInputs = validateAdditionalInputs();
+
+        if (fixedInputs || additionalInputs) {
+            focusInputError();
+            return false;
+        }
+
+        return true;
+    }
+
+    /** 
+    * Focus input with error
+    * 
+    * @return bool
+    */
+    function focusInputError() {
+        if (document.querySelectorAll('.mp-form-control-error') != undefined) {
+            var form_inputs = document.querySelectorAll('.mp-form-control-error');
+            form_inputs[0].focus();
+        }
+    }
+
+    /** 
+    * Validate fixed Inputs is empty
+    * 
+    * @return bool
+    */
+    function validateFixedInputs() {
+        var emptyInputs = false;
+        var form = getForm();
+        var form_inputs = form.querySelectorAll('[data-checkout]');
         var fixed_inputs = [
             'cardNumber',
             'cardExpiration',
@@ -398,24 +437,23 @@ jQuery(function () {
         for (var x = 0; x < form_inputs.length; x++) {
             var element = form_inputs[x];
             // Check is a input to create token.
-            if (fixed_inputs.indexOf(element.getAttribute("data-checkout")) > -1) {
+            if (fixed_inputs.indexOf(element.getAttribute('data-checkout')) > -1) {
                 if (element.value == -1 || element.value == "") {
-                    element.focus();
-                    return false;
+                    var small = form.querySelectorAll('small[data-main="#' + element.id + '"]');
+                    if (small.length > 0) {
+                        small[0].style.display = 'block';
+                    }
+                    element.classList.add('mp-form-control-error');
+                    emptyInputs = true;
                 }
             }
         }
 
-        if (objPaymentMethod.length == 0) {
-            document.getElementById('id-card-number').focus();
-            return false;
+        if (emptyInputs) {
+            return emptyInputs;
+        } else {
+            return emptyInputs;
         }
-
-        if (!validateAdditionalInputs()) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -424,35 +462,43 @@ jQuery(function () {
      * @return bool
      */
     function validateAdditionalInputs() {
+        var emptyInputs = false;
+
         if (additionalInfoNeeded.issuer) {
             var inputMpIssuer = document.getElementById('id-issuers-options');
             if (inputMpIssuer.value == -1 || inputMpIssuer.value == "") {
-                inputMpIssuer.focus();
-                return false;
+                inputMpIssuer.classList.add('mp-form-control-error');
+                emptyInputs = true;
             }
         }
         if (additionalInfoNeeded.cardholder_name) {
             var inputCardholderName = document.getElementById('id-card-holder-name');
             if (inputCardholderName.value == -1 || inputCardholderName.value == "") {
-                inputCardholderName.focus();
-                return false;
+                inputCardholderName.classList.add('mp-form-control-error');
+                emptyInputs = true;
             }
         }
         if (additionalInfoNeeded.cardholder_identification_type) {
             var inputDocType = document.getElementById('id-docType');
             if (inputDocType.value == -1 || inputDocType.value == "") {
-                docType.focus();
-                return false;
+                docType.classList.add('mp-form-control-error');
+                emptyInputs = true;
             }
         }
         if (additionalInfoNeeded.cardholder_identification_number) {
             var docNumber = document.getElementById('id-doc-number');
             if (docNumber.value == -1 || docNumber.value == "") {
-                docNumber.focus();
-                return false;
+                docNumber.classList.add('mp-form-control-error');
+                document.getElementById('mp-error-324').style.display = "inline-block";
+                emptyInputs = true;
             }
         }
-        return true;
+
+        if (emptyInputs) {
+            return emptyInputs;
+        } else {
+            return emptyInputs;
+        }
     }
 
     /**
@@ -502,7 +548,9 @@ jQuery(function () {
             }
 
             if (small != undefined) {
+                var input = form.querySelector(small.getAttribute("data-main"));
                 small.style.display = "block";
+                input.classList.add("mp-form-control-error");
             }
         }
         return;
@@ -512,9 +560,15 @@ jQuery(function () {
      * Hide errors when return of cardToken error
      */
     function hideErrors() {
+        for (var x = 0; x < document.querySelectorAll("[data-checkout]").length; x++) {
+            var field = document.querySelectorAll("[data-checkout]")[x];
+            field.classList.remove("mp-error-input");
+            field.classList.remove("mp-form-control-error");
+        }
+
         for (var x = 0; x < document.querySelectorAll(".mp-erro-form").length; x++) {
             var small = document.querySelectorAll(".mp-erro-form")[x];
-            small.style.display = "none";
+            small.style.display = 'none';
         }
     }
 
