@@ -91,10 +91,7 @@ class StoreSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = (['MERCADOPAGO_INTEGRATOR_ID' => 'integrator_id']);
-
         parent::postFormProcess();
-
         MPLog::generate('Store information saved successfully');
     }
 

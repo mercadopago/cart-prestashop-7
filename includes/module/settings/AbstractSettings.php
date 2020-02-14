@@ -112,16 +112,6 @@ class AbstractSettings
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
-                case "integrator_id":
-                    if ($value != '' && !$this->mercadopago->isValidIntegratorId($value)) {
-                        Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('Integrator ID must be valid and ') . 
-                            $this->module->l('must be from the same country as the seller.');
-                        MPLog::generate('Invalid integrator_id submitted', 'warning');
-                        return false;
-                    }
-                    break;
-
                 case "expiration_preference";
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';

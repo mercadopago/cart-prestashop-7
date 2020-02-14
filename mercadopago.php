@@ -255,7 +255,6 @@ class Mercadopago extends PaymentModule
         return $output;
     }
 
-
     /**
      * Load settings
      *
@@ -351,7 +350,7 @@ class Mercadopago extends PaymentModule
 
                 if ($order_state->add()) {
                     $file = _PS_ROOT_DIR_ . '/img/os/' . (int)$order_state->id . '.gif';
-                    copy((dirname(__file__) . '/views/img/mp_icon.gif'), $file);
+                    copy((dirname(__FILE__) . '/views/img/mp_icon.gif'), $file);
                     Configuration::updateValue('MERCADOPAGO_STATUS_' . $key, $order_state->id);
                 }
             }
@@ -445,7 +444,7 @@ class Mercadopago extends PaymentModule
         if ($version == self::PRESTA16) {
             $frontInformations = $this->standardCheckout->getStandardCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
-            return $this->display(__file__, 'views/templates/hook/six/standard.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/six/standard.tpl');
         } else {
             $frontInformations = $this->standardCheckout->getStandardCheckoutPS17($cart);
             $infoTemplate = $this->context->smarty->assign($frontInformations)
@@ -469,7 +468,7 @@ class Mercadopago extends PaymentModule
         if ($version == self::PRESTA16) {
             $frontInformations = $this->customCheckout->getCustomCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
-            return $this->display(__file__, 'views/templates/hook/six/custom.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/six/custom.tpl');
         } else {
             $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
             $str_discount = ' (' . $discount . '% OFF) ';
@@ -498,7 +497,7 @@ class Mercadopago extends PaymentModule
         if ($version == self::PRESTA16) {
             $frontInformations = $this->ticketCheckout->getTicketCheckoutPS16($cart);
             $this->context->smarty->assign($frontInformations);
-            return $this->display(__file__, 'views/templates/hook/six/ticket.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/six/ticket.tpl');
         } else {
             $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
             $str_discount = ' (' . $discount . '% OFF) ';

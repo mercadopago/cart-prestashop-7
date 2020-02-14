@@ -190,7 +190,7 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$module_dir}/views/js/ticket.js"/>
+<script type="text/javascript" src="{$module_dir}views/js/ticket.js"/>
 <script type="text/javascript">
     window.onload = function () {
         var site_id = '{$site_id}';
