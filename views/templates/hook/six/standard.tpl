@@ -23,27 +23,27 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<a href="{$redirect|escape:'html':'UTF-8'}" class="redirect-checkout-six">
-    <div class="row frame-checkout-six">
-        <div class="title-checkout-six">
+<a href="{$redirect|escape:'html':'UTF-8'}" class="mp-redirect-checkout-six">
+    <div class="row mp-frame-checkout-six">
+        <div class="mp-title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
             <p>{l s='Quiero pagar con Mercado Pago sin costo adicional' mod='mercadopago'}</p>
         </div>
 
-        <p class="subtitle-checkout-six">{l s='Usa el medio de pago que prefieras' mod='mercadopago'}</p>
+        <p class="submp-title-checkout-six">{l s='Usa el medio de pago que prefieras' mod='mercadopago'}</p>
 
         {if count($credit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">
+                <p class="submp-title-checkout">
                     {l s='Tarjetas de crédito' mod='mercadopago'} 
-                    <span class="badge-checkout">
+                    <span class="mp-badge-checkout">
                         {l s='Hasta' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='cuotas' mod='mercadopago'}
                     </span>
                 </p>
 
                 {foreach $credit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
@@ -52,10 +52,10 @@
         {if count($debit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                <p class="submp-title-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
 
                 {foreach $debit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
@@ -64,10 +64,10 @@
         {if count($ticket) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
+                <p class="submp-title-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
 
                 {foreach $ticket as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
@@ -82,7 +82,7 @@
 {if $modal == true && $preference != ""}
 <script>
     var mercadopago_button = document.querySelector('.mercadopago-button');
-    var mercadopago_redirect = document.querySelector('.redirect-checkout-six');
+    var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
     
     mercadopago_button.style.display = 'none';
     mercadopago_redirect.setAttribute('href', '#');

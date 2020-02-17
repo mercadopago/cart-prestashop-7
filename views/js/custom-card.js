@@ -137,7 +137,6 @@
         if (additionalInfoNeeded.issuer) {
             document.getElementById('container-issuers').style.display = 'block';
             document.getElementById('container-installments').classList.remove('col-md-12');
-            document.getElementById('container-installments').classList.remove('pl-0');
             document.getElementById('container-installments').classList.add('col-md-8');
             Mercadopago.getIssuers(objPaymentMethod.id, issuersHandler);
         } else {
@@ -349,7 +348,6 @@
         document.getElementById('container-issuers').style.display = 'none';
         document.getElementById('container-installments').classList.remove('col-md-8');
         document.getElementById('container-installments').classList.add('mp-md-12');
-        document.getElementById('container-installments').classList.add('pl-0');
         document.getElementById('id-issuers-options').innerHTML = '';
     }
 
@@ -556,6 +554,16 @@
         return document.querySelector('#mp_custom_checkout');
     }
 
+    /**
+     * Get condition terms input on PS17
+     */
+    function getConditionTerms() {
+        var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
+        if (typeof terms === 'object' && terms !== null) {
+            return terms.checked = false;
+        }
+    }
+
     jQuery(function () {
         $('input[data-checkout="cardNumber"]').on('focusout', guessingPaymentMethod);
 
@@ -566,6 +574,7 @@
                     return createToken();
                 }
 
+                getConditionTerms();
                 return false;
             };
         }

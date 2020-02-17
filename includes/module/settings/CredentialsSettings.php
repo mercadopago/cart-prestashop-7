@@ -77,7 +77,7 @@ class CredentialsSettings extends AbstractSettings
                 'label' => $this->module->l('Upload credentials'),
                 'html_content' => '<a href="https://www.mercadopago.com/'
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
-                    '/account/credentials" target="_blank" class="btn btn-default btn-credenciais">'
+                    '/account/credentials" target="_blank" class="btn btn-default mp-btn-credenciais">'
                     . $this->module->l('Search my credentials') . '</a>'
             ),
             array(
