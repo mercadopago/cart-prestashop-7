@@ -24,20 +24,20 @@
 *}
 
 <form id="mp_standard_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'html':'UTF-8'}">
-    <div class="row frame-checkout-seven">
+    <div class="row mp-frame-checkout-seven">
 
         {if count($credit) != 0}
         <div class="col-xs-12 col-md-12 col-12">
             <div class="frame-tarjetas">
-                <p class="subtitle-standard-checkout">
+                <p class="mp-subtitle-standard-checkout">
                     {l s='Tarjetas de crédito' mod='mercadopago'}
-                    <span class="badge-checkout">
+                    <span class="mp-badge-checkout">
                         {l s='Hasta' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='cuotas' mod='mercadopago'}
                     </span>
                 </p>
 
                 {foreach $credit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
@@ -46,10 +46,10 @@
         {if count($debit) != 0}
         <div class="col-xs-12 col-lg-6 col-md-6 col-12">
             <div class="frame-tarjetas">
-                <p class="subtitle-standard-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                <p class="mp-subtitle-standard-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
 
                 {foreach $debit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
@@ -58,18 +58,18 @@
         {if count($ticket) != 0}
         <div class="col-xs-12 col-lg-6 col-md-6 col-12">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
+                <p class="submp-title-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
 
                 {foreach $ticket as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas" />
+                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
                 {/foreach}
             </div>
         </div>
         {/if}
 
         {if $modal != true && $preference == ""}
-        <div class="col-md-12 pt-20">
-            <div class="redirect-frame">
+        <div class="col-md-12 mp-pt-20">
+            <div class="mp-redirect-frame">
                 <img src="{$module_dir|escape:'html':'UTF-8'}views/img/redirect_checkout.png" class="img-fluid" />
                 <p>{l s='Te llevamos a nuestro sitio para completar el pago' mod='mercadopago'}</p>
             </div>
