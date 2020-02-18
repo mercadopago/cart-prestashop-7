@@ -95,7 +95,7 @@ window.onload = function() {
     var checkbox_online = document.querySelector("#checkbox_0");
     var checkbox_online_prepend = "<div class='all_checkbox'>\
             <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-            <label for='checkmeon'><b class='pointer pl-5'>Selecciona pagos online</b></label>\
+            <label for='checkmeon'><b class='pointer pl-5'>Payment methods</b></label>\
     </div>";
     checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
     
@@ -116,7 +116,7 @@ window.onload = function() {
     var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
     var checkbox_offline_prepend = "<div class='all_checkbox'>\
             <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-            <label for='checkmeoff'><b class='pointer pl-5'>Selecciona pagos presenciales</b></label>\
+            <label for='checkmeoff'><b class='pointer pl-5'>Select face payments</b></label>\
     </div>";
     checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
     
@@ -145,7 +145,8 @@ window.onload = function() {
     
     collapse_body_prepend.innerHTML = "<div class='row pb-25'>\
         <div class='col-md-12'>\
-            <h4 class='title-checkout-body'>Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar.</h4>\
+            <h4 class='title-checkout-body'>Activate other tools in our module ready to use.
+            </h4>\
         </div>\
     </div>";
     

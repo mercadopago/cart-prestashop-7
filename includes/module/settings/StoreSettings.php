@@ -62,9 +62,9 @@ class StoreSettings extends AbstractSettings
                 'type' => 'select',
                 'label' => $this->module->l('Category'),
                 'name' => 'MERCADOPAGO_STORE_CATEGORY',
-                'desc' => $this->module->l('What category are your products? ') .
+                'desc' => $this->module->l('What category do your products belong to? ') .
                     $this->module->l('Choose the one that best characterizes them ') .
-                    $this->module->l('(choose "other" if your product is too specific).'),
+                    $this->module->l('(choose other if your product is too specific).'),
                 'options' => array(
                     'query' => $this->getCategories(),
                     'id' => 'id',
@@ -77,7 +77,7 @@ class StoreSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_INTEGRATOR_ID',
                 'label' => $this->module->l('Integrator ID'),
                 'desc' => $this->module->l('With this number we identify all your transactions ') .
-                    $this->module->l('and we know how many sales we process with your account.'),
+                    $this->module->l('and know how many sales we process with your account.'),
             ),
         );
 
@@ -120,7 +120,7 @@ class StoreSettings extends AbstractSettings
     public function getCategories()
     {
         $categories = array();
-        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Select the category'));
+        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Category'));
         $categories[] = array('id' => 'others', 'name' => 'Other categories');
         $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
         $categories[] = array(

@@ -50,12 +50,12 @@ class CredentialsSettings extends AbstractSettings
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Sandbox Mode'),
+                'label' => $this->module->l('Production'),
                 'name' => 'MERCADOPAGO_SANDBOX_STATUS',
                 'is_bool' => true,
-                'desc' => $this->module->l('Choose "YES" to test your store before selling. ') .
-                    $this->module->l('Switch to "NO" to disable test mode ') .
-                    $this->module->l('and start receiving online payments.'),
+                'desc' => $this->module->l('Select "YES" only when you are ready to sell. ') .
+                    $this->module->l('Change to NO to activate the Sandbox ') .
+                    $this->module->l('test environment.'),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
@@ -74,7 +74,7 @@ class CredentialsSettings extends AbstractSettings
                 'type' => 'html',
                 'name' => '',
                 'desc' => '',
-                'label' => $this->module->l('Upload credentials'),
+                'label' => $this->module->l('Load credentials'),
                 'html_content' => '<a href="https://www.mercadopago.com/'
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
                     '/account/credentials" target="_blank" class="btn btn-default btn-credenciais">'

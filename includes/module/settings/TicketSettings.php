@@ -51,9 +51,9 @@ class TicketSettings extends AbstractSettings
         $fields = array(
             array(
                 'type' => 'switch',
-                'label' => $this->module->l('Activate checkout'),
+                'label' => $this->module->l('Activate Checkout of face to face payments'),
                 'name' => 'MERCADOPAGO_TICKET_CHECKOUT',
-                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.'),
+                'desc' => $this->module->l('Activate the option of face to face payments in your store.'),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -73,7 +73,7 @@ class TicketSettings extends AbstractSettings
                 'type' => 'checkbox',
                 'label' => $this->module->l('Payment methods'),
                 'name' => 'MERCADOPAGO_TICKET_PAYMENT',
-                'hint' => $this->module->l('Select the payment methods available in your store.'),
+                'hint' => $this->module->l('Enable the payment methods available to your customers.'),
                 'class' => 'payment-ticket-checkbox',
                 'desc' => ' ',
                 'values' => array(
@@ -88,18 +88,16 @@ class TicketSettings extends AbstractSettings
                 'label' => $this->module->l('Payment due'),
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_TICKET_EXPIRATION',
-                'desc' => 'In how many days payments will expire.',
+                'desc' => $this->module->l('In how many days will the face to face payments expire.'),
             ),
             array(
                 'col' => 2,
                 'suffix' => '%',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_TICKET_DISCOUNT',
-                'label' => $this->module->l('Discount for paying with ticket'),
-                'desc' => $this->module->l('Choose the discount percentage that will apply to customers ') .
-                    $this->module->l('who want to pay you with ticket. ') .
-                    $this->module->l('Leave the field empty or complete with a “0” when you ') .
-                    $this->module->l('do not want to offer this discount.'),
+                'label' => $this->module->l('Discount for purchase'),
+                'desc' => $this->module->l('Offer a special discount to encourage your ') .
+                    $this->module->l('customers to make the purchase with Mercado Pago.'),
             ),
         );
 

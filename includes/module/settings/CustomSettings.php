@@ -71,11 +71,11 @@ class CustomSettings extends AbstractSettings
                 'label' => $this->module->l('Binary Mode'),
                 'name' => 'MERCADOPAGO_CUSTOM_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Accept and reject payments automatically. Do you want us to activate it? '),
-                'hint' => $this->module->l('If you activate the binary mode ') .
-                    $this->module->l('you will not be able to leave pending payments. ') .
-                    $this->module->l('This can affect the prevention of fraud. ') .
-                    $this->module->l('Leave it inactive to be protected by our own tool.'),
+                'desc' => $this->module->l('Approve or reject payments instantly and automatically, ').
+                $this->module->l('without pending or under review status. Do you want us to activate it?'),
+                'hint' => $this->module->l('Activating it can affect fraud prevention. ') .
+                    $this->module->l('Leave it inactive so we can take ') .
+                    $this->module->l('care of your charges'),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_CUSTOM_BINARY_MODE_ON',
@@ -94,11 +94,9 @@ class CustomSettings extends AbstractSettings
                 'suffix' => '%',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_CUSTOM_DISCOUNT',
-                'label' => $this->module->l('Discount for paying in one installment'),
-                'desc' => $this->module->l('Choose the discount percentage that will apply to customers ') .
-                    $this->module->l('who want to pay you in a single installment. ') .
-                    $this->module->l('Leave the field empty or complete with a “0” when you ') .
-                    $this->module->l('do not want to offer this discount.'),
+                'label' => $this->module->l('Discount for purchase'),
+                'desc' => $this->module->l('Offer a special discount to encourage your ') .
+                    $this->module->l('customers to make the purchase with Mercado Pago.'),
             ),
         );
 
