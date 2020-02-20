@@ -38,14 +38,14 @@ window.onload = function() {
     
     form_prepend.innerHTML = "<div class='row'>\
         <div class='col-md-12'>\
-            <h4 class='title-checkout-body'>Activa tus credenciales según lo que quieras hacer</h4>\
+            <h4 class='mp-title-checkout-body'>Activa tus credenciales según lo que quieras hacer</h4>\
         </div>\
     </div>\
-    <div class='row pt-15 pb-25'>\
+    <div class='row mp-pt-15 mp-pb-25'>\
         <div class='col-md-12'>\
-            <p class='text-credenciais'>Realiza pruebas antes de salir al mundo. <b>Opera de dos formas</b>:</p>\
-            <p class='text-credenciais'>Por defecto te dejamos <b>el modo Sandbox activo</b> para que hagas testeos antes de empezar a vender.</p>\
-            <p class='text-credenciais'>¿Todo va bien? <b>Desactiva Sandbox</b> al final de la configuración y abre paso a tus ventas online.</p>\
+            <p class='mp-text-credenciais'>Realiza pruebas antes de salir al mundo. <b>Opera de dos formas</b>:</p>\
+            <p class='mp-text-credenciais'>Por defecto te dejamos <b>el modo Sandbox activo</b> para que hagas testeos antes de empezar a vender.</p>\
+            <p class='mp-text-credenciais'>¿Todo va bien? <b>Desactiva Sandbox</b> al final de la configuración y abre paso a tus ventas online.</p>\
         </div>\
     </div>";
     
@@ -71,9 +71,9 @@ window.onload = function() {
     var form_basic = document.querySelector("#module_form_1 .panel .form-wrapper");
     var form_basic_prepend = document.createElement("div");
     
-    form_basic_prepend.innerHTML = "<div class='row pb-25'>\
+    form_basic_prepend.innerHTML = "<div class='row mp-pb-25'>\
         <div class='col-md-12'>\
-            <h4 class='title-checkout-body'>Hagamos que tu cliente termine su compra de forma rápida, fácil y segura.</h4>\
+            <h4 class='mp-title-checkout-body'>Hagamos que tu cliente termine su compra de forma rápida, fácil y segura.</h4>\
         </div>\
     </div>";
     
@@ -93,9 +93,9 @@ window.onload = function() {
     }
     
     var checkbox_online = document.querySelector("#checkbox_0");
-    var checkbox_online_prepend = "<div class='all_checkbox'>\
+    var checkbox_online_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-            <label for='checkmeon'><b class='pointer pl-5'>Payment methods</b></label>\
+            <label for='checkmeon'><b class='mp-pointer mp-pl-5'>Payment methods</b></label>\
     </div>";
     checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
     
@@ -114,9 +114,9 @@ window.onload = function() {
     
     var countOnlineInputs = document.querySelectorAll(".payment-online-checkbox").length;
     var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
-    var checkbox_offline_prepend = "<div class='all_checkbox'>\
+    var checkbox_offline_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-            <label for='checkmeoff'><b class='pointer pl-5'>Select face payments</b></label>\
+            <label for='checkmeoff'><b class='mp-pointer mp-pl-5'>Select face payments</b></label>\
     </div>";
     checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
     
@@ -130,23 +130,22 @@ window.onload = function() {
     
     for (i=0; i < form_group.length; i++) {
         if(i == 2){
-            form_group[i].innerHTML += "<hr class='mt-50'>\
+            form_group[i].innerHTML += "<hr class='mp-mt-50'>\
             <div class='row'>\
                 <div class='col-md-12'>\
-                    <h4 class='title-checkout-body'>¿Eres un partner de Mercado Pago?</h4>\
+                    <h4 class='mp-title-checkout-body'>¿Eres un partner de Mercado Pago?</h4>\
                 </div>\
             </div>";
         }
     }
     
-    form_module.style.cursor = "pointer";
-    form_module.innerHTML += "<span class='btn-collapsible' id='header_plus' style='display:block'>+</span>\
-        <span class='btn-collapsible' id='header_less' style='display:none'>-</span>";
+    form_module.style.cursor = "mp-pointer";
+    form_module.innerHTML += "<span class='mp-btn-collapsible' id='header_plus' style='display:block'>+</span>\
+        <span class='mp-btn-collapsible' id='header_less' style='display:none'>-</span>";
     
-    collapse_body_prepend.innerHTML = "<div class='row pb-25'>\
+    collapse_body_prepend.innerHTML = "<div class='row mp-pb-25'>\
         <div class='col-md-12'>\
-            <h4 class='title-checkout-body'>Activate other tools in our module ready to use.
-            </h4>\
+            <h4 class='mp-title-checkout-body'>Activate other tools in our module ready to use.</h4>\
         </div>\
     </div>";
     

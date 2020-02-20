@@ -254,12 +254,7 @@ class AbstractPreference
     public function getSponsorId()
     {
         $sponsor_id = $this->mpuseful->getCountryConfigs($this->settings['MERCADOPAGO_SITE_ID']);
-
-        if ($this->settings['MERCADOPAGO_INTEGRATOR_ID'] == "") {
-            return $sponsor_id;
-        }
-
-       return $this->settings['MERCADOPAGO_INTEGRATOR_ID'];
+        return $sponsor_id;
     }
 
     /**

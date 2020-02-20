@@ -97,11 +97,6 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
-            //ticket open for fix
-            if ($value['id'] == "pec") {
-                continue;
-            }
-
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
@@ -213,35 +208,6 @@ class MPApi
         //response treatment
         $result = $response['response'];
         return $result;
-    }
-
-    /**
-     * Is valid sponsor id
-     *
-     * @param $integrator_id
-     * @return boolean
-     * @throws Exception
-     */
-    public function isValidIntegratorId($integrator_id)
-    {
-        $response = MPRestCli::get('/users/' . $integrator_id);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API valid_integrator_id error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        //response treatment
-        $result = $response['response'];
-        if (
-            $result['site_id'] != Configuration::get('MERCADOPAGO_SITE_ID') ||
-            $result['id'] == Configuration::get('MERCADOPAGO_SELLER_ID')
-        ) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

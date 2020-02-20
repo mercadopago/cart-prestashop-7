@@ -23,12 +23,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<div class="panel panel-mercadopago">
+<div class="panel mp-panel-mercadopago">
 	<div class="row header-mercadopago">
         <div class="left-details">
-            <h2 class="title-checkout-header">{l s='Design the best payment experience for your customers' mod='mercadopago'}</h2>
+            <h2 class="mp-title-checkout-header">{l s='Design the best payment experience for your customers' mod='mercadopago'}</h2>
         </div>
-        <div class="right-details">
+        <div class="mp-right-details">
             <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mpinfo_logo.png" class="img-fluid header-mp-logo" id="payment-logo" />
         </div>
 	</div>
@@ -38,76 +38,76 @@
 	<div class="mercadopago-content">
 		<div class="row">
             <div class="col-md-12">
-                <h4 class="title-checkout-body">{l s='Follow these steps and maximize your conversion:' mod='mercadopago'}</h4>
+                <h4 class="mp-title-checkout-body">{l s='Follow these steps and maximize your conversion:' mod='mercadopago'}</h4>
             </div>
 		</div>
         
-        <div class="row pt-15">
-            <div class="col-md-2 text-center w-25 px-10">
+        <div class="row mp-pt-15">
+            <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $access_token != '' && $sandbox_access_token != ''}
-                    <p class="number-checked"><i class="icon-check"></i></p>
+                    <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
-                    <p class="number-checkout-body">1</p>
+                    <p class="mp-number-checkout-body">1</p>
                 {/if}
                 
-                <p class="text-checkout-body">
+                <p class="mp-text-checkout-body">
                     {l s='Get your' mod='mercadopago'} 
                     {l s='credentials' mod='mercadopago'}
                     {l s='in your Mercado Pago account.' mod='mercadopago'}
                 </p>
             </div>
             
-            <div class="col-md-2 text-center w-25 px-10">
+            <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $seller_homolog == true}
-                    <p class="number-checked"><i class="icon-check"></i></p>
+                    <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
-                    <p class="number-checkout-body">2</p>
+                    <p class="mp-number-checkout-body">2</p>
                 {/if}
                 
-                <p class="text-checkout-body">
+                <p class="mp-text-checkout-body">
                     {l s='Approve your account to securely charge your customers.' mod='mercadopago'}
                 </p>
             </div>
             
-            <div class="col-md-2 text-center w-25 px-10">
+            <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $standard_test == true}
-                    <p class="number-checked"><i class="icon-check"></i></p>
+                    <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
-                    <p class="number-checkout-body">3</p>
+                    <p class="mp-number-checkout-body">3</p>
                 {/if}
                 
-                <p class="text-checkout-body">
+                <p class="mp-text-checkout-body">
                     {l s='Choose the' mod='mercadopago'} 
                     {l s='payment methods' mod='mercadopago'}
                     {l s='available in your store.' mod='mercadopago'}
                 </p>
             </div>
             
-            <div class="col-md-2 text-center w-25 px-10">
+            <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $count_test != 0}
-                    <p class="number-checked"><i class="icon-check"></i></p>
+                    <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
-                    <p class="number-checkout-body">4</p>
+                    <p class="mp-number-checkout-body">4</p>
                 {/if}
                 
-                <p class="text-checkout-body">
+                <p class="mp-text-checkout-body">
                     {l s='Activate the' mod='mercadopago'} 
                     {l s='Sandbox' mod='mercadopago'}
                     {l s='test environment to test your store.' mod='mercadopago'}
                 </p>
             </div>
             
-            <div class="col-md-2 text-center w-25 px-10">
+            <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $sandbox_status != true}
-                    <p class="number-checked"><i class="icon-check"></i></p>
+                    <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
-                    <p class="number-checkout-body">5</p>
+                    <p class="mp-number-checkout-body">5</p>
                 {/if}
-                <p class="text-checkout-body">{l s='Deactivate it if you’re ready to receive payments.' mod='mercadopago'}</p>
+                <p class="mp-text-checkout-body">{l s='Deactivate it if you’re ready to receive payments.' mod='mercadopago'}</p>
             </div>
 		</div>
 		
-		<div class="row pt-30">
+		<div class="row mp-pt-30">
             <div class="col-md-6">
                 <p class="text-branded lists-how-configure">
                     {l s='Credentials are the keys we provide you to integrate quickly and securely.' mod='mercadopago'}
@@ -156,19 +156,19 @@
         <div class="mercadopago-content">
             <div class="row">
                 <div class="col-md-12">
-                    <h4 class="title-checkout-body">{l s='Everything set up? Test your store' mod='mercadopago'}</h4>
+                    <h4 class="mp-title-checkout-body">{l s='Everything set up? Test your store' mod='mercadopago'}</h4>
                 </div>
             </div>
 
-            <div class="row pt-15">
+            <div class="row mp-pt-15">
                 <div class="col-md-12">
-                    <p class="text-credenciais">{l s='Visit your store and simulate payments to check that everything is fine.' mod='mercadopago'}</p>
+                    <p class="mp-text-credenciais">{l s='Visit your store and simulate payments to check that everything is fine.' mod='mercadopago'}</p>
                 </div>
             </div>
 
-            <div class="row pt-25">
+            <div class="row mp-pt-25">
                 <div class="col-md-12">
-                    <a href="{$url_base|escape:'html':'UTF-8'}" target="_blank" class="btn btn-default btn-credenciais">{l s='I want to test my sales' mod='mercadopago'}</a>
+                    <a href="{$url_base|escape:'html':'UTF-8'}" target="_blank" class="btn btn-default mp-btn-credenciais">{l s='I want to test my sales' mod='mercadopago'}</a>
                 </div>
             </div>
         </div>
@@ -182,20 +182,20 @@
         <div class="mercadopago-content">
             <div class="row">
                 <div class="col-md-12">
-                    <h4 class="title-checkout-body">{l s='You have already gone to production!' mod='mercadopago'}</h4>
+                    <h4 class="mp-title-checkout-body">{l s='You have already gone to production!' mod='mercadopago'}</h4>
                 </div>
             </div>
 
-            <div class="row pt-15">
+            <div class="row mp-pt-15">
                 <div class="col-md-12">
-                    <p class="text-credenciais">{l s='All ready for the takeoff of your sales. Now bring your' mod='mercadopago'}</p>
-                    <p class="text-credenciais">{l s='customers to offer them the best online shopping experience with Mercado Pago.' mod='mercadopago'}</p>
+                    <p class="mp-text-credenciais">{l s='All ready for the takeoff of your sales. Now bring your' mod='mercadopago'}</p>
+                    <p class="mp-text-credenciais">{l s='customers to offer them the best online shopping experience with Mercado Pago.' mod='mercadopago'}</p>
                 </div>
             </div>
 
-            <div class="row pt-25">
+            <div class="row mp-pt-25">
                 <div class="col-md-12">
-                    <a href="{$url_base|escape:'html':'UTF-8'}" target="_blank" class="btn btn-default btn-credenciais">{l s='Visit my store' mod='mercadopago'}</a>
+                    <a href="{$url_base|escape:'html':'UTF-8'}" target="_blank" class="btn btn-default mp-btn-credenciais">{l s='Visit my store' mod='mercadopago'}</a>
                 </div>
             </div>
         </div>
@@ -217,31 +217,31 @@
     </div>
     
     <div class="col-md-4 text-right">
-        <a class="link-modal-trigger lists-how-configure" data-toggle="modal" data-target="#rating-modal">
+        <a class="mp-link-modal-trigger lists-how-configure" data-toggle="modal" data-target="#mp-rating-modal">
             {l s='Your opinion helps us improving' mod='mercadopago'}
         </a>
 
         <!-- Modal -->
-        <div class="modal rating-modal fade" id="rating-modal" tabindex="-1" role="dialog" aria-labelledby="rating-modal">
-            <div class="modal-dialog rating-modal-dialog" role="document">
+        <div class="modal mp-rating-modal fade" id="mp-rating-modal" tabindex="-1" role="dialog" aria-labelledby="mp-rating-modal">
+            <div class="modal-dialog mp-rating-modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header rating-modal-header">
+                    <div class="modal-header mp-rating-modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h3 class="modal-title" id="myModalLabel">{l s='Your opinion helps us improving.' mod='mercadopago'}</h3>
                     </div>
                         
                     <form action="" method="post">
-                        <div class="modal-body rating-modal-body">
+                        <div class="modal-body mp-rating-modal-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p class="label-rating-input">
+                                    <p class="label-mp-rating-input">
                                         {l s='From 1 to 10, how likely are you to recommend our module to a friend?' mod='mercadopago'}
                                     </p>
-                                    <div class="rating-box pb-10">
+                                    <div class="mp-rating-box mp-pb-10">
                                         {for $i=1 to 10 step 1}
-                                            <div class="rating-input">
-                                                <input type="radio" value="{$i|escape:'html':'UTF-8'}" name="mercadopago-rating" id="rating{$i|escape:'html':'UTF-8'}" class="pointer" /><br>
-                                                <label for="rating{$i|escape:'html':'UTF-8'}" class="label-rating pointer">{$i|escape:'html':'UTF-8'}</label>
+                                            <div class="mp-rating-input">
+                                                <input type="radio" value="{$i|escape:'html':'UTF-8'}" name="mercadopago-rating" id="rating{$i|escape:'html':'UTF-8'}" class="mp-pointer" /><br>
+                                                <label for="rating{$i|escape:'html':'UTF-8'}" class="label-rating mp-pointer">{$i|escape:'html':'UTF-8'}</label>
                                             </div>
                                         {/for}
                                     </div>
@@ -254,19 +254,19 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <p class="fl-right">10 - {l s='Very likely' mod='mercadopago'}</p>
+                                        <p class="mp-fl-right">10 - {l s='Very likely' mod='mercadopago'}</p>
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 pt-30">
-                                    <p class="label-rating-input"><b>{l s='Comments or suggestions? This is the ideal space:' mod='mercadopago'}</b></p>
-                                    <textarea name="mercadopago-comments" class="textarea-rating-module" placeholder="{l s='Write your comment' mod='mercadopago'}"></textarea>
+                                <div class="col-md-12 mp-pt-30">
+                                    <p class="label-mp-rating-input"><b>{l s='Comments or suggestions? This is the ideal space:' mod='mercadopago'}</b></p>
+                                    <textarea name="mercadopago-comments" class="mp-textarea-rating-module" placeholder="{l s='Write your comment' mod='mercadopago'}"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer rating-modal-footer">
+                        <div class="modal-footer rating-mp-modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">{l s='Close' mod='mercadopago'}</button>
-                            <input type="submit" class="btn btn-primary btn-rating-submit" name="submitMercadopagoRating" value="{l s='Send' mod='mercadopago'}" />
+                            <input type="submit" class="btn btn-primary mp-btn-rating-submit" name="submitMercadopagoRating" value="{l s='Send' mod='mercadopago'}" />
                         </div>
                     </form>
                 </div>

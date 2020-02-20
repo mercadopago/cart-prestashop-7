@@ -59,7 +59,7 @@
 
         form_country_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12 pb-25'>\
-                <h4 class='title-checkout-body'>{l s='In which country does your Mercado Pago account operate?' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='In which country does your Mercado Pago account operate?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_country.insertBefore(form_country_prepend, form_country.firstChild);
@@ -72,30 +72,30 @@
 
         form_credentials_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Enter your credentials and choose how to operate' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Enter your credentials and choose how to operate' mod='mercadopago'}</h4>\
             </div>\
         </div>\
-        <div class='row pt-5 pb-30'>\
+        <div class='row mp-pt-5 mp-pb-30'>\
             <div class='col-md-12'>\
-                <p class='text-credenciais'><b>{l s='Test Mode' mod='mercadopago'}</b></p>\
-                <p class='text-credenciais'>{l s='By default, we leave the test environment (Sandbox) active for you to test before you start selling.' mod='mercadopago'}</p>\
-                <p class='text-credenciais pt-15'><b>{l s='Production Mode' mod='mercadopago'}</b></p>\
-                <p class='text-credenciais'>{l s='When you see that everything is going well, disable Sandbox to go to Production and make way for your online sales.' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais'><b>{l s='Test Mode' mod='mercadopago'}</b></p>\
+                <p class='mp-text-credenciais'>{l s='By default, we leave the test environment (Sandbox) active for you to test before you start selling.' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-15'><b>{l s='Production Mode' mod='mercadopago'}</b></p>\
+                <p class='mp-text-credenciais'>{l s='When you see that everything is going well, disable Sandbox to go to Production and make way for your online sales.' mod='mercadopago'}</p>\
             </div>\
         </div>";
         form_credentials.insertBefore(form_credentials_prepend, form_credentials.firstChild);
 
-        var form_credentials_pruebas_append = "<div class='row pt-20 mb-15'>\
+        var form_credentials_pruebas_append = "<div class='row mp-pt-20 mp-mb-15'>\
             <div class='col-md-12'>\
-                <p class='title-credenciais'>{l s='Test Credentials' mod='mercadopago'}</p>\
-                <p class='text-credenciais pt-5 pb-10'>{l s='With these keys you can do the tests you want' mod='mercadopago'}</p>\
+                <p class='mp-title-credenciais'>{l s='Test Credentials' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='With these keys you can do the tests you want' mod='mercadopago'}</p>\
             </div>\
         </div>";
 
-        var form_credentials_produccion_append = "<div class='row pt-20 mb-15'>\
+        var form_credentials_produccion_append = "<div class='row mp-pt-20 mp-mb-15'>\
             <div class='col-md-12'>\
-                <p class='title-credenciais'>{l s='Production Credentials' mod='mercadopago'}</p>\
-                <p class='text-credenciais pt-5 pb-10'>{l s='With these keys you can receive real payments from your customers.' mod='mercadopago'}</p>\
+                <p class='mp-title-credenciais'>{l s='Production Credentials' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='With these keys you can receive real payments from your customers.' mod='mercadopago'}</p>\
             </div>\
         </div>";
 
@@ -113,11 +113,11 @@
         var form_homolog = document.querySelector("#module_form_2 .panel .form-wrapper");
 
         form_homolog.innerHTML = "<div class='row'>\
-            <div class='col-md-12 pb-10'>\
-                <h4 class='title-checkout-body'>{l s='Approve your account, it will only take a few minutes' mod='mercadopago'}</h4>\
+            <div class='col-md-12 mp-pb-10'>\
+                <h4 class='mp-title-checkout-body'>{l s='Approve your account, it will only take a few minutes' mod='mercadopago'}</h4>\
             </div>\
             <div class='col-md-6'>\
-                <p class='text-branded lists-how-configure pb-10'>\
+                <p class='mp-text-branded lists-how-configure mp-pb-10'>\
                     {l s='Complete this process to ensure the data' mod='mercadopago'} \
                     {l s='of your customers and the adaptation to the regulations or legal ' mod='mercadopago'} \
                     {l s='provisions of each country.' mod='mercadopago'} \
@@ -132,18 +132,18 @@
         var form_store = document.querySelector("#module_form_3 .panel .form-wrapper");
         var form_store_group = document.querySelectorAll("#module_form_3 .panel .form-wrapper .form-group");
 
-        form_store_prepend.innerHTML = "<div class='row pb-25'>\
+        form_store_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Store Information' mod='mercadopago'}</h4>\
-                <p class='text-credenciais pb-10'>{l s='Enter your business details in the module:' mod='mercadopago'}</p>\
+                <h4 class='mp-title-checkout-body'>{l s='Store Information' mod='mercadopago'}</h4>\
+                <p class='mp-text-credenciais mp-pb-10'>{l s='Enter your business details in the module:' mod='mercadopago'}</p>\
             </div>\
         </div>";
         form_store.insertBefore(form_store_prepend, form_store.firstChild);
 
-        var form_store_append = "<hr class='mt-15'>\
-        <div class='row mb-15'>\
+        var form_store_append = "<hr class='mp-mt-15'>\
+        <div class='row mp-mb-15'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Are you a Mercado Pago partner?' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Are you a Mercado Pago partner?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -164,7 +164,7 @@
         var form_standard_header = document.querySelector("#module_form_4 .panel .panel-heading");
         form_standard_header.style.height = "auto";
 
-        form_standard_header_prepend.innerHTML = "<ul class='checkout-list'>\
+        form_standard_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
             <li><span>{l s='Offers all payment methods.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Payment experience on the Mercado Pago site.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Your customers can pay as guests or by entering their Mercado Pago account.' mod='mercadopago'}</span></li>\
@@ -183,9 +183,9 @@
         var form_standard = document.querySelector("#module_form_4 .panel .form-wrapper");
         var form_standard_group = document.querySelectorAll("#module_form_4 .panel .form-wrapper .form-group");
 
-        form_standard_prepend.innerHTML = "<div class='row pb-25'>\
+        form_standard_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_standard.insertBefore(form_standard_prepend, form_standard.firstChild);
@@ -204,9 +204,9 @@
         }
 
         var checkbox_online = document.querySelector("#checkbox_0");
-        var checkbox_online_prepend = "<div class='all_checkbox'>\
+        var checkbox_online_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-            <label for='checkmeon'><b class='pointer no-select pl-5'>{l s='Payment methods' mod='mercadopago'}</b></label>\
+            <label for='checkmeon'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Payment methods' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
 
@@ -225,21 +225,21 @@
 
         var countOnlineInputs = document.querySelectorAll(".payment-online-checkbox").length;
         var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
-        var checkbox_offline_prepend = "<div class='all_checkbox'>\
+        var checkbox_offline_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-            <label for='checkmeoff'><b class='pointer no-select pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
+            <label for='checkmeoff'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
         //advanced configuration
-        var form_standard_append = "<div class='panel-heading panel-advanced-config'>\
+        var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
             <i class='icon-cogs'></i> Advanced Configuration\
-            <span class='btn-collapsible' id='header_plus_standard' style='display:block'>+</span>\
-            <span class='btn-collapsible' id='header_less_standard' style='display:none'>-</span>\
+            <span class='mp-btn-collapsible' id='header_plus_standard' style='display:block'>+</span>\
+            <span class='mp-btn-collapsible' id='header_less_standard' style='display:none'>-</span>\
         </div>\
         <div class='row text-standard-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body mp-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -255,7 +255,7 @@
         var style_collapsible = false;
         var header_plus_standard = document.querySelector("#header_plus_standard");
         var header_less_standard = document.querySelector("#header_less_standard");
-        var form_standard_collapsible = document.querySelector("#module_form_4 .panel .panel-advanced-config");
+        var form_standard_collapsible = document.querySelector("#module_form_4 .panel .mp-panel-advanced-config");
         var form_standard_collapsible_body = document.querySelectorAll(".mp-input-collapsible");
         var form_standard_collapsible_footer = document.querySelector("#module_form_4 .panel .panel-footer");
 
@@ -296,7 +296,7 @@
         var form_custom_header = document.querySelector("#module_form_5 .panel .panel-heading");
         form_custom_header.style.height = "auto";
 
-        form_custom_header_prepend.innerHTML = "<ul class='checkout-list'>\
+        form_custom_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
             <li><span>{l s='Offers payments with debit and credit cards.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Payment experience within your store.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Your customers pay as guests without leaving your store.' mod='mercadopago'}</span></li>\
@@ -307,22 +307,22 @@
         var form_custom = document.querySelector("#module_form_5 .panel .form-wrapper");
         var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
 
-        form_custom_prepend.innerHTML = "<div class='row pb-25'>\
+        form_custom_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_custom.insertBefore(form_custom_prepend, form_custom.firstChild);
 
         //advanced configuration
-        var form_custom_append = "<div class='panel-heading panel-advanced-config'>\
+        var form_custom_append = "<div class='panel-heading mp-panel-advanced-config'>\
             <i class='icon-cogs'></i> Advanced Configuration\
-            <span class='btn-collapsible' id='header_plus_custom' style='display:block'>+</span>\
-            <span class='btn-collapsible' id='header_less_custom' style='display:none'>-</span>\
+            <span class='mp-btn-collapsible' id='header_plus_custom' style='display:block'>+</span>\
+            <span class='mp-btn-collapsible' id='header_less_custom' style='display:none'>-</span>\
         </div>\
         <div class='row text-custom-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body mp-custom-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-custom-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -341,7 +341,7 @@
         var style_collapsible_custom = false;
         var header_plus_custom = document.querySelector("#header_plus_custom");
         var header_less_custom = document.querySelector("#header_less_custom");
-        var form_custom_collapsible = document.querySelector("#module_form_5 .panel .panel-advanced-config");
+        var form_custom_collapsible = document.querySelector("#module_form_5 .panel .mp-panel-advanced-config");
         var form_custom_collapsible_body = document.querySelectorAll(".mp-custom-input-collapsible");
         var form_custom_collapsible_footer = document.querySelector("#module_form_5 .panel .panel-footer");
         var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
@@ -389,7 +389,7 @@
         var form_ticket_header = document.querySelector("#module_form_6 .panel .panel-heading");
         form_ticket_header.style.height = "auto";
 
-        form_ticket_header_prepend.innerHTML = "<ul class='checkout-list'>\
+        form_ticket_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
             <li><span>{l s='Offer cash payments.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Payment experience within your store.' mod='mercadopago'}</span></li>\
             <li><span>{l s='Your customers pay as guests without leaving your store.' mod='mercadopago'}</span></li>\
@@ -400,9 +400,9 @@
         var form_ticket = document.querySelector("#module_form_6 .panel .form-wrapper");
         var form_ticket_group = document.querySelectorAll("#module_form_6 .panel .form-wrapper .form-group");
 
-        form_ticket_prepend.innerHTML = "<div class='row pb-25'>\
+        form_ticket_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body'>{l s='Your customer will make their purchase quickly, easily and safely with these settings:' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Your customer will make their purchase quickly, easily and safely with these settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_ticket.insertBefore(form_ticket_prepend, form_ticket.firstChild);
@@ -423,21 +423,21 @@
 
         var countStandarPayments = countOnlineInputs + countOfflineInputs; 
         var checkbox_ticket = document.querySelector("#checkbox_"+countStandarPayments);
-        var checkbox_ticket_prepend = "<div class='all_checkbox'>\
+        var checkbox_ticket_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeticket' id='checkmeticket' "+ticketChecked+" onclick='completeTicketCheckbox()'> \
-            <label for='checkmeticket'><b class='pointer no-select pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
+            <label for='checkmeticket'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_ticket.insertAdjacentHTML('beforebegin', checkbox_ticket_prepend);
 
         //advanced configuration
-        var form_ticket_append = "<div class='panel-heading panel-advanced-config'>\
+        var form_ticket_append = "<div class='panel-heading mp-panel-advanced-config'>\
             <i class='icon-cogs'></i> Advanced Configuration\
-            <span class='btn-collapsible' id='header_plus_ticket' style='display:block'>+</span>\
-            <span class='btn-collapsible' id='header_less_ticket' style='display:none'>-</span>\
+            <span class='mp-btn-collapsible' id='header_plus_ticket' style='display:block'>+</span>\
+            <span class='mp-btn-collapsible' id='header_less_ticket' style='display:none'>-</span>\
         </div>\
         <div class='row text-ticket-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='title-checkout-body mp-ticket-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-mp-ticket-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -455,7 +455,7 @@
         var style_collapsible_ticket = false;
         var header_plus_ticket = document.querySelector("#header_plus_ticket");
         var header_less_ticket = document.querySelector("#header_less_ticket");
-        var form_ticket_collapsible = document.querySelector("#module_form_6 .panel .panel-advanced-config");
+        var form_ticket_collapsible = document.querySelector("#module_form_6 .panel .mp-panel-advanced-config");
         var form_ticket_collapsible_body = document.querySelectorAll(".mp-ticket-input-collapsible");
         var form_ticket_collapsible_footer = document.querySelector("#module_form_6 .panel .panel-footer");
 
