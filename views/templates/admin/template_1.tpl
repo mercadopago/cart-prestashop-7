@@ -52,7 +52,7 @@
                 
                 <p class="text-checkout-body">
                     {l s='Get your' mod='mercadopago'} 
-                    <b>{l s='credentials' mod='mercadopago'}</b> 
+                    {l s='credentials' mod='mercadopago'}
                     {l s='in your Mercado Pago account.' mod='mercadopago'}
                 </p>
             </div>
@@ -78,7 +78,7 @@
                 
                 <p class="text-checkout-body">
                     {l s='Choose the' mod='mercadopago'} 
-                    <b>{l s='payment methods' mod='mercadopago'}</b> 
+                    {l s='payment methods' mod='mercadopago'}
                     {l s='available in your store.' mod='mercadopago'}
                 </p>
             </div>
@@ -92,7 +92,7 @@
                 
                 <p class="text-checkout-body">
                     {l s='Activate the' mod='mercadopago'} 
-                    <b>{l s='Sandbox' mod='mercadopago'}</b> 
+                    {l s='Sandbox' mod='mercadopago'}
                     {l s='test environment to test your store.' mod='mercadopago'}
                 </p>
             </div>

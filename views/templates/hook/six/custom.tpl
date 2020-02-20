@@ -28,25 +28,25 @@
         <!-- Logo & Title -->
         <div class="title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}"/>
-            <p>{l s='Quiero pagar con Checkout Custom' mod='mercadopago'}</p>
+            <p>{l s='Pay with credit and debit cards' mod='mercadopago'}</p>
         </div>
 
         <!-- Cards Type -->
         <div class="col-xs-12 col-md-12 col-12 pt-25">
             <a class="link-checkout-custom"
-               id="button-show-payments">{l s='Con qué tarjetas puedo pagar' mod='mercadopago'} ⌵ </a>
+               id="button-show-payments">{l s='With what cards can I pay' mod='mercadopago'} ⌵ </a>
         </div>
         <div class="col-xs-12 col-md-12 col-12">
             <div class="frame-payments" id="frame-payments">
                 {if count($credit) != 0}
-                    <p class="subtitle-payments">{l s='Tarjetas de crédito' mod='mercadopago'}</p>
+                    <p class="subtitle-payments">{l s='Credit card' mod='mercadopago'}</p>
                     {foreach $credit as $tarjeta}
                         <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas"/>
                     {/foreach}
                 {/if}
 
                 {if count($debit) != 0}
-                    <p class="subtitle-payments pt-10">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                    <p class="subtitle-payments pt-10">{l s='Debit card' mod='mercadopago'}</p>
                     {foreach $debit as $tarjeta}
                         <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid img-tarjetas"/>
                     {/foreach}
@@ -58,14 +58,14 @@
         <!-- MP FORM -->
         <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
             <div id="mp-subtitle-div-title" class="col-md-12 col-12 frame-title">
-                <p class="subtitle-checkout-six">{l s='Ingresa los datos de tu tarjeta' mod='mercadopago'}</p>
+                <p class="subtitle-checkout-six">{l s='Enter your card details' mod='mercadopago'}</p>
             </div>
 
 
             <!-- Input Card number -->
             <div class="row">
                 <div class="col-md-12 col-12 pb-10 mp-m-col">
-                    <label for="id-card-number" class="pb-5">{l s='Número de Tarjeta' mod='mercadopago'} <em
+                    <label for="id-card-number" class="pb-5">{l s='Card number' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-card-number" data-checkout="cardNumber" type="text"
                            class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24"
@@ -83,7 +83,7 @@
             <div id="mp-card-holder-div" class="row">
                 <div class="col-md-12 col-12 pt-10 mp-m-col">
                     <label for="id-card-holder-name"
-                           class="pb-5">{l s='Nombre y apellido del titular de la tarjeta' mod='mercadopago'} <em
+                           class="pb-5">{l s='Name and surname of the cardholder' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
                            class="form-control mp-form-control" autocomplete="off"/>
@@ -95,7 +95,7 @@
             <div class="row">
                 <!-- Input expiration date -->
                 <div class="col-md-6 col-6 pt-10 mp-m-col">
-                    <label for="id-card-expiration" class="pb-5">{l s='Fecha de vencimiento' mod='mercadopago'} <em
+                    <label for="id-card-expiration" class="pb-5">{l s='Expiration date' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-card-expiration" data-checkout="cardExpiration" type="text"
                            class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA"
@@ -113,13 +113,13 @@
 
                 <!-- Input Security Code -->
                 <div class="col-md-6 col-6 pt-10 mp-m-col">
-                    <label for="id-security-code" class="pb-5">{l s='Código de seguridad' mod='mercadopago'} <em
+                    <label for="id-security-code" class="pb-5">{l s='Security code' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-security-code" data-checkout="securityCode" type="text"
                            class="form-control mp-form-control" autocomplete="off"
                            placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);"
                            maxlength="4"/>
-                    <small class="mp-small pt-5">{l s='Últimos 3 números del dorso' mod='mercadopago'}</small>
+                    <small class="mp-small pt-5">{l s='last 3 numbers on the back of your card' mod='mercadopago'}</small>
                     <small id="mp-error-224" class="mp-erro-form pt-0" data-main="#id-security-code">
                         {l s='Invalid card holder name' mod='mercadopago'}</small>
                     <small id="mp-error-E302" class="mp-erro-form pt-0" data-main="#id-security-code">
@@ -136,7 +136,7 @@
                 <!-- Select issuer -->
                 <div id="container-issuers" class="issuers-options col-md-4 col-4 pt-20 mp-m-col">
                     <label for="id-issuers-options"
-                           class="issuers-options pb-5">{l s='Banco emisor' mod='mercadopago'}</label>
+                           class="issuers-options pb-5">{l s='issuing bank' mod='mercadopago'}</label>
                     <select id="id-issuers-options"
                             class="issuers-options form-control mp-form-control mp-select pointer noUniform"
                             data-checkout="issuer" name="mercadopago_custom[issuer]" type="text"></select>
@@ -146,7 +146,7 @@
                 <!-- Select installments -->
                 <div id="container-installments" class="col-md-12 col-8 col-md-4 mp-m-col pl-15">
                     <label for="id-installments"
-                           class="pb-5">{l s='Seleccione el número de cotas' mod='mercadopago'}</label>
+                           class="pb-5">{l s='In how many installments do you want to pay?' mod='mercadopago'}</label>
                     <select class="form-control mp-form-control  pointer not_uniform noUniform" id="id-installments"
                             data-no-uniform="true" data-checkout="installments" name="mercadopago_custom[installments]"
                             type="text"></select>
@@ -166,22 +166,21 @@
                 </div>
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 frame-title">
-                <p class="subtitle-checkout-six">{l s='Ingresá tu número de documento' mod='mercadopago'}</p>
+                <p class="subtitle-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
             </div>
 
             <div id="mp-doc-div" class="row">
                 <div id="mp-doc-type-div" class="col-md-4 col-4 pb-20 mp-m-col">
-                    <label for="id-docType" class="pb-5">{l s='Tipo' mod='mercadopago'}</label>
+                    <label for="id-docType" class="pb-5">{l s='Type' mod='mercadopago'}</label>
                     <select id="id-docType" data-checkout="docType"
                             class="form-control mp-form-control  pointer noUniform"></select>
                 </div>
 
                 <!-- Input Doc Number -->
                 <div id="mp-doc-number-div" class="col-md-8 col-8 pb-20 mp-m-col">
-                    <label for="id-doc-number" class="pb-5">{l s='Número de documento' mod='mercadopago'}</label>
+                    <label for="id-doc-number" class="pb-5">{l s='Document number' mod='mercadopago'}</label>
                     <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control"
                            onkeyup="maskInput(this, minteger);" autocomplete="off"/>
-                    <small class="mp-small pt-5">{l s='Solo números' mod='mercadopago'}</small>
                     <small id="mp-error-324" class="mp-erro-form pt-0" data-main="#id-doc-number">
                         {l s='Invalid document number' mod='mercadopago'}</small>
                 </div>
@@ -191,7 +190,7 @@
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 px-0 mp-m-col">
                     <p class="all-required"><em
-                                class="mp-required text-bold">*</em> {l s='Campo obligatorio' mod='mercadopago'}</p>
+                                class="mp-required text-bold">*</em> {l s='Obligatory field' mod='mercadopago'}</p>
                 </div>
             </div>
         </div>
@@ -206,7 +205,7 @@
 
         <div class="row">
             <div class="col-md-12 col-xs-12 col-12 pt-25 mp-m-col">
-                <button class="btn btn-primary">{l s='Finalizar pedido' mod='mercadopago'}</button>
+                <button class="btn btn-primary">{l s='Check out' mod='mercadopago'}</button>
             </div>
         </div>
     </div>

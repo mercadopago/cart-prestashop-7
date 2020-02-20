@@ -36,7 +36,7 @@
                                 <input class="form-check-input mp-checkbox" type="radio" value="CPF" id="mp_cpf"
                                        name="mercadopago_ticket[docType]" checked>
                                 <label class="form-check-label fl-left pl-10"
-                                       for="mp_cpf">{l s='Persona Física' mod='mercadopago'}</label>
+                                       for="mp_cpf">{l s='Individual' mod='mercadopago'}</label>
                             </div>
                         </div>
                         <div class="form-check mp-form-check">
@@ -44,16 +44,16 @@
                                 <input class="form-check-input mp-checkbox" type="radio" value="CNPJ" id="mp_cnpj"
                                        name="mercadopago_ticket[docType]">
                                 <label class="form-check-label fl-left pl-10"
-                                       for="mp_cnpj">{l s='Persona Jurídica' mod='mercadopago'}</label>
+                                       for="mp_cnpj">{l s='Legal Entity' mod='mercadopago'}</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-4 col-4 col-xs-6 pb-10 pl-0" id="mp_box_firstname">
-                        <label for="" id="mp_firstname_label" class="pb-5">{l s='Nombre' mod='mercadopago'} <em
+                        <label for="" id="mp_firstname_label" class="pb-5">{l s='First and Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
-                        <label for="" id="mp_socialname_label" class="pb-5">{l s='Razón social' mod='mercadopago'} <em
+                        <label for="" id="mp_socialname_label" class="pb-5">{l s='Company number' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_firstname" data-checkout="mp_firstname"
                                name="mercadopago_ticket[firstname]" class="form-control mp-form-control"
@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-6 pb-10 m-pr-0" id="mp_box_lastname">
-                        <label for="" class="pb-5">{l s='Apellido' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_lastname" data-checkout="mp_lastname"
                                name="mercadopago_ticket[lastname]" class="form-control mp-form-control"
@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-8 col-8 col-xs-8 pb-20 pl-0">
-                        <label for="" class="pb-5">{l s='Dirección' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='Address' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_address" data-checkout="mp_address" name="mercadopago_ticket[address]"
                                class="form-control mp-form-control" value="{$address->address1}" autocomplete="off"/>
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-4 pb-20 pr-0">
-                        <label for="" class="pb-5">{l s='Número' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='Number' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_number" data-checkout="mp_number" name="mercadopago_ticket[number]"
                                class="form-control mp-form-control" onkeyup="maskInput(this, minteger);"
@@ -106,7 +106,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-4 col-4 col-xs-6 pb-20 pl-0">
-                        <label for="" class="pb-5">{l s='Ciudad' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='City' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_city" data-checkout="mp_city" name="mercadopago_ticket[city]"
                                class="form-control mp-form-control" value="{$address->city}" autocomplete="off"/>
@@ -115,7 +115,7 @@
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-6 pb-20 m-pr-0">
-                        <label for="" class="pb-5">{l s='Estado' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='State' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <select id="mp_state" data-checkout="mp_state" name="mercadopago_ticket[state]"
                                 class="form-control mp-form-control mp-select pointer">
@@ -153,7 +153,7 @@
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-12 pb-20 pr-0 mp-m-col">
-                        <label for="" class="pb-5">{l s='Código postal' mod='mercadopago'} <em
+                        <label for="" class="pb-5">{l s='Postal Code' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_zipcode" data-checkout="mp_zipcode" name="mercadopago_ticket[zipcode]"
                                class="form-control mp-form-control" value="{$address->postcode}" autocomplete="off"/>
@@ -162,12 +162,12 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-xs-12 col-12 px-0 mp-m-col">
-                    <p class="all-required">{l s='Completa todos los campos, son obligatorios.' mod='mercadopago'}</p>
+                    <p class="all-required">{l s='Complete all fields, they are mandatory!' mod='mercadopago'}</p>
                 </div>
             {/if}
 
             <div class="col-md-12 col-12 frame-title">
-                <h3 class="title-custom-checkout">{l s='Por favor, selecciona el emisor de su elección' mod='mercadopago'}</h3>
+                <h3 class="title-custom-checkout">{l s='Please, select the issuer of face payments with which you want to make the purchase:' mod='mercadopago'}</h3>
             </div>
 
             <div class="form-group">

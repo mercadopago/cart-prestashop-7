@@ -27,18 +27,18 @@
     <div class="row frame-checkout-six">
         <div class="title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-            <p>{l s='Quiero pagar con Mercado Pago sin costo adicional' mod='mercadopago'}</p>
+            <p>{l s='I want to pay with Mercado Pago at no additional cost.' mod='mercadopago'}</p>
         </div>
 
-        <p class="subtitle-checkout-six">{l s='Usa el medio de pago que prefieras' mod='mercadopago'}</p>
+        <p class="subtitle-checkout-six">{l s='Use the payment method you prefer.' mod='mercadopago'}</p>
 
         {if count($credit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
                 <p class="subtitle-checkout">
-                    {l s='Tarjetas de crédito' mod='mercadopago'} 
+                    {l s='Credit card' mod='mercadopago'} 
                     <span class="badge-checkout">
-                        {l s='Hasta' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='cuotas' mod='mercadopago'}
+                        {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
                     </span>
                 </p>
 
@@ -52,7 +52,7 @@
         {if count($debit) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                <p class="subtitle-checkout">{l s='Debit card' mod='mercadopago'}</p>
 
                 {foreach $debit as $tarjeta}
                 <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
@@ -64,7 +64,7 @@
         {if count($ticket) != 0}
         <div class="col-xs-4 col-md-4">
             <div class="frame-tarjetas">
-                <p class="subtitle-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
+                <p class="subtitle-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
 
                 {foreach $ticket as $tarjeta}
                 <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid img-tarjetas" />
