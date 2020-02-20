@@ -16,9 +16,9 @@ $_MODULE['<{mercadopago}prestashop>mercadopago_ab74c3411f6f46df16a6c47791be5a1b'
 $_MODULE['<{mercadopago}prestashop>mercadopago_bf40a1c10d0b4a9cb26a27593226285b'] = 'Transação em Mediação';
 $_MODULE['<{mercadopago}prestashop>mercadopago_53b4d02529d11ed85eb327d5297ec1ca'] = 'Transação pendente';
 $_MODULE['<{mercadopago}prestashop>mercadopago_2b39c27da5542ec1a72d8151ac607cd7'] = 'Transação Autorizada';
-$_MODULE['<{mercadopago}prestashop>mercadopago_fa7cfa1fc7f592acdf04ecafec84cb2a'] = 'Quero pagar com Mercado Pago sem custo adicional.';
-$_MODULE['<{mercadopago}prestashop>mercadopago_3733a68a866b18fc5f43dfd461412358'] = 'Quero pagar com cartão de crédito';
-$_MODULE['<{mercadopago}prestashop>mercadopago_86e7da69626be75f7920ad8dc9bd9475'] = 'Quero pagar via boleto ou na lotérica';
+$_MODULE['<{mercadopago}prestashop>mercadopago_3e8bd808fa886bce4b3de20f28870f9d'] = 'Quero pagar com Mercado Pago sem custo adicional.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_f4818b8be3fb0dcad10b46475db2efa1'] = 'Quero pagar com cartão de crédito';
+$_MODULE['<{mercadopago}prestashop>mercadopago_5edffb5efe684d534217bad198adeece'] = 'Quero pagar via boleto ou na lotérica';
 $_MODULE['<{mercadopago}prestashop>homologationsettings_2488dda96f94d5e5d7f227690ed5fabc'] = 'Homologação';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_c9cc8cce247e49bae79f15173ce97354'] = 'Salvar';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_4d9ac946f92f7211e40671513c72fd09'] = 'Configurações salvas com sucesso';

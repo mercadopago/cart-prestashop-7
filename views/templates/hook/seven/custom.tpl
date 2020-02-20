@@ -118,7 +118,7 @@
 
             <!-- Title installments -->
             <div class="col-md-12 col-12 frame-title">
-                <h3 class="title-custom-checkout">{l s='Cuántas cuotas querés pagar' mod='mercadopago'}</h3>
+                <h3 class="title-custom-checkout">{l s='In how many installments do you want to pay?' mod='mercadopago'}</h3>
             </div>
 
             <div class="form-group">

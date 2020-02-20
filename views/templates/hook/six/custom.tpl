@@ -129,7 +129,7 @@
 
             <!-- Title installments -->
             <div class="col-md-12 col-12 frame-title">
-                <p class="subtitle-checkout-six pt-15">{l s='Cuántas cuotas querés pagar' mod='mercadopago'}</p>
+                <p class="subtitle-checkout-six pt-15">{l s='In how many installments do you want to pay?' mod='mercadopago'}</p>
             </div>
 
             <div class="row">

@@ -452,7 +452,7 @@ class Mercadopago extends PaymentModule
                 ->fetch('module:mercadopago/views/templates/hook/seven/standard.tpl');
             $standardCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
             $standardCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Standard Checkout.'))
+                ->setCallToActionText($this->l('I want to pay with Mercado Pago at no additional cost.'))
                 ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
             return $standardCheckout;
@@ -480,7 +480,7 @@ class Mercadopago extends PaymentModule
                 ->fetch('module:mercadopago/views/templates/hook/seven/custom.tpl');
             $customCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
             $customCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Custom Checkout.') . $str_discount)
+                ->setCallToActionText($this->l(' Pay with credit and debit cards') . $str_discount)
                 ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
             return $customCheckout;
@@ -509,7 +509,7 @@ class Mercadopago extends PaymentModule
                 ->fetch('module:mercadopago/views/templates/hook/seven/ticket.tpl');
             $ticketCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
             $ticketCheckout->setForm($infoTemplate)
-                ->setCallToActionText($this->l('I want to pay with Ticket Checkout.') . $str_discount)
+                ->setCallToActionText($this->l('Pay with payment methods in cash') . $str_discount)
                 ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
             return $ticketCheckout;
