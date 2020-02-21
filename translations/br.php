@@ -189,7 +189,7 @@ $_MODULE['<{mercadopago}prestashop>configure_1bc20b46625d14ce9a7587faf7af4171'] 
 $_MODULE['<{mercadopago}prestashop>configure_7e3c0f9991ae9abe60ee5e022ae42159'] = 'Experiência de pagamento na sua loja.';
 $_MODULE['<{mercadopago}prestashop>configure_6e7cc3c1db795bffb2de3a237442e047'] = 'Seus clientes pagam como visitantes sem sair da sua loja.';
 $_MODULE['<{mercadopago}prestashop>configure_2cf04dc84eb55a15d6557f1f30eb63ad'] = 'Ofereça pagamentos em dinheiro.';
-$_MODULE['<{mercadopago}prestashop>configure_9816529bd797ea2cf8c0dfe7b13b9dd2'] = 'Your customers pay as guests without leaving your store.';
+$_MODULE['<{mercadopago}prestashop>configure_9816529bd797ea2cf8c0dfe7b13b9dd2'] = 'Seu cliente paga de forma rápida, fácil e segura com estas opções:';
 $_MODULE['<{mercadopago}prestashop>template_2_d6cf1a3115755104888673a6b9e3acf6'] = 'Aumente suas vendas on-line';
 $_MODULE['<{mercadopago}prestashop>template_2_0275de4d9b97b8b6c73adf434500771c'] = 'Ofereça a melhor experiência';
 $_MODULE['<{mercadopago}prestashop>template_2_a04c73627fe84661558c0cca42df4dcf'] = 'de pagamento para os seus clientes. ';

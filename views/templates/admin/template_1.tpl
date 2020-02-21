@@ -25,7 +25,7 @@
 
 <div class="panel mp-panel-mercadopago">
 	<div class="row header-mercadopago">
-        <div class="-mp-left-details">
+        <div class="mp-left-details">
             <h2 class="mp-title-checkout-header">{l s='Design the best payment experience for your customers' mod='mercadopago'}</h2>
         </div>
         <div class="mp-right-details">

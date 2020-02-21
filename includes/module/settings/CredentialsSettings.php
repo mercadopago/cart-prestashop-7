@@ -58,14 +58,14 @@ class CredentialsSettings extends AbstractSettings
                     $this->module->l('test environment.'),
                 'values' => array(
                     array(
-                        'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
-                        'value' => false,
-                        'label' => $this->module->l('Active')
-                    ),
-                    array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_OFF',
                         'value' => true,
                         'label' => $this->module->l('Inactive')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
+                        'value' => false,
+                        'label' => $this->module->l('Active')
                     )
                 ),
             ),
