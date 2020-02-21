@@ -45,14 +45,14 @@ class LocalizationSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Localization');
+        $title = $this->module->l('Localization', 'LocalizationSettings');
         $fields = array(
             array(
                 'col' => 4,
                 'type' => 'select',
-                'label' => $this->module->l('Country:'),
+                'label' => $this->module->l('Country:', 'LocalizationSettings'),
                 'name' => 'MERCADOPAGO_COUNTRY_LINK',
-                'desc' => $this->module->l('Select the country in which your Mercado Pago account operates'),
+                'desc' => $this->module->l('Select the country in which your Mercado Pago account operates', 'LocalizationSettings'),
                 'options' => array(
                     'query' => $this->getCountryLinks(),
                     'id' => 'id',
@@ -73,7 +73,7 @@ class LocalizationSettings extends AbstractSettings
     {
         parent::postFormProcess();
 
-        Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.');
+        Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.', 'LocalizationSettings');
         MPLog::generate('Localization saved successfully');
     }
 
@@ -97,15 +97,15 @@ class LocalizationSettings extends AbstractSettings
     public function getCountryLinks()
     {
         $country_links = array();
-        $country_links[] = array('id' => 'mld', 'name' => $this->module->l('Select country'));
-        $country_links[] = array('id' => 'mla', 'name' => $this->module->l('Argentina'));
-        $country_links[] = array('id' => 'mlb', 'name' => $this->module->l('Brazil'));
-        $country_links[] = array('id' => 'mlc', 'name' => $this->module->l('Chile'));
-        $country_links[] = array('id' => 'mco', 'name' => $this->module->l('Colombia'));
-        $country_links[] = array('id' => 'mlm', 'name' => $this->module->l('Mexico'));
-        $country_links[] = array('id' => 'mpe', 'name' => $this->module->l('Peru'));
-        $country_links[] = array('id' => 'mlu', 'name' => $this->module->l('Uruguay'));
-        $country_links[] = array('id' => 'mlv', 'name' => $this->module->l('Venezuela'));
+        $country_links[] = array('id' => 'mld', 'name' => $this->module->l('Select country', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mla', 'name' => $this->module->l('Argentina', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mlb', 'name' => $this->module->l('Brazil', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mlc', 'name' => $this->module->l('Chile', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mco', 'name' => $this->module->l('Colombia', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mlm', 'name' => $this->module->l('Mexico', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mpe', 'name' => $this->module->l('Peru', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mlu', 'name' => $this->module->l('Uruguay', 'LocalizationSettings'));
+        $country_links[] = array('id' => 'mlv', 'name' => $this->module->l('Venezuela', 'LocalizationSettings'));
 
         return $country_links;
     }

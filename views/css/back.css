@@ -119,6 +119,10 @@
     user-select: none !important;
 }
 
+.mp-text-center {
+    text-align: center !important;
+}
+
 .hr-mp-modal {
     margin-top: 25px !important;
     border-top: 1px solid #ccc !important;

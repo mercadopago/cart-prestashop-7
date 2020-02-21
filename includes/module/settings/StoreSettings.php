@@ -48,23 +48,23 @@ class StoreSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Store Information');
+        $title = $this->module->l('Store Information', 'StoreSettings');
         $fields = array(
             array(
                 'col' => 6,
                 'type' => 'text',
-                'label' => $this->module->l('Name'),
+                'label' => $this->module->l('Name', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_INVOICE_NAME',
-                'desc' => $this->module->l('This is the name that will appear on the customers invoice.'),
+                'desc' => $this->module->l('This is the name that will appear on the customers invoice.', 'StoreSettings'),
             ),
             array(
                 'col' => 4,
                 'type' => 'select',
-                'label' => $this->module->l('Category'),
+                'label' => $this->module->l('Category', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_STORE_CATEGORY',
-                'desc' => $this->module->l('What category do your products belong to? ') .
-                    $this->module->l('Choose the one that best characterizes them ') .
-                    $this->module->l('(choose other if your product is too specific).'),
+                'desc' => $this->module->l('What category do your products belong to? ', 'StoreSettings') .
+                    $this->module->l('Choose the one that best characterizes them ', 'StoreSettings') .
+                    $this->module->l('(choose other if your product is too specific).', 'StoreSettings'),
                 'options' => array(
                     'query' => $this->getCategories(),
                     'id' => 'id',
@@ -75,9 +75,9 @@ class StoreSettings extends AbstractSettings
                 'col' => 2,
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_INTEGRATOR_ID',
-                'label' => $this->module->l('Integrator ID'),
-                'desc' => $this->module->l('With this number we identify all your transactions ') .
-                    $this->module->l('and know how many sales we process with your account.'),
+                'label' => $this->module->l('Integrator ID', 'StoreSettings'),
+                'desc' => $this->module->l('With this number we identify all your transactions ', 'StoreSettings') .
+                    $this->module->l('and know how many sales we process with your account.', 'StoreSettings'),
             ),
         );
 

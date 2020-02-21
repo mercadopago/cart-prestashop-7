@@ -45,27 +45,27 @@ class CredentialsSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Credentials');
+        $title = $this->module->l('Credentials', 'CredentialsSettings');
         $fields = array(
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Production'),
+                'label' => $this->module->l('Production', 'CredentialsSettings'),
                 'name' => 'MERCADOPAGO_SANDBOX_STATUS',
                 'is_bool' => true,
-                'desc' => $this->module->l('Select "YES" only when you are ready to sell. ') .
-                    $this->module->l('Change to NO to activate the Sandbox ') .
-                    $this->module->l('test environment.'),
+                'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'CredentialsSettings') .
+                    $this->module->l('Change to NO to activate the Sandbox ', 'CredentialsSettings') .
+                    $this->module->l('test environment.', 'CredentialsSettings'),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_OFF',
-                        'value' => true,
-                        'label' => $this->module->l('Inactive')
+                        'value' => false,
+                        'label' => $this->module->l('Inactive', 'CredentialsSettings')
                     ),
                     array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
-                        'value' => false,
-                        'label' => $this->module->l('Active')
+                        'value' => true,
+                        'label' => $this->module->l('Active', 'CredentialsSettings')
                     )
                 ),
             ),
@@ -74,18 +74,18 @@ class CredentialsSettings extends AbstractSettings
                 'type' => 'html',
                 'name' => '',
                 'desc' => '',
-                'label' => $this->module->l('Load credentials'),
+                'label' => $this->module->l('Load credentials', 'CredentialsSettings'),
                 'html_content' => '<a href="https://www.mercadopago.com/'
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
                     '/account/credentials" target="_blank" class="btn btn-default mp-btn-credenciais">'
-                    . $this->module->l('Search my credentials') . '</a>'
+                    . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>'
             ),
             array(
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key'),
+                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -93,7 +93,7 @@ class CredentialsSettings extends AbstractSettings
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
-                'label' => $this->module->l('Access token'),
+                'label' => $this->module->l('Access token', 'CredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -101,7 +101,7 @@ class CredentialsSettings extends AbstractSettings
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key'),
+                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
                 'required' => true
             ),
             array(
@@ -109,7 +109,7 @@ class CredentialsSettings extends AbstractSettings
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'MERCADOPAGO_ACCESS_TOKEN',
-                'label' => $this->module->l('Access token'),
+                'label' => $this->module->l('Access token', 'CredentialsSettings'),
                 'required' => true
             ),
         );
@@ -144,7 +144,7 @@ class CredentialsSettings extends AbstractSettings
                 }
             }
 
-            Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.');
+            Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.', 'CredentialsSettings');
 
             $this->sendSettingsInfo();
             MPLog::generate('Credentials saved successfully');

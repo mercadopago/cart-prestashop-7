@@ -49,7 +49,7 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_cef6266789eeb18008a67056a56d
 $_MODULE['<{mercadopago}prestashop>standardsettings_14e34536b7eea32e8a7e021bea1b9b91'] = ' Activarlo puede afectar a la prevención de fraude. ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_e7369d7d7500eb4804b08192ab2b1444'] = 'Déjalo inactivo para que ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_f18f9cbe68138db2d541dd171101fb35'] = 'podamos cuidar tus cobros.';
-$_MODULE['<{mercadopago}prestashop>standardsettings_e158df26c6c5fa5329868a48ab2e54ee'] = 'horas sin actividad.';
+$_MODULE['<{mercadopago}prestashop>standardsettings_e158df26c6c5fa5329868a48ab2e54ee'] = 'horas sin actividad';
 $_MODULE['<{mercadopago}prestashop>standardsettings_f4baa4850222eacc72d4f217fd03e252'] = 'Cancela las preferencias de pago luego de ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_941254e31637b81ac1008e6eb1861c93'] = 'Durante este tiempo guardaremos la preferencia de pago';
 $_MODULE['<{mercadopago}prestashop>standardsettings_4476880111ab525b0ef3cfe9173c40ba'] = ' para no volver a pedirle los datos a tu cliente. ';
@@ -60,8 +60,8 @@ $_MODULE['<{mercadopago}prestashop>credentialssettings_756d97bb256b8580d4d71ee0c
 $_MODULE['<{mercadopago}prestashop>credentialssettings_ebc4608a47aa08cb533d928e0259f1df'] = 'Elige “SÍ” solo cuando estés listo para vender. ';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_6087b8439a7036bff644affc8784da4b'] = 'Cambia a NO para activar ';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_3bc591c82367247890499e4b021a933e'] = 'el entorno de pruebas Sandbox.';
-$_MODULE['<{mercadopago}prestashop>credentialssettings_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Activar';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_3cab03c00dbd11bc3569afa0748013f0'] = 'Inactivar';
+$_MODULE['<{mercadopago}prestashop>credentialssettings_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Activar';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_cd00f38c17c8d33b4ee0141caed3c806'] = 'Cargar credenciales';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_22cea83454a1f571a8935118c4d423f6'] = 'Buscar mis credenciales';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_37c5b6e7c4291021b6100a6754ae7ffe'] = 'Public Key';
@@ -111,6 +111,7 @@ $_MODULE['<{mercadopago}prestashop>ticketsettings_4d3d769b812b6faa6b76e1a8abaece
 $_MODULE['<{mercadopago}prestashop>ticketsettings_3cab03c00dbd11bc3569afa0748013f0'] = 'Inactiva';
 $_MODULE['<{mercadopago}prestashop>ticketsettings_0da8d9a75492046bea7f314521e07cae'] = 'Medios de pago';
 $_MODULE['<{mercadopago}prestashop>ticketsettings_958cb40bf8532bac958dd71b30867ee4'] = 'Habilita los medios de pago presenciales disponibles para tus clientes.';
+$_MODULE['<{mercadopago}prestashop>ticketsettings_44fdec47036f482b68b748f9d786801b'] = 'dias';
 $_MODULE['<{mercadopago}prestashop>ticketsettings_1787da92a63da5bfdf8b2aa3e7a8d54e'] = 'Vencimiento del pago';
 $_MODULE['<{mercadopago}prestashop>ticketsettings_67b09091d73c254778332c4ba38c6011'] = 'En cuántos días caducarán los pagos presenciales.';
 $_MODULE['<{mercadopago}prestashop>ticketsettings_5143ec2136ffd545e7aafcc9c0ce50f5'] = ' Descuento por compra';
@@ -184,6 +185,7 @@ $_MODULE['<{mercadopago}prestashop>configure_ba409932f82a5dbbc411b83fe3e8adb7'] 
 $_MODULE['<{mercadopago}prestashop>configure_edcc027aee641dec9c6e6cfa70aede7d'] = 'Haz que tu cliente termine su compra con estos ajustes básicos:';
 $_MODULE['<{mercadopago}prestashop>configure_0da8d9a75492046bea7f314521e07cae'] = 'Medios de pago';
 $_MODULE['<{mercadopago}prestashop>configure_24e9fd6116bb8c7c0f060273672067e2'] = 'Selecciona pagos personales';
+$_MODULE['<{mercadopago}prestashop>configure_c70ec5b31b31ecef0efd3ea40e33909f'] = 'Configuración avanzada';
 $_MODULE['<{mercadopago}prestashop>configure_18b934da2943766913dc95ae10cd11d9'] = 'Activa otras herramientas de nuestro módulo listas para usar.';
 $_MODULE['<{mercadopago}prestashop>configure_1bc20b46625d14ce9a7587faf7af4171'] = 'Ofrece pagos con tarjetas de débito y crédito.';
 $_MODULE['<{mercadopago}prestashop>configure_7e3c0f9991ae9abe60ee5e022ae42159'] = 'Experiencia de pago dentro de tu tienda. ';

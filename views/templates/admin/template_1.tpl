@@ -246,14 +246,14 @@
                                         {/for}
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <p>1 - {l s='Nothing likely' mod='mercadopago'}</p>
                                     </div>
-                                    <div class="col-md-6">
-                                        <p class="fl-right">5 - {l s='Unlikely' mod='mercadopago'}</p>
+                                    <div class="col-md-4">
+                                        <p class="mp-text-center">5 - {l s='Unlikely' mod='mercadopago'}</p>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <p class="mp-fl-right">10 - {l s='Very likely' mod='mercadopago'}</p>
                                     </div>
                                 </div>

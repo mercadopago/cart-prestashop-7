@@ -44,7 +44,7 @@ class HomologationSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Homologation');
+        $title = $this->module->l('Homologation', 'HomologationSettings');
         $fields = null;
 
         return $this->buildForm($title, $fields);

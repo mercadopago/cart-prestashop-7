@@ -59,7 +59,7 @@ class RatingSettings extends AbstractSettings
         }
 
         Mercadopago::$form_alert = 'alert-success';
-        Mercadopago::$form_message = $this->module->l('Thanks for rating us!');
+        Mercadopago::$form_message = $this->module->l('Thanks for rating us!', 'RatingSettings');
         MPLog::generate('Evaluation saved successfully');
     }
 }

@@ -45,47 +45,47 @@ class CustomSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Basic Configuration');
+        $title = $this->module->l('Basic Configuration', 'CustomSettings');
         $fields = array(
             array(
                 'type' => 'switch',
-                'label' => $this->module->l('Activate checkout'),
+                'label' => $this->module->l('Activate checkout', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_CHECKOUT',
-                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.'),
+                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.', 'CustomSettings'),
                 'is_bool' => true,
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_CUSTOM_CHECKOUT_ON',
                         'value' => true,
-                        'label' => $this->module->l('Active')
+                        'label' => $this->module->l('Active', 'CustomSettings')
                     ),
                     array(
                         'id' => 'MERCADOPAGO_CUSTOM_CHECKOUT_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Inactive')
+                        'label' => $this->module->l('Inactive', 'CustomSettings')
                     )
                 ),
             ),
             array(
                 'type' => 'switch',
-                'label' => $this->module->l('Binary Mode'),
+                'label' => $this->module->l('Binary Mode', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Approve or reject payments instantly and automatically, ').
-                $this->module->l('without pending or under review status. Do you want us to activate it?'),
-                'hint' => $this->module->l('Activating it can affect fraud prevention. ') .
-                    $this->module->l('Leave it inactive so we can take ') .
-                    $this->module->l('care of your charges'),
+                'desc' => $this->module->l('Approve or reject payments instantly and automatically, ', 'CustomSettings').
+                $this->module->l('without pending or under review status. Do you want us to activate it?', 'CustomSettings'),
+                'hint' => $this->module->l('Activating it can affect fraud prevention. ', 'CustomSettings') .
+                    $this->module->l('Leave it inactive so we can take ', 'CustomSettings') .
+                    $this->module->l('care of your charges', 'CustomSettings'),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_CUSTOM_BINARY_MODE_ON',
                         'value' => true,
-                        'label' => $this->module->l('Active')
+                        'label' => $this->module->l('Active', 'CustomSettings')
                     ),
                     array(
                         'id' => 'MERCADOPAGO_CUSTOM_BINARY_MODE_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Inactive')
+                        'label' => $this->module->l('Inactive', 'CustomSettings')
                     )
                 ),
             ),
@@ -94,9 +94,9 @@ class CustomSettings extends AbstractSettings
                 'suffix' => '%',
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_CUSTOM_DISCOUNT',
-                'label' => $this->module->l('Discount for purchase'),
-                'desc' => $this->module->l('Offer a special discount to encourage your ') .
-                    $this->module->l('customers to make the purchase with Mercado Pago.'),
+                'label' => $this->module->l('Discount for purchase', 'CustomSettings'),
+                'desc' => $this->module->l('Offer a special discount to encourage your ', 'CustomSettings') .
+                    $this->module->l('customers to make the purchase with Mercado Pago.', 'CustomSettings'),
             ),
         );
 

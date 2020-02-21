@@ -233,7 +233,7 @@
 
         //advanced configuration
         var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_standard' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_standard' style='display:none'>-</span>\
         </div>\
@@ -249,6 +249,7 @@
             }
             else if(i > 3) {
                 form_standard_group[i].classList.add("mp-input-collapsible");
+                form_standard_group[i].querySelector("p").style.width = "400px";
             }
         }
 
@@ -316,7 +317,7 @@
 
         //advanced configuration
         var form_custom_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_custom' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_custom' style='display:none'>-</span>\
         </div>\
@@ -333,7 +334,7 @@
             if(i > 0) {
                 form_custom_group[i].classList.add("mp-custom-input-collapsible");
             }
-            if(i >= 3){
+            if(i >= 1){
                 form_custom_group[i].querySelector("p").style.width = "400px";
             }
         }
@@ -372,12 +373,6 @@
                 for(i=0; i<form_custom_collapsible_body.length; i++){
                     form_custom_collapsible_body[i].style.display = "none";
                 }
-            }
-        }
-
-        for (i=0; i < form_custom_group.length; i++) {
-            if(i == 2){
-                form_custom_group[i].querySelector("p").style.width = "400px";
             }
         }
 
@@ -431,7 +426,7 @@
 
         //advanced configuration
         var form_ticket_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_ticket' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_ticket' style='display:none'>-</span>\
         </div>\
