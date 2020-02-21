@@ -50,7 +50,7 @@ class CredentialsSettings extends AbstractSettings
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Sandbox Mode'),
+                'label' => $this->module->l('Production'),
                 'name' => 'MERCADOPAGO_SANDBOX_STATUS',
                 'is_bool' => true,
                 'desc' => $this->module->l('Select "YES" only when you are ready to sell. ') .
@@ -59,12 +59,12 @@ class CredentialsSettings extends AbstractSettings
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
-                        'value' => true,
+                        'value' => false,
                         'label' => $this->module->l('Active')
                     ),
                     array(
                         'id' => 'MERCADOPAGO_SANDBOX_STATUS_OFF',
-                        'value' => false,
+                        'value' => true,
                         'label' => $this->module->l('Inactive')
                     )
                 ),
