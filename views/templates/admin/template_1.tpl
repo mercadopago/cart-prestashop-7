@@ -264,7 +264,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer rating-mp-modal-footer">
+                        <div class="modal-footer rating-modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">{l s='Close' mod='mercadopago'}</button>
                             <input type="submit" class="btn btn-primary mp-btn-rating-submit" name="submitMercadopagoRating" value="{l s='Send' mod='mercadopago'}" />
                         </div>

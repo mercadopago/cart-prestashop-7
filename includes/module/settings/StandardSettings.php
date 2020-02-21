@@ -171,10 +171,10 @@ class StandardSettings extends AbstractSettings
             ),
             array(
                 'col' => 2,
-                'suffix' => 'hours',
+                'suffix' => $this->module->l('hours without activity'),
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_EXPIRATION_DATE_TO',
-                'label' => $this->module->l('Cancels payment preferences after [numeric field] hours without activity.'),
+                'label' => $this->module->l('Cancels payment preferences after'),
                 'hint' => $this->module->l('During this time we will save the payment ') .
                     $this->module->l('preference so as not to ask your client for ') .
                     $this->module->l('the data again. Once elapsed, it will be deleted automatically.'),

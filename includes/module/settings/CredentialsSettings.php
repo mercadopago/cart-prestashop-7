@@ -50,7 +50,7 @@ class CredentialsSettings extends AbstractSettings
             array(
                 'col' => 4,
                 'type' => 'switch',
-                'label' => $this->module->l('Production'),
+                'label' => $this->module->l('Sandbox Mode'),
                 'name' => 'MERCADOPAGO_SANDBOX_STATUS',
                 'is_bool' => true,
                 'desc' => $this->module->l('Select "YES" only when you are ready to sell. ') .

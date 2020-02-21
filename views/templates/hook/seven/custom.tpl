@@ -185,7 +185,7 @@
                         class="form-control mp-form-control" onkeyup="maskInput(this, minteger);"
                         autocomplete="off" />
                     <small class="mp-small mp-pt-5">{l s='Only numbers' mod='mercadopago'}</small>
-                    <small id="mp-error-324" class="mp-erro-form pt-0" data-main="#id-doc-number">
+                    <small id="mp-error-324" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
                         {l s='Invalid document number' mod='mercadopago'}</small>
                 </div>
             </div>

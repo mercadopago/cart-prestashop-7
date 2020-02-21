@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="col-md-4 col-4 col-xs-6 mp-pb-10 m-mp-pr-0" id="mp_box_lastname">
-                        <label for="" class="mp-pb-5">l s='Last Name' mod='mercadopago'} <em
+                        <label for="" class="mp-pb-5">{l s='Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_lastname" data-checkout="mp_lastname"
                                name="mercadopago_ticket[lastname]" class="form-control mp-form-control"

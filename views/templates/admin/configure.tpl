@@ -58,7 +58,7 @@
         var form_country = document.querySelector("#module_form_0 .panel .form-wrapper");
 
         form_country_prepend.innerHTML = "<div class='row'>\
-            <div class='col-md-12 pb-25'>\
+            <div class='col-md-12 mp-pb-25'>\
                 <h4 class='mp-title-checkout-body'>{l s='In which country does your Mercado Pago account operate?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
@@ -117,12 +117,12 @@
                 <h4 class='mp-title-checkout-body'>{l s='Approve your account, it will only take a few minutes' mod='mercadopago'}</h4>\
             </div>\
             <div class='col-md-6'>\
-                <p class='mp-text-branded lists-how-configure mp-pb-10'>\
+                <p class='text-branded lists-how-configure mp-pb-10'>\
                     {l s='Complete this process to ensure the data' mod='mercadopago'} \
                     {l s='of your customers and the adaptation to the regulations or legal ' mod='mercadopago'} \
                     {l s='provisions of each country.' mod='mercadopago'} \
                 </p>\
-                <a href='https://www.mercadopago.com/{$country_link|escape:'html':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default btn-credenciais mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
+                <a href='https://www.mercadopago.com/{$country_link|escape:'html':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
             </div>\
         </div>";
 
@@ -437,7 +437,7 @@
         </div>\
         <div class='row text-ticket-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body mp-mp-ticket-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-ticket-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 

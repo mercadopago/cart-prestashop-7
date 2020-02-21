@@ -125,7 +125,7 @@
                                 class="mp-required">*</em></label>
                         <select id="mp_state" data-checkout="mp_state" name="mercadopago_ticket[state]"
                             class="form-control mp-form-control mp-select mp-pointer">
-                            <option value="">l s='Select state' mod='mercadopago'}</option>
+                            <option value="">{l s='Select state' mod='mercadopago'}</option>
                             <option value="AC">Acre</option>
                             <option value="AL">Alagoas</option>
                             <option value="AP">Amapá</option>
