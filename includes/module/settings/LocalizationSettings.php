@@ -54,7 +54,10 @@ class LocalizationSettings extends AbstractSettings
                 'type' => 'select',
                 'label' => $this->module->l('Country:', 'LocalizationSettings'),
                 'name' => 'MERCADOPAGO_COUNTRY_LINK',
-                'desc' => $this->module->l('Select the country in which your Mercado Pago account operates', 'LocalizationSettings'),
+                'desc' => $this->module->l(
+                    'Select the country in which your Mercado Pago account operates', 
+                    'LocalizationSettings'
+                ),
                 'options' => array(
                     'query' => $this->getCountryLinks(),
                     'id' => 'id',
