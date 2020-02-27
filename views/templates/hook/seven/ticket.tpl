@@ -23,7 +23,7 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
+<form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
     <div class="row mp-frame-checkout-custom-seven">
 
 
@@ -57,7 +57,7 @@
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_firstname" data-checkout="mp_firstname"
                                name="mercadopago_ticket[firstname]" class="form-control mp-form-control"
-                               value="{$customer['firstname']}" autocomplete="off"/>
+                               value="{$customer['firstname']|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_firstname"
                                id="error_firstname">{l s='You must inform your name' mod='mercadopago'}</small>
                     </div>
@@ -67,7 +67,7 @@
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_lastname" data-checkout="mp_lastname"
                                name="mercadopago_ticket[lastname]" class="form-control mp-form-control"
-                               value="{$customer['lastname']}" autocomplete="off"/>
+                               value="{$customer['lastname']|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_lastname"
                                id="error_lastname">{l s='You must inform last name' mod='mercadopago'}</small>
                     </div>
@@ -175,12 +175,12 @@
                     {foreach $ticket as $key => $value}
                         <div class="col-md-6 col-6 col-xs-6 mp-px-0 mp-m-col">
                             <div class="form-check mp-form-check">
-                                <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']}"
-                                       class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id'])}"
+                                <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']|escape:'html':'UTF-8'}"
+                                       class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id']|escape:'html':'UTF-8')}"
                                        type="radio" {if $key == 0} checked {/if}>
-                                <label class="form-check-label" for="{$value['id']}">
-                                    <img src="{$value['image']}" alt="{$value['name']}"/>
-                                    <span class="mp-text-ticket-tarjeta">{$value['name']}</span>
+                                <label class="form-check-label" for="{$value['id']|escape:'html':'UTF-8'}">
+                                    <img src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
+                                    <span class="mp-text-ticket-tarjeta">{$value['name']|escape:'html':'UTF-8'}</span>
                                 </label>
                             </div>
                         </div>

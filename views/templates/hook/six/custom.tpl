@@ -23,7 +23,7 @@
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form action="{$redirect}" method="post" class="mp-custom-checkout-six" id="mp_custom_checkout">
+<form action="{$redirect|escape:'htmlall':'UTF-8'}" method="post" class="mp-custom-checkout-six" id="mp_custom_checkout">
     <div class="row mp-frame-checkout-six">
         <!-- Logo & Title -->
         <div class="mp-title-checkout-six">
