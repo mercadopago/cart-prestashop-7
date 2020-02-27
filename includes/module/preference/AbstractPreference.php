@@ -66,7 +66,7 @@ class AbstractPreference
             }
         }
         if (!$authorized) {
-            die($this->module->l('Este método de pago no está disponible.'));
+            die($this->module->l('This payment method is not available.'));
         }
     }
 

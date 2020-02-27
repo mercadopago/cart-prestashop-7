@@ -30,9 +30,9 @@
         <div class="col-xs-12 col-md-12 col-12">
             <div class="frame-tarjetas">
                 <p class="mp-subtitle-standard-checkout">
-                    {l s='Tarjetas de crédito' mod='mercadopago'}
+                    {l s='Credit card' mod='mercadopago'}
                     <span class="mp-badge-checkout">
-                        {l s='Hasta' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='cuotas' mod='mercadopago'}
+                        {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
                     </span>
                 </p>
 
@@ -46,7 +46,7 @@
         {if count($debit) != 0}
         <div class="col-xs-12 col-lg-6 col-md-6 col-12">
             <div class="frame-tarjetas">
-                <p class="mp-subtitle-standard-checkout">{l s='Tarjetas de débito' mod='mercadopago'}</p>
+                <p class="mp-subtitle-standard-checkout">{l s='Debit card' mod='mercadopago'}</p>
 
                 {foreach $debit as $tarjeta}
                 <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
@@ -58,7 +58,7 @@
         {if count($ticket) != 0}
         <div class="col-xs-12 col-lg-6 col-md-6 col-12">
             <div class="frame-tarjetas">
-                <p class="submp-title-checkout">{l s='Pagos en efectivo' mod='mercadopago'}</p>
+                <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
 
                 {foreach $ticket as $tarjeta}
                 <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
@@ -71,7 +71,7 @@
         <div class="col-md-12 mp-pt-20">
             <div class="mp-redirect-frame">
                 <img src="{$module_dir|escape:'html':'UTF-8'}views/img/redirect_checkout.png" class="img-fluid" />
-                <p>{l s='Te llevamos a nuestro sitio para completar el pago' mod='mercadopago'}</p>
+                <p>{l s='We take you to our site to complete the payment' mod='mercadopago'}</p>
             </div>
         </div>
         {/if}

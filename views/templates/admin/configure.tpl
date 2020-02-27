@@ -33,8 +33,8 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
-	<li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Configurar' mod='mercadopago'}</a></li>
-    <li><a href="#template_2" role="tab" data-toggle="tab">{l s='Acerca de Mercado Pago' mod='mercadopago'}</a></li>
+	<li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
+    <li><a href="#template_2" role="tab" data-toggle="tab">{l s='About Mercado Pago' mod='mercadopago'}</a></li>
     <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version}</span></a></li>
 </ul>
 
@@ -59,7 +59,7 @@
 
         form_country_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12 mp-pb-25'>\
-                <h4 class='mp-title-checkout-body'>{l s='¿En qué país opera tu cuenta de Mercado Pago?' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='In which country does your Mercado Pago account operate?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_country.insertBefore(form_country_prepend, form_country.firstChild);
@@ -72,30 +72,30 @@
 
         form_credentials_prepend.innerHTML = "<div class='row'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='Ingresa tus credenciales y elige cómo operar' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Enter your credentials and choose how to operate' mod='mercadopago'}</h4>\
             </div>\
         </div>\
         <div class='row mp-pt-5 mp-pb-30'>\
             <div class='col-md-12'>\
-                <p class='mp-text-credenciais'><b>{l s='Modo Pruebas' mod='mercadopago'}</b></p>\
-                <p class='mp-text-credenciais'>{l s='Por defecto te dejamos el modo Sandbox activo para que hagas testeos antes de empezar a vender.' mod='mercadopago'}</p>\
-                <p class='mp-text-credenciais mp-pt-15'><b>{l s='Modo Producción' mod='mercadopago'}</b></p>\
-                <p class='mp-text-credenciais'>{l s='Cuando veas que todo va bien, desactivá Sandbox, prendé Producción y abrí paso a tus ventas online.' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais'><b>{l s='Test Mode' mod='mercadopago'}</b></p>\
+                <p class='mp-text-credenciais'>{l s='By default, we leave the test environment (Sandbox) active for you to test before you start selling.' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-15'><b>{l s='Production Mode' mod='mercadopago'}</b></p>\
+                <p class='mp-text-credenciais'>{l s='When you see that everything is going well, disable Sandbox to go to Production and make way for your online sales.' mod='mercadopago'}</p>\
             </div>\
         </div>";
         form_credentials.insertBefore(form_credentials_prepend, form_credentials.firstChild);
 
         var form_credentials_pruebas_append = "<div class='row mp-pt-20 mp-mb-15'>\
             <div class='col-md-12'>\
-                <p class='mp-title-credenciais'>{l s='Credenciales de Prueba' mod='mercadopago'}</p>\
-                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='Con estas claves podrás hacer las pruebas que quieras.' mod='mercadopago'}</p>\
+                <p class='mp-title-credenciais'>{l s='Test Credentials' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='With these keys you can do the tests you want' mod='mercadopago'}</p>\
             </div>\
         </div>";
 
         var form_credentials_produccion_append = "<div class='row mp-pt-20 mp-mb-15'>\
             <div class='col-md-12'>\
-                <p class='mp-title-credenciais'>{l s='Credenciales para producción' mod='mercadopago'}</p>\
-                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='Con estas claves podrás recibir pagos reales de tus clientes.' mod='mercadopago'}</p>\
+                <p class='mp-title-credenciais'>{l s='Production Credentials' mod='mercadopago'}</p>\
+                <p class='mp-text-credenciais mp-pt-5 mp-pb-10'>{l s='With these keys you can receive real payments from your customers.' mod='mercadopago'}</p>\
             </div>\
         </div>";
 
@@ -114,15 +114,15 @@
 
         form_homolog.innerHTML = "<div class='row'>\
             <div class='col-md-12 mp-pb-10'>\
-                <h4 class='mp-title-checkout-body'>{l s='Homologa tu cuenta, solo te llevará unos minutos.' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Approve your account, it will only take a few minutes' mod='mercadopago'}</h4>\
             </div>\
             <div class='col-md-6'>\
                 <p class='text-branded lists-how-configure mp-pb-10'>\
-                    {l s='Completa este proceso para que podamos garantizar, juntos, ' mod='mercadopago'} \
-                    {l s='la seguridad de los datos de tus clientes y la adecuación ' mod='mercadopago'} \
-                    {l s='a las normas o disposiciones legales de cada país.' mod='mercadopago'} \
+                    {l s='Complete this process to ensure the data' mod='mercadopago'} \
+                    {l s='of your customers and the adaptation to the regulations or legal ' mod='mercadopago'} \
+                    {l s='provisions of each country.' mod='mercadopago'} \
                 </p>\
-                <a href='https://www.mercadopago.com/{$country_link|escape:'html':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Homologa mi cuenta' mod='mercadopago'}</a> \
+                <a href='https://www.mercadopago.com/{$country_link|escape:'html':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
             </div>\
         </div>";
 
@@ -134,8 +134,8 @@
 
         form_store_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='Información básica de la tienda' mod='mercadopago'}</h4>\
-                <p class='mp-text-credenciais mp-pb-10'>{l s='Ingresa los datos de tu negocio en el módulo:' mod='mercadopago'}</p>\
+                <h4 class='mp-title-checkout-body'>{l s='Store Information' mod='mercadopago'}</h4>\
+                <p class='mp-text-credenciais mp-pb-10'>{l s='Enter your business details in the module:' mod='mercadopago'}</p>\
             </div>\
         </div>";
         form_store.insertBefore(form_store_prepend, form_store.firstChild);
@@ -143,7 +143,7 @@
         var form_store_append = "<hr class='mp-mt-15'>\
         <div class='row mp-mb-15'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='¿Eres un partner de Mercado Pago?' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Are you a Mercado Pago partner?' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -165,9 +165,9 @@
         form_standard_header.style.height = "auto";
 
         form_standard_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-            <li><span>{l s='Ofrece todos los medios de pago.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Experiencia de compra en el sitio de Mercado Pago.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Tus clientes pueden pagar como invitados o ingresando a su cuenta de Mercado Pago.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Offers all payment methods.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Payment experience on the Mercado Pago site.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Your customers can pay as guests or by entering their Mercado Pago account.' mod='mercadopago'}</span></li>\
         </ul>";
         form_standard_header.insertBefore(form_standard_header_prepend, form_standard_header.firstChild);
 
@@ -185,7 +185,7 @@
 
         form_standard_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='Haz que tu cliente termine su compra de forma rápida, fácil y segura' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_standard.insertBefore(form_standard_prepend, form_standard.firstChild);
@@ -206,7 +206,7 @@
         var checkbox_online = document.querySelector("#checkbox_0");
         var checkbox_online_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-            <label for='checkmeon'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Selecciona pagos online' mod='mercadopago'}</b></label>\
+            <label for='checkmeon'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Payment methods' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
 
@@ -227,19 +227,19 @@
         var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
         var checkbox_offline_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-            <label for='checkmeoff'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Selecciona pagos presenciales' mod='mercadopago'}</b></label>\
+            <label for='checkmeoff'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
         //advanced configuration
         var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_standard' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_standard' style='display:none'>-</span>\
         </div>\
         <div class='row text-standard-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body mp-input-collapsible'>{l s='Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -249,6 +249,7 @@
             }
             else if(i > 3) {
                 form_standard_group[i].classList.add("mp-input-collapsible");
+                form_standard_group[i].querySelector("p").style.width = "400px";
             }
         }
 
@@ -297,9 +298,9 @@
         form_custom_header.style.height = "auto";
 
         form_custom_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-            <li><span>{l s='Ofrece pagos con tarjetas de débito y crédito.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Experiencia de pago dentro de tu tienda.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Tus clientes pagan como invitados sin salir de tu tienda.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Offers payments with debit and credit cards.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Payment experience within your store.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Your customers pay as guests without leaving your store.' mod='mercadopago'}</span></li>\
         </ul>";
         form_custom_header.insertBefore(form_custom_header_prepend, form_custom_header.firstChild);
 
@@ -309,20 +310,20 @@
 
         form_custom_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='Haz que tu cliente termine su compra de forma rápida, fácil y segura' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_custom.insertBefore(form_custom_prepend, form_custom.firstChild);
 
         //advanced configuration
         var form_custom_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_custom' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_custom' style='display:none'>-</span>\
         </div>\
         <div class='row text-custom-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body mp-custom-input-collapsible'>{l s='Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-custom-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
@@ -333,7 +334,7 @@
             if(i > 0) {
                 form_custom_group[i].classList.add("mp-custom-input-collapsible");
             }
-            if(i >= 3){
+            if(i >= 1){
                 form_custom_group[i].querySelector("p").style.width = "400px";
             }
         }
@@ -375,12 +376,6 @@
             }
         }
 
-        for (i=0; i < form_custom_group.length; i++) {
-            if(i == 2){
-                form_custom_group[i].querySelector("p").style.width = "400px";
-            }
-        }
-
 
         // ----- ticket configuration form ------ //
         //ticket form header
@@ -390,9 +385,9 @@
         form_ticket_header.style.height = "auto";
 
         form_ticket_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-            <li><span>{l s='Ofrece pagos en efectivo.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Experiencia de pago dentro de tu tienda.' mod='mercadopago'}</span></li>\
-            <li><span>{l s='Tus clientes pagan como invitados sin salir de tu tienda.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Offer cash payments.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Payment experience within your store.' mod='mercadopago'}</span></li>\
+            <li><span>{l s='Your customers pay as guests without leaving your store.' mod='mercadopago'}</span></li>\
         </ul>";
         form_ticket_header.insertBefore(form_ticket_header_prepend, form_ticket_header.firstChild);
 
@@ -402,7 +397,7 @@
 
         form_ticket_prepend.innerHTML = "<div class='row mp-pb-25'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body'>{l s='Tu cliente hará su compra de forma rápida, fácil y segura con estos ajustes:' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body'>{l s='Your customer will make their purchase quickly, easily and safely with these settings:' mod='mercadopago'}</h4>\
             </div>\
         </div>";
         form_ticket.insertBefore(form_ticket_prepend, form_ticket.firstChild);
@@ -425,19 +420,19 @@
         var checkbox_ticket = document.querySelector("#checkbox_"+countStandarPayments);
         var checkbox_ticket_prepend = "<div class='mp-all_checkbox'>\
             <input type='checkbox' name='checkmeticket' id='checkmeticket' "+ticketChecked+" onclick='completeTicketCheckbox()'> \
-            <label for='checkmeticket'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Selecciona pagos presenciales' mod='mercadopago'}</b></label>\
+            <label for='checkmeticket'><b class='mp-pointer mp-no-select mp-pl-5'>{l s='Select face payments' mod='mercadopago'}</b></label>\
         </div>";
         checkbox_ticket.insertAdjacentHTML('beforebegin', checkbox_ticket_prepend);
 
         //advanced configuration
         var form_ticket_append = "<div class='panel-heading mp-panel-advanced-config'>\
-            <i class='icon-cogs'></i> Advanced Configuration\
+            <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
             <span class='mp-btn-collapsible' id='header_plus_ticket' style='display:block'>+</span>\
             <span class='mp-btn-collapsible' id='header_less_ticket' style='display:none'>-</span>\
         </div>\
         <div class='row text-ticket-advanced'>\
             <div class='col-md-12'>\
-                <h4 class='mp-title-checkout-body mp-ticket-input-collapsible'>{l s='Personaliza estas opciones y activa otras herramientas de nuestro módulo listas para usar' mod='mercadopago'}</h4>\
+                <h4 class='mp-title-checkout-body mp-ticket-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
             </div>\
         </div>";
 
