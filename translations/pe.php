@@ -83,7 +83,8 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_5c37fb51921ed01de76b54887c7b
 $_MODULE['<{mercadopago}prestashop>standardsettings_7f6733fc4902833edb6f6d1a89fb4acc'] =
 'Modal checkout';
 $_MODULE['<{mercadopago}prestashop>standardsettings_85f6ca4c342e2956824ee59c72f6cee9'] =
-'Tus clientes accederán al formulario de pagos de Mercado Pago sin salir de tu tienda. Si lo desactivas, serán redirigidos a otra página';
+'Tus clientes accederán al formulario de pagos de Mercado Pago sin salir de tu tienda. Si lo desactivas, serán 
+redirigidos a otra página';
 $_MODULE['<{mercadopago}prestashop>standardsettings_deb43872e3df204974c85e5b07ad8576'] =
 'Modo binario';
 $_MODULE['<{mercadopago}prestashop>standardsettings_65073593c74f39e8b77174346432937e'] =
