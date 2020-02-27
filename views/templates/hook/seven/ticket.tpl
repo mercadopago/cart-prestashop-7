@@ -89,7 +89,7 @@
                         <label for="" class="mp-pb-5">{l s='Address' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_address" data-checkout="mp_address" name="mercadopago_ticket[address]"
-                               class="form-control mp-form-control" value="{$address->address1}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->address1|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_address"
                                id="mp_error_address">{l s='You must inform address' mod='mercadopago'}</small>
                     </div>
@@ -109,7 +109,7 @@
                         <label for="" class="mp-pb-5">{l s='City' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_city" data-checkout="mp_city" name="mercadopago_ticket[city]"
-                               class="form-control mp-form-control" value="{$address->city}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->city|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_city"
                                id="mp_error_city">{l s='You must inform address number' mod='mercadopago'}</small>
                     </div>
@@ -156,7 +156,7 @@
                         <label for="" class="mp-pb-5">{l s='Postal Code' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_zipcode" data-checkout="mp_zipcode" name="mercadopago_ticket[zipcode]"
-                               class="form-control mp-form-control" value="{$address->postcode}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->postcode|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_zipcode"
                                id="mp_error_zipcode">{l s='You must inform zip code' mod='mercadopago'}</small>
                     </div>
@@ -190,10 +190,10 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$module_dir}views/js/ticket.js"/>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js"/>
 <script type="text/javascript">
     window.onload = function () {
-        var site_id = '{$site_id}';
+        var site_id = '{$site_id|escape:'javascript':'UTF-8'}';
         mpValidateSiteId(site_id);
         validateDocumentInputs();
         mercadoPagoFormHandlerTicket();
