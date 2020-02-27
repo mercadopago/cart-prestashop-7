@@ -53,7 +53,7 @@ class StandardPreference extends AbstractPreference
         $preference['binary_mode'] = $this->getBinaryMode();
         $preference['expires'] = $this->getExpirationStatus();
         $preference['expiration_date_to'] = $this->getExpirationDate();
-        $preference['metadata'] = $this->getInternalMetadata();        
+        $preference['metadata'] = $this->getInternalMetadata();
 
         $preference = Tools::jsonEncode($preference);
         $createPreference = $this->mercadopago->createPreference($preference);
@@ -213,7 +213,7 @@ class StandardPreference extends AbstractPreference
 
     /**
      * Get internal metadata
-     * 
+     *
      * @return array
      */
     public function getInternalMetadata()
@@ -222,7 +222,7 @@ class StandardPreference extends AbstractPreference
         $internal_metadata["checkout"] = "smart";
         $internal_metadata["checkout_type"] = "redirect";
 
-        if($this->settings['MERCADOPAGO_STANDARD_MODAL'] == true){
+        if ($this->settings['MERCADOPAGO_STANDARD_MODAL'] == true) {
             $internal_metadata["checkout_type"] = "modal";
         }
         

@@ -46,10 +46,11 @@ class CustomCheckout
     public function getCustomCheckoutPS16($cart)
     {
         $checkoutInfo = $this->getCustomCheckout($cart);
-        $frontInformations = array_merge($checkoutInfo,
-            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png'));
+        $frontInformations = array_merge(
+            $checkoutInfo,
+            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
+        );
         return $frontInformations;
-
     }
 
     /**
@@ -109,5 +110,4 @@ class CustomCheckout
     {
         $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card.js');
     }
-
 }

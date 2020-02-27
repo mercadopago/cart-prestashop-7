@@ -47,8 +47,10 @@ class TicketCheckout
     public function getTicketCheckoutPS16($cart)
     {
         $checkoutInfo = $this->getTicketCheckout($cart);
-        $frontInformations = array_merge($checkoutInfo,
-            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png'));
+        $frontInformations = array_merge(
+            $checkoutInfo,
+            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
+        );
         return $frontInformations;
     }
 
@@ -76,8 +78,7 @@ class TicketCheckout
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
-                if (
-                    $tarjeta['type'] != 'credit_card' &&
+                if ($tarjeta['type'] != 'credit_card' &&
                     $tarjeta['type'] != 'debit_card' &&
                     $tarjeta['type'] != 'prepaid_card'
                 ) {

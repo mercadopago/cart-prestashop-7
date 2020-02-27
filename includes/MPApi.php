@@ -28,8 +28,7 @@
 class MPApi
 {
     public function __construct()
-    { 
-        
+    {
     }
 
     /**

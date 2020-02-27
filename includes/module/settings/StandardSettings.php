@@ -223,8 +223,7 @@ class StandardSettings extends AbstractSettings
             $pm_id = $payment_method['id'];
             $pm_name = 'MERCADOPAGO_PAYMENT_' . $pm_id;
 
-            if (
-                $payment_method['type'] == 'credit_card' ||
+            if ($payment_method['type'] == 'credit_card' ||
                 $payment_method['type'] == 'debit_card' ||
                 $payment_method['type'] == 'prepaid_card'
             ) {

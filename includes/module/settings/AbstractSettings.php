@@ -112,7 +112,7 @@ class AbstractSettings
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
-                case "expiration_preference";
+                case "expiration_preference":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
                         Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
@@ -148,7 +148,7 @@ class AbstractSettings
                     }
                     break;
 
-                case "payment_due";
+                case "payment_due":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
                         Mercadopago::$form_message .= $this->module->l('The payment due must be an integer.');

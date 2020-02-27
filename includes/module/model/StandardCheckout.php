@@ -46,8 +46,10 @@ class StandardCheckout
     public function getStandardCheckoutPS16($cart)
     {
         $informations = $this->getStandard($cart);
-        $frontInformations = array_merge($informations,
-            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png'));
+        $frontInformations = array_merge(
+            $informations,
+            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
+        );
         return $frontInformations;
     }
 

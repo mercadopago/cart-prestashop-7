@@ -26,7 +26,6 @@
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
-
     public function initContent()
     {
         $mercadopago = MPApi::getInstance();

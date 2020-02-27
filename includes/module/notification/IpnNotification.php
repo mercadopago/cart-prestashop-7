@@ -54,7 +54,7 @@ class IpnNotification extends AbstractNotification
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             return $this->createOrder($cart);
-        }else{
+        } else {
             return $this->updateOrder($cart);
         }
     }

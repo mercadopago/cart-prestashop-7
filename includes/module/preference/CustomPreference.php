@@ -49,12 +49,12 @@ class CustomPreference extends AbstractPreference
         $preference['payer']['email'] = $this->getCustomerEmail();
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
-        $preference['metadata'] = $this->getInternalMetadata(); 
+        $preference['metadata'] = $this->getInternalMetadata();
         $preference['token'] = $custom_info['card_token_id'];
         $preference['installments'] = (integer) $custom_info['installments'];
         $preference['payment_method_id'] = $custom_info['payment_method_id'];
 
-        if(isset($custom_info['issuer'])){
+        if (isset($custom_info['issuer'])) {
             $preference['issuer_id'] = (integer) $custom_info['issuer'];
         }
 
@@ -146,7 +146,7 @@ class CustomPreference extends AbstractPreference
 
     /**
      * Get internal metadata
-     * 
+     *
      * @return array
      */
     public function getInternalMetadata()

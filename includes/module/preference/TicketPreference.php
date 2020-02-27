@@ -48,7 +48,7 @@ class TicketPreference extends AbstractPreference
         $preference['description'] = $this->getPreferenceDescription($cart);
         $preference['payment_method_id'] = $ticket_info['paymentMethodId'];
         $preference['payer']['email'] = $this->getCustomerEmail();
-        $preference['metadata'] = $this->getInternalMetadata(); 
+        $preference['metadata'] = $this->getInternalMetadata();
 
         if ($this->module->context->currency->iso_code == 'BRL') {
             $preference['payer']['first_name'] = $ticket_info['firstname'];
@@ -155,7 +155,7 @@ class TicketPreference extends AbstractPreference
 
     /**
      * Get internal metadata
-     * 
+     *
      * @return array
      */
     public function getInternalMetadata()
