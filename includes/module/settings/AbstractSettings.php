@@ -117,7 +117,8 @@ class AbstractSettings
                 case "expiration_preference":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
+                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') .
+                            $this->module->l('must be an integer.');
                         MPLog::generate('Invalid expiration_date_to submitted', 'warning');
                         return false;
                     }

@@ -57,7 +57,10 @@ class StoreSettings extends AbstractSettings
                 'type' => 'text',
                 'label' => $this->module->l('Name', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_INVOICE_NAME',
-                'desc' => $this->module->l('This is the name that will appear on the customers invoice.', 'StoreSettings'),
+                'desc' => $this->module->l(
+                    'This is the name that will appear on the customers invoice.', 
+                    'StoreSettings'
+                ),
             ),
             array(
                 'col' => 4,
