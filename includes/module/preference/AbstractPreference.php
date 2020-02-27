@@ -120,10 +120,6 @@ class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image['id_image'], "");
 
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
             $product_price = $product['price_wt'];
             if ($percent != null) {
                 $product_price = (float) $product_price - ($product_price * ($percent / 100));
@@ -138,6 +134,10 @@ class AbstractPreference
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
             );
+
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
 
             $items[] = $item;
         }
