@@ -144,8 +144,8 @@ class StandardSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_STANDARD_MODAL',
                 'is_bool' => true,
                 'desc' => $this->module->l(
-                    'Your customers will access the Mercado Pago payment form without leaving your store.
-                     If you deactivate it, they will be redirected to another page.',
+                    'Your customers will access the Mercado Pago payment form without leaving your store. 
+                    If you deactivate it, they will be redirected to another page.',
                     'StandardSettings'
                 ),
                 'values' => array(
