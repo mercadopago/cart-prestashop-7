@@ -141,7 +141,7 @@ class StandardSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_STANDARD_MODAL',
                 'is_bool' => true,
                 'desc' => $this->module->l(
-                    'Your customers will access the Mercado Pago payment form without leaving your store. 
+                    'Your customers will access the Mercado Pago payment form without leaving your store.
                      If you deactivate it, they will be redirected to another page.', 
                     'StandardSettings'
                 ),
@@ -163,7 +163,10 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Binary Mode', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Approve or reject payments instantly and automatically,', 'StandardSettings') .
+                'desc' => $this->module->l(
+                    'Approve or reject payments instantly and automatically,', 
+                    'StandardSettings'
+                ) .
                 $this->module->l(
                     ' without pending or under review status. Do you want us to activate it? ', 
                     'StandardSettings'
