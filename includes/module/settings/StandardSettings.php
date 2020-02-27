@@ -56,7 +56,10 @@ class StandardSettings extends AbstractSettings
                 'type' => 'switch',
                 'label' => $this->module->l('Activate checkout', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_CHECKOUT',
-                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.', 'StandardSettings'),
+                'desc' => $this->module->l(
+                    'Activate the Mercado Pago experience at the checkout of your store.',
+                    'StandardSettings'
+                ),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -91,7 +94,7 @@ class StandardSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_PAYMENT',
                 'class' => 'payment-offline-checkbox',
                 'desc' => $this->module->l(
-                    'Activate the payment alternatives you prefer for your customers.', 
+                    'Activate the payment alternatives you prefer for your customers.',
                     'StandardSettings'
                 ),
                 'values' => array(
@@ -106,7 +109,7 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Maximum number of installments', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_INSTALLMENTS',
                 'desc' => $this->module->l(
-                    'What is the maximum number of installments with which a customer can buy?', 
+                    'What is the maximum number of installments with which a customer can buy?',
                     'StandardSettings'
                 ),
                 'options' => array(
@@ -142,7 +145,7 @@ class StandardSettings extends AbstractSettings
                 'is_bool' => true,
                 'desc' => $this->module->l(
                     'Your customers will access the Mercado Pago payment form without leaving your store.
-                     If you deactivate it, they will be redirected to another page.', 
+                     If you deactivate it, they will be redirected to another page.',
                     'StandardSettings'
                 ),
                 'values' => array(
@@ -164,11 +167,11 @@ class StandardSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_STANDARD_BINARY_MODE',
                 'is_bool' => true,
                 'desc' => $this->module->l(
-                    'Approve or reject payments instantly and automatically,', 
+                    'Approve or reject payments instantly and automatically,',
                     'StandardSettings'
                 ) .
                 $this->module->l(
-                    ' without pending or under review status. Do you want us to activate it? ', 
+                    ' without pending or under review status. Do you want us to activate it? ',
                     'StandardSettings'
                 ) ,
                 'hint' => $this->module->l(' Activating it can affect fraud prevention. ', 'StandardSettings') .
@@ -196,7 +199,7 @@ class StandardSettings extends AbstractSettings
                 'hint' => $this->module->l('During this time we will save the payment ', 'StandardSettings') .
                     $this->module->l('preference so as not to ask your client for ', 'StandardSettings') .
                     $this->module->l(
-                        'the data again. Once elapsed, it will be deleted automatically.', 
+                        'the data again. Once elapsed, it will be deleted automatically.',
                         'StandardSettings'
                     ),
                 'desc' => ' ',

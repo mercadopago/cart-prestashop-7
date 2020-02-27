@@ -147,7 +147,7 @@ class CredentialsSettings extends AbstractSettings
             }
 
             Mercadopago::$form_message = $this->module->l(
-                'Settings saved successfully. Now you can configure the module.', 
+                'Settings saved successfully. Now you can configure the module.',
                 'CredentialsSettings'
             );
 

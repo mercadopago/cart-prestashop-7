@@ -55,7 +55,7 @@ class LocalizationSettings extends AbstractSettings
                 'label' => $this->module->l('Country:', 'LocalizationSettings'),
                 'name' => 'MERCADOPAGO_COUNTRY_LINK',
                 'desc' => $this->module->l(
-                    'Select the country in which your Mercado Pago account operates', 
+                    'Select the country in which your Mercado Pago account operates',
                     'LocalizationSettings'
                 ),
                 'options' => array(
@@ -78,7 +78,10 @@ class LocalizationSettings extends AbstractSettings
     {
         parent::postFormProcess();
 
-        Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.', 'LocalizationSettings');
+        Mercadopago::$form_message = $this->module->l(
+            'Settings saved successfully. Now you can configure the module.',
+            'LocalizationSettings'
+        );
         MPLog::generate('Localization saved successfully');
     }
 

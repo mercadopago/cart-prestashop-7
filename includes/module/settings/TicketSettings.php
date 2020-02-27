@@ -56,7 +56,7 @@ class TicketSettings extends AbstractSettings
                 'label' => $this->module->l('Activate Checkout of face to face payments', 'TicketSettings'),
                 'name' => 'MERCADOPAGO_TICKET_CHECKOUT',
                 'desc' => $this->module->l(
-                    'Activate the option of face to face payments in your store.', 
+                    'Activate the option of face to face payments in your store.',
                     'TicketSettings'
                 ),
                 'is_bool' => true,

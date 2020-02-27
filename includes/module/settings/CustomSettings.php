@@ -54,7 +54,7 @@ class CustomSettings extends AbstractSettings
                 'label' => $this->module->l('Activate checkout', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_CHECKOUT',
                 'desc' => $this->module->l(
-                    'Activate the Mercado Pago experience at the checkout of your store.', 
+                    'Activate the Mercado Pago experience at the checkout of your store.',
                     'CustomSettings'
                 ),
                 'is_bool' => true,
@@ -77,11 +77,11 @@ class CustomSettings extends AbstractSettings
                 'name' => 'MERCADOPAGO_CUSTOM_BINARY_MODE',
                 'is_bool' => true,
                 'desc' => $this->module->l(
-                    'Approve or reject payments instantly and automatically, ', 
+                    'Approve or reject payments instantly and automatically, ',
                     'CustomSettings'
                 ).
                 $this->module->l(
-                    'without pending or under review status. Do you want us to activate it?', 
+                    'without pending or under review status. Do you want us to activate it?',
                     'CustomSettings'
                 ),
                 'hint' => $this->module->l('Activating it can affect fraud prevention. ', 'CustomSettings') .
