@@ -18,12 +18,12 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2019 PrestaShop SA
+* @copyright 2007-2020 PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect}">
+<form id="mp_ticket_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
     <div class="row mp-frame-checkout-custom-seven">
 
 
@@ -57,7 +57,7 @@
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_firstname" data-checkout="mp_firstname"
                                name="mercadopago_ticket[firstname]" class="form-control mp-form-control"
-                               value="{$customer['firstname']}" autocomplete="off"/>
+                               value="{$customer['firstname']|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_firstname"
                                id="error_firstname">{l s='You must inform your name' mod='mercadopago'}</small>
                     </div>
@@ -67,7 +67,7 @@
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_lastname" data-checkout="mp_lastname"
                                name="mercadopago_ticket[lastname]" class="form-control mp-form-control"
-                               value="{$customer['lastname']}" autocomplete="off"/>
+                               value="{$customer['lastname']|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_lastname"
                                id="error_lastname">{l s='You must inform last name' mod='mercadopago'}</small>
                     </div>
@@ -89,7 +89,7 @@
                         <label for="" class="mp-pb-5">{l s='Address' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_address" data-checkout="mp_address" name="mercadopago_ticket[address]"
-                               class="form-control mp-form-control" value="{$address->address1}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->address1|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_address"
                                id="mp_error_address">{l s='You must inform address' mod='mercadopago'}</small>
                     </div>
@@ -109,7 +109,7 @@
                         <label for="" class="mp-pb-5">{l s='City' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_city" data-checkout="mp_city" name="mercadopago_ticket[city]"
-                               class="form-control mp-form-control" value="{$address->city}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->city|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_city"
                                id="mp_error_city">{l s='You must inform address number' mod='mercadopago'}</small>
                     </div>
@@ -156,7 +156,7 @@
                         <label for="" class="mp-pb-5">{l s='Postal Code' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_zipcode" data-checkout="mp_zipcode" name="mercadopago_ticket[zipcode]"
-                               class="form-control mp-form-control" value="{$address->postcode}" autocomplete="off"/>
+                               class="form-control mp-form-control" value="{$address->postcode|escape:'html':'UTF-8'}" autocomplete="off"/>
                         <small class="mp-erro-febraban" data-main="#mp_zipcode"
                                id="mp_error_zipcode">{l s='You must inform zip code' mod='mercadopago'}</small>
                     </div>
@@ -175,12 +175,12 @@
                     {foreach $ticket as $key => $value}
                         <div class="col-md-6 col-6 col-xs-6 mp-px-0 mp-m-col">
                             <div class="form-check mp-form-check">
-                                <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']}"
-                                       class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id'])}"
+                                <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']|escape:'html':'UTF-8'}"
+                                       class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id']|escape:'html':'UTF-8')}"
                                        type="radio" {if $key == 0} checked {/if}>
-                                <label class="form-check-label" for="{$value['id']}">
-                                    <img src="{$value['image']}" alt="{$value['name']}"/>
-                                    <span class="mp-text-ticket-tarjeta">{$value['name']}</span>
+                                <label class="form-check-label" for="{$value['id']|escape:'html':'UTF-8'}">
+                                    <img src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
+                                    <span class="mp-text-ticket-tarjeta">{$value['name']|escape:'html':'UTF-8'}</span>
                                 </label>
                             </div>
                         </div>
@@ -190,10 +190,10 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$module_dir}views/js/ticket.js"/>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js"/>
 <script type="text/javascript">
     window.onload = function () {
-        var site_id = '{$site_id}';
+        var site_id = '{$site_id|escape:'javascript':'UTF-8'}';
         mpValidateSiteId(site_id);
         validateDocumentInputs();
         mercadoPagoFormHandlerTicket();

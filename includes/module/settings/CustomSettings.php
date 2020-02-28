@@ -1,29 +1,31 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 require_once MP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
 
@@ -51,7 +53,10 @@ class CustomSettings extends AbstractSettings
                 'type' => 'switch',
                 'label' => $this->module->l('Activate checkout', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_CHECKOUT',
-                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.', 'CustomSettings'),
+                'desc' => $this->module->l(
+                    'Activate the Mercado Pago experience at the checkout of your store.',
+                    'CustomSettings'
+                ),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -71,8 +76,14 @@ class CustomSettings extends AbstractSettings
                 'label' => $this->module->l('Binary Mode', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Approve or reject payments instantly and automatically, ', 'CustomSettings').
-                $this->module->l('without pending or under review status. Do you want us to activate it?', 'CustomSettings'),
+                'desc' => $this->module->l(
+                    'Approve or reject payments instantly and automatically, ',
+                    'CustomSettings'
+                ).
+                $this->module->l(
+                    'without pending or under review status. Do you want us to activate it?',
+                    'CustomSettings'
+                ),
                 'hint' => $this->module->l('Activating it can affect fraud prevention. ', 'CustomSettings') .
                     $this->module->l('Leave it inactive so we can take ', 'CustomSettings') .
                     $this->module->l('care of your charges', 'CustomSettings'),

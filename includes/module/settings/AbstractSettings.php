@@ -1,29 +1,31 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 class AbstractSettings
 {
@@ -112,10 +114,11 @@ class AbstractSettings
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
-                case "expiration_preference";
+                case "expiration_preference":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
+                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') .
+                            $this->module->l('must be an integer.');
                         MPLog::generate('Invalid expiration_date_to submitted', 'warning');
                         return false;
                     }
@@ -124,7 +127,10 @@ class AbstractSettings
                 case "public_key":
                     if ($value == '') {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        Mercadopago::$form_message = $this->module->l(
+                            'Credentials can not be empty and must be valid. '
+                        ) .
+                        $this->module->l('Please complete your credentials to enable the module.');
                         MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -133,7 +139,10 @@ class AbstractSettings
                 case "access_token":
                     if (!$this->validateCredentials($input, $value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        Mercadopago::$form_message = $this->module->l(
+                            'Credentials can not be empty and must be valid. '
+                        ) .
+                        $this->module->l('Please complete your credentials to enable the module.');
                         MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -148,7 +157,7 @@ class AbstractSettings
                     }
                     break;
 
-                case "payment_due";
+                case "payment_due":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
                         Mercadopago::$form_message .= $this->module->l('The payment due must be an integer.');

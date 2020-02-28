@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2019 PrestaShop SA
+*  @copyright 2007-2020 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -35,7 +35,7 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
     <li><a href="#template_2" role="tab" data-toggle="tab">{l s='About Mercado Pago' mod='mercadopago'}</a></li>
-    <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version}</span></a></li>
+    <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version|escape:'html':'UTF-8'}</span></a></li>
 </ul>
 
 <!-- Tab panes -->

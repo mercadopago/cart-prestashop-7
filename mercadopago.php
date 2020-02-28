@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2018 PrestaShop.
  *
@@ -39,27 +38,27 @@ class Mercadopago extends PaymentModule
 {
     public $tab;
     public $name;
+    public $path;
     public $author;
     public $version;
     public $context;
     public $mpuseful;
     public $bootstrap;
-    public $mercadopago;
     public $module_key;
+    public $mercadopago;
     public $displayName;
     public $description;
     public $need_instance;
-    public $confirmUninstall;
-    public $ps_versions_compliancy;
-    public $path;
-    public $standardCheckout;
     public $customCheckout;
     public $ticketCheckout;
+    public $standardCheckout;
+    public $confirmUninstall;
+    public $ps_versions_compliancy;
     public static $form_alert;
     public static $form_message;
 
-    CONST PRESTA16 = "1.6";
-    CONST PRESTA17 = "1.7";
+    const PRESTA16 = "1.6";
+    const PRESTA17 = "1.7";
 
     public function __construct()
     {

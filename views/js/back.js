@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2019 PrestaShop SA
+*  @copyright 2007-2020 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *
@@ -26,7 +26,7 @@
 * to avoid any conflicts with others containers.
 */
 
-window.onload = function() {    
+window.onload = function () {
     var element = document.querySelectorAll("#module_form");
     for (var i=0; i < element.length; i++) {
         element[i].id = "module_form_" + i;
@@ -83,12 +83,12 @@ window.onload = function() {
     var onlineChecked = "";
     var countOnlineChecked = 0;
     var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
-    for(var ion=0; ion < onlineInputs.length; ion++){
-        if(onlineInputs[ion].checked == true){
+    for (var ion=0; ion < onlineInputs.length; ion++) {
+        if (onlineInputs[ion].checked == true) {
             countOnlineChecked += 1;
         }
     }
-    if(countOnlineChecked == onlineInputs.length){
+    if (countOnlineChecked == onlineInputs.length) {
         onlineChecked = "checked";
     }
     
@@ -103,12 +103,12 @@ window.onload = function() {
     var offlineChecked = "";
     var countOfflineChecked = 0;
     var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
-    for(var ioff=0; ioff < offlineInputs.length; ioff++){
-        if(offlineInputs[ioff].checked == true){
+    for (var ioff=0; ioff < offlineInputs.length; ioff++) {
+        if (offlineInputs[ioff].checked == true) {
             countOfflineChecked += 1;
         }
     }
-    if(countOfflineChecked == offlineInputs.length){
+    if (countOfflineChecked == offlineInputs.length) {
         offlineChecked = "checked";
     }
     
@@ -129,7 +129,7 @@ window.onload = function() {
     var form_group = document.querySelectorAll("#module_form_2 .panel .form-wrapper .form-group");
     
     for (i=0; i < form_group.length; i++) {
-        if(i == 2){
+        if (i == 2) {
             form_group[i].innerHTML += "<hr class='mp-mt-50'>\
             <div class='row'>\
                 <div class='col-md-12'>\
@@ -160,8 +160,8 @@ window.onload = function() {
     form_module.style.marginBottom = "0";
     collapse_panel.style.paddingBottom = "0";
     
-    form_module.onclick = function(){
-        if(collapse_body.style.display == "none"){
+    form_module.onclick = function () {
+        if (collapse_body.style.display == "none") {
             collapse_body.style.display = "block";
             collapse_footer.style.display = "block";
             header_less.style.display = "block";
@@ -170,8 +170,7 @@ window.onload = function() {
             form_module.style.borderBottom = "1px solid #eee";
             form_module.style.marginBottom = "15px";
             collapse_panel.style.paddingBottom = "20px";
-        }
-        else{
+        } else {
             collapse_body.style.display = "none";
             collapse_footer.style.display = "none";
             header_less.style.display = "none";
@@ -186,28 +185,28 @@ window.onload = function() {
 }
 
 //Online payments
-function completeOnlineCheckbox(){
-    var onlineCheck = document.getElementById("checkmeon").checked; 
+function completeOnlineCheckbox()
+{
+    var onlineCheck = document.getElementById("checkmeon").checked;
     var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
     for (var i=0; i < onlineInputs.length; i++) {
-        if(onlineCheck == true){
+        if (onlineCheck == true) {
             onlineInputs[i].checked = true;
-        }
-        else{
+        } else {
             onlineInputs[i].checked = false;
         }
     }
 }
 
 //Offline payments
-function completeOfflineCheckbox(){
-    var offlineCheck = document.getElementById("checkmeoff").checked; 
+function completeOfflineCheckbox()
+{
+    var offlineCheck = document.getElementById("checkmeoff").checked;
     var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
     for (var i=0; i < offlineInputs.length; i++) {
-        if(offlineCheck == true){
+        if (offlineCheck == true) {
             offlineInputs[i].checked = true;
-        }
-        else{
+        } else {
             offlineInputs[i].checked = false;
         }
     }

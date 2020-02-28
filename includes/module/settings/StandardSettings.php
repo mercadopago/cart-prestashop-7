@@ -1,29 +1,31 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 require_once MP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
 
@@ -54,7 +56,10 @@ class StandardSettings extends AbstractSettings
                 'type' => 'switch',
                 'label' => $this->module->l('Activate checkout', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_CHECKOUT',
-                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.', 'StandardSettings'),
+                'desc' => $this->module->l(
+                    'Activate the Mercado Pago experience at the checkout of your store.',
+                    'StandardSettings'
+                ),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -88,7 +93,10 @@ class StandardSettings extends AbstractSettings
                 'type' => 'checkbox',
                 'name' => 'MERCADOPAGO_PAYMENT',
                 'class' => 'payment-offline-checkbox',
-                'desc' => $this->module->l('Activate the payment alternatives you prefer for your customers.', 'StandardSettings'),
+                'desc' => $this->module->l(
+                    'Activate the payment alternatives you prefer for your customers.',
+                    'StandardSettings'
+                ),
                 'values' => array(
                     'query' => $this->offline_payments,
                     'id' => 'id',
@@ -100,7 +108,10 @@ class StandardSettings extends AbstractSettings
                 'type' => 'select',
                 'label' => $this->module->l('Maximum number of installments', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_INSTALLMENTS',
-                'desc' => $this->module->l('What is the maximum number of installments with which a customer can buy?', 'StandardSettings'),
+                'desc' => $this->module->l(
+                    'What is the maximum number of installments with which a customer can buy?',
+                    'StandardSettings'
+                ),
                 'options' => array(
                     'query' => $this->getInstallments(24),
                     'id' => 'id',
@@ -132,7 +143,10 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Modal checkout', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_MODAL',
                 'is_bool' => true,
-                'desc' => $this->module->l('Your customers will access the Mercado Pago payment form without leaving your store. If you deactivate it, they will be redirected to another page.', 'StandardSettings'),
+                'desc' => $this->module->l(
+                    'Your customers will access the Mercado Pago payment form without leaving your store. If you deactivate it, they will be redirected to another page.',
+                    'StandardSettings'
+                ),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_STANDARD_MODAL_ON',
@@ -151,8 +165,14 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Binary Mode', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l('Approve or reject payments instantly and automatically,', 'StandardSettings') .
-                $this->module->l(' without pending or under review status. Do you want us to activate it? ', 'StandardSettings') ,
+                'desc' => $this->module->l(
+                    'Approve or reject payments instantly and automatically,',
+                    'StandardSettings'
+                ) .
+                $this->module->l(
+                    ' without pending or under review status. Do you want us to activate it? ',
+                    'StandardSettings'
+                ) ,
                 'hint' => $this->module->l(' Activating it can affect fraud prevention. ', 'StandardSettings') .
                     $this->module->l('Leave it inactive so we can ', 'StandardSettings') .
                     $this->module->l('take care of your charges', 'StandardSettings'),
@@ -177,7 +197,10 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Cancels payment preferences after', 'StandardSettings'),
                 'hint' => $this->module->l('During this time we will save the payment ', 'StandardSettings') .
                     $this->module->l('preference so as not to ask your client for ', 'StandardSettings') .
-                    $this->module->l('the data again. Once elapsed, it will be deleted automatically.', 'StandardSettings'),
+                    $this->module->l(
+                        'the data again. Once elapsed, it will be deleted automatically.',
+                        'StandardSettings'
+                    ),
                 'desc' => ' ',
             )
         );
@@ -223,8 +246,7 @@ class StandardSettings extends AbstractSettings
             $pm_id = $payment_method['id'];
             $pm_name = 'MERCADOPAGO_PAYMENT_' . $pm_id;
 
-            if (
-                $payment_method['type'] == 'credit_card' ||
+            if ($payment_method['type'] == 'credit_card' ||
                 $payment_method['type'] == 'debit_card' ||
                 $payment_method['type'] == 'prepaid_card'
             ) {
