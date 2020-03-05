@@ -43,7 +43,7 @@ $_MODULE['<{mercadopago}prestashop>abstractsettings_c9cc8cce247e49bae79f15173ce9
 $_MODULE['<{mercadopago}prestashop>abstractsettings_4d9ac946f92f7211e40671513c72fd09'] =
 'Configurações salvas com sucesso';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_36ac045205b16f9bb7cd8bb5641e839d'] =
-'A hora para salvar as preferências de pagamento';
+'A hora para salvar as preferências de pagamento ';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_81495f3842f92cd64795702e235405e6'] =
 'deve ser um número inteiro.';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_93027262f5c97f5faccac9eb7ef7df6d'] =
@@ -91,7 +91,7 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_65073593c74f39e8b77174346432
 $_MODULE['<{mercadopago}prestashop>standardsettings_cef6266789eeb18008a67056a56d680c'] =
 'sem status pendentes ou em revisão. Você quer que o ativemos?';
 $_MODULE['<{mercadopago}prestashop>standardsettings_14e34536b7eea32e8a7e021bea1b9b91'] =
-'Ativá-lo pode afetar a prevenção de fraude.';
+'Ativá-lo pode afetar a prevenção de fraude. ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_e7369d7d7500eb4804b08192ab2b1444'] =
 'Deixe-o inativo para que possamos ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_f18f9cbe68138db2d541dd171101fb35'] =
@@ -103,7 +103,7 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_f4baa4850222eacc72d4f217fd03
 $_MODULE['<{mercadopago}prestashop>standardsettings_941254e31637b81ac1008e6eb1861c93'] =
 'Durante este tempo, vamos salvar as preferências de pagamento ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_4476880111ab525b0ef3cfe9173c40ba'] =
-'para não ter que pedir os dados do seu cliente novamente.';
+'para não ter que pedir os dados do seu cliente novamente. ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_42b26ebeb795fcdfdd3d59e3f301970d'] =
 'Depois disso, eles serão apagados automaticamente.';
 $_MODULE['<{mercadopago}prestashop>ratingsettings_5ecdf7c8fed5fa55b341b963ae70790f'] =
@@ -149,7 +149,7 @@ $_MODULE['<{mercadopago}prestashop>customsettings_880bb5685c2e7ef3c65fe0aad31a4d
 $_MODULE['<{mercadopago}prestashop>customsettings_4c0985e3f8194a2415269103fa9a104d'] =
 'sem status pendentes ou em revisão. Você quer que o ativemos?';
 $_MODULE['<{mercadopago}prestashop>customsettings_679555bbde4dbc004d33b03a55d4a764'] =
-'Ativá-lo pode afetar a prevenção de fraude.';
+'Ativá-lo pode afetar a prevenção de fraude. ';
 $_MODULE['<{mercadopago}prestashop>customsettings_237779dcb8689068ce4d9abdad8c6ce5'] =
 'Deixe-o inativo para que possamos cuidar';
 $_MODULE['<{mercadopago}prestashop>customsettings_1a9640e57cd90969114812b5bf0c27ef'] =
