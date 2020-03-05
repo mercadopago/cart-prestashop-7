@@ -53,21 +53,21 @@ class CredentialsSettings extends AbstractSettings
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Production', 'CredentialsSettings'),
-                'name' => 'MERCADOPAGO_SANDBOX_STATUS',
+                'name' => 'MERCADOPAGO_PROD_STATUS',
                 'is_bool' => true,
                 'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'CredentialsSettings') .
                     $this->module->l('Change to NO to activate the Sandbox ', 'CredentialsSettings') .
                     $this->module->l('test environment.', 'CredentialsSettings'),
                 'values' => array(
                     array(
-                        'id' => 'MERCADOPAGO_SANDBOX_STATUS_OFF',
-                        'value' => false,
-                        'label' => $this->module->l('Inactive', 'CredentialsSettings')
-                    ),
-                    array(
-                        'id' => 'MERCADOPAGO_SANDBOX_STATUS_ON',
+                        'id' => 'MERCADOPAGO_PROD_STATUS_ON',
                         'value' => true,
                         'label' => $this->module->l('Active', 'CredentialsSettings')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_PROD_STATUS_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Inactive', 'CredentialsSettings')
                     )
                 ),
             ),
@@ -164,9 +164,9 @@ class CredentialsSettings extends AbstractSettings
     public function getFormValues()
     {
         return array(
+            'MERCADOPAGO_PROD_STATUS' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
             'MERCADOPAGO_PUBLIC_KEY' => Configuration::get('MERCADOPAGO_PUBLIC_KEY'),
             'MERCADOPAGO_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_ACCESS_TOKEN'),
-            'MERCADOPAGO_SANDBOX_STATUS' => Configuration::get('MERCADOPAGO_SANDBOX_STATUS'),
             'MERCADOPAGO_SANDBOX_PUBLIC_KEY' => Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY'),
             'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN')
         );

@@ -1,0 +1,6 @@
+[2020-03-05 10:47:49] [WARNING]: Invalid MERCADOPAGO_PUBLIC_KEY submitted
+[2020-03-05 10:47:51] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2020-03-05 10:47:51] [WARNING]: Invalid MERCADOPAGO_ACCESS_TOKEN submitted
+[2020-03-05 10:47:51] [WARNING]: Invalid MERCADOPAGO_SANDBOX_PUBLIC_KEY submitted
+[2020-03-05 10:47:52] [ERROR]: API valid_access_token error: The User ID must match the consultant's
+[2020-03-05 10:47:52] [WARNING]: Invalid MERCADOPAGO_SANDBOX_ACCESS_TOKEN submitted
