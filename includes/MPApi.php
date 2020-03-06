@@ -69,10 +69,10 @@ class MPApi
     public function getPublicKey()
     {
         if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
-            return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+            return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         }
 
-        return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
     }
 
     /**
