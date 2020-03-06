@@ -98,7 +98,7 @@
             </div>
             
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
-                {if $sandbox_status != true}
+                {if $sandbox_status == true}
                     <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
                     <p class="mp-number-checkout-body">5</p>
@@ -125,7 +125,7 @@
 
 {if $access_token != '' && $public_key != ''  && $sandbox_access_token != '' && $sandbox_public_key != ''}
   
-    {if $sandbox_status == true || $seller_homolog == true}
+    {if $sandbox_status != true || $seller_homolog == true}
         <div style="display: none">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>
     {else}
         <div style="display: block">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>
@@ -147,7 +147,7 @@
         <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div>
     </div>
     
-    {if $sandbox_status == true}
+    {if $sandbox_status != true}
     <div class="panel">
         <div class="panel-heading">
             <i class="icon-cogs"></i> {l s='Test yor store' mod='mercadopago'}

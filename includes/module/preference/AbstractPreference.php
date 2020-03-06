@@ -389,14 +389,14 @@ class AbstractPreference
                 'customer_id' => $cart->id_customer,
                 'mp_module_id' => $mp_module['id_mp_module'],
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->settings['MERCADOPAGO_PROD_STATUS']
             ]);
         } else {
             $mp_transaction->where('cart_id', '=', $cart->id)->update([
                 'total' => $cart->getOrderTotal(),
                 'customer_id' => $cart->id_customer,
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->settings['MERCADOPAGO_PROD_STATUS']
             ]);
         }
     }
@@ -408,11 +408,11 @@ class AbstractPreference
      */
     public function validateSandboxMode()
     {
-        if ($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true) {
-            return true;
+        if ($this->settings['MERCADOPAGO_PROD_STATUS'] == true) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -502,9 +502,9 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_COUNTRY_LINK'] = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         //credentials
+        $this->settings['MERCADOPAGO_PROD_STATUS'] = Configuration::get('MERCADOPAGO_PROD_STATUS');
         $this->settings['MERCADOPAGO_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
-        $this->settings['MERCADOPAGO_SANDBOX_STATUS'] = Configuration::get('MERCADOPAGO_SANDBOX_STATUS');
         $this->settings['MERCADOPAGO_SANDBOX_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_SANDBOX_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 

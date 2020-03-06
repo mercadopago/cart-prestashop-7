@@ -190,7 +190,7 @@ class StandardSettings extends AbstractSettings
                 ),
             ),
             array(
-                'col' => 2,
+                'col' => 3,
                 'suffix' => $this->module->l('hours without activity', 'StandardSettings'),
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_EXPIRATION_DATE_TO',
