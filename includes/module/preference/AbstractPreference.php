@@ -36,6 +36,9 @@ class AbstractPreference
     public $cart_rule;
     public $mercadopago;
 
+    /**
+     * AbstractPreference constructor.
+     */
     public function __construct()
     {
         $this->module = Module::getInstanceByName('mercadopago');
@@ -72,10 +75,9 @@ class AbstractPreference
     }
 
     /**
-     * Return the common fields in preference
-     *
      * @param $cart
      * @return array
+     * @throws Exception
      */
     public function getCommonPreference($cart)
     {
@@ -490,9 +492,7 @@ class AbstractPreference
     }
 
     /**
-     * Get Mercado Pago settings
-     *
-     * @return void
+     * @return mixed
      */
     public function getMercadoPagoSettings()
     {

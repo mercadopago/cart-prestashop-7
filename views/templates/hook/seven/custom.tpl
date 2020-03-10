@@ -216,7 +216,7 @@
         window.onload = function () {
             var custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s="Choose" mod="mercadopago"}...'
+                select_choose: '{l s='Choose' mod='mercadopago'}...'
             };
 
             initializeCustom(custom);

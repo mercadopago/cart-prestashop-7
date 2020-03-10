@@ -113,7 +113,7 @@ class MPApi
     /**
      * Create preference
      *
-     * @param array $preference
+     * @param $preference
      * @return bool
      * @throws Exception
      */
@@ -158,7 +158,7 @@ class MPApi
         //in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
-            return false;
+            return $response['response']['message'];
         }
 
         //response treatment
@@ -311,5 +311,19 @@ class MPApi
         $result = $response['response'];
 
         return $result['scopes'];
+    }
+
+    /**
+     * @param null $message
+     * @return null
+     */
+    public static function validateMessageApi($message = null)
+    {
+        $validMessages = array('Invalid users involved', '...');
+
+        if (in_array(trim($message), $validMessages)) {
+            return $message;
+        }
+        return null;
     }
 }

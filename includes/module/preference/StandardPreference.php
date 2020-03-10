@@ -38,10 +38,9 @@ class StandardPreference extends AbstractPreference
     }
 
     /**
-     * Get preference params to send to MP
-     *
-     * @param mixed $cart
-     * @return mixed
+     * @param $cart
+     * @return bool
+     * @throws Exception
      */
     public function createPreference($cart)
     {
@@ -57,8 +56,8 @@ class StandardPreference extends AbstractPreference
         $preference['expiration_date_to'] = $this->getExpirationDate();
         $preference['metadata'] = $this->getInternalMetadata();
 
-        $preference = Tools::jsonEncode($preference);
-        $createPreference = $this->mercadopago->createPreference($preference);
+        $preferenceEncoded = Tools::jsonEncode($preference);
+        $createPreference = $this->mercadopago->createPreference($preferenceEncoded);
 
         return $createPreference;
     }

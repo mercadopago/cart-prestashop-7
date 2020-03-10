@@ -38,10 +38,10 @@ class CustomPreference extends AbstractPreference
     }
 
     /**
-     * Get preference params to send to MP
-     *
-     * @param mixed $cart
-     * @return mixed
+     * @param $cart
+     * @param $custom_info
+     * @return bool
+     * @throws Exception
      */
     public function createPreference($cart, $custom_info)
     {
@@ -72,7 +72,9 @@ class CustomPreference extends AbstractPreference
 
         //Create preference
         $preference = Tools::jsonEncode($preference);
+        MPLog::generate('Create Preference Infos: ' . $preference);
         $createPreference = $this->mercadopago->createPayment($preference);
+        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
 
         return $createPreference;
     }
