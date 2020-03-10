@@ -389,14 +389,14 @@ class AbstractPreference
                 'customer_id' => $cart->id_customer,
                 'mp_module_id' => $mp_module['id_mp_module'],
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_PROD_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         } else {
             $mp_transaction->where('cart_id', '=', $cart->id)->update([
                 'total' => $cart->getOrderTotal(),
                 'customer_id' => $cart->id_customer,
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_PROD_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         }
     }
