@@ -139,7 +139,6 @@ class CredentialsSettings extends AbstractSettings
         //activate checkout
         if (Mercadopago::$form_alert != 'alert-danger') {
             if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == '') {
-                Configuration::updateValue('MERCADOPAGO_STANDARD_CHECKOUT', true);
                 $payment_methods = $this->mercadopago->getPaymentMethods();
                 foreach ($payment_methods as $payment_method) {
                     $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
