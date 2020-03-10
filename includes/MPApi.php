@@ -319,11 +319,22 @@ class MPApi
      */
     public static function validateMessageApi($message = null)
     {
-        $validMessages = array('Invalid users involved', '...');
-
-        if (in_array(trim($message), $validMessages)) {
-            return $message;
+        switch (trim($message)) {
+            case 'Invalid payment_method_id';
+                return 'The payment method is not valid or not available.';
+                break;
+            case 'Invalid transaction_amount';
+                return 'The transaction amount cannot be processed by Mercado Pago. Possible causes: Currency not supported; Amounts below the minimum or above the maximum allowed.';
+                break;
+            case 'Invalid users involved';
+                return 'The users are not valid. Possible causes: Buyer and seller have the same account in Mercado Pago; The transaction involving production and test users.';
+                break;
+            case 'Unauthorized use of live credentials';
+                return 'Unauthorized use of production credentials. Possible causes: Use permission in use for the credential of the seller.';
+                break;
+            default;
+                return null;
+                break;
         }
-        return null;
     }
 }
