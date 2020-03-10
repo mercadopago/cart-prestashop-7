@@ -117,7 +117,7 @@ $_MODULE['<{mercadopago}prestashop>credentialssettings_ebc4608a47aa08cb533d928e0
 $_MODULE['<{mercadopago}prestashop>credentialssettings_6087b8439a7036bff644affc8784da4b'] =
 'Mude para NÃO para experimentar ';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_3bc591c82367247890499e4b021a933e'] =
-'loja antes de vender';
+'loja antes de vender.';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_3cab03c00dbd11bc3569afa0748013f0'] =
 'Desativar';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_4d3d769b812b6faa6b76e1a8abaece2d'] =
@@ -185,7 +185,7 @@ $_MODULE['<{mercadopago}prestashop>localizationsettings_369686331c93d55e58744114
 $_MODULE['<{mercadopago}prestashop>localizationsettings_f64be5eef68442a8f50cf535b92ad3e4'] =
 'País:';
 $_MODULE['<{mercadopago}prestashop>localizationsettings_bdaea8d8b9968a9c9ec57e2ebf37d9f8'] =
-' Selecione o país onde sua conta do Mercado Pago opera';
+' Selecione o país onde sua conta do Mercado Pago opera.';
 $_MODULE['<{mercadopago}prestashop>localizationsettings_f9465576c2b33512983a54a95bad3210'] =
 ' Configurações salvas com sucesso. Agora você pode configurar o módulo.';
 $_MODULE['<{mercadopago}prestashop>localizationsettings_8b144ffc87beff564884b1c190275539'] =
@@ -243,21 +243,21 @@ $_MODULE['<{mercadopago}prestashop>template_1_3972296bf88ad8b9df45219704cbc499']
 $_MODULE['<{mercadopago}prestashop>template_1_d3ed68f7315b7e72b8d886b2278fcac3'] =
 'credenciais';
 $_MODULE['<{mercadopago}prestashop>template_1_a74702c3f87efa59784d648c68cbe7ea'] =
-'na sua conta do Mercado Pago,';
+'na sua conta do Mercado Pago.';
 $_MODULE['<{mercadopago}prestashop>template_1_afbb92a0d1285fbd49350014669046f3'] =
-'Homologue sua conta';
+'Homologue sua conta.';
 $_MODULE['<{mercadopago}prestashop>template_1_6b4fb1dba01491995d2222e8e6f59dd0'] =
 'Selecione os';
 $_MODULE['<{mercadopago}prestashop>template_1_b8d8952ddd5e6db1936bd51b88edc760'] =
 'meios de pagamento';
 $_MODULE['<{mercadopago}prestashop>template_1_b52ba38c3bc63fbc7f2c36b472455143'] =
-'disponíveis na sua loja,';
+'disponíveis na sua loja.';
 $_MODULE['<{mercadopago}prestashop>template_1_c6bb78598105e349729d9ebb019d739b'] =
 'Deixe o';
 $_MODULE['<{mercadopago}prestashop>template_1_2652eec977dcb2a5aea85f5bec235b05'] =
 'Sandbox';
 $_MODULE['<{mercadopago}prestashop>template_1_3dd7c03abf4b169d72637025fad108aa'] =
-'para testar compras na sua loja,';
+'para testar compras na sua loja.';
 $_MODULE['<{mercadopago}prestashop>template_1_05b0d76c904472532b5ab0ec235a16b8'] =
 'Desative-o se estiver pronto para receber pagamentos.';
 $_MODULE['<{mercadopago}prestashop>template_1_b3d228eb96c4d15caabb6507e9e8acba'] =
