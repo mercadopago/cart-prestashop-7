@@ -548,16 +548,18 @@ class Mercadopago extends PaymentModule
             return;
         }
 
-        if (Tools::getIsset('payment_ticket')) {
-            $ticket_url = Tools::getValue('payment_ticket');
+        $order = $params['objOrder'];
+        $products = $order->getProducts();
+        $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
 
-            $this->context->smarty->assign(array(
-                "ticket_url" => $ticket_url,
-                "module_dir" => $this->_path,
-            ));
+        $this->context->smarty->assign(array(
+            'order'=> $order,
+            'order_products' => $products,
+            "module_dir" => $this->_path,
+            "ticket_url" => $ticket_url
+        ));
 
-            return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
-        }
+        return $this->display(__FILE__, 'views/templates/hook/payment_return.tpl');
     }
 
     /**
