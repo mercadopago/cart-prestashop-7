@@ -31,6 +31,11 @@ require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
+    /**
+     * Default function of Prestashop for init the controller
+     *
+     * @return void
+     */
     public function initContent()
     {
         $typeReturn = Tools::getValue('typeReturn');
