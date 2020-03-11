@@ -50,10 +50,14 @@ class WebhookNotification extends AbstractNotification
         $this->total = (float) $cart->getOrderTotal();
         $this->order_id = Order::getOrderByCartId($cart->id);
         
-        $this->verifyCustomPayment();
-        $this->validateOrderState();
+        if($this->order_id != 0){
+            $this->verifyCustomPayment();
+            $this->validateOrderState();
+            return $this->updateOrder($cart);
+        }
 
-        return $this->updateOrder($cart);
+        MPLog::generate('Order does not exist or Order status is the same', 'warning');
+        $this->getNotificationResponse("Order does not exist or Order status is the same", 422);
     }
 
     /**

@@ -46,16 +46,21 @@ class IpnNotification extends AbstractNotification
     {
         $this->total = (float) $cart->getOrderTotal();
         $this->order_id = Order::getOrderByCartId($cart->id);
-
-        $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
-        $payments = $merchant_order['payments'];
-
         $this->verifyWebhook($cart);
-        $this->verifyPayments($payments);
-        $this->validateOrderState();
-        $this->updateTransactionId();
 
-        return $this->updateOrder($cart);
+        if($this->order_id != 0){
+            $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
+            $payments = $merchant_order['payments'];
+
+            $this->verifyPayments($payments);
+            $this->validateOrderState();
+            $this->updateTransactionId();
+
+            return $this->updateOrder($cart);
+        }
+
+        MPLog::generate('Order does not exist or Order status is the same', 'warning');
+        $this->getNotificationResponse("Order does not exist or Order status is the same", 422);
     }
 
     /**
