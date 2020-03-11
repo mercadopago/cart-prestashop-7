@@ -149,7 +149,7 @@ class AbstractNotification
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
 
-        if ($this->order_state != $actual_status) {
+        if ($this->order_id != 0 && $this->order_state != $actual_status) {
             try {
                 $order->setCurrentState($this->order_state);
                 $this->saveUpdateOrderData($cart);
@@ -163,8 +163,8 @@ class AbstractNotification
                 $this->getNotificationResponse("The order has not been updated", 422);
             }
         } else {
-            MPLog::generate('The order status is the same', 'warning');
-            $this->getNotificationResponse("The order status is the same", 422);
+            MPLog::generate('Order does not exist or Order status is the same', 'warning');
+            $this->getNotificationResponse("Order does not exist or Order status is the same", 422);
         }
     }
 

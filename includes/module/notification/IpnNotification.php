@@ -53,6 +53,7 @@ class IpnNotification extends AbstractNotification
         $this->verifyWebhook($cart);
         $this->verifyPayments($payments);
         $this->validateOrderState();
+        $this->updateTransactionId();
 
         return $this->updateOrder($cart);
     }
@@ -105,5 +106,18 @@ class IpnNotification extends AbstractNotification
                 $this->pending += $payment_info['transaction_amount'];
             }
         }
+    }
+
+    /**
+     * Update merchant_order_id on transaction id
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function updateTransactionId() {
+        $order = new Order($this->order_id);
+        $payments = $order->getOrderPaymentCollection();
+        $payments[0]->transaction_id = $this->transaction_id;
+        $payments[0]->update();
     }
 }
