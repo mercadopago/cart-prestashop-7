@@ -57,7 +57,7 @@ class WebhookNotification extends AbstractNotification
     }
 
     /**
-     * Create ordem for custom payments wihtout notification
+     * Create order for custom payments without notification
      *
      * @param mixed $cart
      * @return void
