@@ -221,7 +221,6 @@ class StandardSettings extends AbstractSettings
 
         Configuration::updateValue('MERCADOPAGO_STANDARD', true);
 
-        $this->sendSettingsInfo();
         MPLog::generate('Standard checkout configuration saved successfully');
     }
 

@@ -258,27 +258,6 @@ class MPApi
     }
 
     /**
-     * Send platform info to settings api
-     *
-     * @param [array] $params
-     * @return bool
-     * @throws Exception
-     */
-    public function saveApiSettings($params)
-    {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::post('/modules/tracking/settings?access_token=' . $access_token, $params);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API save_api_settings error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get application_id
      *
      * @param [integer] $seller

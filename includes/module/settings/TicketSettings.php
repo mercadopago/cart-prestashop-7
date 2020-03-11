@@ -123,7 +123,6 @@ class TicketSettings extends AbstractSettings
 
         if ($this->validatePaymentMethods()) {
             parent::postFormProcess();
-            $this->sendSettingsInfo();
             MPLog::generate('Ticket checkout configuration saved successfully');
         }
     }

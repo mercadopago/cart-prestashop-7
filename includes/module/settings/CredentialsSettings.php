@@ -160,7 +160,6 @@ class CredentialsSettings extends AbstractSettings
                 'CredentialsSettings'
             );
 
-            $this->sendSettingsInfo();
             MPLog::generate('Credentials saved successfully');
         }
     }
