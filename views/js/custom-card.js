@@ -565,7 +565,7 @@
      */
     function showErrors(response)
     {
-        var form = getForm();
+        var form = getFormCustom();
         for (var x = 0; x < response.cause.length; x++) {
             var error = response.cause[x];
             var small = '';
@@ -581,6 +581,7 @@
                 input.classList.add('mp-form-control-error');
             }
         }
+        focusInputError();
         return;
     }
 
