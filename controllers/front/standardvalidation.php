@@ -39,21 +39,13 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
     public function initContent()
     {
         $typeReturn = Tools::getValue('typeReturn');
-        $payments_id = Tools::getValue('collection_id');
+        $payment_id = Tools::getValue('collection_id');
 
-        if (isset($payments_id) && $payments_id != 'null' && $typeReturn != 'failure') {
+        if (isset($payment_id) && $payment_id != 'null' && $typeReturn != 'failure') {
             $cart_id = Tools::getValue('external_reference');
             $cart = new Cart($cart_id);
-            $total = $cart->getOrderTotal();
-
-            $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
-            $uri .= '&id_cart=' . $cart_id;
-            $uri .= '&id_module=' . $this->module->id;
-            $uri .= '&typeReturn=' . $typeReturn;
-            $uri .= '&payment_id=' . implode(',', $payments_id);
-            $uri .= '&total=' . $total;
-
-            $this->createOrder($cart, $uri);
+            $order = $this->createOrder($cart);
+            $this->redirectOrderConfirmation($cart, $order);
         }
 
         $this->redirectError();
@@ -66,11 +58,33 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      * @param string $url
      * @return void
      */
-    public function createOrder($cart, $url)
+    public function createOrder($cart)
     {
         $customer_secure_key = $cart->secure_key;
         $notification = new IpnNotification(null, $customer_secure_key);
         $notification = $notification->createStandardOrder($cart);
+
+        $order = Order::getOrderByCartId($cart->id);
+        $order = new Order($order);
+
+        return $order;
+    }
+
+    /**
+     * Redirect to order confirmation page
+     *
+     * @param mixed $cart
+     * @param mixed $order
+     * @return void
+     */
+    public function redirectOrderConfirmation($cart, $order)
+    {
+        $url = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
+        $url .= '&key=' . $order->secure_key;
+        $url .= '&total=' . $cart->getOrderTotal();
+        $url .= '&id_cart=' . $order->id_cart;
+        $url .= '&id_order=' . $order->id;
+        $url .= '&id_module=' . $this->module->id;
 
         return Tools::redirectLink($url);
     }
