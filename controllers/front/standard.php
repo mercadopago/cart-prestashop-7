@@ -50,7 +50,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
 
         //modal checkout
         if ($preference->settings['MERCADOPAGO_STANDARD_MODAL'] != "") {
-            return $this->standardModalCheckout($preference);
+            return $this->standardModalCheckout($cart, $preference);
         }
 
         //redirect checkout
@@ -70,14 +70,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
             $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
             MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
-
-            //create order
-            $customer_secure_key = $cart->secure_key;
-            $notification = new IpnNotification(null, $customer_secure_key);
-            $notification = $notification->createStandardOrder($cart);
-
-            //mercadopago redirect
-            return Tools::redirectLink($createPreference['init_point']);
+            $this->createOrder($cart, $createPreference['init_point']);
         }
 
         return $preference->redirectError();
@@ -89,14 +82,29 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
      * @param mixed $cart
      * @return void
      */
-    public function standardModalCheckout($preference)
+    public function standardModalCheckout($cart, $preference)
     {
         $back_url = Tools::getValue('back_url');
 
         if (isset($back_url)) {
-            return Tools::redirectLink($back_url);
+            $this->createOrder($cart, $back_url);
         }
 
         return $preference->redirectError();
+    }
+
+    /**
+     * Create order without notification
+     *
+     * @param mixed $cart
+     * @param string $url
+     * @return void
+     */
+    public function createOrder($cart, $url) {
+        $customer_secure_key = $cart->secure_key;
+        $notification = new IpnNotification(null, $customer_secure_key);
+        $notification = $notification->createStandardOrder($cart);
+
+        return Tools::redirectLink($url);
     }
 }
