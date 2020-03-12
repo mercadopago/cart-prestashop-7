@@ -567,9 +567,7 @@ class Mercadopago extends PaymentModule
      */
     public function hookDisplayTopColumn()
     {
-        if (Tools::getValue('typeReturn') == 'failure') {
-            return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
-        }
+        return $this->getDisplayFailure();
     }
 
     /**
@@ -579,7 +577,21 @@ class Mercadopago extends PaymentModule
      */
     public function hookDisplayWrapperTop()
     {
+        return $this->getDisplayFailure();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDisplayFailure()
+    {
         if (Tools::getValue('typeReturn') == 'failure') {
+            $cookie = $this->context->cookie;
+            if ($cookie->__isset('redirect_message')) {
+                $this->context->smarty->assign(array('redirect_message' => $cookie->__get('redirect_message')));
+                $cookie->__unset('redirect_message');
+            }
+
             return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
         }
     }

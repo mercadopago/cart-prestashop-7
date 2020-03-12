@@ -118,7 +118,7 @@ class MPApi
     /**
      * Create preference
      *
-     * @param array $preference
+     * @param $preference
      * @return bool
      * @throws Exception
      */
@@ -163,7 +163,7 @@ class MPApi
         //in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
-            return false;
+            return $response['response']['message'];
         }
 
         //response treatment
@@ -295,5 +295,30 @@ class MPApi
         $result = $response['response'];
 
         return $result['scopes'];
+    }
+
+    /**
+     * @param null $message
+     * @return null
+     */
+    public static function validateMessageApi($message = null)
+    {
+        switch (trim($message)) {
+            case 'Invalid payment_method_id';
+                return 'The payment method is not valid or not available.';
+                break;
+            case 'Invalid transaction_amount';
+                return 'The transaction amount cannot be processed by Mercado Pago. Possible causes: Currency not supported; Amounts below the minimum or above the maximum allowed.';
+                break;
+            case 'Invalid users involved';
+                return 'The users are not valid. Possible causes: Buyer and seller have the same account in Mercado Pago; The transaction involving production and test users.';
+                break;
+            case 'Unauthorized use of live credentials';
+                return 'Unauthorized use of production credentials. Possible causes: Use permission in use for the credential of the seller.';
+                break;
+            default;
+                return null;
+                break;
+        }
     }
 }
