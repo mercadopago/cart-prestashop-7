@@ -469,7 +469,7 @@ class Mercadopago extends PaymentModule
             $this->context->smarty->assign($frontInformations);
             return $this->display(__FILE__, 'views/templates/hook/six/custom.tpl');
         } else {
-            $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+            $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
             $str_discount = ' (' . $discount . '% OFF) ';
             $str_discount = ($discount != "") ? $str_discount : '';
 
