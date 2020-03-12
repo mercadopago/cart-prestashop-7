@@ -52,7 +52,7 @@ class TicketPreference extends AbstractPreference
         $preference['payer']['email'] = $this->getCustomerEmail();
         $preference['metadata'] = $this->getInternalMetadata();
 
-        if ($this->module->context->currency->iso_code == 'BRL') {
+        if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLB') {
             $preference['payer']['first_name'] = $ticket_info['firstname'];
             $preference['payer']['last_name'] = $ticket_info['docType'] == "CPF" ? $ticket_info['lastname'] : "";
             $preference['payer']['identification']['type'] = $ticket_info['docType'];
