@@ -486,7 +486,7 @@ class AbstractPreference
      */
     public function redirectError()
     {
-        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 
     /**
