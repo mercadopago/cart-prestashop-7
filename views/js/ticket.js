@@ -69,7 +69,7 @@
                         mp_box_firstname.classList.add('col-md-4');
                         mp_box_firstname.classList.remove('col-md-8');
                         mp_doc_number.setAttribute('maxlength', '14');
-                        mp_doc_number.setAttribute('onkeyup', 'maskinput(this, mcpf)');
+                        mp_doc_number.setAttribute('onkeyup', 'maskInput(this, mcpf)');
                         mercado_pago_docnumber = 'CPF';
                     } else {
                         mp_cpf_label.style.display = 'none';
@@ -80,7 +80,7 @@
                         mp_box_firstname.classList.add('col-md-8');
                         mp_box_firstname.classList.remove('col-md-4');
                         mp_doc_number.setAttribute('maxlength', '18');
-                        mp_doc_number.setAttribute('onkeyup', 'maskinput(this, mcnpj)');
+                        mp_doc_number.setAttribute('onkeyup', 'maskInput(this, mcnpj)');
                         mercado_pago_docnumber = 'CNPJ';
                     }
                 });
