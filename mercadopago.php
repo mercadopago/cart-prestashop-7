@@ -54,7 +54,6 @@ class Mercadopago extends PaymentModule
     public $standardCheckout;
     public $confirmUninstall;
     public $ps_versions_compliancy;
-    public $errors;
     public static $form_alert;
     public static $form_message;
 
@@ -587,13 +586,12 @@ class Mercadopago extends PaymentModule
     public function getDisplayFailure()
     {
         if (Tools::getValue('typeReturn') == 'failure') {
-            if (Tools::getValue('typeReturn') == 'failure') {
-                $cookie = $this->context->cookie;
-                if ($cookie->__isset('redirect_message')) {
-                    $this->context->smarty->assign(array('redirect_message' => $cookie->__get('redirect_message')));
-                    $cookie->__unset('redirect_message');
-                }
+            $cookie = $this->context->cookie;
+            if ($cookie->__isset('redirect_message')) {
+                $this->context->smarty->assign(array('redirect_message' => $cookie->__get('redirect_message')));
+                $cookie->__unset('redirect_message');
             }
+
             return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
         }
     }

@@ -31,7 +31,7 @@
                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                 {if !empty($redirect_message)}
                     {$redirect_message|escape:'htmlall':'UTF-8'}
-                        {else}
+                {else}
                     {l s='Oops! There was an error in payment, attempted ...' mod='mercadopago'}
                 {/if}
             </div>
