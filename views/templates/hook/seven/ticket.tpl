@@ -192,8 +192,9 @@
 </form>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js"/>
 <script type="text/javascript">
-    window.onload = function () {
-        var site_id = '{$site_id|escape:'javascript':'UTF-8'}';
+    window.onload = loadTicket();   
+    function loadTicket() {
+        var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
         mpValidateSiteId(site_id);
         validateDocumentInputs();
         mercadoPagoFormHandlerTicket();

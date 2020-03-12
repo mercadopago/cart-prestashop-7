@@ -31,11 +31,11 @@
     var objPaymentMethod = {};
     var additionalInfoNeeded = {};
 
-    var seller = {
+    var seller_custom = {
         site_id: ''
     };
 
-    var translate = {
+    var translate_custom = {
         select_choose: ''
     };
 
@@ -44,18 +44,17 @@
       *
       * @param object customVars
       */
-    window.initializeCustom = function (custom) {
-        seller.site_id = custom.site_id;
-        translate.select_choose = custom.select_choose;
-    }
+    window.initializeCustom = function (mp_custom) {
+        seller_custom.site_id = mp_custom.site_id;
+        translate_custom.select_choose = mp_custom.select_choose;
+    };
 
     /*
      * Execute before event focusout on input Card Number
      *
      * @param object event
      */
-    function guessingPaymentMethod(event)
-    {
+    function guessingPaymentMethod(event) {
         clearIssuer();
         clearInstallments();
         clearTax();
@@ -91,8 +90,7 @@
     * @param number status
     * @param object response
     */
-    function paymentMethodHandler(status, response)
-    {
+    function paymentMethodHandler(status, response) {
         if (status === 200) {
             objPaymentMethod = response[0];
             setPaymentMethodId(objPaymentMethod.id);
@@ -109,8 +107,7 @@
      *
      * @param string paymentMethodId
      */
-    function setPaymentMethodId(paymentMethodId)
-    {
+    function setPaymentMethodId(paymentMethodId) {
         var paymentMethodElement = document.getElementById('payment_method_id');
         paymentMethodElement.value = paymentMethodId;
     }
@@ -120,8 +117,7 @@
      *
      * @param string secureThumbnail
      */
-    function setImageCard(secureThumbnail)
-    {
+    function setImageCard(secureThumbnail) {
         document.getElementById('id-card-number').style.background = 'url(' + secureThumbnail + ') 98% 50% no-repeat #fff';
     }
 
@@ -131,8 +127,7 @@
      *
      * @param array additional_info_needed
      */
-    function loadAdditionalInfo(additional_info_needed)
-    {
+    function loadAdditionalInfo(additional_info_needed) {
         additionalInfoNeeded = {
             'issuer': false,
             'cardholder_name': false,
@@ -159,8 +154,7 @@
     /**
      * Check what information is necessary to pay and show inputs
      */
-    function additionalInfoHandler()
-    {
+    function additionalInfoHandler() {
 
         if (additionalInfoNeeded.cardholder_name) {
             document.getElementById('mp-card-holder-div').style.display = 'block';
@@ -208,15 +202,14 @@
      * @param status status
      * @param object response
      */
-    function issuersHandler(status, response)
-    {
+    function issuersHandler(status, response) {
         if (status === 200) {
             // If the API does not return any bank.
             var issuersSelector = document.getElementById('id-issuers-options');
             var fragment = document.createDocumentFragment();
 
             issuersSelector.options.length = 0;
-            var option = new Option(translate.select_choose, '-1');
+            var option = new Option(translate_custom.select_choose, '-1');
             fragment.appendChild(option);
 
             for (var i = 0; i < response.length; i++) {
@@ -235,8 +228,7 @@
     /**
      * Call insttalments with issuer ou not, depends on additionalInfoHandler()
      */
-    function setInstallments()
-    {
+    function setInstallments() {
         var params_installments = {};
         var amount = getAmount();
         var issuer = false;
@@ -271,11 +263,10 @@
      * @param number status
      * @param object response
      */
-    function installmentHandler(status, response)
-    {
+    function installmentHandler(status, response) {
         clearInstallments();
         if (status === 200) {
-            var html_option = new Option(translate.select_choose, '', true, true);
+            var html_option = new Option(translate_custom.select_choose, '', true, true);
             $('#id-installments').append(html_option);
 
             var payerCosts = [];
@@ -291,7 +282,7 @@
                 $('#id-installments').append(html_option);
             }
 
-            if (seller.site_id === 'MLA') {
+            if (seller_custom.site_id === 'MLA') {
                 clearTax();
                 $('body').on('change', '#id-installments', showTaxes);
             }
@@ -307,10 +298,9 @@
      * @param * payerCosts
      * @returns string
      */
-    function argentinaResolution(payerCosts)
-    {
+    function argentinaResolution(payerCosts) {
         var dataInput = '';
-        if (seller.site_id === 'MLA') {
+        if (seller_custom.site_id === 'MLA') {
             for (var l = 0; l < payerCosts.length; l++) {
                 if (payerCosts[l].indexOf('CFT_') !== -1) {
                     dataInput = payerCosts[l];
@@ -324,8 +314,7 @@
     /**
      * Show taxes resolution 51/2017 for MLA
      */
-    function showTaxes()
-    {
+    function showTaxes() {
         var selectorInstallments = document.querySelector('#id-installments');
         var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
         var cft = '';
@@ -346,16 +335,14 @@
     /**
      * Get Amount end calculate discount for hide inputs
      */
-    function getAmount()
-    {
+    function getAmount() {
         return document.getElementById('amount').value;
     }
 
     /**
      * Get Bin from Card Number
      */
-    function getBin()
-    {
+    function getBin() {
         var cardnumber = $('#id-card-number').val().replace(/ /g, '').replace(/-/g, '').replace(/\./g, '');
         return cardnumber.substr(0, 6);
     }
@@ -363,24 +350,21 @@
     /**
      * Remove background image from imput
      */
-    function resetBackgroundCard()
-    {
+    function resetBackgroundCard() {
         document.getElementById('id-card-number').style.background = 'no-repeat #fff';
     }
 
     /**
      * Clear input select
      */
-    function clearInstallments()
-    {
+    function clearInstallments() {
         document.getElementById('id-installments').innerHTML = '';
     }
 
     /**
      * Clear Tax
      */
-    function clearTax()
-    {
+    function clearTax() {
         document.querySelector('.mp-text-cft').innerHTML = '';
         document.querySelector('.mp-text-tea').innerHTML = '';
     }
@@ -388,8 +372,7 @@
     /**
      * Clear input select and change to default layout
      */
-    function clearIssuer()
-    {
+    function clearIssuer() {
         document.getElementById('container-issuers').style.display = 'none';
         document.getElementById('container-installments').classList.remove('col-md-8');
         document.getElementById('container-installments').classList.add('mp-md-12');
@@ -399,8 +382,7 @@
     /**
      * Clear input select and change to default layout
      */
-    function clearDoc()
-    {
+    function clearDoc() {
         document.getElementById('mp-doc-div-title').style.display = 'none';
         document.getElementById('mp-doc-div').style.display = 'none';
         document.getElementById('mp-doc-type-div').style.display = 'none';
@@ -414,8 +396,7 @@
      *
      * @return bool
      */
-    function validateInputsCreateToken()
-    {
+    function validateInputsCreateToken() {
         hideErrors();
         var fixedInputs = validateFixedInputs();
         var additionalInputs = validateAdditionalInputs();
@@ -433,8 +414,7 @@
     *
     * @return bool
     */
-    function focusInputError()
-    {
+    function focusInputError() {
         if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
             var form_inputs = document.querySelectorAll('.mp-form-control-error');
             form_inputs[0].focus();
@@ -446,8 +426,7 @@
     *
     * @return bool
     */
-    function validateFixedInputs()
-    {
+    function validateFixedInputs() {
         var emptyInputs = false;
         var form = getFormCustom();
         var form_inputs = form.querySelectorAll('[data-checkout]');
@@ -485,8 +464,7 @@
      *
      * @return bool
      */
-    function validateAdditionalInputs()
-    {
+    function validateAdditionalInputs() {
         var emptyInputs = false;
 
         if (additionalInfoNeeded.issuer) {
@@ -531,8 +509,7 @@
      *
      *  @return bool
      */
-    function createToken()
-    {
+    function createToken() {
         hideErrors();
 
         // Form.
@@ -548,8 +525,7 @@
      * @param number status
      * @param object response
      */
-    function sdkResponseHandler(status, response)
-    {
+    function sdkResponseHandler(status, response) {
         if (status !== 200 && status !== 201) {
             showErrors(response);
         } else {
@@ -563,8 +539,7 @@
      *
      * @param  obje  response
      */
-    function showErrors(response)
-    {
+    function showErrors(response) {
         var form = getFormCustom();
         for (var x = 0; x < response.cause.length; x++) {
             var error = response.cause[x];
@@ -588,8 +563,7 @@
     /**
      * Hide errors when return of cardToken error
      */
-    function hideErrors()
-    {
+    function hideErrors() {
         for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
             var field = document.querySelectorAll('[data-checkout]')[x];
             field.classList.remove('mp-error-input');
@@ -605,16 +579,14 @@
     /**
      * Get form
      */
-    function getFormCustom()
-    {
+    function getFormCustom() {
         return document.querySelector('#mp_custom_checkout');
     }
 
     /**
      * Get condition terms input on PS17
      */
-    function getConditionTerms()
-    {
+    function getConditionTerms() {
         var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
         if (typeof terms === 'object' && terms !== null) {
             return terms.checked = false;
