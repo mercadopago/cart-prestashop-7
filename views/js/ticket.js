@@ -30,22 +30,23 @@
 
     var mercado_pago_docnumber = 'CPF';
 
-    var seller = {
+    var seller_ticket = {
         site_id: ''
     };
 
     /**
      * Validate site_id
      */
-    window.mpValidateSiteId = function (site_id) {
-        seller.site_id = site_id;
+    window.mpValidateSiteId = function (site_id_ticket) {
+        console.log('Ticket ' + site_id_ticket);
+        seller_ticket.site_id = site_id_ticket;
     };
 
     /**
      * Validate input depending on document type
      */
     window.validateDocumentInputs = function () {
-        if (seller.site_id === 'MLB') {
+        if (seller_ticket.site_id === 'MLB') {
             var mp_box_lastname = document.getElementById('mp_box_lastname');
             var mp_box_firstname = document.getElementById('mp_box_firstname');
             var mp_firstname_label = document.getElementById('mp_firstname_label');
@@ -95,7 +96,7 @@
     window.mercadoPagoFormHandlerTicket = function () {
         if (document.forms['mp_ticket_checkout'] !== undefined) {
             document.forms['mp_ticket_checkout'].onsubmit = function () {
-                if (seller.site_id === 'MLB') {
+                if (seller_ticket.site_id === 'MLB') {
                     if (validateInputs() && validateDocumentNumber()) {
                         return true;
                     } else {

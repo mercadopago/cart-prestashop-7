@@ -31,11 +31,11 @@
     var objPaymentMethod = {};
     var additionalInfoNeeded = {};
 
-    var seller = {
+    var seller_custom = {
         site_id: ''
     };
 
-    var translate = {
+    var translate_custom = {
         select_choose: ''
     };
 
@@ -44,10 +44,11 @@
       *
       * @param object customVars
       */
-    window.initializeCustom = function (custom) {
-        seller.site_id = custom.site_id;
-        translate.select_choose = custom.select_choose;
-    }
+    window.initializeCustom = function (mp_custom) {
+        console.log(mp_custom.site_id);
+        seller_custom.site_id = mp_custom.site_id;
+        translate_custom.select_choose = mp_custom.select_choose;
+    };
 
     /*
      * Execute before event focusout on input Card Number
@@ -216,7 +217,7 @@
             var fragment = document.createDocumentFragment();
 
             issuersSelector.options.length = 0;
-            var option = new Option(translate.select_choose, '-1');
+            var option = new Option(translate_custom.select_choose, '-1');
             fragment.appendChild(option);
 
             for (var i = 0; i < response.length; i++) {
@@ -275,7 +276,7 @@
     {
         clearInstallments();
         if (status === 200) {
-            var html_option = new Option(translate.select_choose, '', true, true);
+            var html_option = new Option(translate_custom.select_choose, '', true, true);
             $('#id-installments').append(html_option);
 
             var payerCosts = [];
@@ -291,7 +292,7 @@
                 $('#id-installments').append(html_option);
             }
 
-            if (seller.site_id === 'MLA') {
+            if (seller_custom.site_id === 'MLA') {
                 clearTax();
                 $('body').on('change', '#id-installments', showTaxes);
             }
@@ -310,7 +311,7 @@
     function argentinaResolution(payerCosts)
     {
         var dataInput = '';
-        if (seller.site_id === 'MLA') {
+        if (seller_custom.site_id === 'MLA') {
             for (var l = 0; l < payerCosts.length; l++) {
                 if (payerCosts[l].indexOf('CFT_') !== -1) {
                     dataInput = payerCosts[l];

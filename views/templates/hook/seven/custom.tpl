@@ -213,13 +213,14 @@
 {if $public_key != ''}
     <script type="text/javascript">
         // Set params to custom-card
-        window.onload = function () {
-            var custom = {
+        window.onload = loadCustom();
+        
+        function loadCustom() {
+            var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
                 select_choose: '{l s="Choose" mod="mercadopago"}...'
             };
-
-            initializeCustom(custom);
+            initializeCustom(mp_custom);
         }
 
         // Set mercadopago public_key
