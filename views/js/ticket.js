@@ -38,7 +38,6 @@
      * Validate site_id
      */
     window.mpValidateSiteId = function (site_id_ticket) {
-        console.log('Ticket ' + site_id_ticket);
         seller_ticket.site_id = site_id_ticket;
     };
 
@@ -112,16 +111,14 @@
     /**
      * Get form
      */
-    function getFormTicket()
-    {
+    function getFormTicket() {
         return document.querySelector('#mp_ticket_checkout');
     }
 
     /**
      * Get condition terms input on PS17
      */
-    function getConditionTerms()
-    {
+    function getConditionTerms() {
         var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
         if (typeof terms === 'object' && terms !== null) {
             return terms.checked = false;
@@ -131,8 +128,7 @@
     /**
      * Validate if all inputs are valid
      */
-    function validateInputs()
-    {
+    function validateInputs() {
         var form = getFormTicket();
         var form_inputs = form.querySelectorAll('[data-checkout]');
         var small = form.querySelectorAll('.mp-erro-febraban');
@@ -168,8 +164,7 @@
      * Validate document number
      * @return {bool}
      */
-    function validateDocumentNumber()
-    {
+    function validateDocumentNumber() {
         var docnumber_input = document.getElementById('mp_doc_number');
         var docnumber_error = document.getElementById('mp_error_docnumber');
         var docnumber_validate = false;
@@ -199,8 +194,7 @@
      * @param {string} strCPF
      * @return {bool}
      */
-    function validateCPF(strCPF)
-    {
+    function validateCPF(strCPF) {
         var Soma;
         var Resto;
 
@@ -217,18 +211,21 @@
 
         Resto = (Soma * 10) % 11;
         if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0; }
+            Resto = 0;
+        }
         if (Resto !== parseInt(strCPF.substring(9, 10))) {
             return false;
         }
 
         Soma = 0;
         for (var k = 1; k <= 10; k++) {
-            Soma = Soma + parseInt(strCPF.substring(k - 1, k)) * (12 - k); }
+            Soma = Soma + parseInt(strCPF.substring(k - 1, k)) * (12 - k);
+        }
 
         Resto = (Soma * 10) % 11;
         if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0; }
+            Resto = 0;
+        }
         if (Resto !== parseInt(strCPF.substring(10, 11))) {
             return false;
         }
@@ -241,8 +238,7 @@
      * @param {string} strCNPJ
      * @return {bool}
      */
-    function validateCNPJ(strCNPJ)
-    {
+    function validateCNPJ(strCNPJ) {
         var numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais;
 
         strCNPJ = strCNPJ.replace('.', '');

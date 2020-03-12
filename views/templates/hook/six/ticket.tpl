@@ -207,11 +207,11 @@
     </form>
 
     <script type="text/javascript">
-        window.onload = loadTicket();   
+        window.onload = loadTicket();
         function loadTicket() {
-        var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
-        mpValidateSiteId(site_id);
-        validateDocumentInputs();
-        mercadoPagoFormHandlerTicket();
+            var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
+            mpValidateSiteId(site_id);
+            validateDocumentInputs();
+            mercadoPagoFormHandlerTicket();
         }
     </script>

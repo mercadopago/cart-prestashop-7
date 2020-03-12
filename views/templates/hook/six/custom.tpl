@@ -208,7 +208,6 @@
     <script type="text/javascript">
         // Set params to custom-card
         window.onload = loadCustom();
-        
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
