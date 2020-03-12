@@ -183,26 +183,4 @@ class AbstractSettings
 
         return true;
     }
-
-    /**
-     * Send info to settings api
-     *
-     * @return void
-     */
-    public function sendSettingsInfo()
-    {
-        $checkout_basic = (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) ? 'true' : 'false';
-
-        $data = array(
-            "platform" => "PrestaShop",
-            "platform_version" => _PS_VERSION_,
-            "module_version" => MP_VERSION,
-            "code_version" => phpversion(),
-            "checkout_basic" => $checkout_basic
-        );
-
-        $this->mercadopago->saveApiSettings($data);
-
-        return true;
-    }
 }
