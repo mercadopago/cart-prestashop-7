@@ -580,3 +580,21 @@ $_MODULE['<{mercadopago}prestashop>ticket_49ee3087348e8d44e1feda1917443987'] =
 'Nome';
 $_MODULE['<{mercadopago}prestashop>ticket_377e99e7404b414341a9621f7fb3f906'] =
 'Finalizar pedido';
+$_MODULE['<{mercadopago}prestashop>mpapi_052dbe4cbe0fc4c37bbb5c59f70ac2d4'] =
+'O meio de pagamento não é válido ou não está disponível.';
+$_MODULE['<{mercadopago}prestashop>mpapi_9fdd961e41fdff842c80aea4a875138d'] =
+'O valor da transação não pode ser processado pelo Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>mpapi_8a6cb9e19e687968bffd11566895bb00'] =
+'Possíveis causas: Moeda não suportada; ';
+$_MODULE['<{mercadopago}prestashop>mpapi_81e3267deaa45a720e31c55e53d45d95'] =
+'Valores abaixo do mínimo ou acima do máximo permitido.';
+$_MODULE['<{mercadopago}prestashop>mpapi_8a0595f24ba7e98096ea2f52d1546605'] =
+'Os usuários não são válidos. Possíveis causas: ';
+$_MODULE['<{mercadopago}prestashop>mpapi_edf9cda9340f50dce8b4dad690c68341'] =
+'o comprador e o vendedor têm a mesma conta no Mercado Pago; ';
+$_MODULE['<{mercadopago}prestashop>mpapi_5f65da2a91e569c0f6c8821a8f354cf3'] =
+'A transação está envolvendo usuários de produção e teste.';
+$_MODULE['<{mercadopago}prestashop>mpapi_c92a089d8ab502e6ff18d8bf1c724833'] =
+'Uso não autorizado de credenciais de produção. ';
+$_MODULE['<{mercadopago}prestashop>mpapi_ac7495823e9778d3ffc7677ac5d3765a'] =
+'Possíveis causas: Pendência de permissão de uso na produção para a credencial do vendedor.';

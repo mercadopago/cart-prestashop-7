@@ -77,7 +77,6 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
 
                 //redirect to order confirmation page
                 Tools::redirect($uri);
-                return;
             }
 
             if (is_string($customPreference)) {
@@ -89,6 +88,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
         }
+        
         $preference->deleteCartRule();
         $preference->redirectError();
     }
