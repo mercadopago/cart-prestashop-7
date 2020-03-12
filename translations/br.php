@@ -82,8 +82,12 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_5c37fb51921ed01de76b54887c7b
 ' à loja após finalizar a compra? ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_7f6733fc4902833edb6f6d1a89fb4acc'] =
 'Modal checkout';
-$_MODULE['<{mercadopago}prestashop>standardsettings_85f6ca4c342e2956824ee59c72f6cee9'] =
-'Seus clientes acessarão o formulário de pagamento do Mercado Pago sem sair de sua loja. Se você desativá-lo, eles serão redirecionados para outra página.';
+$_MODULE['<{mercadopago}prestashop>standardsettings_833a9c46c3664a83053f319489b4c238'] =
+'Seus clientes vão acessar o formulário de pagamentos do Mercado Pago ';
+$_MODULE['<{mercadopago}prestashop>standardsettings_6a02c0cb3d450c1e23157b4ef4155a50'] =
+'sem sair da sua loja. Se desativar isso, ';
+$_MODULE['<{mercadopago}prestashop>standardsettings_ae47f9266c75b0b9cf904ce182f9b510'] =
+'eles serão redirecionados a outra página.';
 $_MODULE['<{mercadopago}prestashop>standardsettings_deb43872e3df204974c85e5b07ad8576'] =
 'Modo binário';
 $_MODULE['<{mercadopago}prestashop>standardsettings_65073593c74f39e8b77174346432937e'] =
@@ -160,6 +164,10 @@ $_MODULE['<{mercadopago}prestashop>customsettings_f2a22ca66322e56b52de81d06834c1
 'Ofereça um desconto especial para motivar seus ';
 $_MODULE['<{mercadopago}prestashop>customsettings_474aceb7275c706995d816dc90bdf45d'] =
 'clientes a fazerem a compra com Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>ticketsettings_c2adc2174b4cd2fd168bc5de3f1d1c48'] =
+'Não é possível remover ';
+$_MODULE['<{mercadopago}prestashop>ticketsettings_87fb0447a4e4615a6c2f40ec2154fc1c'] =
+'todos os meios de pagamento do Ticket Checkout.';
 $_MODULE['<{mercadopago}prestashop>storesettings_80a11d2a54a677f6fadd9c041c0d6b98'] =
 'Informações sobre sua loja';
 $_MODULE['<{mercadopago}prestashop>storesettings_49ee3087348e8d44e1feda1917443987'] =
@@ -494,6 +502,8 @@ $_MODULE['<{mercadopago}prestashop>custom_9abfb506bebd1e72069f0be0014986dc'] =
 'Número de documento inválido';
 $_MODULE['<{mercadopago}prestashop>custom_ab8a2170eb587c1022ad4ee33eb99e7f'] =
 'Campo obrigatório';
+$_MODULE['<{mercadopago}prestashop>custom_961f2247a2070bedff9f9cd8d64e2650'] =
+'Escolher';
 $_MODULE['<{mercadopago}prestashop>standard_e7f9e382dc50889098cbe56f2554c77b'] =
 'Cartão de crédito';
 $_MODULE['<{mercadopago}prestashop>standard_26f5a22330a8d5d32c87e6a4c7f3de95'] =

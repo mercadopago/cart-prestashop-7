@@ -149,10 +149,8 @@ class TicketSettings extends AbstractSettings
 
         if ($count_checked == $count_total) {
             Mercadopago::$form_alert = 'alert-danger';
-            Mercadopago::$form_message = $this->module->l(
-                'It is not possible to remove all payment methods for ticket checkout.',
-                'TicketSettings'
-            );
+            Mercadopago::$form_message = $this->module->l('It is not possible to remove ', 'TicketSettings') .
+                $this->module->l('all payment methods for ticket checkout.', 'TicketSettings');
             return false;
         }
 
