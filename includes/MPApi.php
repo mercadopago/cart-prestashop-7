@@ -98,6 +98,11 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
+            // remove on paypay release
+            if($value['id'] == 'paypal') {
+                continue;
+            }
+            
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
