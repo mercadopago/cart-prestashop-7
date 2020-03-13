@@ -512,6 +512,14 @@ $_MODULE['<{mercadopago}prestashop>ticket_return_21d104a54fc71a19a325c7305327f1d
 'Em processamento';
 $_MODULE['<{mercadopago}prestashop>ticket_return_051b4fc3b5b94694296b17af2f969dfc'] =
 'Imprimir';
+$_MODULE['<{mercadopago}prestashop>ticket_2aeaeb22ad892fd719ccde8e3d55617d'] =
+'Informe seu número de documento';
+$_MODULE['<{mercadopago}prestashop>ticket_a1fa27779242b4902f7ae3bdd5c6d508'] =
+'Tipo';
+$_MODULE['<{mercadopago}prestashop>ticket_3ba0f40775d6d6ace27ef929f5be3cdf'] =
+'CI';
+$_MODULE['<{mercadopago}prestashop>ticket_14c44ffb79e2c416100024bd491b48b9'] =
+'Número de documento';
 $_MODULE['<{mercadopago}prestashop>ticket_2dd4472245a696bc0b4b944db2a8b519'] =
 'Pessoa física';
 $_MODULE['<{mercadopago}prestashop>ticket_5a4471420aa5026337a78145a7f97b63'] =
