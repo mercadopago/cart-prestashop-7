@@ -82,9 +82,12 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_5c37fb51921ed01de76b54887c7b
 'a la tienda después de finalizar la compra?';
 $_MODULE['<{mercadopago}prestashop>standardsettings_7f6733fc4902833edb6f6d1a89fb4acc'] =
 'Modal checkout';
-$_MODULE['<{mercadopago}prestashop>standardsettings_85f6ca4c342e2956824ee59c72f6cee9'] =
-'Tus clientes accederán al formulario de pagos de Mercado Pago sin salir de tu tienda. Si lo desactivas, serán 
-redirigidos a otra página';
+$_MODULE['<{mercadopago}prestashop>standardsettings_833a9c46c3664a83053f319489b4c238'] =
+'Tus clientes accederán al formulario de pagos de Mercado Pago ';
+$_MODULE['<{mercadopago}prestashop>standardsettings_6a02c0cb3d450c1e23157b4ef4155a50'] =
+'sin salir de tu tienda. Si lo desactivas, ';
+$_MODULE['<{mercadopago}prestashop>standardsettings_ae47f9266c75b0b9cf904ce182f9b510'] =
+'serán redirigidos a otra página.';
 $_MODULE['<{mercadopago}prestashop>standardsettings_deb43872e3df204974c85e5b07ad8576'] =
 'Modo binario';
 $_MODULE['<{mercadopago}prestashop>standardsettings_65073593c74f39e8b77174346432937e'] =
@@ -161,6 +164,10 @@ $_MODULE['<{mercadopago}prestashop>customsettings_f2a22ca66322e56b52de81d06834c1
 'Ofrece un descuento especial para alentar a que tus ';
 $_MODULE['<{mercadopago}prestashop>customsettings_474aceb7275c706995d816dc90bdf45d'] =
 'clientes realicen la compra con Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>ticketsettings_c2adc2174b4cd2fd168bc5de3f1d1c48'] =
+'No es posible deshabilitar ';
+$_MODULE['<{mercadopago}prestashop>ticketsettings_87fb0447a4e4615a6c2f40ec2154fc1c'] =
+'todos los medios de pago para el Ticket Checkout.';
 $_MODULE['<{mercadopago}prestashop>storesettings_80a11d2a54a677f6fadd9c041c0d6b98'] =
 'Información de tu tienda';
 $_MODULE['<{mercadopago}prestashop>storesettings_49ee3087348e8d44e1feda1917443987'] =
@@ -495,6 +502,8 @@ $_MODULE['<{mercadopago}prestashop>custom_9abfb506bebd1e72069f0be0014986dc'] =
 'Invalid document number';
 $_MODULE['<{mercadopago}prestashop>custom_ab8a2170eb587c1022ad4ee33eb99e7f'] =
 'Completa todos los campos, ¡son obligatorios!';
+$_MODULE['<{mercadopago}prestashop>custom_961f2247a2070bedff9f9cd8d64e2650'] =
+'Elegir';
 $_MODULE['<{mercadopago}prestashop>standard_e7f9e382dc50889098cbe56f2554c77b'] =
 'Tarjetas de Crédito';
 $_MODULE['<{mercadopago}prestashop>standard_26f5a22330a8d5d32c87e6a4c7f3de95'] =
@@ -579,3 +588,21 @@ $_MODULE['<{mercadopago}prestashop>ticket_49ee3087348e8d44e1feda1917443987'] =
 'Nombre';
 $_MODULE['<{mercadopago}prestashop>ticket_377e99e7404b414341a9621f7fb3f906'] =
 'Finalizar';
+$_MODULE['<{mercadopago}prestashop>mpapi_052dbe4cbe0fc4c37bbb5c59f70ac2d4'] =
+'El medio de pago no es válido o no está disponible.';
+$_MODULE['<{mercadopago}prestashop>mpapi_9fdd961e41fdff842c80aea4a875138d'] =
+'El monto de transacción no puede ser procesado por Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>mpapi_8a6cb9e19e687968bffd11566895bb00'] =
+'Posibles causas: Moneda no soportada; ';
+$_MODULE['<{mercadopago}prestashop>mpapi_81e3267deaa45a720e31c55e53d45d95'] =
+'Montos por debajo del mínimo o por encima del máximo permitido.';
+$_MODULE['<{mercadopago}prestashop>mpapi_8a0595f24ba7e98096ea2f52d1546605'] =
+'Los usuários no son válidos. Posibles causas: ';
+$_MODULE['<{mercadopago}prestashop>mpapi_edf9cda9340f50dce8b4dad690c68341'] =
+'Comprador y vendedor tienen la misma cuenta en Mercado Pago; ';
+$_MODULE['<{mercadopago}prestashop>mpapi_5f65da2a91e569c0f6c8821a8f354cf3'] =
+'La transacción involucrando usuários de producción y de prueba.';
+$_MODULE['<{mercadopago}prestashop>mpapi_c92a089d8ab502e6ff18d8bf1c724833'] =
+'Uso no autorizado de credenciales de producción.';
+$_MODULE['<{mercadopago}prestashop>mpapi_ac7495823e9778d3ffc7677ac5d3765a'] =
+'Posibles causas: Pendencia de permiso de uso en producción para la credencial del vendedor.';
