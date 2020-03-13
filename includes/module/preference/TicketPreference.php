@@ -65,6 +65,15 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
         }
 
+        if($ticket_info['paymentMethodId'] == 'webpay'){
+            $preference['callback_url'] = $this->getSiteUrl();
+            $preference['transaction_details']['financial_institution'] = "1234";
+            $preference['additional_info']['ip_address'] = "127.0.0.1";
+            $preference['payer']['identification']['type'] = "RUT";
+            $preference['payer']['identification']['number'] = "0";
+            $preference['payer']['entity_type'] = "individual";
+        }
+
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 
