@@ -205,7 +205,7 @@
      * @param {string} docnumber
      * @return {bool}
      */
-    function validateDocTypeMLU(docnumber){
+    function validateDocTypeMLB(docnumber){
         if (mercado_pago_docnumber === 'CPF') {
             return validateCPF(docnumber);
         } else {
