@@ -100,6 +100,10 @@
     height: 100% !important;
 }
 
+.mp-hg-500 {
+    height: 500px !important;
+}
+
 .mp-fl-left {
     float: left !important;
 }
@@ -359,6 +363,23 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-ticket-frame iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.mp-ticket-frame-six {
+    height: 600px;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.mp-ticket-frame-six a {
+    margin: 10px 0;
+    padding: 10px 30px;
+    margin: 15px 0 15px;
+}
+
+.mp-ticket-frame-six iframe {
     width: 100%;
     height: 100%;
 }

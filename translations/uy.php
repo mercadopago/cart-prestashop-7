@@ -606,3 +606,23 @@ $_MODULE['<{mercadopago}prestashop>mpapi_c92a089d8ab502e6ff18d8bf1c724833'] =
 'Uso no autorizado de credenciales de producción.';
 $_MODULE['<{mercadopago}prestashop>mpapi_ac7495823e9778d3ffc7677ac5d3765a'] =
 'Posibles causas: Pendencia de permiso de uso en producción para la credencial del vendedor.';
+$_MODULE['<{mercadopago}prestashop>payment_return_3e09b7a997278261b6db524197e20bf8'] =
+'Gracias por su compra!';
+$_MODULE['<{mercadopago}prestashop>payment_return_21d104a54fc71a19a325c7305327f1d2'] =
+'Procesando...';
+$_MODULE['<{mercadopago}prestashop>payment_return_051b4fc3b5b94694296b17af2f969dfc'] =
+'Imprimir';
+$_MODULE['<{mercadopago}prestashop>payment_return_deb10517653c255364175796ace3553f'] =
+'Producto';
+$_MODULE['<{mercadopago}prestashop>payment_return_3601146c4e948c32b6424d2c0a7f0118'] =
+'Precio';
+$_MODULE['<{mercadopago}prestashop>payment_return_03ab340b3f99e03cff9e84314ead38c0'] =
+'Cantidad';
+$_MODULE['<{mercadopago}prestashop>payment_return_2194aaec8cc7086ab0e93f74547e5f53'] =
+'Subtotal';
+$_MODULE['<{mercadopago}prestashop>payment_return_104d9898c04874d0fbac36e125fa1369'] =
+'Descuento';
+$_MODULE['<{mercadopago}prestashop>payment_return_ea9cf7e47ff33b2be14e6dd07cbcefc6'] =
+'Envío y manejo';
+$_MODULE['<{mercadopago}prestashop>payment_return_3af22b59f4641bc5501998297f9ac70d'] =
+'TOTAL';

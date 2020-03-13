@@ -1,5 +1,5 @@
 {*
-* 2007-2019 PrestaShop
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -25,9 +25,34 @@
 
 <h2 class="ticket-return-title">
     {l s='Thank you for your purchase!' mod='mercadopago'}
-    <img src="{$module_dir|escape:'html':'UTF-8'}views/img/logo.png" class="img-fluid header-mp-logo"
-         id="logo-confirmation"/>
+    <img src="{$module_dir|escape:'html':'UTF-8'}views/img/logo.png" class="img-fluid header-mp-logo" id="logo-confirmation"/>
 </h2>
+
+{if $ticket_url != null}
+    <div class="mp-ticket-return">
+        <div class="row mp-ticket-frame-six">
+            <div class="col-md-12 mp-hg-500">
+                <iframe src="{$ticket_url|escape:'htmlall':'UTF-8'}" id="ticket-frame" name="ticket-frame">
+                    <div class="lightbox" id="text">
+                        <div class="box">
+                            <div class="content">
+                                <div class="processing">
+                                    <span>{l s='Processing...' mod='mercadopago'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </iframe>
+            </div>
+
+            <div class="col-md-12">
+                <a href="{$ticket_url|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-primary">
+                    {l s='Print ticket' mod='mercadopago'}
+                </a>
+            </div>
+        </div>
+    </div>
+{/if}
 
 <table class="std">
     <thead>
@@ -68,7 +93,7 @@
     </tr>
     <tr>
         <td style="text-align:right">
-            {l s='DISCOUNT' mod='mercadopago'}
+            {l s='Discount' mod='mercadopago'}
         </td>
         <td colspan="2">-
             {if $use_taxes}
@@ -111,4 +136,3 @@
 
     </tfoot>
 </table>
-{include file="/var/www/html/modules/mercadopago/views/templates/hook/six/ticket_return.tpl"}
