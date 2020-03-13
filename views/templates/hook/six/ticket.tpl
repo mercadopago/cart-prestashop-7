@@ -31,6 +31,31 @@
             </div>
 
             <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
+                {if $site_id == "MLU"}
+                    <div class="col-md-12 col-12 mp-frame-title">
+                        <p class="submp-title-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div id="mp-doc-tye" class="col-md-4 col-4 mp-pb-20 mp-m-col">
+                            <label for="mp-docType" class="mp-pb-5">{l s='Type' mod='mercadopago'}</label>
+                            <select id="mp-docType" class="form-control mp-form-control mp-select mp-pointer"
+                                name="mercadopago_ticket[docType]">
+                                <option value="CI" selected>{l s='CI' mod='mercadopago'}</option>
+                            </select>
+                        </div>
+                    
+                        <!-- Input Doc Number -->
+                        <div class="col-md-8 col-8 mp-pb-20 mp-m-col">
+                            <label for="mp_doc_number" class="mp-pb-5">{l s='Document number' mod='mercadopago'}</label>
+                            <input id="mp_doc_number" data-checkout="mp_doc_number" name="mercadopago_ticket[docNumber]" type="text"
+                                class="form-control mp-form-control" onkeyup="maskInput(this, minteger);" autocomplete="off"
+                                maxlength="8" />
+                            <small class="mp-erro-efetivo-mlu" data-main="#mp_doc_number" id="mp_error_docnumber">{l s='The document must be
+                                valid' mod='mercadopago'}</small>
+                        </div>
+                    </div>
+                {/if}
                 {if $site_id == "MLB"}
                 <div class="row mp-pt-25">
                     <div class="col-md-12 col-12 mp-pb-20 mp-px-0">

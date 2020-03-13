@@ -95,8 +95,17 @@
     window.mercadoPagoFormHandlerTicket = function () {
         if (document.forms['mp_ticket_checkout'] !== undefined) {
             document.forms['mp_ticket_checkout'].onsubmit = function () {
+
                 if (seller_ticket.site_id === 'MLB') {
                     if (validateInputs() && validateDocumentNumber()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                if (seller_ticket.site_id === 'MLU') {
+                    if (validateDocumentNumber()) {
                         return true;
                     } else {
                         return false;
@@ -169,10 +178,12 @@
         var docnumber_error = document.getElementById('mp_error_docnumber');
         var docnumber_validate = false;
 
-        if (mercado_pago_docnumber === 'CPF') {
-            docnumber_validate = validateCPF(docnumber_input.value);
-        } else {
-            docnumber_validate = validateCNPJ(docnumber_input.value);
+        if(seller_ticket.site_id === 'MLB') {
+        docnumber_validate = validateDocTypeMLB(docnumber_input.value);
+        }
+
+        if(seller_ticket.site_id === 'MLU') {
+        docnumber_validate = validateDocTypeMLU(docnumber_input.value);
         }
 
         if (!docnumber_validate) {
@@ -187,6 +198,32 @@
         }
 
         return docnumber_validate;
+    }
+
+    /**
+     * Validate Document number for MLB
+     * @param {string} docnumber
+     * @return {bool}
+     */
+    function validateDocTypeMLB(docnumber){
+        if (mercado_pago_docnumber === 'CPF') {
+            return validateCPF(docnumber);
+        } else {
+            return validateCNPJ(docnumber);
+        }
+    }
+
+    /**
+     * Validate Document number for MLU
+     * @param {string} docnumber
+     * @return {bool}
+     */
+    function validateDocTypeMLU(docnumber){
+        if (docnumber != '') {
+            return validateCI(docnumber);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -296,6 +333,33 @@
         } else {
             return false;
         }
+    }
+
+     /**
+     * Validate CI MLU
+     * @param {string} docNumber
+     * @return {bool}
+     */
+    function validateCI(docNumber) {
+        var x = 0;
+        var y = 0;
+        var docCI = 0;
+        var dig = docNumber[docNumber.length - 1];
+
+        if (docNumber.length <= 6) {
+            for (y = docNumber.length; y < 7; y++) {
+                docNumber = '0' + docNumber;
+            }
+        }
+        for (y = 0; y < 7; y++) {
+            x += (parseInt("2987634"[y]) * parseInt(docNumber[y])) % 10;
+        }
+        if (x % 10 === 0) {
+            docCI = 0;
+        } else {
+            docCI = 10 - x % 10;
+        }
+        return (dig == docCI);
     }
 
 })();

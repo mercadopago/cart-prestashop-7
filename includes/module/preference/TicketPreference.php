@@ -65,6 +65,11 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
         }
 
+        if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLU') {
+            $preference['payer']['identification']['type'] = $ticket_info['docType'];
+            $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
+        }
+
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
 
