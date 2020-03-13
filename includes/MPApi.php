@@ -303,18 +303,25 @@ class MPApi
      */
     public static function validateMessageApi($message = null)
     {
+        $module = Module::getInstanceByName('mercadopago');
+
         switch (trim($message)) {
             case 'Invalid payment_method_id';
-                return 'The payment method is not valid or not available.';
+                return $module->l('The payment method is not valid or not available.', 'MPApi');
                 break;
             case 'Invalid transaction_amount';
-                return 'The transaction amount cannot be processed by Mercado Pago. Possible causes: Currency not supported; Amounts below the minimum or above the maximum allowed.';
+                return $module->l('The transaction amount cannot be processed by Mercado Pago. ', 'MPApi') .
+                    $module->l('Possible causes: Currency not supported; ', 'MPApi') .
+                    $module->l('Amounts below the minimum or above the maximum allowed.', 'MPApi');
                 break;
             case 'Invalid users involved';
-                return 'The users are not valid. Possible causes: Buyer and seller have the same account in Mercado Pago; The transaction involving production and test users.';
+                return $module->l('The users are not valid. Possible causes: ', 'MPApi') .
+                    $module->l('Buyer and seller have the same account in Mercado Pago; ', 'MPApi') .
+                    $module->l('The transaction involving production and test users.', 'MPApi');
                 break;
             case 'Unauthorized use of live credentials';
-                return 'Unauthorized use of production credentials. Possible causes: Use permission in use for the credential of the seller.';
+                return $module->l('Unauthorized use of production credentials. ', 'MPApi') .
+                    $module->l('Possible causes: Use permission in use for the credential of the seller.', 'MPApi');
                 break;
             default;
                 return null;
