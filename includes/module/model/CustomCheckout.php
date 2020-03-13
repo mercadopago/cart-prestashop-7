@@ -101,6 +101,7 @@ class CustomCheckout
             "amount" => $amount,
             "site_id" => $site_id,
             "redirect" => $redirect,
+            "discount" => $discount,
             "public_key" => $public_key,
         );
 
