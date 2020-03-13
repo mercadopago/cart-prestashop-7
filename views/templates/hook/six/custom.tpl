@@ -28,7 +28,10 @@
         <!-- Logo & Title -->
         <div class="mp-title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-            <p>{l s='Pay with credit and debit cards' mod='mercadopago'}</p>
+            <p>
+                {l s='Pay with credit and debit cards' mod='mercadopago'}
+                {if $discount != ""} ({$discount}% OFF) {/if}
+            </p>
         </div>
 
         <!-- Cards Type -->

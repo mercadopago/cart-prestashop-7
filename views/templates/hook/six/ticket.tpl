@@ -27,7 +27,10 @@
         <div class="row mp-frame-checkout-six">
             <div class="mp-title-checkout-six">
                 <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-                <p>{l s='Pay with payment methods in cash' mod='mercadopago'}</p>
+                <p>
+                    {l s='Pay with payment methods in cash' mod='mercadopago'}
+                    {if $discount != ""} ({$discount}% OFF) {/if}
+                </p>
             </div>
 
             <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">

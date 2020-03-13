@@ -75,7 +75,9 @@
     </div>
 
     {if $modal == true && $preference != ""}
-        <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
+        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
+            <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
+        </form>
     {/if}
 </a>
 
