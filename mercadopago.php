@@ -556,7 +556,7 @@ class Mercadopago extends PaymentModule
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url
             ));
-            return $this->display(__FILE__, 'views/templates/hook/six/ticket_return.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
         }
 
         $order = $params['objOrder'];
@@ -565,11 +565,10 @@ class Mercadopago extends PaymentModule
         $this->context->smarty->assign(array(
             'order'=> $order,
             'order_products' => $products,
-            "ticket_template" => _PS_MODULE_DIR_. 'views/templates/hook/six/ticket_return.tpl',
             "ticket_url" => $ticket_url
         ));
 
-        return $this->display(__FILE__, 'views/templates/hook/payment_return.tpl');
+        return $this->display(__FILE__, 'views/templates/hook/six/payment_return.tpl');
     }
 
     /**
