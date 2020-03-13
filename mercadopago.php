@@ -54,6 +54,7 @@ class Mercadopago extends PaymentModule
     public $standardCheckout;
     public $confirmUninstall;
     public $ps_versions_compliancy;
+    public $ps_version;
     public static $form_alert;
     public static $form_message;
 
@@ -82,6 +83,7 @@ class Mercadopago extends PaymentModule
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_version = _PS_VERSION_;
         $this->path = $this->_path;
         $this->standardCheckout = new StandardCheckout($this);
         $this->customCheckout = new CustomCheckout($this);
@@ -548,16 +550,26 @@ class Mercadopago extends PaymentModule
             return;
         }
 
-        if (Tools::getIsset('payment_ticket')) {
-            $ticket_url = Tools::getValue('payment_ticket');
+        $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
 
+        if($this->getVersionPs() == self::PRESTA17){
             $this->context->smarty->assign(array(
-                "ticket_url" => $ticket_url,
-                "module_dir" => $this->_path,
+                "ticket_url" => $ticket_url
             ));
-
-            return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
+            return $this->display(__FILE__, 'views/templates/hook/six/ticket_return.tpl');
         }
+
+        $order = $params['objOrder'];
+        $products = $order->getProducts();
+
+        $this->context->smarty->assign(array(
+            'order'=> $order,
+            'order_products' => $products,
+            "ticket_template" => _PS_MODULE_DIR_. 'views/templates/hook/six/ticket_return.tpl',
+            "ticket_url" => $ticket_url
+        ));
+
+        return $this->display(__FILE__, 'views/templates/hook/payment_return.tpl');
     }
 
     /**
@@ -593,6 +605,18 @@ class Mercadopago extends PaymentModule
             }
 
             return $this->display(__FILE__, 'views/templates/hook/failure.tpl');
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersionPs()
+    {
+        if($this->ps_version >= 1.7){
+            return self::PRESTA17;
+        }else{
+            return self::PRESTA16;
         }
     }
 }

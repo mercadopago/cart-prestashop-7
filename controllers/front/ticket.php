@@ -82,7 +82,6 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 
                 //redirect to order confirmation page
                 Tools::redirect($uri);
-                return;
             }
             if (is_string($ticketPreference)) {
                 $message = MPApi::validateMessageApi($ticketPreference);
@@ -94,6 +93,7 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
             $this->context->cookie->__set('redirect_message', Tools::displayError());
             MPLog::generate('Exception Message: ' . $e->getMessage());
         }
+        
         $preference->deleteCartRule();
         $preference->redirectError();
     }
