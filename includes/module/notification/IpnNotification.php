@@ -44,8 +44,7 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->total = (float) $cart->getOrderTotal();
-        $this->order_id = Order::getOrderByCartId($cart->id);
+        $this->verifyOrderId($cart);
         $this->verifyWebhook($cart);
 
         if($this->order_id != 0){
@@ -69,6 +68,7 @@ class IpnNotification extends AbstractNotification
      */
     public function createStandardOrder($cart)
     {
+        $this->verifyOrderId($cart);
         $this->total = (float) $cart->getOrderTotal();
         $this->status = 'pending';
         $this->pending += $this->total;
@@ -77,6 +77,17 @@ class IpnNotification extends AbstractNotification
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
+    }
+
+    /**
+     * Verify if exists order id
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function verifyOrderId($cart) {
+        $this->total = (float) $cart->getOrderTotal();
+        $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
     /**
