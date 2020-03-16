@@ -44,6 +44,7 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
+        $this->total = (float) $cart->getOrderTotal();
         $this->verifyOrderId($cart);
         $this->verifyWebhook($cart);
 
@@ -86,7 +87,6 @@ class IpnNotification extends AbstractNotification
      * @return void
      */
     public function verifyOrderId($cart) {
-        $this->total = (float) $cart->getOrderTotal();
         $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
