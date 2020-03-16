@@ -81,12 +81,12 @@ class IpnNotification extends AbstractNotification
     }
 
     /**
-     * Verify if exists order id
+     * Verify if order exists then get order_id
      *
      * @param mixed $cart
      * @return void
      */
-    public function verifyOrderId($cart) {
+    public function getOrderId($cart) {
         $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
