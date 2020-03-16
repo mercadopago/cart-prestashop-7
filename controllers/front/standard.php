@@ -86,6 +86,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         if (isset($back_url)) {
             Tools::redirectLink($back_url);
         }
+        
         $preference->redirectError();
     }
 }
