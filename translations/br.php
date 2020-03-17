@@ -461,7 +461,7 @@ $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917']
 $_MODULE['<{mercadopago}prestashop>failure_55d37c0a3c1b32de6e3f9ceb1f8c0a4a'] =
 'Ops! Ocorreu um erro no seu pagamento, tente novamente ...';
 $_MODULE['<{mercadopago}prestashop>custom_b2fd5a4f417785d2c8d5a3674a1b3e83'] =
-'Ver Meus cartões';
+'Com quais cartões posso pagar?';
 $_MODULE['<{mercadopago}prestashop>custom_e7f9e382dc50889098cbe56f2554c77b'] =
 'Cartão de crédito';
 $_MODULE['<{mercadopago}prestashop>custom_87aed576797f8992ddc7a8c629fb7035'] =
@@ -522,6 +522,8 @@ $_MODULE['<{mercadopago}prestashop>ticket_return_21d104a54fc71a19a325c7305327f1d
 'Em processamento';
 $_MODULE['<{mercadopago}prestashop>ticket_return_051b4fc3b5b94694296b17af2f969dfc'] =
 'Imprimir';
+$_MODULE['<{mercadopago}prestashop>custom_dc4554b3840d99f5489a30a49f9477b4'] =
+'Promoções vigentes';
 $_MODULE['<{mercadopago}prestashop>ticket_2aeaeb22ad892fd719ccde8e3d55617d'] =
 'Informe seu número de documento';
 $_MODULE['<{mercadopago}prestashop>ticket_a1fa27779242b4902f7ae3bdd5c6d508'] =

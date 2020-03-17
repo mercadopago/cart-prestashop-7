@@ -30,6 +30,13 @@
             <a class="mp-link-checkout-custom" id="button-show-payments">
                 {l s='With what cards can I pay' mod='mercadopago'} ⌵ 
             </a>
+
+            {if $site_id == 'MLA'}
+                <span class="mp-separate-promotion-link"> | </span>
+                <a href="https://www.mercadopago.com.ar/cuotas" target="_blank" class="mp-link-checkout-custom">
+                    {l s='See current promotions' mod='mercadopago'}
+                </a>
+            {/if}
         </div>
 
         <div class="col-xs-12 col-md-12 col-12">

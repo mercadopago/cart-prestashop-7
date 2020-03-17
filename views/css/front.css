@@ -444,6 +444,10 @@ body#checkout section.checkout-step .payment-options label {
     font-weight: bold !important;
 }
 
+.mp-separate-promotion-link{
+    padding: 0 5px 0 5px !important;
+}
+
 /* --- mobile --- */
 
 @media (max-width: 767.98px) {
