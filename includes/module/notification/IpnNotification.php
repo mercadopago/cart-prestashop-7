@@ -45,7 +45,7 @@ class IpnNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->total = (float) $cart->getOrderTotal();
-        $this->order_id = Order::getOrderByCartId($cart->id);
+        $this->getOrderId($cart);
         $this->verifyWebhook($cart);
 
         if($this->order_id != 0){
@@ -55,12 +55,10 @@ class IpnNotification extends AbstractNotification
             $this->verifyPayments($payments);
             $this->validateOrderState();
             $this->updateTransactionId();
-
-            return $this->updateOrder($cart);
+            $this->updateOrder($cart);
+        } else {
+            $this->createStandardOrder($cart);
         }
-
-        MPLog::generate('Order does not exist or Order status is the same', 'warning');
-        $this->getNotificationResponse("Order does not exist or Order status is the same", 422);
     }
 
     /**
@@ -71,14 +69,25 @@ class IpnNotification extends AbstractNotification
      */
     public function createStandardOrder($cart)
     {
+        $this->getOrderId($cart);
         $this->total = (float) $cart->getOrderTotal();
         $this->status = 'pending';
         $this->pending += $this->total;
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            return $this->createOrder($cart, true);
+            $this->createOrder($cart, true);
         }
+    }
+
+    /**
+     * Verify if order exists then get order_id
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function getOrderId($cart) {
+        $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
     /**

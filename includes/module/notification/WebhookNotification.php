@@ -54,7 +54,7 @@ class WebhookNotification extends AbstractNotification
         if ($this->order_id != 0) {
             $this->verifyCustomPayment();
             $this->validateOrderState();
-            return $this->updateOrder($cart);
+            $this->updateOrder($cart);
         }
 
         MPLog::generate('Order does not exist or Order status is the same', 'warning');
@@ -74,7 +74,7 @@ class WebhookNotification extends AbstractNotification
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            return $this->createOrder($cart, true);
+            $this->createOrder($cart, true);
         }
     }
 
