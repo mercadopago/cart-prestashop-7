@@ -71,17 +71,14 @@ class AbstractNotification
     }
 
     /**
-     * Validate order state
-     *
-     * @param string $status
-     * @return string
+     * @return mixed
      */
     public function validateOrderState()
     {
-        if ($this->approved >= $this->total) {
+        if ($this->approved >= $this->getTotal()) {
             $this->amount = $this->approved;
             $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->pending >= $this->total) {
+        } elseif ($this->pending >= $this->getTotal()) {
             $this->amount = $this->pending;
             $this->order_state = $this->getNotificationPaymentState('in_process');
         } else {
@@ -104,7 +101,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->total,
+                $this->getTotal(),
                 "Mercado Pago",
                 null,
                 array(),
@@ -221,10 +218,8 @@ class AbstractNotification
     }
 
     /**
-     * Get notification payment status
-     *
-     * @param string $state
-     * @return void
+     * @param $state
+     * @return mixed
      */
     public function getNotificationPaymentState($state)
     {
@@ -260,5 +255,18 @@ class AbstractNotification
 
         echo Tools::jsonEncode($response);
         return var_dump(http_response_code($code));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal()
+    {
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            return round($this->total);
+        }
+
+        return $this->total;
     }
 }
