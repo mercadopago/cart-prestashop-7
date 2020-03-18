@@ -144,8 +144,7 @@ class CredentialsSettings extends AbstractSettings
                     $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
                     Configuration::updateValue($pm_name, 'on');
 
-                    if (
-                        $payment_method['type'] != 'credit_card' &&
+                    if ($payment_method['type'] != 'credit_card' &&
                         $payment_method['type'] != 'debit_card' &&
                         $payment_method['type'] != 'prepaid_card'
                     ) {

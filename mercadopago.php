@@ -552,7 +552,7 @@ class Mercadopago extends PaymentModule
 
         $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
 
-        if($this->getVersionPs() == self::PRESTA17){
+        if ($this->getVersionPs() == self::PRESTA17) {
             $this->context->smarty->assign(array(
                 "ticket_url" => $ticket_url
             ));
@@ -612,9 +612,9 @@ class Mercadopago extends PaymentModule
      */
     public function getVersionPs()
     {
-        if($this->ps_version >= 1.7){
+        if ($this->ps_version >= 1.7) {
             return self::PRESTA17;
-        }else{
+        } else {
             return self::PRESTA16;
         }
     }

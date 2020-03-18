@@ -75,11 +75,10 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
         }
 
-
         $bankTransfers = $this->getBankTransferMethods();
-        if (in_array(strtoupper($ticket_info['paymentMethodId']), $bankTransfers )) {
+        if (in_array(strtoupper($ticket_info['paymentMethodId']), $bankTransfers)) {
             $financial_institution = "1065";
-            if(isset($this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])])){
+            if (isset($this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])])) {
                 $financial_institution = $this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])];
             }
             $preference['callback_url'] = $this->getSiteUrl();
@@ -101,9 +100,12 @@ class TicketPreference extends AbstractPreference
         //Update cart total with CartRule()
         $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
+        
         //Create preference
         $preferenceEncoded = Tools::jsonEncode($preference);
+        MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
         $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
+        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
 
         return $createPreference;
     }
@@ -119,7 +121,7 @@ class TicketPreference extends AbstractPreference
         $total = (float) $cart->getOrderTotal();
         $localization = $this->settings['MERCADOPAGO_SITE_ID'];
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return round($total);
+            return Tools::ps_round($total, 2);
         }
 
         return $total;
@@ -199,14 +201,15 @@ class TicketPreference extends AbstractPreference
     {
         $bankTransfers = array();
 
-        foreach ($this->methods as $method){
-            if($method['type'] == 'bank_transfer'){
+        foreach ($this->methods as $method) {
+            if ($method['type'] == 'bank_transfer') {
                 array_push($bankTransfers, strtoupper($method['id']));
-                if(!empty($method['financial_institutions'])){
+                if (!empty($method['financial_institutions'])) {
                     $this->financial_institutions[strtoupper($method['id'])] = $method['financial_institutions'][0]['id'];
                 }
             }
         }
+        
         return $bankTransfers;
     }
 }

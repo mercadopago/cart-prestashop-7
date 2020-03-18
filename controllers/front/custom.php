@@ -57,7 +57,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
                 //create order
                 $notification = new WebhookNotification(
                     $customPreference['id'],
-                    $this->context->cart->id->customer_secure_key
+                    $this->context->cart->customer_secure_key
                 );
                 $notification->createCustomOrder($this->context->cart);
                 $preference->disableCartRule();

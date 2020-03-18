@@ -48,7 +48,7 @@ class WebhookNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->total = (float) $cart->getOrderTotal();
+        $this->total = $this->getTotal($cart);
         $this->order_id = Order::getOrderByCartId($cart->id);
 
         if ($this->order_id != 0) {
@@ -56,9 +56,6 @@ class WebhookNotification extends AbstractNotification
             $this->validateOrderState();
             $this->updateOrder($cart);
         }
-
-        MPLog::generate('Order does not exist or Order status is the same', 'warning');
-        $this->getNotificationResponse("Order does not exist or Order status is the same", 422);
     }
 
     /**
@@ -69,11 +66,11 @@ class WebhookNotification extends AbstractNotification
      */
     public function createCustomOrder($cart)
     {
-        $this->total = (float) $cart->getOrderTotal();
+        $this->total = $this->getTotal($cart);
         $this->verifyCustomPayment();
         $this->validateOrderState();
 
-        if ($this->order_id == 0 && $this->amount >= $this->getTotal() && $this->status != 'rejected') {
+        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
     }

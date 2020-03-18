@@ -75,17 +75,19 @@ class AbstractNotification
      */
     public function validateOrderState()
     {
-        if ($this->approved >= $this->getTotal()) {
-            $this->amount = $this->approved;
-            $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->pending >= $this->getTotal()) {
-            $this->amount = $this->pending;
-            $this->order_state = $this->getNotificationPaymentState('in_process');
-        } else {
-            $this->order_state = $this->getNotificationPaymentState($this->status);
-        }
+        if ($this->status != null) {
+            if ($this->approved >= $this->total) {
+                $this->amount = $this->approved;
+                $this->order_state = $this->getNotificationPaymentState('approved');
+            } elseif ($this->pending >= $this->total) {
+                $this->amount = $this->pending;
+                $this->order_state = $this->getNotificationPaymentState('in_process');
+            } else {
+                $this->order_state = $this->getNotificationPaymentState($this->status);
+            }
 
-        return $this->order_state;
+            return $this->order_state;
+        }
     }
 
     /**
@@ -101,7 +103,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->getTotal(),
+                $this->total,
                 "Mercado Pago",
                 null,
                 array(),
@@ -148,7 +150,7 @@ class AbstractNotification
         $status_approved = $this->getNotificationPaymentState('approved');
         $status_rejected = $this->getNotificationPaymentState('rejected');
 
-        if ($actual_status == $status_approved && $this->order_state == $status_rejected) {
+        if ($actual_status == $status_approved && $this->order_state == $status_rejected && $this->status != null) {
             MPLog::generate('It is not possible to reject an approved payment', 'warning');
             $this->getNotificationResponse('It is not possible to reject an approved payment', 422);
         } else {
@@ -260,13 +262,14 @@ class AbstractNotification
     /**
      * @return mixed
      */
-    public function getTotal()
+    public function getTotal($cart)
     {
+        $total = (float) $cart->getOrderTotal();
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return round($this->total);
+            return Tools::ps_round($total, 2);
         }
 
-        return $this->total;
+        return $total;
     }
 }

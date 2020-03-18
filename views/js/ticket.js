@@ -120,14 +120,16 @@
     /**
      * Get form
      */
-    function getFormTicket() {
+    function getFormTicket()
+    {
         return document.querySelector('#mp_ticket_checkout');
     }
 
     /**
      * Get condition terms input on PS17
      */
-    function getConditionTerms() {
+    function getConditionTerms()
+    {
         var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
         if (typeof terms === 'object' && terms !== null) {
             return terms.checked = false;
@@ -137,7 +139,8 @@
     /**
      * Validate if all inputs are valid
      */
-    function validateInputs() {
+    function validateInputs()
+    {
         var form = getFormTicket();
         var form_inputs = form.querySelectorAll('[data-checkout]');
         var small = form.querySelectorAll('.mp-erro-febraban');
@@ -173,17 +176,18 @@
      * Validate document number
      * @return {bool}
      */
-    function validateDocumentNumber() {
+    function validateDocumentNumber()
+    {
         var docnumber_input = document.getElementById('mp_doc_number');
         var docnumber_error = document.getElementById('mp_error_docnumber');
         var docnumber_validate = false;
 
-        if(seller_ticket.site_id === 'MLB') {
-        docnumber_validate = validateDocTypeMLB(docnumber_input.value);
+        if (seller_ticket.site_id === 'MLB') {
+            docnumber_validate = validateDocTypeMLB(docnumber_input.value);
         }
 
-        if(seller_ticket.site_id === 'MLU') {
-        docnumber_validate = validateDocTypeMLU(docnumber_input.value);
+        if (seller_ticket.site_id === 'MLU') {
+            docnumber_validate = validateDocTypeMLU(docnumber_input.value);
         }
 
         if (!docnumber_validate) {
@@ -205,7 +209,8 @@
      * @param {string} docnumber
      * @return {bool}
      */
-    function validateDocTypeMLB(docnumber){
+    function validateDocTypeMLB(docnumber)
+    {
         if (mercado_pago_docnumber === 'CPF') {
             return validateCPF(docnumber);
         } else {
@@ -218,7 +223,8 @@
      * @param {string} docnumber
      * @return {bool}
      */
-    function validateDocTypeMLU(docnumber){
+    function validateDocTypeMLU(docnumber)
+    {
         if (docnumber != '') {
             return validateCI(docnumber);
         } else {
@@ -231,7 +237,8 @@
      * @param {string} strCPF
      * @return {bool}
      */
-    function validateCPF(strCPF) {
+    function validateCPF(strCPF)
+    {
         var Soma;
         var Resto;
 
@@ -275,13 +282,17 @@
      * @param {string} strCNPJ
      * @return {bool}
      */
-    function validateCNPJ(strCNPJ) {
+    function validateCNPJ(strCNPJ)
+    {
         strCNPJ = strCNPJ.replace(/[^\d]+/g, '');
 
-        if (strCNPJ == '') return false;
-
-        if (strCNPJ.length != 14)
+        if (strCNPJ == '') {
             return false;
+        }
+
+        if (strCNPJ.length != 14) {
+            return false;
+        }
 
         if (strCNPJ == '00000000000000' ||
             strCNPJ == '11111111111111' ||
@@ -292,8 +303,9 @@
             strCNPJ == '66666666666666' ||
             strCNPJ == '77777777777777' ||
             strCNPJ == '88888888888888' ||
-            strCNPJ == '99999999999999')
+            strCNPJ == '99999999999999') {
             return false;
+        }
 
         tamanho = strCNPJ.length - 2;
         numeros = strCNPJ.substring(0, tamanho);
@@ -302,12 +314,14 @@
         pos = tamanho - 7;
         for (i = tamanho; i >= 1; i--) {
             soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
+            if (pos < 2) {
                 pos = 9;
+            }
         }
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(0))
+        if (resultado != digitos.charAt(0)) {
             return false;
+        }
 
         tamanho = tamanho + 1;
         numeros = strCNPJ.substring(0, tamanho);
@@ -315,12 +329,14 @@
         pos = tamanho - 7;
         for (i = tamanho; i >= 1; i--) {
             soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
+            if (pos < 2) {
                 pos = 9;
+            }
         }
         resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(1))
+        if (resultado != digitos.charAt(1)) {
             return false;
+        }
 
         return true;
     }
@@ -330,7 +346,8 @@
      * @param {string} docNumber
      * @return {bool}
      */
-    function validateCI(docNumber) {
+    function validateCI(docNumber)
+    {
         var x = 0;
         var y = 0;
         var docCI = 0;

@@ -99,7 +99,7 @@ class MPApi
         $payments = array();
         foreach ($result as $value) {
             // remove on paypay release
-            if($value['id'] == 'paypal') {
+            if ($value['id'] == 'paypal') {
                 continue;
             }
             
@@ -307,24 +307,24 @@ class MPApi
         $module = Module::getInstanceByName('mercadopago');
 
         switch (trim($message)) {
-            case 'Invalid payment_method_id';
+            case 'Invalid payment_method_id':
                 return $module->l('The payment method is not valid or not available.', 'MPApi');
                 break;
-            case 'Invalid transaction_amount';
+            case 'Invalid transaction_amount':
                 return $module->l('The transaction amount cannot be processed by Mercado Pago. ', 'MPApi') .
                     $module->l('Possible causes: Currency not supported; ', 'MPApi') .
                     $module->l('Amounts below the minimum or above the maximum allowed.', 'MPApi');
                 break;
-            case 'Invalid users involved';
+            case 'Invalid users involved':
                 return $module->l('The users are not valid. Possible causes: ', 'MPApi') .
                     $module->l('Buyer and seller have the same account in Mercado Pago; ', 'MPApi') .
                     $module->l('The transaction involving production and test users.', 'MPApi');
                 break;
-            case 'Unauthorized use of live credentials';
+            case 'Unauthorized use of live credentials':
                 return $module->l('Unauthorized use of production credentials. ', 'MPApi') .
                     $module->l('Possible causes: Use permission in use for the credential of the seller.', 'MPApi');
                 break;
-            default;
+            default:
                 return null;
                 break;
         }
