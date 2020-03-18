@@ -87,6 +87,11 @@ if ($count == 0) {
     $mp_module->create(["version" => MP_VERSION]);
 }
 
+//Mercadopago update from 4.0.1 to 4.1.0
+if (Configuration::get('MERCADOPAGO_CHECKOUT_STATUS') == true) {
+    Configuration::updateValue('MERCADOPAGO_STANDARD_CHECKOUT', true);
+}
+
 //Prestashop configuration table
 Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
 Configuration::updateValue('MERCADOPAGO_PROD_STATUS', false);

@@ -142,18 +142,17 @@ class CredentialsSettings extends AbstractSettings
             $payment_methods = $this->mercadopago->getPaymentMethods();
             foreach ($payment_methods as $payment_method) {
                 $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
-                if($mp_check == ""){
+                if ($mp_check == "") {
                     Configuration::updateValue($pm_name, 'on');
                 }
 
-                if (
-                    $payment_method['type'] != 'credit_card' &&
+                if ($payment_method['type'] != 'credit_card' &&
                     $payment_method['type'] != 'debit_card' &&
                     $payment_method['type'] != 'prepaid_card' &&
                     !in_array($payment_method['id'], $this->getTicketExcludedMethods())
                 ) {
                     $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $payment_method['id'];
-                    if($mp_check == ""){
+                    if ($mp_check == "") {
                         Configuration::updateValue($pm_name, 'on');
                     }
                 }
