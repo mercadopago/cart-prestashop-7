@@ -121,7 +121,7 @@ class TicketPreference extends AbstractPreference
         $total = (float) $cart->getOrderTotal();
         $localization = $this->settings['MERCADOPAGO_SITE_ID'];
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return round($total);
+            return Tools::ps_round($total, 2);
         }
 
         return $total;

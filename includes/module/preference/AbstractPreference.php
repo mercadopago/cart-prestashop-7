@@ -133,7 +133,7 @@ class AbstractPreference
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? round($product_price) : $product_price,
+                'unit_price' => $round ? Tools::ps_round($product_price) : $product_price,
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
@@ -156,7 +156,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
             );
@@ -174,7 +174,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => $round ? round(-$discounts) : -$discounts,
+                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Discount provided by store',
             );
@@ -192,7 +192,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
+                'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
             );
@@ -475,6 +475,7 @@ class AbstractPreference
 
         foreach ($sql as $query) {
             if (Db::getInstance()->execute($query) == false) {
+                $this->disableCartRule();
                 MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
                 return false;
             }

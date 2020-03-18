@@ -75,10 +75,10 @@ class AbstractNotification
      */
     public function validateOrderState()
     {
-        if ($this->approved >= $this->getTotal()) {
+        if ($this->approved >= $this->total) {
             $this->amount = $this->approved;
             $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->pending >= $this->getTotal()) {
+        } elseif ($this->pending >= $this->total) {
             $this->amount = $this->pending;
             $this->order_state = $this->getNotificationPaymentState('in_process');
         } else {
@@ -101,7 +101,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->getTotal(),
+                $this->total,
                 "Mercado Pago",
                 null,
                 array(),
@@ -260,13 +260,14 @@ class AbstractNotification
     /**
      * @return mixed
      */
-    public function getTotal()
+    public function getTotal($cart)
     {
+        $total = (float) $cart->getOrderTotal();
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return round($this->total);
+            return Tools::ps_round($total, 2);
         }
 
-        return $this->total;
+        return $total;
     }
 }
