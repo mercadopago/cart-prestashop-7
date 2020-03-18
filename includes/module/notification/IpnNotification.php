@@ -75,7 +75,7 @@ class IpnNotification extends AbstractNotification
         $this->pending += $this->total;
         $this->validateOrderState();
 
-        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
+        if ($this->order_id == 0 && $this->amount >= $this->getTotal() && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
     }
