@@ -526,6 +526,8 @@ $_MODULE['<{mercadopago}prestashop>ticket_return_21d104a54fc71a19a325c7305327f1d
 'Processing...	';
 $_MODULE['<{mercadopago}prestashop>ticket_return_051b4fc3b5b94694296b17af2f969dfc'] =
 'Imprimir';
+$_MODULE['<{mercadopago}prestashop>custom_dc4554b3840d99f5489a30a49f9477b4'] =
+'Ver promociones vigentes';
 $_MODULE['<{mercadopago}prestashop>ticket_2aeaeb22ad892fd719ccde8e3d55617d'] =
 'Ingresa tu número de documento';
 $_MODULE['<{mercadopago}prestashop>ticket_a1fa27779242b4902f7ae3bdd5c6d508'] =
