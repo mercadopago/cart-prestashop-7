@@ -48,7 +48,7 @@ class IpnNotification extends AbstractNotification
         $this->getOrderId($cart);
         $this->verifyWebhook($cart);
 
-        if($this->order_id != 0){
+        if ($this->order_id != 0) {
             $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
             $payments = $merchant_order['payments'];
 
@@ -86,7 +86,8 @@ class IpnNotification extends AbstractNotification
      * @param mixed $cart
      * @return void
      */
-    public function getOrderId($cart) {
+    public function getOrderId($cart)
+    {
         $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
@@ -128,7 +129,8 @@ class IpnNotification extends AbstractNotification
      * @param mixed $cart
      * @return void
      */
-    public function updateTransactionId() {
+    public function updateTransactionId()
+    {
         $order = new Order($this->order_id);
         $payments = $order->getOrderPaymentCollection();
         $payments[0]->transaction_id = $this->transaction_id;

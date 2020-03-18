@@ -75,17 +75,19 @@ class AbstractNotification
      */
     public function validateOrderState()
     {
-        if ($this->approved >= $this->total) {
-            $this->amount = $this->approved;
-            $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->pending >= $this->total) {
-            $this->amount = $this->pending;
-            $this->order_state = $this->getNotificationPaymentState('in_process');
-        } else {
-            $this->order_state = $this->getNotificationPaymentState($this->status);
-        }
+        if ($this->status != null) {
+            if ($this->approved >= $this->total) {
+                $this->amount = $this->approved;
+                $this->order_state = $this->getNotificationPaymentState('approved');
+            } elseif ($this->pending >= $this->total) {
+                $this->amount = $this->pending;
+                $this->order_state = $this->getNotificationPaymentState('in_process');
+            } else {
+                $this->order_state = $this->getNotificationPaymentState($this->status);
+            }
 
-        return $this->order_state;
+            return $this->order_state;
+        }
     }
 
     /**
@@ -148,7 +150,7 @@ class AbstractNotification
         $status_approved = $this->getNotificationPaymentState('approved');
         $status_rejected = $this->getNotificationPaymentState('rejected');
 
-        if ($actual_status == $status_approved && $this->order_state == $status_rejected) {
+        if ($actual_status == $status_approved && $this->order_state == $status_rejected && $this->status != null) {
             MPLog::generate('It is not possible to reject an approved payment', 'warning');
             $this->getNotificationResponse('It is not possible to reject an approved payment', 422);
         } else {
