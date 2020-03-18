@@ -327,6 +327,7 @@
     function showTaxes()
     {
         var selectorInstallments = document.querySelector('#id-installments');
+        if (selectorInstallments.options.length > 0) {
         var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
         var cft = '';
         var tea = '';
@@ -341,6 +342,12 @@
         }
         document.querySelector('.mp-text-cft').innerHTML = cft;
         document.querySelector('.mp-text-tea').innerHTML = tea;
+        } else {
+            var span = document.querySelector('#uniform-id-installments').children[0].tagName;
+            if(span === "SPAN") {
+                document.querySelector('#uniform-id-installments').children[0].innerHTML = '';
+            }
+        }
     }
 
     /**

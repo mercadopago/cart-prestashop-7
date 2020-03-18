@@ -138,10 +138,10 @@
                 <p class="submp-title-checkout-six mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</p>
             </div>
 
-            <div class="row">
+            <div class="row">   
                 <!-- Select issuer -->
-                <div id="container-issuers" class="issuers-options col-md-4 col-4 mp-pt-20 mp-m-col">
-                    <label for="id-issuers-options" class="issuers-options mp-pb-5">{l s='issuing bank' mod='mercadopago'}</label>
+                <div id="container-issuers" class="issuers-options col-md-4 col-4 mp-m-col">
+                    <label for="id-issuers-options" class="issuers-options mp-pb-5 mp-pt-10">{l s='issuing bank' mod='mercadopago'}</label>
                     <select id="id-issuers-options"
                         class="issuers-options form-control mp-form-control mp-select mp-pointer noUniform"
                         data-checkout="issuer" name="mercadopago_custom[issuer]" type="text"></select>
@@ -149,35 +149,31 @@
                 </div>
 
                 <!-- Select installments -->
-                <div id="container-installments" class="col-md-12 col-8 col-md-4 mp-m-col pl-15">
+                <div id="container-installments" class="col-md-8 col-8 col-md-4 mp-m-col mp-pl-15">
                     <label for="id-installments" class="mp-pb-5 mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</label>
                     <select class="form-control mp-form-control  mp-pointer not_uniform noUniform" id="id-installments"
                         data-no-uniform="true" data-checkout="installments" name="mercadopago_custom[installments]"
                         type="text"></select>
                     <small id="id-installments-status" class="mp-erro-form"></small>
 
-                    <div class="row">
                         <div class="col-md-12">
                             <div class="mp-text-cft"></div>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <div class="col-md-12">
                             <div class="mp-text-tea"></div>
                         </div>
-                    </div>
                 </div>
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">
                 <p class="submp-title-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
-            </div>
+            </div>          
 
             <div id="mp-doc-div" class="row">
                 <div id="mp-doc-type-div" class="col-md-4 col-4 mp-pb-20 mp-m-col">
                     <label for="id-docType" class="mp-pb-5">{l s='Type' mod='mercadopago'}</label>
                     <select id="id-docType" data-checkout="docType"
-                        class="form-control mp-form-control  mp-pointer noUniform"></select>
+                        class="form-control mp-form-control mp-pointer noUniform"></select>
                 </div>
 
                 <!-- Input Doc Number -->
@@ -251,10 +247,15 @@
 {/if}
 
 <style>
+    {if $site_id != 'MLB'}
+    #container-issuers {
+        display: block;
+    }
+    {/if}
     #uniform-id-installments span {
         background-position: unset !important;
     }
-
+    
     #uniform-id-docType,
     #uniform-id-docType span {
         width: 100% !important;
