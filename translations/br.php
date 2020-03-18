@@ -373,7 +373,7 @@ $_MODULE['<{mercadopago}prestashop>configure_ba409932f82a5dbbc411b83fe3e8adb7'] 
 $_MODULE['<{mercadopago}prestashop>configure_edcc027aee641dec9c6e6cfa70aede7d'] =
 'Seu cliente paga de forma rápida, fácil e segura com estas opções:';
 $_MODULE['<{mercadopago}prestashop>configure_0da8d9a75492046bea7f314521e07cae'] =
-'Meios de pagamento';
+'Selecione cartões';
 $_MODULE['<{mercadopago}prestashop>configure_24e9fd6116bb8c7c0f060273672067e2'] =
 'Selecione pagamentos presenciais';
 $_MODULE['<{mercadopago}prestashop>configure_c70ec5b31b31ecef0efd3ea40e33909f'] =
@@ -460,6 +460,8 @@ $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917']
 'Programa de proteção de vendedores.';
 $_MODULE['<{mercadopago}prestashop>failure_55d37c0a3c1b32de6e3f9ceb1f8c0a4a'] =
 'Ops! Ocorreu um erro no seu pagamento, tente novamente ...';
+$_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] =
+'Quero pagar com cartão de crédito';
 $_MODULE['<{mercadopago}prestashop>custom_b2fd5a4f417785d2c8d5a3674a1b3e83'] =
 'Ver Meus cartões';
 $_MODULE['<{mercadopago}prestashop>custom_e7f9e382dc50889098cbe56f2554c77b'] =
@@ -471,11 +473,11 @@ $_MODULE['<{mercadopago}prestashop>custom_e4179c3a6980bed5071fe92c929e6157'] =
 $_MODULE['<{mercadopago}prestashop>custom_a44217022190f5734b2f72ba1e4f8a79'] =
 'Número do cartão';
 $_MODULE['<{mercadopago}prestashop>custom_00cc96b2cd5db9825852af3700813e4e'] =
-'número de cartão inválido';
+'Número do cartão inválido';
 $_MODULE['<{mercadopago}prestashop>custom_bab78a96a00725b7efa6f34f452d17b9'] =
 'Titular do cartão';
 $_MODULE['<{mercadopago}prestashop>custom_ae35ed084114b30399338fa515188bcb'] =
-'nome do titular inválido';
+'Código de segurança inválido';
 $_MODULE['<{mercadopago}prestashop>custom_8c1279db4db86553e4b9682f78cf500e'] =
 'Data de vencimento';
 $_MODULE['<{mercadopago}prestashop>custom_22d248eda08203b9ebb7b84ca22635cb'] =
@@ -489,7 +491,7 @@ $_MODULE['<{mercadopago}prestashop>custom_b905fb66f717edccb30cb861bc1f20f0'] =
 $_MODULE['<{mercadopago}prestashop>custom_f8809653e0184b71678421dc963074c7'] =
 'Em quantas parcelas você quer pagar';
 $_MODULE['<{mercadopago}prestashop>custom_16bfdf30b1a694ab3bf3da553a4dff03'] =
-'banco emissor';
+'Banco emissor';
 $_MODULE['<{mercadopago}prestashop>custom_2aeaeb22ad892fd719ccde8e3d55617d'] =
 'Informe seu número de documento';
 $_MODULE['<{mercadopago}prestashop>custom_a1fa27779242b4902f7ae3bdd5c6d508'] =
@@ -502,6 +504,8 @@ $_MODULE['<{mercadopago}prestashop>custom_9abfb506bebd1e72069f0be0014986dc'] =
 'Número de documento inválido';
 $_MODULE['<{mercadopago}prestashop>custom_ab8a2170eb587c1022ad4ee33eb99e7f'] =
 'Campo obrigatório';
+$_MODULE['<{mercadopago}prestashop>custom_377e99e7404b414341a9621f7fb3f906'] =
+'Finalizar pedido';
 $_MODULE['<{mercadopago}prestashop>custom_961f2247a2070bedff9f9cd8d64e2650'] =
 'Escolher';
 $_MODULE['<{mercadopago}prestashop>standard_e7f9e382dc50889098cbe56f2554c77b'] =
@@ -574,10 +578,6 @@ $_MODULE['<{mercadopago}prestashop>ticket_7ed938d13683ef13343362a05226f0e9'] =
 'Por favor, preencha todos os campos, são obrigatórios.';
 $_MODULE['<{mercadopago}prestashop>ticket_04cf30c71ec29aee2615e8cd526afeef'] =
 'Seleccione o meio de pagamento';
-$_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] =
-' Quero pagar com cartão de crédito';
-$_MODULE['<{mercadopago}prestashop>custom_377e99e7404b414341a9621f7fb3f906'] =
-'Finalizar pedido';
 $_MODULE['<{mercadopago}prestashop>standard_3e8bd808fa886bce4b3de20f28870f9d'] =
 'Quero pagar com Mercado Pago sem custo adicional.';
 $_MODULE['<{mercadopago}prestashop>standard_d80b215711d6701ab5dae0b8171f4da3'] =
