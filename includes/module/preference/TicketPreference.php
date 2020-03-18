@@ -32,17 +32,21 @@ require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
 
 class TicketPreference extends AbstractPreference
 {
+    public $methods;
+    public $financial_institutions = array();
+
     public function __construct()
     {
         parent::__construct();
         $this->checkout = 'custom';
+        $this->methods = $this->mercadopago->getPaymentMethods();
     }
 
     /**
-     * Get preference params to send to MP
-     *
-     * @param mixed $cart
-     * @return mixed
+     * @param $cart
+     * @param $ticket_info
+     * @return bool
+     * @throws Exception
      */
     public function createPreference($cart, $ticket_info)
     {
@@ -71,9 +75,15 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
         }
 
-        if ($ticket_info['paymentMethodId'] == 'webpay') {
+
+        $bankTransfers = $this->getBankTransferMethods();
+        if (in_array(strtoupper($ticket_info['paymentMethodId']), $bankTransfers )) {
+            $financial_institution = "1065";
+            if(isset($this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])])){
+                $financial_institution = $this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])];
+            }
             $preference['callback_url'] = $this->getSiteUrl();
-            $preference['transaction_details']['financial_institution'] = "1234";
+            $preference['transaction_details']['financial_institution'] = $financial_institution;
             $preference['additional_info']['ip_address'] = "127.0.0.1";
             $preference['payer']['identification']['type'] = "RUT";
             $preference['payer']['identification']['number'] = "0";
@@ -82,7 +92,6 @@ class TicketPreference extends AbstractPreference
 
         $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
         $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
-
         $preference['additional_info']['items'] = $this->getCartItems(
             $cart,
             true,
@@ -92,10 +101,9 @@ class TicketPreference extends AbstractPreference
         //Update cart total with CartRule()
         $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
-
         //Create preference
-        $preference = Tools::jsonEncode($preference);
-        $createPreference = $this->mercadopago->createPayment($preference);
+        $preferenceEncoded = Tools::jsonEncode($preference);
+        $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
 
         return $createPreference;
     }
@@ -182,5 +190,23 @@ class TicketPreference extends AbstractPreference
         $internal_metadata["checkout_type"] = "ticket";
 
         return $internal_metadata;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBankTransferMethods()
+    {
+        $bankTransfers = array();
+
+        foreach ($this->methods as $method){
+            if($method['type'] == 'bank_transfer'){
+                array_push($bankTransfers, strtoupper($method['id']));
+                if(!empty($method['financial_institutions'])){
+                    $this->financial_institutions[strtoupper($method['id'])] = $method['financial_institutions'][0]['id'];
+                }
+            }
+        }
+        return $bankTransfers;
     }
 }
