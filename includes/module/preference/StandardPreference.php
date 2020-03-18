@@ -56,8 +56,11 @@ class StandardPreference extends AbstractPreference
         $preference['expiration_date_to'] = $this->getExpirationDate();
         $preference['metadata'] = $this->getInternalMetadata();
 
+        //Create preference
         $preferenceEncoded = Tools::jsonEncode($preference);
+        MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
         $createPreference = $this->mercadopago->createPreference($preferenceEncoded);
+        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
 
         return $createPreference;
     }

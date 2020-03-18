@@ -75,7 +75,6 @@ class TicketPreference extends AbstractPreference
             $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
         }
 
-
         $bankTransfers = $this->getBankTransferMethods();
         if (in_array(strtoupper($ticket_info['paymentMethodId']), $bankTransfers )) {
             $financial_institution = "1065";
@@ -101,9 +100,12 @@ class TicketPreference extends AbstractPreference
         //Update cart total with CartRule()
         $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
+        
         //Create preference
         $preferenceEncoded = Tools::jsonEncode($preference);
+        MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
         $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
+        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
 
         return $createPreference;
     }
@@ -207,6 +209,7 @@ class TicketPreference extends AbstractPreference
                 }
             }
         }
+        
         return $bankTransfers;
     }
 }
