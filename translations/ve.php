@@ -541,13 +541,13 @@ $_MODULE['<{mercadopago}prestashop>ticket_2dd4472245a696bc0b4b944db2a8b519'] =
 $_MODULE['<{mercadopago}prestashop>ticket_5a4471420aa5026337a78145a7f97b63'] =
 'Persona jurídica';
 $_MODULE['<{mercadopago}prestashop>ticket_d4150c6bd6a42bda6fc0bcc118cafd41'] =
-'Nombre y apellido';
+'Nombre';
 $_MODULE['<{mercadopago}prestashop>ticket_4e1d2b56da5ef5d0c57afc363cb790d8'] =
 'Documento';
 $_MODULE['<{mercadopago}prestashop>ticket_165613bac50ccc224e149a310147a944'] =
 ' Debes informar tu nombre';
 $_MODULE['<{mercadopago}prestashop>ticket_77587239bf4c54ea493c7033e1dbf636'] =
-'apellido';
+'Apellido';
 $_MODULE['<{mercadopago}prestashop>ticket_515003ca1a070566016e4ac6312097da'] =
 ' Debes informar el apellido';
 $_MODULE['<{mercadopago}prestashop>ticket_e3fe6d057f44794ab6098de4ada86d80'] =

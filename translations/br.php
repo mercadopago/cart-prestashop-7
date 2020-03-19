@@ -541,7 +541,7 @@ $_MODULE['<{mercadopago}prestashop>ticket_2dd4472245a696bc0b4b944db2a8b519'] =
 $_MODULE['<{mercadopago}prestashop>ticket_5a4471420aa5026337a78145a7f97b63'] =
 'Pessoa jurídica';
 $_MODULE['<{mercadopago}prestashop>ticket_d4150c6bd6a42bda6fc0bcc118cafd41'] =
-'Nome e Sobrenome';
+'Nome';
 $_MODULE['<{mercadopago}prestashop>ticket_4e1d2b56da5ef5d0c57afc363cb790d8'] =
 'Razão social';
 $_MODULE['<{mercadopago}prestashop>ticket_165613bac50ccc224e149a310147a944'] =

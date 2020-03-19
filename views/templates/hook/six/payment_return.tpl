@@ -54,85 +54,80 @@
     </div>
 {/if}
 
-<table class="std">
-    <thead>
-    <tr>
-        <th>{l s='Product' mod='mercadopago'}</th>
-        <th>{l s='Price' mod='mercadopago'}</th>
-        <th>{l s='Qty' mod='mercadopago'}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {foreach from=$order_products item=product}
-        <tr>
-            <td>{$product.product_name}</td>
-            <td>
+<div class="row mp-mx-0">
+    <div class="col-md-12 mp-pb-20">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6 mp-table"><b>{l s='Product' mod='mercadopago'}</b></div>
+            <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center"><b>{l s='Price' mod='mercadopago'}</b></div>
+            <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center"><b>{l s='Qty' mod='mercadopago'}</b></div>
+        </div>
+        
+        {foreach from=$order_products item=product}
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6 mp-table">{$product.product_name}</div>
+                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">
+                    {if $use_taxes}
+                        {displayPrice price=$product.total_price_tax_incl}
+                    {else}
+                        {displayPrice price=$product.total_price_tax_excl}
+                    {/if}
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">{$product.product_quantity}</div>
+            </div>
+        {/foreach}
+
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8 mp-table mp-align-right">
+                {l s='Subtotal' mod='mercadopago'}
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 mp-table">
                 {if $use_taxes}
-                    {displayPrice price=$product.total_price_tax_incl}
+                    {displayPrice price=$order->total_products_wt}
                 {else}
-                    {displayPrice price=$product.total_price_tax_excl}
+                    {displayPrice price=$order->total_products}
                 {/if}
-            </td>
-            <td>{$product.product_quantity}</td>
-        </tr>
-    {/foreach}
-    </tbody>
-    <tfoot>
-    <tr>
-        <td style="text-align:right">
-            {l s='Subtotal' mod='mercadopago'}
-        </td>
-        <td colspan="2">
-            {if $use_taxes}
-                {displayPrice price=$order->total_products_wt}
-            {else}
-                {displayPrice price=$order->total_products}
-            {/if}
+            </div>
+        </div>
 
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align:right">
-            {l s='Discount' mod='mercadopago'}
-        </td>
-        <td colspan="2">-
-            {if $use_taxes}
-                {displayPrice price=$order->total_discounts_tax_incl}
-            {else}
-                {displayPrice price=$order->total_discounts_tax_excl}
-            {/if}
-        </td>
-    </tr>
-
-
-    <tr>
-        <td style="text-align:right">
-            {l s='Shipping' mod='mercadopago'}
-        </td>
-        <td colspan="2">
-            {if $use_taxes}
-                {displayPrice price=$order->total_shipping_tax_incl}
-            {else}
-                {displayPrice price=$order->total_shipping_tax_excl}
-            {/if}
-
-        </td>
-    </tr>
-
-    <tr>
-        <td style="text-align:right">
-            <b>{l s='TOTAL' mod='mercadopago'}</b>
-        </td>
-        <td colspan="2">
-            <b>
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8 mp-table mp-align-right">
+                {l s='Discount' mod='mercadopago'}
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 mp-table">
                 {if $use_taxes}
-                    {displayPrice price=$order->total_paid_tax_incl}
+                    {displayPrice price=$order->total_discounts_tax_incl}
                 {else}
-                    {displayPrice price=$order->total_paid_tax_excl}
+                    {displayPrice price=$order->total_discounts_tax_excl}
                 {/if}
-            </b>
-        </td>
-    </tr>
+            </div>
+        </div>
 
-    </tfoot>
-</table>
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8 mp-table mp-align-right">
+                {l s='Shipping' mod='mercadopago'}
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 mp-table">
+                {if $use_taxes}
+                    {displayPrice price=$order->total_shipping_tax_incl}
+                {else}
+                    {displayPrice price=$order->total_shipping_tax_excl}
+                {/if}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8 mp-table mp-align-right">
+                <b>{l s='TOTAL' mod='mercadopago'}</b>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 mp-table">
+                <b>
+                    {if $use_taxes}
+                        {displayPrice price=$order->total_paid_tax_incl}
+                    {else}
+                        {displayPrice price=$order->total_paid_tax_excl}
+                    {/if}
+                </b>
+            </div>
+        </div>
+    </div>
+</div>

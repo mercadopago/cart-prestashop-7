@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2020 PrestaShop
  *
@@ -76,10 +75,12 @@ class TicketPreference extends AbstractPreference
         }
 
         $bankTransfers = $this->getBankTransferMethods();
-        if (in_array(strtoupper($ticket_info['paymentMethodId']), $bankTransfers)) {
+        if (in_array(Tools::strtoupper($ticket_info['paymentMethodId']), $bankTransfers)) {
             $financial_institution = "1065";
-            if (isset($this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])])) {
-                $financial_institution = $this->financial_institutions[strtoupper($ticket_info['paymentMethodId'])];
+            if (isset($this->financial_institutions[Tools::strtoupper($ticket_info['paymentMethodId'])])) {
+                $financial_institution = $this->financial_institutions[
+                    Tools::strtoupper($ticket_info['paymentMethodId'])
+                ];
             }
             $preference['callback_url'] = $this->getSiteUrl();
             $preference['transaction_details']['financial_institution'] = $financial_institution;
@@ -203,9 +204,9 @@ class TicketPreference extends AbstractPreference
 
         foreach ($this->methods as $method) {
             if ($method['type'] == 'bank_transfer') {
-                array_push($bankTransfers, strtoupper($method['id']));
+                array_push($bankTransfers, Tools::strtoupper($method['id']));
                 if (!empty($method['financial_institutions'])) {
-                    $this->financial_institutions[strtoupper($method['id'])] = $method['financial_institutions'][0]['id'];
+                    $this->financial_institutions[Tools::strtoupper($method['id'])] = $method['financial_institutions'][0]['id'];
                 }
             }
         }

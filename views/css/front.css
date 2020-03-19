@@ -198,6 +198,18 @@ body#checkout section.checkout-step .payment-options label {
     margin: 0px;
 }
 
+.submp-title-smart-checkout-six {
+    font-size: 22px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #04204c;
+    padding: 25px 0 0;
+    margin: 0px;
+}
+
 .mp-redirect-frame {
     text-align: center;
     background-color: #f5f5f5;
@@ -448,8 +460,49 @@ body#checkout section.checkout-step .payment-options label {
     font-weight: bold !important;
 }
 
-.mp-separate-promotion-link{
+.mp-separate-promotion-link {
     padding: 0 5px 0 5px !important;
+}
+
+.mp-btn-primary {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.42857;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.mp-align-right {
+    text-align: right !important;
+}
+
+.mp-align-center {
+    text-align: center !important;
+}
+
+.mp-table {
+    border: 1px solid #aaa;
+    padding: 10px 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mp-mx-0 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 /* --- mobile --- */
@@ -457,6 +510,9 @@ body#checkout section.checkout-step .payment-options label {
 @media (max-width: 767.98px) {
     .m-mp-pr-0 {
         padding-right: 0px !important;
+    }
+    .m-mp-pl-0 {
+        padding-left: 0px !important;
     }
     .mp-redirect-frame {
         display: inline-block;
@@ -468,5 +524,27 @@ body#checkout section.checkout-step .payment-options label {
     }
     .mp-fl-left {
         float: none !important;
+    }
+    .mp-checkout-form {
+        padding: 0px 25px 0 10px !important;
+    }
+    .mp-m-dib {
+        display: inline-block !important;
+    }
+    .mp-m-px-0 {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    .submp-title-checkout-six {
+        margin: 0 -15px 0 -15px !important;
+    }
+    .mp-m-pt-10 {
+        padding-top: 10px !important;
+    }
+    .mp-ticket-frame-six a {
+        display: block !important;
+    }
+    .mp-btn-primary {
+        width: 100% !important;
     }
 }

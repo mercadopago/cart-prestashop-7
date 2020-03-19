@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-4 col-4 col-xs-6 mp-pb-10 mp-pl-0" id="mp_box_firstname">
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-m-px-0" id="mp_box_firstname">
                         <label for="" id="mp_firstname_label" class="mp-pb-5">{l s='First and Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <label for="" id="mp_socialname_label" class="mp-pb-5">{l s='Company number' mod='mercadopago'} <em
@@ -89,7 +89,7 @@
                                id="error_firstname">{l s='You must inform your name' mod='mercadopago'}</small>
                     </div>
 
-                    <div class="col-md-4 col-4 col-xs-6 mp-pb-10 m-mp-pr-0" id="mp_box_lastname">
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-m-px-0" id="mp_box_lastname">
                         <label for="" class="mp-pb-5">{l s='Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_lastname" data-checkout="mp_lastname"
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-4 col-4 col-xs-6 mp-pb-20 mp-pl-0">
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-20 mp-pl-0 mp-m-px-0">
                         <label for="" class="mp-pb-5">{l s='City' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <input type="text" id="mp_city" data-checkout="mp_city" name="mercadopago_ticket[city]"
@@ -141,7 +141,7 @@
                                id="mp_error_city">{l s='You must inform address number' mod='mercadopago'}</small>
                     </div>
 
-                    <div class="col-md-4 col-4 col-xs-6 mp-pb-20 m-mp-pr-0">
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-20 mp-m-px-0">
                         <label for="" class="mp-pb-5">{l s='State' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <select id="mp_state" data-checkout="mp_state" name="mercadopago_ticket[state]"
@@ -193,14 +193,14 @@
                 </div>
             {/if}
 
-            <div class="col-md-12 col-12 mp-frame-title">
+            <div class="col-md-12 col-12 mp-frame-title mp-m-dib">
                 <h3 class="mp-title-custom-checkout">{l s='Please, select the issuer of face payments with which you want to make the purchase:' mod='mercadopago'}</h3>
             </div>
 
             <div class="form-group">
                 {if count($ticket) != 0}
                     {foreach $ticket as $key => $value}
-                        <div class="col-md-6 col-6 col-xs-6 mp-px-0 mp-m-col">
+                        <div class="col-md-6 col-6 col-xs-12 mp-px-0 mp-m-col mp-pt-15">
                             <div class="form-check mp-form-check">
                                 <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']|escape:'html':'UTF-8'}"
                                        class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id']|escape:'html':'UTF-8')}"

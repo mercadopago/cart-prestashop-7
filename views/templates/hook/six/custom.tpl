@@ -28,14 +28,14 @@
         <!-- Logo & Title -->
         <div class="mp-title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-            <p>
+            <p class="mp-m-pt-10">
                 {l s='Pay with credit and debit cards' mod='mercadopago'}
                 {if $discount != ""} ({$discount}% OFF) {/if}
             </p>
         </div>
 
         <!-- Cards Type -->
-        <div class="col-xs-12 col-md-12 col-12 mp-pt-25">
+        <div class="col-xs-12 col-md-12 col-12 mp-pt-25 mp-m-px-0">
             <a class="mp-link-checkout-custom" id="button-show-payments">
                 {l s='With what cards can I pay' mod='mercadopago'} ⌵ 
             </a>
@@ -204,7 +204,7 @@
     
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
-                    <button class="btn btn-primary">{l s='Check out' mod='mercadopago'}</button>
+                    <button class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
                 </div>
             </div>
         </div>
