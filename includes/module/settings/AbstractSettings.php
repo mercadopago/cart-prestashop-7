@@ -113,7 +113,7 @@ class AbstractSettings
     public function getTicketExcludedMethods()
     {
         return array(
-            'PAYPAL'
+            'PAYPAL', 'PSE'
         );
     }
 
