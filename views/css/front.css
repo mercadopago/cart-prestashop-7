@@ -484,6 +484,27 @@ body#checkout section.checkout-step .payment-options label {
     user-select: none;
 }
 
+.mp-align-right {
+    text-align: right !important;
+}
+
+.mp-align-center {
+    text-align: center !important;
+}
+
+.mp-table {
+    border: 1px solid #aaa;
+    padding: 10px 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mp-mx-0 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 /* --- mobile --- */
 
 @media (max-width: 767.98px) {
