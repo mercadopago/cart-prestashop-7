@@ -82,6 +82,14 @@
     {/if}
 </form>
 
+{if $count == 0}
+    <style>
+        .mp-frame-checkout-seven {
+            padding: 0px;
+        }
+    </style>
+{/if}
+
 {if $modal == true && $preference != ""}
 <script>
     var mercadopago_button = document.querySelector('.mercadopago-button');

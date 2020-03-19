@@ -74,6 +74,7 @@ class StandardCheckout
      */
     public function getStandard($cart)
     {
+        $count = 0;
         $debit = array();
         $credit = array();
         $ticket = array();
@@ -81,6 +82,7 @@ class StandardCheckout
 
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get($tarjeta['config']) != "") {
+                $count++;
                 if ($tarjeta['type'] == 'credit_card') {
                     $credit[] = $tarjeta;
                 } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
@@ -109,6 +111,7 @@ class StandardCheckout
         }
 
         $informations = array(
+            "count" => $count,
             "debit" => $debit,
             "credit" => $credit,
             "ticket" => $ticket,
