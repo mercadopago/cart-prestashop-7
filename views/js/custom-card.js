@@ -328,23 +328,23 @@
     {
         var selectorInstallments = document.querySelector('#id-installments');
         if (selectorInstallments.options.length > 0) {
-        var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
-        var cft = '';
-        var tea = '';
-        if (tax !== null) {
-            var tax_split = tax.split('|');
-            cft = tax_split[0].replace('_', ' ');
-            tea = tax_split[1].replace('_', ' ');
-            if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
-                cft = '';
-                tea = '';
+            var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
+            var cft = '';
+            var tea = '';
+            if (tax !== null) {
+                var tax_split = tax.split('|');
+                cft = tax_split[0].replace('_', ' ');
+                tea = tax_split[1].replace('_', ' ');
+                if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
+                    cft = '';
+                    tea = '';
+                }
             }
-        }
-        document.querySelector('.mp-text-cft').innerHTML = cft;
-        document.querySelector('.mp-text-tea').innerHTML = tea;
+            document.querySelector('.mp-text-cft').innerHTML = cft;
+            document.querySelector('.mp-text-tea').innerHTML = tea;
         } else {
             var span = document.querySelector('#uniform-id-installments').children[0].tagName;
-            if(span === "SPAN") {
+            if (span === "SPAN") {
                 document.querySelector('#uniform-id-installments').children[0].innerHTML = '';
             }
         }

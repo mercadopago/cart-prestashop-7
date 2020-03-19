@@ -105,6 +105,19 @@ class AbstractSettings
     }
 
     /**
+     * Get ticket excluded payment methods
+     * Enter the ids (uppercase) of the payment methods that must be removed to avoid errors
+     *
+     * @return array
+     */
+    public function getTicketExcludedMethods()
+    {
+        return array(
+            'PAYPAL'
+        );
+    }
+
+    /**
      * Validate input for submit
      *
      * @param mixed $input

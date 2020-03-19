@@ -174,7 +174,8 @@ class TicketSettings extends AbstractSettings
         foreach ($payment_methods as $payment_method) {
             if ($payment_method['type'] != 'credit_card' &&
                 $payment_method['type'] != 'debit_card' &&
-                $payment_method['type'] != 'prepaid_card'
+                $payment_method['type'] != 'prepaid_card' &&
+                !in_array($payment_method['id'], $this->getTicketExcludedMethods())
             ) {
                 $pm_id = $payment_method['id'];
                 $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $pm_id;

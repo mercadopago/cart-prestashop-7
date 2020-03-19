@@ -138,17 +138,21 @@ class CredentialsSettings extends AbstractSettings
 
         //activate checkout
         if (Mercadopago::$form_alert != 'alert-danger') {
-            if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == '') {
-                $payment_methods = $this->mercadopago->getPaymentMethods();
-                foreach ($payment_methods as $payment_method) {
-                    $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
+            $mp_check = Configuration::get('MERCADOPAGO_CHECK_CREDENTIALS');
+            $payment_methods = $this->mercadopago->getPaymentMethods();
+            foreach ($payment_methods as $payment_method) {
+                $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
+                if ($mp_check == "") {
                     Configuration::updateValue($pm_name, 'on');
+                }
 
-                    if ($payment_method['type'] != 'credit_card' &&
-                        $payment_method['type'] != 'debit_card' &&
-                        $payment_method['type'] != 'prepaid_card'
-                    ) {
-                        $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $payment_method['id'];
+                if ($payment_method['type'] != 'credit_card' &&
+                    $payment_method['type'] != 'debit_card' &&
+                    $payment_method['type'] != 'prepaid_card' &&
+                    !in_array($payment_method['id'], $this->getTicketExcludedMethods())
+                ) {
+                    $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $payment_method['id'];
+                    if ($mp_check == "") {
                         Configuration::updateValue($pm_name, 'on');
                     }
                 }
@@ -159,6 +163,7 @@ class CredentialsSettings extends AbstractSettings
                 'CredentialsSettings'
             );
 
+            Configuration::updateValue('MERCADOPAGO_CHECK_CREDENTIALS', true);
             MPLog::generate('Credentials saved successfully');
         }
     }
