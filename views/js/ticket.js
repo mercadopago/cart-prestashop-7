@@ -30,22 +30,22 @@
 
     var mercado_pago_docnumber = 'CPF';
 
-    var seller = {
+    var seller_ticket = {
         site_id: ''
     };
 
     /**
      * Validate site_id
      */
-    window.mpValidateSiteId = function (site_id) {
-        seller.site_id = site_id;
+    window.mpValidateSiteId = function (site_id_ticket) {
+        seller_ticket.site_id = site_id_ticket;
     };
 
     /**
      * Validate input depending on document type
      */
     window.validateDocumentInputs = function () {
-        if (seller.site_id === 'MLB') {
+        if (seller_ticket.site_id === 'MLB') {
             var mp_box_lastname = document.getElementById('mp_box_lastname');
             var mp_box_firstname = document.getElementById('mp_box_firstname');
             var mp_firstname_label = document.getElementById('mp_firstname_label');
@@ -69,7 +69,7 @@
                         mp_box_firstname.classList.add('col-md-4');
                         mp_box_firstname.classList.remove('col-md-8');
                         mp_doc_number.setAttribute('maxlength', '14');
-                        mp_doc_number.setAttribute('onkeyup', 'maskinput(this, mcpf)');
+                        mp_doc_number.setAttribute('onkeyup', 'maskInput(this, mcpf)');
                         mercado_pago_docnumber = 'CPF';
                     } else {
                         mp_cpf_label.style.display = 'none';
@@ -80,7 +80,7 @@
                         mp_box_firstname.classList.add('col-md-8');
                         mp_box_firstname.classList.remove('col-md-4');
                         mp_doc_number.setAttribute('maxlength', '18');
-                        mp_doc_number.setAttribute('onkeyup', 'maskinput(this, mcnpj)');
+                        mp_doc_number.setAttribute('onkeyup', 'maskInput(this, mcnpj)');
                         mercado_pago_docnumber = 'CNPJ';
                     }
                 });
@@ -95,8 +95,17 @@
     window.mercadoPagoFormHandlerTicket = function () {
         if (document.forms['mp_ticket_checkout'] !== undefined) {
             document.forms['mp_ticket_checkout'].onsubmit = function () {
-                if (seller.site_id === 'MLB') {
+
+                if (seller_ticket.site_id === 'MLB') {
                     if (validateInputs() && validateDocumentNumber()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                if (seller_ticket.site_id === 'MLU') {
+                    if (validateDocumentNumber()) {
                         return true;
                     } else {
                         return false;
@@ -173,10 +182,12 @@
         var docnumber_error = document.getElementById('mp_error_docnumber');
         var docnumber_validate = false;
 
-        if (mercado_pago_docnumber === 'CPF') {
-            docnumber_validate = validateCPF(docnumber_input.value);
-        } else {
-            docnumber_validate = validateCNPJ(docnumber_input.value);
+        if (seller_ticket.site_id === 'MLB') {
+            docnumber_validate = validateDocTypeMLB(docnumber_input.value);
+        }
+
+        if (seller_ticket.site_id === 'MLU') {
+            docnumber_validate = validateDocTypeMLU(docnumber_input.value);
         }
 
         if (!docnumber_validate) {
@@ -191,6 +202,34 @@
         }
 
         return docnumber_validate;
+    }
+
+    /**
+     * Validate Document number for MLB
+     * @param {string} docnumber
+     * @return {bool}
+     */
+    function validateDocTypeMLB(docnumber)
+    {
+        if (mercado_pago_docnumber === 'CPF') {
+            return validateCPF(docnumber);
+        } else {
+            return validateCNPJ(docnumber);
+        }
+    }
+
+    /**
+     * Validate Document number for MLU
+     * @param {string} docnumber
+     * @return {bool}
+     */
+    function validateDocTypeMLU(docnumber)
+    {
+        if (docnumber != '') {
+            return validateCI(docnumber);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -216,18 +255,21 @@
 
         Resto = (Soma * 10) % 11;
         if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0; }
+            Resto = 0;
+        }
         if (Resto !== parseInt(strCPF.substring(9, 10))) {
             return false;
         }
 
         Soma = 0;
         for (var k = 1; k <= 10; k++) {
-            Soma = Soma + parseInt(strCPF.substring(k - 1, k)) * (12 - k); }
+            Soma = Soma + parseInt(strCPF.substring(k - 1, k)) * (12 - k);
+        }
 
         Resto = (Soma * 10) % 11;
         if ((Resto === 10) || (Resto === 11)) {
-            Resto = 0; }
+            Resto = 0;
+        }
         if (Resto !== parseInt(strCPF.substring(10, 11))) {
             return false;
         }
@@ -242,63 +284,89 @@
      */
     function validateCNPJ(strCNPJ)
     {
-        var numeros, digitos, soma, i, resultado, pos, tamanho, digitos_iguais;
+        strCNPJ = strCNPJ.replace(/[^\d]+/g, '');
 
-        strCNPJ = strCNPJ.replace('.', '');
-        strCNPJ = strCNPJ.replace('.', '');
-        strCNPJ = strCNPJ.replace('.', '');
-        strCNPJ = strCNPJ.replace('-', '');
-        strCNPJ = strCNPJ.replace('/', '');
-        digitos_iguais = 1;
-
-        if (strCNPJ.length < 14 && strCNPJ.length < 15) {
+        if (strCNPJ == '') {
             return false;
         }
-        for (i = 0; i < strCNPJ.length - 1; i++) {
-            if (strCNPJ.charAt(i) !== strCNPJ.charAt(i + 1)) {
-                digitos_iguais = 0;
-                break;
+
+        if (strCNPJ.length != 14) {
+            return false;
+        }
+
+        if (strCNPJ == '00000000000000' ||
+            strCNPJ == '11111111111111' ||
+            strCNPJ == '22222222222222' ||
+            strCNPJ == '33333333333333' ||
+            strCNPJ == '44444444444444' ||
+            strCNPJ == '55555555555555' ||
+            strCNPJ == '66666666666666' ||
+            strCNPJ == '77777777777777' ||
+            strCNPJ == '88888888888888' ||
+            strCNPJ == '99999999999999') {
+            return false;
+        }
+
+        tamanho = strCNPJ.length - 2;
+        numeros = strCNPJ.substring(0, tamanho);
+        digitos = strCNPJ.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) {
+                pos = 9;
             }
         }
-        if (!digitos_iguais) {
-            tamanho = strCNPJ.length - 2;
-            numeros = strCNPJ.substring(0, tamanho);
-            digitos = strCNPJ.substring(tamanho);
-            soma = 0;
-            pos = tamanho - 7;
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0)) {
+            return false;
+        }
 
-            for (i = tamanho; i >= 1; i--) {
-                soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) {
-                    pos = 9;
-                }
+        tamanho = tamanho + 1;
+        numeros = strCNPJ.substring(0, tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) {
+                pos = 9;
             }
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1)) {
+            return false;
+        }
 
-            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado !== digitos.charAt(0)) {
-                return false;
+        return true;
+    }
+
+     /**
+     * Validate CI MLU
+     * @param {string} docNumber
+     * @return {bool}
+     */
+    function validateCI(docNumber)
+    {
+        var x = 0;
+        var y = 0;
+        var docCI = 0;
+        var dig = docNumber[docNumber.length - 1];
+
+        if (docNumber.length <= 6) {
+            for (y = docNumber.length; y < 7; y++) {
+                docNumber = '0' + docNumber;
             }
-
-            tamanho = tamanho + 1;
-            numeros = strCNPJ.substring(0, tamanho);
-            soma = 0;
-            pos = tamanho - 7;
-            for (i = tamanho; i >= 1; i--) {
-                soma += numeros.charAt(tamanho - i) * pos--;
-                if (pos < 2) {
-                    pos = 9;
-                }
-            }
-
-            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-            if (resultado !== digitos.charAt(1)) {
-                return false;
-            }
-
-            return true;
+        }
+        for (y = 0; y < 7; y++) {
+            x += (parseInt("2987634"[y]) * parseInt(docNumber[y])) % 10;
+        }
+        if (x % 10 === 0) {
+            docCI = 0;
         } else {
-            return false;
+            docCI = 10 - x % 10;
         }
+        return (dig == docCI);
     }
 
 })();

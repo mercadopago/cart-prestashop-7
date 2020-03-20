@@ -94,6 +94,7 @@ class TicketCheckout
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $address = new Address((int) $cart->id_address_invoice);
         $customer = Context::getContext()->customer->getFields();
+        $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'ticket');
 
         $info = array(
@@ -102,6 +103,7 @@ class TicketCheckout
             "address" => $address,
             "customer" => $customer,
             "redirect" => $redirect,
+            "discount" => $discount,
             "module_dir" => $this->payment->path,
         );
 

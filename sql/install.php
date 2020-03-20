@@ -89,7 +89,7 @@ if ($count == 0) {
 
 //Prestashop configuration table
 Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
-Configuration::updateValue('MERCADOPAGO_SANDBOX_STATUS', true);
+Configuration::updateValue('MERCADOPAGO_PROD_STATUS', false);
 Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
 Configuration::updateValue('MERCADOPAGO_STANDARD', false);
 Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);

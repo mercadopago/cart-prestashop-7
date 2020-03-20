@@ -31,11 +31,11 @@
     var objPaymentMethod = {};
     var additionalInfoNeeded = {};
 
-    var seller = {
+    var seller_custom = {
         site_id: ''
     };
 
-    var translate = {
+    var translate_custom = {
         select_choose: ''
     };
 
@@ -44,10 +44,10 @@
       *
       * @param object customVars
       */
-    window.initializeCustom = function (custom) {
-        seller.site_id = custom.site_id;
-        translate.select_choose = custom.select_choose;
-    }
+    window.initializeCustom = function (mp_custom) {
+        seller_custom.site_id = mp_custom.site_id;
+        translate_custom.select_choose = mp_custom.select_choose;
+    };
 
     /*
      * Execute before event focusout on input Card Number
@@ -216,7 +216,7 @@
             var fragment = document.createDocumentFragment();
 
             issuersSelector.options.length = 0;
-            var option = new Option(translate.select_choose, '-1');
+            var option = new Option(translate_custom.select_choose, '-1');
             fragment.appendChild(option);
 
             for (var i = 0; i < response.length; i++) {
@@ -275,7 +275,7 @@
     {
         clearInstallments();
         if (status === 200) {
-            var html_option = new Option(translate.select_choose, '', true, true);
+            var html_option = new Option(translate_custom.select_choose, '', true, true);
             $('#id-installments').append(html_option);
 
             var payerCosts = [];
@@ -291,7 +291,7 @@
                 $('#id-installments').append(html_option);
             }
 
-            if (seller.site_id === 'MLA') {
+            if (seller_custom.site_id === 'MLA') {
                 clearTax();
                 $('body').on('change', '#id-installments', showTaxes);
             }
@@ -310,7 +310,7 @@
     function argentinaResolution(payerCosts)
     {
         var dataInput = '';
-        if (seller.site_id === 'MLA') {
+        if (seller_custom.site_id === 'MLA') {
             for (var l = 0; l < payerCosts.length; l++) {
                 if (payerCosts[l].indexOf('CFT_') !== -1) {
                     dataInput = payerCosts[l];
@@ -327,20 +327,27 @@
     function showTaxes()
     {
         var selectorInstallments = document.querySelector('#id-installments');
-        var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
-        var cft = '';
-        var tea = '';
-        if (tax !== null) {
-            var tax_split = tax.split('|');
-            cft = tax_split[0].replace('_', ' ');
-            tea = tax_split[1].replace('_', ' ');
-            if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
-                cft = '';
-                tea = '';
+        if (selectorInstallments.options.length > 0) {
+            var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
+            var cft = '';
+            var tea = '';
+            if (tax !== null) {
+                var tax_split = tax.split('|');
+                cft = tax_split[0].replace('_', ' ');
+                tea = tax_split[1].replace('_', ' ');
+                if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
+                    cft = '';
+                    tea = '';
+                }
+            }
+            document.querySelector('.mp-text-cft').innerHTML = cft;
+            document.querySelector('.mp-text-tea').innerHTML = tea;
+        } else {
+            var span = document.querySelector('#uniform-id-installments').children[0].tagName;
+            if (span === "SPAN") {
+                document.querySelector('#uniform-id-installments').children[0].innerHTML = '';
             }
         }
-        document.querySelector('.mp-text-cft').innerHTML = cft;
-        document.querySelector('.mp-text-tea').innerHTML = tea;
     }
 
     /**
@@ -565,7 +572,7 @@
      */
     function showErrors(response)
     {
-        var form = getForm();
+        var form = getFormCustom();
         for (var x = 0; x < response.cause.length; x++) {
             var error = response.cause[x];
             var small = '';
@@ -581,6 +588,7 @@
                 input.classList.add('mp-form-control-error');
             }
         }
+        focusInputError();
         return;
     }
 

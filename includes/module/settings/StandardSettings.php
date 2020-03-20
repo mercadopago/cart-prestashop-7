@@ -143,10 +143,10 @@ class StandardSettings extends AbstractSettings
                 'label' => $this->module->l('Modal checkout', 'StandardSettings'),
                 'name' => 'MERCADOPAGO_STANDARD_MODAL',
                 'is_bool' => true,
-                'desc' => $this->module->l(
-                    'Your customers will access the Mercado Pago payment form without leaving your store. If you deactivate it, they will be redirected to another page.',
-                    'StandardSettings'
-                ),
+                'desc' =>
+                    $this->module->l('Your customers will access the Mercado Pago payment ', 'StandardSettings') .
+                    $this->module->l('form without leaving your store. If you deactivate it, ', 'StandardSettings') .
+                    $this->module->l('they will be redirected to another page.', 'StandardSettings'),
                 'values' => array(
                     array(
                         'id' => 'MERCADOPAGO_STANDARD_MODAL_ON',
@@ -190,7 +190,7 @@ class StandardSettings extends AbstractSettings
                 ),
             ),
             array(
-                'col' => 2,
+                'col' => 3,
                 'suffix' => $this->module->l('hours without activity', 'StandardSettings'),
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_EXPIRATION_DATE_TO',
@@ -221,7 +221,6 @@ class StandardSettings extends AbstractSettings
 
         Configuration::updateValue('MERCADOPAGO_STANDARD', true);
 
-        $this->sendSettingsInfo();
         MPLog::generate('Standard checkout configuration saved successfully');
     }
 

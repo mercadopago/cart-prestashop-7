@@ -38,10 +38,10 @@ class CustomPreference extends AbstractPreference
     }
 
     /**
-     * Get preference params to send to MP
-     *
-     * @param mixed $cart
-     * @return mixed
+     * @param $cart
+     * @param $custom_info
+     * @return bool
+     * @throws Exception
      */
     public function createPreference($cart, $custom_info)
     {
@@ -72,7 +72,9 @@ class CustomPreference extends AbstractPreference
 
         //Create preference
         $preference = Tools::jsonEncode($preference);
+        MPLog::generate('Create Preference Infos: ' . $preference);
         $createPreference = $this->mercadopago->createPayment($preference);
+        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
 
         return $createPreference;
     }
@@ -88,7 +90,7 @@ class CustomPreference extends AbstractPreference
         $total = (float) $cart->getOrderTotal();
         $localization = $this->settings['MERCADOPAGO_SITE_ID'];
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return round($total);
+            return Tools::ps_round($total, 2);
         }
 
         return $total;

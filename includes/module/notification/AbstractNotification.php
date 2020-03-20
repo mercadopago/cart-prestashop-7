@@ -1,31 +1,31 @@
 <?php
 /**
-* 2007-2020 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+ * 2007-2020 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2020 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
+ */
 
 class AbstractNotification
 {
@@ -43,7 +43,7 @@ class AbstractNotification
     public $mp_transaction;
     public $customer_secure_key;
 
-    public function __construct($transaction_id, $customer_secure_key)
+    public function __construct($transaction_id = null, $customer_secure_key)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
@@ -71,24 +71,23 @@ class AbstractNotification
     }
 
     /**
-     * Validate order state
-     *
-     * @param string $status
-     * @return string
+     * @return mixed
      */
     public function validateOrderState()
     {
-        if ($this->approved >= $this->total) {
-            $this->amount = $this->approved;
-            $this->order_state = $this->getNotificationPaymentState('approved');
-        } elseif ($this->pending >= $this->total) {
-            $this->amount = $this->pending;
-            $this->order_state = $this->getNotificationPaymentState('in_process');
-        } else {
-            $this->order_state = $this->getNotificationPaymentState($this->status);
-        }
+        if ($this->status != null) {
+            if ($this->approved >= $this->total) {
+                $this->amount = $this->approved;
+                $this->order_state = $this->getNotificationPaymentState('approved');
+            } elseif ($this->pending >= $this->total) {
+                $this->amount = $this->pending;
+                $this->order_state = $this->getNotificationPaymentState('in_process');
+            } else {
+                $this->order_state = $this->getNotificationPaymentState($this->status);
+            }
 
-        return $this->order_state;
+            return $this->order_state;
+        }
     }
 
     /**
@@ -124,7 +123,7 @@ class AbstractNotification
             MPLog::generate('Order created successfully on cart id ' . $cart->id);
 
             if ($custom_create_order != true) {
-                $this->getNotificationResponse("The order has been created", 201);
+                $this->getNotificationResponse('The order has been created', 201);
             }
         } catch (Exception $e) {
             MPLog::generate(
@@ -133,7 +132,7 @@ class AbstractNotification
             );
 
             if ($custom_create_order != true) {
-                $this->getNotificationResponse("The order has not been created", 422);
+                $this->getNotificationResponse('The order has not been created', 422);
             }
         }
     }
@@ -148,23 +147,30 @@ class AbstractNotification
     {
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
+        $status_approved = $this->getNotificationPaymentState('approved');
+        $status_rejected = $this->getNotificationPaymentState('rejected');
 
-        if ($this->order_state != $actual_status) {
-            try {
-                $order->setCurrentState($this->order_state);
-                $this->saveUpdateOrderData($cart);
-                MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
-                $this->getNotificationResponse("The order has been updated", 201);
-            } catch (Exception $e) {
-                MPLog::generate(
-                    'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
-                    'error'
-                );
-                $this->getNotificationResponse("The order has not been updated", 422);
-            }
+        if ($actual_status == $status_approved && $this->order_state == $status_rejected && $this->status != null) {
+            MPLog::generate('It is not possible to reject an approved payment', 'warning');
+            $this->getNotificationResponse('It is not possible to reject an approved payment', 422);
         } else {
-            MPLog::generate('The order status is the same', 'warning');
-            $this->getNotificationResponse("The order status is the same", 422);
+            if ($this->order_id != 0 && $this->order_state != $actual_status) {
+                try {
+                    $order->setCurrentState($this->order_state);
+                    $this->saveUpdateOrderData($cart);
+                    MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
+                    $this->getNotificationResponse('The order has been updated', 201);
+                } catch (Exception $e) {
+                    MPLog::generate(
+                        'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
+                        'error'
+                    );
+                    $this->getNotificationResponse('The order has not been updated', 422);
+                }
+            } else {
+                MPLog::generate('Order does not exist or Order status is the same', 'warning');
+                $this->getNotificationResponse('Order does not exist or Order status is the same', 422);
+            }
         }
     }
 
@@ -214,10 +220,8 @@ class AbstractNotification
     }
 
     /**
-     * Get notification payment status
-     *
-     * @param string $state
-     * @return void
+     * @param $state
+     * @return mixed
      */
     public function getNotificationPaymentState($state)
     {
@@ -253,5 +257,19 @@ class AbstractNotification
 
         echo Tools::jsonEncode($response);
         return var_dump(http_response_code($code));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal($cart)
+    {
+        $total = (float) $cart->getOrderTotal();
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            return Tools::ps_round($total, 2);
+        }
+
+        return $total;
     }
 }

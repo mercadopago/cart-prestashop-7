@@ -1,31 +1,31 @@
 <?php
 /**
-* 2007-2020 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+ * 2007-2020 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2020 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
+ */
 
 class MPApi
 {
@@ -54,11 +54,11 @@ class MPApi
      */
     public function getAccessToken()
     {
-        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
-            return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
         }
 
-        return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
     }
 
     /**
@@ -68,11 +68,11 @@ class MPApi
      */
     public function getPublicKey()
     {
-        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
-            return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+        if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         }
 
-        return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
+        return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
     }
 
     /**
@@ -98,12 +98,18 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
+            // remove on paypay release
+            if ($value['id'] == 'paypal') {
+                continue;
+            }
+            
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
                 'type' => $value['payment_type_id'],
                 'image' => $value['secure_thumbnail'],
                 'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+                'financial_institutions' => $value['financial_institutions'],
             );
         }
 
@@ -113,7 +119,7 @@ class MPApi
     /**
      * Create preference
      *
-     * @param array $preference
+     * @param $preference
      * @return bool
      * @throws Exception
      */
@@ -158,7 +164,7 @@ class MPApi
         //in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
-            return false;
+            return $response['response']['message'];
         }
 
         //response treatment
@@ -258,27 +264,6 @@ class MPApi
     }
 
     /**
-     * Send platform info to settings api
-     *
-     * @param [array] $params
-     * @return bool
-     * @throws Exception
-     */
-    public function saveApiSettings($params)
-    {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::post('/modules/tracking/settings?access_token=' . $access_token, $params);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API save_api_settings error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get application_id
      *
      * @param [integer] $seller
@@ -311,5 +296,32 @@ class MPApi
         $result = $response['response'];
 
         return $result['scopes'];
+    }
+
+    /**
+     * @param null $message
+     * @return null
+     */
+    public static function validateMessageApi($message = null)
+    {
+        $module = Module::getInstanceByName('mercadopago');
+
+        switch (trim($message)) {
+            case 'Invalid payment_method_id':
+                return $module->l('The payment method is not valid or not available.', 'MPApi');
+            case 'Invalid transaction_amount':
+                return $module->l('The transaction amount cannot be processed by Mercado Pago. ', 'MPApi') .
+                    $module->l('Possible causes: Currency not supported; ', 'MPApi') .
+                    $module->l('Amounts below the minimum or above the maximum allowed.', 'MPApi');
+            case 'Invalid users involved':
+                return $module->l('The users are not valid. Possible causes: ', 'MPApi') .
+                    $module->l('Buyer and seller have the same account in Mercado Pago; ', 'MPApi') .
+                    $module->l('The transaction involving production and test users.', 'MPApi');
+            case 'Unauthorized use of live credentials':
+                return $module->l('Unauthorized use of production credentials. ', 'MPApi') .
+                    $module->l('Possible causes: Use permission in use for the credential of the seller.', 'MPApi');
+            default:
+                return null;
+        }
     }
 }

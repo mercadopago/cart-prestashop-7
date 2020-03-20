@@ -27,13 +27,13 @@
     <div class="row mp-frame-checkout-six">
         <div class="mp-title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
-            <p>{l s='I want to pay with Mercado Pago at no additional cost.' mod='mercadopago'}</p>
+            <p class="mp-m-pt-10">{l s='I want to pay with Mercado Pago at no additional cost.' mod='mercadopago'}</p>
         </div>
 
-        <p class="submp-title-checkout-six">{l s='Use the payment method you prefer.' mod='mercadopago'}</p>
+        <p class="submp-title-smart-checkout-six mp-m-px-0">{l s='Use the payment method you prefer.' mod='mercadopago'}</p>
 
         {if count($credit) != 0}
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-12 col-md-4">
             <div class="frame-tarjetas">
                 <p class="submp-title-checkout">
                     {l s='Credit card' mod='mercadopago'} 
@@ -50,7 +50,7 @@
         {/if}
 
         {if count($debit) != 0}
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-12 col-md-4">
             <div class="frame-tarjetas">
                 <p class="submp-title-checkout">{l s='Debit card' mod='mercadopago'}</p>
 
@@ -62,7 +62,7 @@
         {/if}
 
         {if count($ticket) != 0}
-        <div class="col-xs-4 col-md-4">
+        <div class="col-xs-12 col-md-4">
             <div class="frame-tarjetas">
                 <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
 
@@ -75,7 +75,9 @@
     </div>
 
     {if $modal == true && $preference != ""}
-        <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
+        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
+            <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
+        </form>
     {/if}
 </a>
 

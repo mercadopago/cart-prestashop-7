@@ -30,6 +30,13 @@
             <a class="mp-link-checkout-custom" id="button-show-payments">
                 {l s='With what cards can I pay' mod='mercadopago'} ⌵ 
             </a>
+
+            {if $site_id == 'MLA'}
+                <span class="mp-separate-promotion-link"> | </span>
+                <a href="https://www.mercadopago.com.ar/cuotas" target="_blank" class="mp-link-checkout-custom">
+                    {l s='See current promotions' mod='mercadopago'}
+                </a>
+            {/if}
         </div>
 
         <div class="col-xs-12 col-md-12 col-12">
@@ -213,13 +220,13 @@
 {if $public_key != ''}
     <script type="text/javascript">
         // Set params to custom-card
-        window.onload = function () {
-            var custom = {
+        window.onload = loadCustom();
+        function loadCustom() {
+            var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s="Choose" mod="mercadopago"}...'
+                select_choose: '{l s='Choose' mod='mercadopago'}...'
             };
-
-            initializeCustom(custom);
+            initializeCustom(mp_custom);
         }
 
         // Set mercadopago public_key

@@ -36,6 +36,9 @@ class AbstractPreference
     public $cart_rule;
     public $mercadopago;
 
+    /**
+     * AbstractPreference constructor.
+     */
     public function __construct()
     {
         $this->module = Module::getInstanceByName('mercadopago');
@@ -72,10 +75,9 @@ class AbstractPreference
     }
 
     /**
-     * Return the common fields in preference
-     *
      * @param $cart
      * @return array
+     * @throws Exception
      */
     public function getCommonPreference($cart)
     {
@@ -131,7 +133,7 @@ class AbstractPreference
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? round($product_price) : $product_price,
+                'unit_price' => $round ? Tools::ps_round($product_price) : $product_price,
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
@@ -154,7 +156,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
             );
@@ -172,7 +174,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => $round ? round(-$discounts) : -$discounts,
+                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Discount provided by store',
             );
@@ -190,7 +192,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
+                'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
             );
@@ -389,14 +391,14 @@ class AbstractPreference
                 'customer_id' => $cart->id_customer,
                 'mp_module_id' => $mp_module['id_mp_module'],
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         } else {
             $mp_transaction->where('cart_id', '=', $cart->id)->update([
                 'total' => $cart->getOrderTotal(),
                 'customer_id' => $cart->id_customer,
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         }
     }
@@ -408,11 +410,11 @@ class AbstractPreference
      */
     public function validateSandboxMode()
     {
-        if ($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true) {
-            return true;
+        if ($this->settings['MERCADOPAGO_PROD_STATUS'] == true) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -473,6 +475,7 @@ class AbstractPreference
 
         foreach ($sql as $query) {
             if (Db::getInstance()->execute($query) == false) {
+                $this->disableCartRule();
                 MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
                 return false;
             }
@@ -486,13 +489,11 @@ class AbstractPreference
      */
     public function redirectError()
     {
-        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 
     /**
-     * Get Mercado Pago settings
-     *
-     * @return void
+     * @return mixed
      */
     public function getMercadoPagoSettings()
     {
@@ -502,9 +503,9 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_COUNTRY_LINK'] = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         //credentials
+        $this->settings['MERCADOPAGO_PROD_STATUS'] = Configuration::get('MERCADOPAGO_PROD_STATUS');
         $this->settings['MERCADOPAGO_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
-        $this->settings['MERCADOPAGO_SANDBOX_STATUS'] = Configuration::get('MERCADOPAGO_SANDBOX_STATUS');
         $this->settings['MERCADOPAGO_SANDBOX_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_SANDBOX_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
