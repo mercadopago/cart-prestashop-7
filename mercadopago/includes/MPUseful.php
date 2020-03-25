@@ -1,28 +1,31 @@
 <?php
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 class MPUseful
 {
@@ -33,7 +36,7 @@ class MPUseful
     /**
      * Instance the class
      *
-     * @return void
+     * @return MPUseful
      */
     public static function getinstance()
     {
@@ -42,83 +45,6 @@ class MPUseful
             $mpuseful = new MPUseful();
         }
         return $mpuseful;
-    }
-
-    /**
-     * Get notification payment status
-     *
-     * @param [string] $state
-     * @return void
-     */
-    public function getNotificationPaymentState($state)
-    {
-        $payment_states = array(
-            'in_process' => 'MERCADOPAGO_STATUS_0',
-            'approved' => 'MERCADOPAGO_STATUS_1',
-            'cancelled' => 'MERCADOPAGO_STATUS_2',
-            'rejected' => 'MERCADOPAGO_STATUS_3',
-            'refunded' => 'MERCADOPAGO_STATUS_4',
-            'charged_back' => 'MERCADOPAGO_STATUS_5',
-            'in_mediation' => 'MERCADOPAGO_STATUS_6',
-            'pending' => 'MERCADOPAGO_STATUS_7',
-            'authorized' => 'MERCADOPAGO_STATUS_8'
-        );
-
-        return Configuration::get($payment_states[$state]);
-    }
-
-    /**
-     * Get mercadopago categories
-     *
-     * @return void
-     */
-    public function getCategories()
-    {
-        $categories = array();
-        $categories[] = array('id' => 'others', 'name' => 'Other categories');
-        $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
-        $categories[] = array(
-            'id' => 'baby',
-            'name' => 'Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats'
-        );
-        $categories[] = array('id' => 'coupons', 'name' => 'Coupons');
-        $categories[] = array('id' => 'donations', 'name' => 'Donations');
-        $categories[] = array('id' => 'computing', 'name' => 'Computers & Tablets');
-        $categories[] = array('id' => 'cameras', 'name' => 'Cameras & Photography');
-        $categories[] = array('id' => 'video_games', 'name' => 'Video Games & Consoles');
-        $categories[] = array('id' => 'television', 'name' => 'LCD, LED, Smart TV, Plasmas, TVs');
-        $categories[] = array(
-            'id' => 'car_electronics',
-            'name' => 'Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC'
-        );
-        $categories[] = array('id' => 'electronics', 'name' => 'Audio & Surveillance, Video & GPS, Others');
-        $categories[] = array('id' => 'automotive', 'name' => 'Parts & Accessories');
-        $categories[] = array(
-            'id' => 'entertainment',
-            'name' => 'Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys'
-        );
-        $categories[] = array(
-            'id' => 'fashion',
-            'name' => 'Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches'
-        );
-        $categories[] = array('id' => 'games', 'name' => 'Online Games & Credits');
-        $categories[] = array('id' => 'home', 'name' => 'Home appliances. Home & Garden');
-        $categories[] = array('id' => 'musical', 'name' => 'Instruments & Gear');
-        $categories[] = array('id' => 'phones', 'name' => 'Cell Phones & Accessories');
-        $categories[] = array('id' => 'services', 'name' => 'General services');
-        $categories[] = array('id' => 'learnings', 'name' => 'Trainings, Conferences, Workshops');
-        $categories[] = array(
-            'id' => 'tickets',
-            'name' => 'Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more'
-        );
-        $categories[] = array('id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers');
-        $categories[] = array(
-            'id' => 'virtual_goods',
-            'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be 
-            electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge'
-        );
-
-        return $categories;
     }
 
     /**
@@ -176,9 +102,9 @@ class MPUseful
     }
 
     /**
-     * Get default country
+     * Get default currency
      *
-     * @param [string] $country
+     * @param string $currency
      * @return string
      */
     public function setMPCurrency($currency)
@@ -202,6 +128,32 @@ class MPUseful
     }
 
     /**
+     * Get modal link
+     *
+     * @param string $localization
+     * @return string
+     */
+    public function getModalLink($localization)
+    {
+        $site_id = array(
+            'MCO' => 'https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js',
+            'MLA' => 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js',
+            'MLB' => 'https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js',
+            'MLC' => 'https://www.mercadopago.cl/integrations/v1/web-payment-checkout.js',
+            'MLM' => 'https://www.mercadopago.com.mx/integrations/v1/web-payment-checkout.js',
+            'MLU' => 'https://www.mercadopago.com.uy/integrations/v1/web-payment-checkout.js',
+            'MLV' => 'https://www.mercadopago.com.ve/integrations/v1/web-payment-checkout.js',
+            'MPE' => 'https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js',
+        );
+
+        if (array_key_exists($localization, $site_id)) {
+            return $site_id[$localization];
+        }
+
+        return 'ar';
+    }
+
+    /**
      * Get seller protect link
      *
      * @param [string] $country
@@ -222,21 +174,5 @@ class MPUseful
         );
 
         return $protect_link[$country];
-    }
-
-    /**
-     * Get installments
-     *
-     * @param [type] $max
-     * @return void
-     */
-    public function getInstallments($max)
-    {
-        $installments = array();
-        for ($i = $max; $i > 0; $i--) {
-            $installments[] = array('id' => $i, 'name' => $i);
-        }
-
-        return $installments;
     }
 }

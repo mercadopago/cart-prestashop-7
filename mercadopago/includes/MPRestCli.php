@@ -1,35 +1,38 @@
 <?php
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 class MPRestCli
 {
     const PRODUCT_ID = 'BC32CCRU643001OI39AG';
+    const PLATFORM_ID = 'BP1EEMU0A3M001J8OJUG';
     const API_BASE_URL = 'https://api.mercadopago.com';
     const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
-    const API_CONFIG_BASE_URL = 'https://api.mercadopago.com/account';
 
     public function __construct()
     {
@@ -38,18 +41,18 @@ class MPRestCli
     /**
      * Get connect with cURL
      *
-     * @param [string] $uri
-     * @param [string] $method
-     * @param [string] $content_type
-     * @param [string] $uri_base
-     * @return void
+     * @param $uri
+     * @param $method
+     * @param $content_type
+     * @param $uri_base
+     * @return false|resource
      */
     private static function getConnect($uri, $method, $content_type, $uri_base)
     {
         $connect = curl_init($uri_base . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v1.0.0');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
@@ -59,6 +62,8 @@ class MPRestCli
                 $product_id,
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
+                'x-platform-id:' . self::PLATFORM_ID,
+                'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
 
@@ -68,18 +73,18 @@ class MPRestCli
     /**
      * Get tracking connect with cURL
      *
-     * @param [string] $uri
-     * @param [string] $method
-     * @param [string] $content_type
-     * @param [string] $trackingID
-     * @return void
+     * @param $uri
+     * @param $method
+     * @param $content_type
+     * @param $trackingID
+     * @return false|resource
      */
     private static function getConnectTracking($uri, $method, $content_type, $trackingID)
     {
         $connect = curl_init(self::API_BASE_URL . $uri);
         $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v1.0.0');
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt(
@@ -89,22 +94,25 @@ class MPRestCli
                 $product_id,
                 'Accept: application/json',
                 'Content-Type: ' . $content_type,
-                'X-Tracking-Id:' . $trackingID,
+                'X-tracking-id:' . $trackingID,
+                'x-platform-id:' . self::PLATFORM_ID,
+                'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
             )
         );
-
+ 
         return $connect;
     }
 
     /**
      * execTracking
      *
-     * @param [string] $method
-     * @param [string] $uri
-     * @param [string] $data
-     * @param [string] $content_type
-     * @param [string] $trackingID
-     * @return void
+     * @param $method
+     * @param $uri
+     * @param $data
+     * @param $content_type
+     * @param $trackingID
+     * @return array
+     * @throws Exception
      */
     private static function execTracking($method, $uri, $data, $content_type, $trackingID)
     {
@@ -129,10 +137,11 @@ class MPRestCli
     /**
      * setData
      *
-     * @param [string] $connect
-     * @param [string] $data
-     * @param [string] $content_type
+     * @param $connect
+     * @param $data
+     * @param $content_type
      * @return void
+     * @throws Exception
      */
     private static function setData($connect, $data, $content_type)
     {
@@ -157,12 +166,13 @@ class MPRestCli
     /**
      * exec
      *
-     * @param [string] $method
-     * @param [string] $uri
-     * @param [string] $data
-     * @param [string] $content_type
-     * @param [string] $uri_base
-     * @return void
+     * @param $method
+     * @param $uri
+     * @param $data
+     * @param $content_type
+     * @param $uri_base
+     * @return array
+     * @throws Exception
      */
     private static function exec($method, $uri, $data, $content_type, $uri_base)
     {
@@ -185,15 +195,16 @@ class MPRestCli
     }
 
     /**
-     * getConfig
+     * get mercado libre api
      *
      * @param string $uri
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
-    public static function getConfig($uri, $content_type = 'application/json')
+    public static function getMercadoLibre($uri, $content_type = 'application/json')
     {
-        return self::exec('GET', $uri, null, $content_type, self::API_CONFIG_BASE_URL);
+        return self::exec('GET', $uri, null, $content_type, self::API_BASE_MELI_URL);
     }
 
     /**
@@ -201,23 +212,12 @@ class MPRestCli
      *
      * @param string $uri
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function get($uri, $content_type = 'application/json')
     {
         return self::exec('GET', $uri, null, $content_type, self::API_BASE_URL);
-    }
-  
-    /**
-     * get mercado libre api
-     *
-     * @param string $uri
-     * @param string $content_type
-     * @return void
-     */
-    public static function getMercadoLibre($uri, $content_type = 'application/json')
-    {
-        return self::exec('GET', $uri, null, $content_type, self::API_BASE_MELI_URL);
     }
 
     /**
@@ -226,7 +226,8 @@ class MPRestCli
      * @param string $uri
      * @param string $data
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function post($uri, $data, $content_type = 'application/json')
     {
@@ -240,7 +241,8 @@ class MPRestCli
      * @param string $data
      * @param string $trackingID
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function postTracking($uri, $data, $trackingID, $content_type = 'application/json')
     {
@@ -253,23 +255,11 @@ class MPRestCli
      * @param string $uri
      * @param string $data
      * @param string $content_type
-     * @return void
+     * @return array
+     * @throws Exception
      */
     public static function put($uri, $data, $content_type = 'application/json')
     {
         return self::exec('PUT', $uri, $data, $content_type, self::API_BASE_URL);
-    }
-
-    /**
-     * putConfig
-     *
-     * @param string $uri
-     * @param string $data
-     * @param string $content_type
-     * @return void
-     */
-    public static function putConfig($uri, $data, $content_type = 'application/json')
-    {
-        return self::exec('PUT', $uri, $data, $content_type, self::API_CONFIG_BASE_URL);
     }
 }
