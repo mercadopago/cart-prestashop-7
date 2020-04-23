@@ -1,5 +1,5 @@
 {*
-* 2007-2019 PrestaShop
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -77,7 +77,7 @@
                 <div class="col-md-12 col-12 mp-pt-10 mp-m-col">
                     <label for="id-card-number" class="mp-pb-5">{l s='Card number' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
-                    <input id="id-card-number" data-checkout="cardNumber" type="text"
+                    <input id="id-card-number" data-checkout="cardNumber" type="text" placeholder="4009 1753 3280 6176"
                         class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24"
                         autocomplete="off" />
                     <small id="mp-error-205" class="mp-erro-form" data-main="#id-card-number">{l s='Invalid card
@@ -87,21 +87,9 @@
                 </div>
             </div>
 
-            <!-- Input Name and Surname -->
-            <div id="mp-card-holder-div" class="row">
-                <div class="col-md-12 col-12 mp-pt-10 mp-m-col">
-                    <label for="id-card-holder-name" class="mp-pb-5">{l s='Name and surname of the cardholder' mod='mercadopago'} <em
-                                class="mp-required">*</em></label>
-                    <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
-                        class="form-control mp-form-control" autocomplete="off" />
-                    <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
-                        {l s='Invalid card holder name' mod='mercadopago'}</small>
-                </div>
-            </div>
-
             <div class="row">
                 <!-- Input expiration date -->
-                <div class="col-md-6 col-6 mp-pt-10 mp-m-col">
+                <div class="col-xs-12 col-md-6 col-6 mp-pt-10 mp-m-col">
                     <label for="id-card-expiration" class="mp-pb-5">{l s='Expiration date' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-card-expiration" data-checkout="cardExpiration" type="text"
@@ -118,20 +106,32 @@
                 </div>
 
                 <!-- Input Security Code -->
-                <div class="col-md-6 col-6 mp-pt-10 mp-m-col">
+                <div class="col-xs-12 col-md-6 col-6 mp-pt-10 mp-m-col">
                     <label for="id-security-code" class="mp-pb-5">{l s='Security code' mod='mercadopago'} <em
                                 class="mp-required">*</em></label>
                     <input id="id-security-code" data-checkout="securityCode" type="text"
                         class="form-control mp-form-control" autocomplete="off"
                         placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);"
                            maxlength="4"/>
-                    <small class="mp-small mp-pt-5">{l s='last 3 numbers on the back of your card' mod='mercadopago'}</small>
+                    </br><small class="mp-small mp-pt-5">{l s='last 3 numbers on the back of your card' mod='mercadopago'}</small>
                     <small id="mp-error-224" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
                         {l s='Invalid card holder name' mod='mercadopago'}</small>
                     <small id="mp-error-E302" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
                         {l s='Invalid card holder name' mod='mercadopago'}</small>
                 </div>
             </div>
+                        
+                        <!-- Input Name and Surname -->
+                        <div id="mp-card-holder-div" class="row">
+                                <div class="col-md-12 col-12 mp-pt-10 mp-m-col">
+                                        <label for="id-card-holder-name" class="mp-pb-5">{l s='Name and surname of the cardholder' mod='mercadopago'} <em
+                                                                class="mp-required">*</em></label>
+                                        <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
+                                                class="form-control mp-form-control" autocomplete="off" />
+                                        <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
+                                                {l s='Invalid card holder name' mod='mercadopago'}</small>
+                                </div>
+                        </div>
 
             <!-- Title installments -->
             <div class="col-md-12 col-12 mp-frame-title">
@@ -140,7 +140,7 @@
 
             <div class="row">   
                 <!-- Select issuer -->
-                <div id="container-issuers" class="issuers-options col-md-4 col-4 mp-m-col">
+                <div id="container-issuers" class="issuers-options col-md-4 col-4 col-xs-12 mp-m-col">
                     <label for="id-issuers-options" class="issuers-options mp-pb-5 mp-pt-10">{l s='issuing bank' mod='mercadopago'}</label>
                     <select id="id-issuers-options"
                         class="issuers-options form-control mp-form-control mp-select mp-pointer noUniform"
@@ -149,7 +149,7 @@
                 </div>
 
                 <!-- Select installments -->
-                <div id="container-installments" class="col-md-8 col-8 col-md-4 mp-m-col mp-pl-15">
+                <div id="container-installments" class="col-md-8 col-8 col-xs-12 mp-m-col">
                     <label for="id-installments" class="mp-pb-5 mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</label>
                     <select class="form-control mp-form-control  mp-pointer not_uniform noUniform" id="id-installments"
                         data-no-uniform="true" data-checkout="installments" name="mercadopago_custom[installments]"
@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">
-                <p class="submp-title-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
+                <p class="submp-title-checkout-six mp-pt-10">{l s='Enter your document number' mod='mercadopago'}</p>
             </div>          
 
             <div id="mp-doc-div" class="row">
@@ -182,7 +182,7 @@
                     <input id="id-doc-number" data-checkout="docNumber" type="text"
                         class="form-control mp-form-control" onkeyup="maskInput(this, minteger);"
                         autocomplete="off" />
-                    <small class="mp-small mp-pt-5">{l s='Only numbers' mod='mercadopago'}</small>
+                    </br><small class="mp-small mp-pt-5">{l s='Only numbers' mod='mercadopago'}</small>
                     <small id="mp-error-324" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
                         {l s='Invalid document number' mod='mercadopago'}</small>
                 </div>
@@ -204,7 +204,7 @@
     
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
-                    <button class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
+                    <button class="mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
                 </div>
             </div>
         </div>
