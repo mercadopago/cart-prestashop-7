@@ -1,0 +1,714 @@
+/**
+* 2007-2019 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+
+.mp-pl-2 {
+    padding-left: 2px !important;
+}
+
+.mp-pl-5 {
+    padding-left: 5px !important;
+}
+
+.mp-pr-20 {
+    padding-right: 20px !important;
+}
+
+.mp-pt-5 {
+    padding-top: 5px !important;
+}
+
+.mp-pt-10 {
+    padding-top: 10px !important;
+}
+
+.mp-pt-15 {
+    padding-top: 15px !important;
+}
+
+.mp-pt-20 {
+    padding-top: 20px !important;
+}
+
+.mp-pt-25 {
+    padding-top: 25px !important;
+}
+
+.mp-pt-30 {
+    padding-top: 30px !important;
+}
+
+.mp-pb-10 {
+    padding-bottom: 10px !important;
+}
+
+.mp-pb-25 {
+    padding-bottom: 25px !important;
+}
+
+.mp-pb-30 {
+    padding-bottom: 30px !important;
+}
+
+.mp-px-10 {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.mp-mg-0 {
+    margin: 0 !important;
+}
+
+.mp-mr--10 {
+    margin-right: -10px !important;
+}
+
+.mp-mt-15 {
+    margin-top: 15px !important;
+}
+
+.mp-mt-50 {
+    margin-top: 50px !important;
+}
+
+.mp-mb-10 {
+    margin-bottom: 10px !important;
+}
+
+.mp-mb-15 {
+    margin-bottom: 15px !important;
+}
+
+.mp-w-25 {
+    width: 20% !important;
+}
+
+.mp-fl-right {
+    float: right !important;
+}
+
+.mp-pointer {
+    cursor: pointer !important;
+}
+
+.mp-no-select {
+    user-select: none !important;
+}
+
+.mp-text-center {
+    text-align: center !important;
+}
+
+.hr-mp-modal {
+    margin-top: 25px !important;
+    border-top: 1px solid #ccc !important;
+}
+
+.mp-panel-mercadopago {
+    border-radius: 0 !important;
+}
+
+.header-mercadopago {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: flex-start;
+}
+
+.header-mp-logo {
+    width: auto;
+    height: 30px;
+}
+
+.mp-left-details {
+    display: inline-block;
+    width: 100%;
+    padding-right: 15px;
+    margin: auto;
+}
+
+.mp-right-details {
+    margin: auto;
+}
+
+.mp-title-checkout-header {
+    font-family: sans-serif !important;
+    margin-top: 5px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #555555;
+}
+
+.mp-title-checkout-body {
+    font-family: sans-serif !important;
+    margin: 5px 0 5px !important;
+    font-size: 18px !important;
+    font-weight: 300 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #555555;
+}
+
+.mp-text-checkout-body {
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #555555;
+}
+
+.mp-number-checkout-body {
+    border-radius: 100%;
+    border: solid 1px #979797;
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 8px !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.mp-number-checked {
+    border-radius: 100%;
+    border: solid 2px #009ee3;
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 8px !important;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.mp-number-checked i {
+    font-size: 20px !important;
+    color: #009ee3 !important;
+}
+
+.mp-alert-token {
+    color: #CD0000;
+}
+
+.mp-title-credenciais {
+    font-size: 15px;
+    margin-bottom: 0 !important;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.mp-text-credenciais {
+    font-size: 13px;
+    margin-bottom: 0 !important;
+    line-height: 1.5;
+}
+
+.mp-btn-credenciais {
+    border-radius: 2px !important;
+    border: solid 1px #c2c2c2 !important;
+    padding: 12px 50px !important;
+    font-size: 13px !important;
+    background-color: #fafafa !important;
+}
+
+.mp-btn-credenciais:hover {
+    background-color: #00aff0 !important;
+    font-size: 13px !important;
+}
+
+.mp-all_checkbox {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+
+.mp-btn-collapsible {
+    float: right;
+    font-size: 25px;
+    padding: 0 13px 0 0;
+    margin-top: -1px;
+}
+
+.mp-panel-landing {
+    padding: 0px !important;
+    border-radius: 0px !important;
+}
+
+.mercadopago-banner {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 500px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mp-banner-gradient {
+    background-image: linear-gradient(to left, rgba(128, 121, 121, 0), #000000);
+}
+
+.mp-label-banner {
+    padding: 110px 100px 130px;
+}
+
+.mp-title-banner:before {
+    content: "";
+    width: 7px;
+    height: 80px;
+    display: block;
+    float: left;
+    background-color: #00b1ea;
+    margin-right: 15px;
+    margin-top: 8px;
+}
+
+.mp-title-banner {
+    font-family: sans-serif !important;
+    font-size: 40px !important;
+    font-weight: bold !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2 !important;
+    letter-spacing: normal;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    margin-left: -20px;
+}
+
+.mp-text-banner {
+    padding-top: 5px;
+    font-family: sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2 !important;
+    letter-spacing: normal;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.mp-btn-banner {
+    border-radius: 4px;
+    font-size: 16px !important;
+    padding: 12px 40px !important;
+    color: #ffffff !important;
+    border-color: #009ee3 !important;
+    background-color: #009ee3 !important;
+    margin-top: 30px !important;
+}
+
+.mp-btn-banner:hover {
+    border: 1px solid #32b3ff !important;
+    background-color: #32b3ff !important;
+}
+
+.mercadopago-installments {
+    background-color: #f5f5f5;
+    padding: 50px 80px 40px;
+}
+
+.mp-row-installments {
+    padding: 0px 0px 0px 80px;
+    box-shadow: 0 5px 10px 0 rgba(155, 169, 187, 0.3);
+    font-family: sans-serif;
+    font-size: 24px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mp-img-tarjetitas {
+    width: 100%;
+}
+
+.mp-info-installments {
+    font-family: sans-serif !important;
+    font-size: 18px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22 !important;
+    letter-spacing: normal;
+    color: #04204c !important;
+    padding-top: 30px;
+}
+
+.mercadopago-beneficios {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 0px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(0, 158, 227, 0.04665616246498594) 100%);
+}
+
+.mp-title-beneficios {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #04204c !important;
+    padding-bottom: 20px;
+    margin-top: 0px !important;
+}
+
+.mp-panel-text-icon {
+    display: flex;
+    align-items: center;
+}
+
+.icon-mercadopago {
+    display: inline-block;
+    padding-right: 15px;
+}
+
+.mp-text-beneficios {
+    font-family: sans-serif !important;
+    font-size: 15px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #7a8899 !important;
+    padding: 10px 0px;
+    display: inline-block;
+}
+
+.mp-img-beneficios {
+    width: auto;
+    max-height: 300px;
+}
+
+.mp-img-puedohacer {
+    width: auto;
+    max-height: 300px;
+    padding-right: 20px;
+    float: right;
+}
+
+.mercadopago-recibopagos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f6f8 !important;
+    padding: 60px 150px 50px;
+    text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mp-title-recibopagos {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #04204c !important;
+    padding-bottom: 25px;
+    margin-top: 0px !important;
+}
+
+.mp-number-recibopagos {
+    border-radius: 100%;
+    border: solid 1px #979797;
+    display: block;
+    width: 35px;
+    height: 35px;
+    margin: 0 auto 8px !important;
+    font-size: 18px;
+    font-weight: normal;
+    border-color: #2ec74b !important;
+    padding-top: 3px;
+}
+
+.mp-number-recibopagos-after:after {
+    content: "";
+    width: 115px;
+    height: 1px;
+    display: block;
+    background-color: #2ec74b;
+    margin-top: -12px;
+    margin-left: 34px;
+}
+
+.mp-number-recibopagos-before:before {
+    content: "";
+    width: 115px;
+    height: 1px;
+    display: block;
+    float: left;
+    background-color: #2ec74b;
+    margin-top: 13px;
+    margin-left: -115px;
+}
+
+.mp-number-recibopagos-before-green:before {
+    content: "";
+    width: 115px;
+    height: 1px;
+    display: block;
+    float: left;
+    background-color: #2ec74b;
+    margin-top: 13px;
+    margin-left: -115px;
+}
+
+.mercadopago-footer {
+    object-fit: contain;
+    background-color: #009ee3;
+    text-align: center;
+    padding: 60px 0px 70px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.mp-title-footer {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: 500 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal !important;
+    color: #ffffff !important;
+}
+
+.mp-btn-footer {
+    border-radius: 4px;
+    font-size: 16px !important;
+    padding: 12px 40px !important;
+    color: #ffffff !important;
+    border-color: #005e88 !important;
+    background-color: #005e88 !important;
+    margin-top: 30px !important;
+}
+
+.mp-btn-footer:hover {
+    border: 1px solid #004666 !important;
+    background-color: #004666 !important;
+}
+
+.mercadopago-partner {
+    background-color: #f5f6f8 !important;
+}
+
+.mp-left-partner {
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 20px !important;
+}
+
+.mp-right-partner {
+    padding: 20px 25px 5px 0px !important;
+}
+
+.mp-img-partner {
+    width: 40px;
+    height: auto;
+}
+
+/* rating modal */
+
+.mp-rating-modal {
+    text-align: center !important;
+    padding: 0!important;
+}
+
+.mp-rating-modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+
+.mp-rating-modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.mp-link-modal-trigger {
+    cursor: pointer;
+}
+
+.mp-rating-modal {
+    text-align: left;
+}
+
+.mp-rating-modal-header h3 {
+    margin: 0 !important;
+}
+
+.mp-rating-modal-body {
+    padding-top: 20px !important;
+    padding-bottom: 25px !important;
+}
+
+.mp-rating-box {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    justify-content: center
+}
+
+.mp-rating-input {
+    text-align: center;
+    padding: 0px 20px;
+    font-size: 14px;
+}
+
+.mp-rating-frame {
+    float: left;
+    margin: -5px 0 5px;
+}
+
+.mp-rating-input label {
+    padding-top: 5px !important;
+}
+
+.radio-mp-rating-modal {
+    border: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    opacity: 0;
+}
+
+.label-mp-rating-modal {
+    position: relative;
+    color: #C8C8C8;
+    cursor: pointer;
+    float: right;
+}
+
+.label-mp-rating-modal:before {
+    margin: 0px 8px 5px 0px;
+    content: "\f005";
+    font-family: FontAwesome;
+    display: inline-block;
+    font-size: 2em;
+    color: #ccc;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.radio-mp-rating-modal:checked~.label-mp-rating-modal:before {
+    color: #FFC107;
+}
+
+.label-mp-rating-modal:hover~.label-mp-rating-modal:before {
+    color: #FFC107;
+}
+
+.label-mp-rating-modal:hover:before {
+    color: #FFC107;
+}
+
+.label-mp-rating-input {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mp-textarea-rating-module {
+    min-height: 60px !important;
+}
+
+.mp-btn-rating-submit {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    text-transform: none !important;
+}
+
+.mp-checkout-list {
+    font-size: 13px;
+    font: 400 12px/1.42857 Open Sans, Helvetica, Arial, sans-serif;
+    text-transform: none;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0px !important;
+    margin-left: -5px !important;
+}
+
+.mp-panel-advanced-config {
+    cursor: pointer;
+    margin-top: 0 !important;
+    margin-bottom: 0px !important;
+    border-top: 1px solid #eee !important;
+    user-select: none;
+}
+
+.mp-input-collapsible, .mp-custom-input-collapsible, .mp-ticket-input-collapsible {
+    display: none;
+}
+
+.mp-plugin-version {
+    float: right !important;
+    margin-bottom: -5px !important;
+}
+
+.mp-plugin-version a, .mp-plugin-version a:hover {
+    color: #555;
+}
+
+.mp-plugin-version span {
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: lowercase;
+}
+
+@media (max-width: 768px) {
+    .mp-pl-30 {
+        padding-left: 0px !important;
+    }
+    .mp-pr-50 {
+        padding-right: 0px !important;
+    }
+}
