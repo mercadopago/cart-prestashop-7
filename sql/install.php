@@ -94,3 +94,9 @@ Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
 Configuration::updateValue('MERCADOPAGO_STANDARD', false);
 Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
 Configuration::updateValue('MERCADOPAGO_STANDARD_MODAL', true);
+
+//Remove Mercado Envios
+Configuration::updateValue('MERCADOENVIOS_ACTIVATE', false);
+Configuration::deleteByName('MERCADOPAGO_CARRIER');
+Configuration::deleteByName('MERCADOPAGO_CARRIER_ID_1');
+Configuration::deleteByName('MERCADOPAGO_CARRIER_ID_2');

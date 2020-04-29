@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-m-px-0" id="mp_box_firstname">
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-m-px-0 mp-pl-0" id="mp_box_firstname">
                         <label for="" id="mp_firstname_label" class="mp-pb-5">{l s='First and Last Name' mod='mercadopago'} <em
                                     class="mp-required">*</em></label>
                         <label for="" id="mp_socialname_label" class="mp-pb-5">{l s='Company number' mod='mercadopago'} <em
