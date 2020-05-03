@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2018 PrestaShop.
+ * 2007-2020 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
@@ -69,12 +69,12 @@ class Mercadopago extends PaymentModule
 
         $this->name = 'mercadopago';
         $this->tab = 'payments_gateways';
-        $this->author = 'mercadopago';
+        $this->author = 'cloyolav';
         $this->need_instance = 1;
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.1.0';
+        $this->version = '4.1.1';
 
         parent::__construct();
 

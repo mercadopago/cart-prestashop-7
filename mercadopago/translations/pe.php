@@ -459,7 +459,7 @@ $_MODULE['<{mercadopago}prestashop>template_2_bb0a503f6022dd9ad15e450f25480f8b']
 $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917'] =
 'Programa de Protección de vendedores.';
 $_MODULE['<{mercadopago}prestashop>failure_55d37c0a3c1b32de6e3f9ceb1f8c0a4a'] =
-' ¡Ops! Ha ocurrido un error en su pago, intente nuevamente...	';
+' ¡Ups! Ha ocurrido un error al realizar su pago, por favor intente nuevamente...	';
 $_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] =
 'Paga con tarjetas de crédito y débito';
 $_MODULE['<{mercadopago}prestashop>custom_b2fd5a4f417785d2c8d5a3674a1b3e83'] =
@@ -487,7 +487,7 @@ $_MODULE['<{mercadopago}prestashop>custom_792bb28aea0e109daf741be7eb18ec87'] =
 $_MODULE['<{mercadopago}prestashop>custom_60a104dc50579d60cbc90158fada1dcf'] =
 'CVV';
 $_MODULE['<{mercadopago}prestashop>custom_b905fb66f717edccb30cb861bc1f20f0'] =
-'Últimos 3 números que figuran en el';
+'Últimos 3 números que figuran en el reverso';
 $_MODULE['<{mercadopago}prestashop>custom_f8809653e0184b71678421dc963074c7'] =
 '¿En cuántas cuotas quieres pagar?';
 $_MODULE['<{mercadopago}prestashop>custom_16bfdf30b1a694ab3bf3da553a4dff03'] =

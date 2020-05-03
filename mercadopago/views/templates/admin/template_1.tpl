@@ -206,7 +206,7 @@
 <!-- Evaluation modal -->
 <hr class="hr-mp-modal">
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-4">
         {l s='Something`s wrong?' mod='mercadopago'}
         
         {if $country_link == 'mlb'}
@@ -214,6 +214,11 @@
         {else}
           <a href="https://www.mercadopago.com.br/developers/es/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
         {/if}
+    </div>
+
+    <div class="col-md-4">
+        {l s='Ver' mod='mercadopago'}
+        <a href="{$url_base|escape:'html':'UTF-8'}/modules/mercadopago/logs/mercadopago.log" target="_blank">{l s='See the log.' mod='mercadopago'}</a>
     </div>
     
     <div class="col-md-4 text-right">
