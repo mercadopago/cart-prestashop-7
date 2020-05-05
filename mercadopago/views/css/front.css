@@ -586,31 +586,6 @@ body#checkout section.checkout-step .payment-options label {
 #mercadopago-form .row {
     margin:0;
 }
-.mp-btn-primary {
-  display: inline-block;
-/*   font-weight: normal;  
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none; */
-
-    padding: 10px 16px;
-    font-size: 18px;
-    line-height: 1.33;
-    border-radius: 6px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    background: #d66c94;
-    border: 1px solid #d66c94;
-    vertical-align: middle;
-    cursor: pointer;
-    white-space: nowrap;
-    margin: 0;
-    color: #fff;
-}
 .mp-btn-primary:hover{
     opacity: 0.8;
 }
