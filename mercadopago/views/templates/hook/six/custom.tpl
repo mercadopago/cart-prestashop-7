@@ -127,7 +127,7 @@
                                         <label for="id-card-holder-name" class="mp-pb-5">{l s='Name and surname of the cardholder' mod='mercadopago'} <em
                                                                 class="mp-required">*</em></label>
                                         <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
-                                                class="form-control mp-form-control" autocomplete="off" />
+                                                class="form-control mp-form-control" autocomplete="off" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                                         <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
                                                 {l s='Invalid card holder name' mod='mercadopago'}</small>
                                 </div>
