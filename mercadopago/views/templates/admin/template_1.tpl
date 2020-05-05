@@ -218,7 +218,7 @@
 
     <div class="col-md-4">
         {l s='Ver' mod='mercadopago'}
-        <a href="{$url_base|escape:'html':'UTF-8'}/modules/mercadopago/logs/mercadopago.log" target="_blank">{l s='See the log.' mod='mercadopago'}</a>
+        <a href="{$url_base|escape:'html':'UTF-8'}./modules/mercadopago/logs/mercadopago.log" target="_blank">{l s='See the log.' mod='mercadopago'}</a>
     </div>
     
     <div class="col-md-4 text-right">
