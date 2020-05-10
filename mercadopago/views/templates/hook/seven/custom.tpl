@@ -77,19 +77,6 @@
                 </div>
             </div>
 
-            <!-- Input Name and Surname -->
-            <div id="mp-card-holder-div" class="form-group">
-                <div class="col-md-12 col-12 mp-pb-10 mp-px-0 mp-m-col">
-                    <label for="id-card-holder-name" class="mp-pb-5">
-                    {l s='Name and surname of the cardholder' mod='mercadopago'} 
-                    <em class="mp-required">*</em></label>
-                    <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
-                        class="form-control mp-form-control" autocomplete="off" />
-                    <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
-                        {l s='Invalid card holder name' mod='mercadopago'}</small>
-                </div>
-            </div>
-
             <div class="form-group">
                 <!-- Input expiration date -->
                 <div class="col-md-6 col-6 mp-pb-20 mp-pl-0 mp-m-col">
@@ -126,6 +113,20 @@
                     <small id="mp-error-E302" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
                         {l s='Invalid card holder name' mod='mercadopago'}</small>
                 </div>
+
+                <!-- Input Name and Surname -->
+                <div id="mp-card-holder-div" class="form-group">
+                    <div class="col-md-12 col-12 mp-pb-10 mp-px-0 mp-m-col">
+                        <label for="id-card-holder-name" class="mp-pb-5">
+                        {l s='Name and surname of the cardholder' mod='mercadopago'} 
+                        <em class="mp-required">*</em></label>
+                        <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
+                            class="form-control mp-form-control" autocomplete="off" />
+                        <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
+                            {l s='Invalid card holder name' mod='mercadopago'}</small>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Title installments -->
