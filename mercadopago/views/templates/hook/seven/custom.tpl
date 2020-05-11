@@ -214,12 +214,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row col-12 mp-pt-15">
                 <div class="col-12">
                     <!-- Title installments -->
                     <p class="submp-title-checkout-six mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</p>
                 </div>
-
             </div>
             <div class="row col-12">
                 <div class="col-12">
@@ -250,9 +249,16 @@
                             </div>
                     </div>
                 </div>
-                <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">
+            </div>
+
+            <div class="row col-12 mp-pt-15">
+                <div class="col-12">
+                    <!-- Title Document -->
                     <p class="submp-title-checkout-six mp-pt-10">{l s='Enter your document number' mod='mercadopago'}</p>
                 </div>
+            </div>
+
+            <div class="row col-12">
                 <div id="mp-doc-div" class="row col-12">
                     <div id="mp-doc-type-div" class="col-md-4 col-4 mp-pb-20 mp-m-col">
                         <label for="id-docType" class="mp-pb-5">{l s='Type' mod='mercadopago'}</label>
@@ -270,29 +276,27 @@
                         <small id="mp-error-324" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
                             {l s='Invalid document number' mod='mercadopago'}</small>
                     </div>
-
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-12 col-xs-12 col-12 mp-m-col mp-pt-20">
-                        <p class="mp-all-required"><em class="mp-required text-bold">*</em> {l s='Obligatory field' mod='mercadopago'}</p>
-                    </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-12 mp-m-col mp-pt-20">
+                    <p class="mp-all-required"><em class="mp-required text-bold">*</em> {l s='Obligatory field' mod='mercadopago'}</p>
                 </div>
+            </div>
 
-                <div id="mercadopago-utilities">
-                    <input type="hidden" id="amount" value="{$amount|escape:'htmlall':'UTF-8'}" />
-                    <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
-                    <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
-                    <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
-                    <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
+            <div id="mercadopago-utilities">
+                <input type="hidden" id="amount" value="{$amount|escape:'htmlall':'UTF-8'}" />
+                <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
+                <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
+                <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
+                <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
+                    <button class="btn btn-default">{l s='Check out' mod='mercadopago'}</button>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
-                        <button class="btn btn-default">{l s='Check out' mod='mercadopago'}</button>
-                    </div>
-                </div>
-
             </div>
 
         </div>   
