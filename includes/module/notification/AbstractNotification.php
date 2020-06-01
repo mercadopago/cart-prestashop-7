@@ -197,6 +197,8 @@ class AbstractNotification
                 case $status_mediation:
                     $this->ruleDevolution($cart, $order, $status_authorized, $actual_status);
                     break;
+                default:
+                    break;
             }
         } else {
             MPLog::generate('Order does not exist', 'warning');
@@ -214,7 +216,7 @@ class AbstractNotification
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 422);
-        } elseif($validate_actual == true) {
+        } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
@@ -234,10 +236,10 @@ class AbstractNotification
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 422);
-        } elseif($actual_status == $status_approved) {
+        } elseif ($actual_status == $status_approved) {
             MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
             $this->getNotificationResponse('It is not possible to update this approved payment', 422);
-        } elseif($validate_actual == true) {
+        } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
@@ -257,10 +259,10 @@ class AbstractNotification
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 422);
-        } elseif($actual_status == $status_approved) {
+        } elseif ($actual_status == $status_approved) {
             MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
             $this->getNotificationResponse('It is not possible to update this approved payment', 422);
-        } elseif($validate_actual == true) {
+        } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
