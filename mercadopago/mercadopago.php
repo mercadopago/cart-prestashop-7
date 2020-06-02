@@ -24,10 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
-
-define('MP_VERSION', '4.1.0');
+define('MP_VERSION', '4.1.1');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -74,7 +71,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.1.0';
+        $this->version = '4.1.1';
 
         parent::__construct();
 
@@ -350,7 +347,7 @@ class Mercadopago extends PaymentModule
                 $order_state->template = array_fill(0, 10, $value[2]);
 
                 if ($order_state->add()) {
-                    $file = _PS_ROOT_DIR_ . '/img/os/' . (int)$order_state->id . '.gif';
+                    $file = _PS_ROOT_DIR_ . '/img/os/' . (int) $order_state->id . '.gif';
                     copy((dirname(__FILE__) . '/views/img/mp_icon.gif'), $file);
                     Configuration::updateValue('MERCADOPAGO_STATUS_' . $key, $order_state->id);
                 }
@@ -373,6 +370,16 @@ class Mercadopago extends PaymentModule
             WHERE id_order_state = '" . $id_order_state . "'"
         );
         return $result['count_state'];
+    }
+
+    /**
+     * Return null for Mercado Envios
+     *
+     * @return void
+     */
+    public function getOrderShippingCost()
+    {
+        return;
     }
 
     /**
@@ -487,7 +494,6 @@ class Mercadopago extends PaymentModule
         }
     }
 
-
     /**
      * @param $cart
      * @param $version
@@ -563,7 +569,7 @@ class Mercadopago extends PaymentModule
         $products = $order->getProducts();
 
         $this->context->smarty->assign(array(
-            'order'=> $order,
+            'order' => $order,
             'order_products' => $products,
             "ticket_url" => $ticket_url
         ));
