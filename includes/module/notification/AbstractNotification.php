@@ -147,8 +147,7 @@ class AbstractNotification
         $status_charged = $this->getNotificationPaymentState('charged_back');
         $status_mediation = $this->getNotificationPaymentState('in_mediation');
 
-        if (
-            $this->status != null &&
+        if ($this->status != null &&
             $validate_actual == true &&
             $actual_status == $status_approved &&
             $this->order_state != $status_refunded &&
