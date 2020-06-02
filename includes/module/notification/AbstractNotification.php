@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2007-2020 PrestaShop
  *
@@ -138,172 +137,47 @@ class AbstractNotification
         }
     }
 
-    /**
-     * Validate status to update order
-     *
-     * @param mixed $cart
-     * @return void
-     */
     public function updateOrder($cart)
     {
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
         $validate_actual = $this->validateActualStatus($actual_status);
-
         $status_approved = $this->getNotificationPaymentState('approved');
-        $status_pending = $this->getNotificationPaymentState('pending');
-        $status_inprocess = $this->getNotificationPaymentState('in_process');
-        $status_authorized = $this->getNotificationPaymentState('authorized');
-        $status_cancelled = $this->getNotificationPaymentState('cancelled');
-        $status_rejected = $this->getNotificationPaymentState('rejected');
         $status_refunded = $this->getNotificationPaymentState('refunded');
         $status_charged = $this->getNotificationPaymentState('charged_back');
         $status_mediation = $this->getNotificationPaymentState('in_mediation');
 
-        if ($this->order_id != 0 && $this->status != null) {
-            switch ($this->order_state) {
-                case $status_approved:
-                    $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
-                    break;
-
-                case $status_pending:
-                    $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
-                    break;
-
-                case $status_inprocess:
-                    $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
-                    break;
-
-                case $status_authorized:
-                    $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                    break;
-
-                case $status_cancelled:
-                    $this->ruleFailed($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                    break;
-
-                case $status_rejected:
-                    $this->ruleFailed($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                    break;
-
-                case $status_refunded:
-                    $this->ruleDevolution($cart, $order, $status_authorized, $actual_status);
-                    break;
-
-                case $status_charged:
-                    $this->ruleDevolution($cart, $order, $status_authorized, $actual_status);
-                    break;
-
-                case $status_mediation:
-                    $this->ruleDevolution($cart, $order, $status_authorized, $actual_status);
-                    break;
-                default:
-                    break;
+        if (
+            $this->status != null &&
+            $validate_actual == true &&
+            $actual_status == $status_approved &&
+            $this->order_state != $status_refunded &&
+            $this->order_state != $status_charged &&
+            $this->order_state != $status_mediation
+        ) {
+            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
+            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+        } elseif ($validate_actual == false) {
+            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+        } else {
+            if ($this->order_id != 0 && $this->order_state != $actual_status && $validate_actual == true) {
+                try {
+                    $order->setCurrentState($this->order_state);
+                    $this->saveUpdateOrderData($cart);
+                    MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
+                    $this->getNotificationResponse('The order has been updated', 201);
+                } catch (Exception $e) {
+                    MPLog::generate(
+                        'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
+                        'error'
+                    );
+                    $this->getNotificationResponse('The order has not been updated', 422);
+                }
+            } else {
+                MPLog::generate('Order does not exist or Order status is the same', 'warning');
+                $this->getNotificationResponse('Order does not exist or Order status is the same', 422);
             }
-        } else {
-            MPLog::generate('Order does not exist', 'warning');
-            $this->getNotificationResponse('Order does not exist', 422);
-        }
-    }
-
-    /**
-     * Rule to update approved order
-     *
-     * @return void
-     */
-    public function ruleApproved($cart, $order, $status, $actual_status, $validate_actual)
-    {
-        if ($actual_status == $status) {
-            MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
-        } elseif ($validate_actual == true) {
-            $this->updatePrestashopOrder($cart, $order);
-        } else {
-            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
-        }
-    }
-
-    /**
-     * Rule to update pending, in_process and authorized order
-     *
-     * @return void
-     */
-    public function ruleProcessing($cart, $order, $status, $actual_status, $validate_actual)
-    {
-        $status_approved = $this->getNotificationPaymentState('approved');
-
-        if ($actual_status == $status) {
-            MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
-        } elseif ($actual_status == $status_approved) {
-            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
-        } elseif ($validate_actual == true) {
-            $this->updatePrestashopOrder($cart, $order);
-        } else {
-            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
-        }
-    }
-
-    /**
-     * Rule to update pending, in_process and authorized order
-     *
-     * @return void
-     */
-    public function ruleFailed($cart, $order, $status, $actual_status, $validate_actual)
-    {
-        $status_approved = $this->getNotificationPaymentState('approved');
-
-        if ($actual_status == $status) {
-            MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
-        } elseif ($actual_status == $status_approved) {
-            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
-        } elseif ($validate_actual == true) {
-            $this->updatePrestashopOrder($cart, $order);
-        } else {
-            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
-        }
-    }
-
-    /**
-     * Rule to update chargedback, refunded and inmediation order
-     *
-     * @return void
-     */
-    public function ruleDevolution($cart, $order, $status, $actual_status)
-    {
-        if ($actual_status == $status) {
-            MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
-        } else {
-            $this->updatePrestashopOrder($cart, $order);
-        }
-    }
-
-    /**
-     * Update order on Prestashop database
-     *
-     * @param mixed $cart
-     * @return void
-     */
-    public function updatePrestashopOrder($cart, $order)
-    {
-        try {
-            $order->setCurrentState($this->order_state);
-            $this->saveUpdateOrderData($cart);
-            MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
-            $this->getNotificationResponse('The order has been updated', 201);
-        } catch (Exception $e) {
-            MPLog::generate(
-                'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
-                'error'
-            );
-            $this->getNotificationResponse('The order has not been updated', 422);
         }
     }
 
