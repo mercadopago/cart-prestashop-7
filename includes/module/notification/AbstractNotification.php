@@ -137,24 +137,30 @@ class AbstractNotification
         }
     }
 
-    /**
-     * Update order on Prestashop database
-     *
-     * @param mixed $cart
-     * @return void
-     */
     public function updateOrder($cart)
     {
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
+        $validate_actual = $this->validateActualStatus($actual_status);
         $status_approved = $this->getNotificationPaymentState('approved');
-        $status_rejected = $this->getNotificationPaymentState('rejected');
+        $status_refunded = $this->getNotificationPaymentState('refunded');
+        $status_charged = $this->getNotificationPaymentState('charged_back');
+        $status_mediation = $this->getNotificationPaymentState('in_mediation');
 
-        if ($actual_status == $status_approved && $this->order_state == $status_rejected && $this->status != null) {
-            MPLog::generate('It is not possible to reject an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to reject an approved payment', 422);
+        if ($this->status != null &&
+            $validate_actual == true &&
+            $actual_status == $status_approved &&
+            $this->order_state != $status_refunded &&
+            $this->order_state != $status_charged &&
+            $this->order_state != $status_mediation
+        ) {
+            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
+            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+        } elseif ($validate_actual == false) {
+            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
         } else {
-            if ($this->order_id != 0 && $this->order_state != $actual_status) {
+            if ($this->order_id != 0 && $this->order_state != $actual_status && $validate_actual == true) {
                 try {
                     $order->setCurrentState($this->order_state);
                     $this->saveUpdateOrderData($cart);
@@ -238,6 +244,22 @@ class AbstractNotification
         );
 
         return Configuration::get($payment_states[$state]);
+    }
+
+    /**
+     * @param integer $actual
+     * @return bool
+     */
+    public function validateActualStatus($actual)
+    {
+        $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . $actual;
+        $sql = Db::getInstance()->getRow($query);
+
+        if ($sql['module_name'] === 'mercadopago') {
+            return true;
+        }
+
+        return false;
     }
 
     /**
