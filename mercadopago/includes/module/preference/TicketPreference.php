@@ -176,7 +176,7 @@ class TicketPreference extends AbstractPreference
         if ($this->settings['MERCADOPAGO_TICKET_EXPIRATION'] != "") {
             return $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = date(
                 'Y-m-d\TH:i:s.000O',
-                strtotime('+' . $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] . ' hours')
+                strtotime('+' . $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] . ' days')
             );
         }
     }

@@ -58,42 +58,42 @@ class MPUseful
         $country_configs = array(
             'MCO' => array(
                 'site_id'    => 'MCO',
-                'sponsor_id' => 208687643,
+                'sponsor_id' => 237788769,
                 'currency'   => 'COP',
             ),
             'MLA' => array(
                 'site_id'    => 'MLA',
-                'sponsor_id' => 208682286,
+                'sponsor_id' => 237788409,
                 'currency'   => 'ARS',
             ),
             'MLB' => array(
                 'site_id'    => 'MLB',
-                'sponsor_id' => 208686191,
+                'sponsor_id' => 236914421,
                 'currency'   => 'BRL',
             ),
             'MLC' => array(
                 'site_id'    => 'MLC',
-                'sponsor_id' => 208690789,
+                'sponsor_id' => 237788173,
                 'currency'   => 'CLP',
             ),
             'MLM' => array(
                 'site_id'    => 'MLM',
-                'sponsor_id' => 208692380,
+                'sponsor_id' => 237793014,
                 'currency'   => 'MXN',
             ),
             'MLU' => array(
                 'site_id'    => 'MLU',
-                'sponsor_id' => 243692679,
+                'sponsor_id' => 241729464,
                 'currency'   => 'UYU',
             ),
             'MLV' => array(
                 'site_id'    => 'MLV',
-                'sponsor_id' => 208692735,
+                'sponsor_id' => 237789083,
                 'currency'   => 'VEF',
             ),
             'MPE' => array(
                 'site_id'    => 'MPE',
-                'sponsor_id' => 216998692,
+                'sponsor_id' => 237791025,
                 'currency'   => 'PEN',
             )
         );

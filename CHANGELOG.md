@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.1] - 2020-06-03
+
+### Added
+- We added status map for Notification
+
+### Fixed
+- We fixed statement_descriptor: from null to ''
+- We fixed document number mask
+- We fixed notification update order flow
+- We fixed the problem after removing Mercado Envíos
+
+### Removed
+- We removed Mercado Envíos default configurations
+
 ## [4.1.0] - 2020-03-25
 
 ### Break Change
