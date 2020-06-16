@@ -252,7 +252,7 @@ class AbstractNotification
      */
     public function validateActualStatus($actual)
     {
-        $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . $actual;
+        $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . (int) $actual;
         $sql = Db::getInstance()->getRow($query);
 
         if ($sql['module_name'] === 'mercadopago') {
