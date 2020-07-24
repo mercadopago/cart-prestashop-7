@@ -224,6 +224,6 @@
         var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
         mpValidateSiteId(site_id);
         validateDocumentInputs();
-        mercadoPagoFormHandlerTicket();
+        mercadoPagoFormHandlerTicket('seven');
     }
 </script>
