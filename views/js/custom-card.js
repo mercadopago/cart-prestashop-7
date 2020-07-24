@@ -39,6 +39,8 @@
         select_choose: ''
     };
 
+    var ps_version = '';
+
     /*
       * Initialise vars to use on JS custom-card.js
       *
@@ -47,6 +49,7 @@
     window.initializeCustom = function (mp_custom) {
         seller_custom.site_id = mp_custom.site_id;
         translate_custom.select_choose = mp_custom.select_choose;
+        ps_version = mp_custom.ps_version;
     };
 
     /*
@@ -628,6 +631,20 @@
         }
     }
 
+    /**
+     * Disable finish order button
+     * @param {string} psVersion 
+     */
+    function disableFinishOrderButton(psVersion) {
+        if (psVersion === 'six') {
+            var sixButton = document.getElementById('mp-custom-finish-order');
+            sixButton.setAttribute('disabled', 'disabled');
+        } else if(psVersion === 'seven') {
+            var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+            sevenButton.setAttribute('disabled', 'disabled');
+        }
+    }
+
     jQuery(function () {
         $('input[data-checkout="cardNumber"]').on('focusout', guessingPaymentMethod);
 
@@ -635,6 +652,7 @@
             document.forms['mp_custom_checkout'].onsubmit = function () {
 
                 if (validateInputsCreateToken()) {
+                    disableFinishOrderButton(ps_version);
                     return createToken();
                 }
 
@@ -642,7 +660,7 @@
                 return false;
             };
         }
-
+        
         $('#uniform-id-docType').removeClass('selector');
         $('#uniform-id-installments').removeClass('selector');
     })

@@ -203,7 +203,7 @@
     
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
-                    <button class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
+                    <button id="mp-custom-finish-order" class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
                 </div>
             </div>
         </div>
@@ -218,7 +218,8 @@
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s='Choose' mod='mercadopago'}...'
+                select_choose: '{l s='Choose' mod='mercadopago'}...',
+                ps_version: 'six',
             };
             initializeCustom(mp_custom);
         }

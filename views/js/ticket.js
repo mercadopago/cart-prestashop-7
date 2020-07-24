@@ -92,12 +92,13 @@
      * Handler form submit
      * @return {bool}
      */
-    window.mercadoPagoFormHandlerTicket = function () {
+    window.mercadoPagoFormHandlerTicket = function (psVersion) {
         if (document.forms['mp_ticket_checkout'] !== undefined) {
             document.forms['mp_ticket_checkout'].onsubmit = function () {
 
                 if (seller_ticket.site_id === 'MLB') {
                     if (validateInputs() && validateDocumentNumber()) {
+                        disableFinishOrderButton(psVersion);
                         return true;
                     } else {
                         return false;
@@ -106,12 +107,14 @@
 
                 if (seller_ticket.site_id === 'MLU') {
                     if (validateDocumentNumber()) {
+                        disableFinishOrderButton(psVersion);
                         return true;
                     } else {
                         return false;
                     }
                 }
 
+                disableFinishOrderButton(psVersion);
                 return true;
             };
         }
@@ -133,6 +136,20 @@
         var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
         if (typeof terms === 'object' && terms !== null) {
             return terms.checked = false;
+        }
+    }
+
+    /**
+     * Disable finish order button
+     * @param {string} psVersion 
+     */
+    function disableFinishOrderButton(psVersion) {
+        if (psVersion === 'six') {
+            var sixButton = document.getElementById('mp-ticket-finish-order');
+            sixButton.setAttribute('disabled', 'disabled');
+        } else if(psVersion === 'seven') {
+            var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+            sevenButton.setAttribute('disabled', 'disabled');
         }
     }
 

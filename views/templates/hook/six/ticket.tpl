@@ -227,7 +227,7 @@
 
                 <div class="row">
                     <div class="col-md-12 col-xs-12 col-12 mp-pt-25 mp-m-col">
-                        <button class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
+                        <button id="mp-ticket-finish-order" class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
                     </div>
                 </div>
             </div>
@@ -240,6 +240,6 @@
             var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
             mpValidateSiteId(site_id);
             validateDocumentInputs();
-            mercadoPagoFormHandlerTicket();
+            mercadoPagoFormHandlerTicket('six');
         }
     </script>

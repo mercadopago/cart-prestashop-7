@@ -223,7 +223,8 @@
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s='Choose' mod='mercadopago'}...'
+                select_choose: '{l s='Choose' mod='mercadopago'}...',
+                ps_version: 'seven',
             };
             initializeCustom(mp_custom);
         }
