@@ -373,6 +373,9 @@ class AbstractPreference
             "collector" => $this->settings['MERCADOPAGO_SELLER_ID'],
             "test_mode" => $this->validateSandboxMode(),
             "site" => $this->settings['MERCADOPAGO_SITE_ID'],
+            "basic_settings" => $this->getStandardCheckoutSettings(),
+            "custom_settings" => $this->getCustomCheckoutSettings(),
+            "ticket_settings" => $this->getTicketCheckoutSettings(),
         );
 
         return $internal_metadata;
@@ -502,6 +505,8 @@ class AbstractPreference
     }
 
     /**
+     * Get plugin settings on database
+     * 
      * @return mixed
      */
     public function getMercadoPagoSettings()
@@ -542,5 +547,53 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
         return $this->settings;
+    }
+
+    /**
+     * Get standard checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getStandardCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_STANDARD_CHECKOUT'] == "" ? false : true;
+        $settings['modal'] = $this->settings['MERCADOPAGO_STANDARD_MODAL'] == "" ? false : true;
+        $settings['auto_return'] = $this->settings['MERCADOPAGO_AUTO_RETURN'] == "" ? false : true;
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] == "" ? false : true;
+        $settings['installments'] = $this->settings['MERCADOPAGO_INSTALLMENTS'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
+
+        return $settings;
+    }
+
+    /**
+     * Get custom checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getCustomCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'];
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] == "" ? false : true;
+
+        return $settings;
+    }
+
+    /**
+     * Get ticket checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getTicketCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_TICKET_DISCOUNT'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_TICKET_EXPIRATION'];
+
+        return $settings;
     }
 }

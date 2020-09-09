@@ -189,8 +189,8 @@ class TicketPreference extends AbstractPreference
     public function getInternalMetadata()
     {
         $internal_metadata = parent::getInternalMetadata();
-        $internal_metadata["checkout"] = "custom";
-        $internal_metadata["checkout_type"] = "ticket";
+        $internal_metadata['checkout'] ='custom';
+        $internal_metadata['checkout_type'] ='ticket';
 
         return $internal_metadata;
     }
