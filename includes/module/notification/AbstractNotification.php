@@ -381,8 +381,26 @@ class AbstractNotification
         $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . (int) $actual;
         $sql = Db::getInstance()->getRow($query);
 
-        if ($sql['module_name'] === 'mercadopago') {
+        if ($sql['module_name'] === 'mercadopago' || $this->getBackOrderStatus($actual)) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param integer $actual
+     * @return bool
+     */
+    public function getBackOrderStatus($actual)
+    {
+        $query = 'SELECT id_order_state, name FROM `' . _DB_PREFIX_ . 'order_state_lang` WHERE template = "outofstock"';
+        $sql = Db::getInstance()->executeS($query);
+
+        foreach ($sql as $row) {
+            if(strpos($row['name'], 'backorder') && $row['id_order_state'] == $actual) {
+                return true;
+            }
         }
 
         return false;
