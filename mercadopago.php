@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.1.1');
+define('MP_VERSION', '4.2.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -71,7 +71,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.1.1';
+        $this->version = '4.2.0';
 
         parent::__construct();
 
@@ -86,7 +86,6 @@ class Mercadopago extends PaymentModule
         $this->customCheckout = new CustomCheckout($this);
         $this->ticketCheckout = new TicketCheckout($this);
     }
-
 
     /**
      * Load files
@@ -103,11 +102,12 @@ class Mercadopago extends PaymentModule
         require_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
         require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
         require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
+        require_once MP_ROOT_URL . '/includes/module/model/PSOrderState.php';
+        require_once MP_ROOT_URL . '/includes/module/model/PSOrderStateLang.php';
         require_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';
         require_once MP_ROOT_URL . '/includes/module/checkouts/CustomCheckout.php';
         require_once MP_ROOT_URL . '/includes/module/checkouts/TicketCheckout.php';
     }
-
 
     /**
      * Install the module

@@ -29,11 +29,11 @@
 
 require_once MP_ROOT_URL . '/includes/MPAbstractDB.php';
 
-class MPModule extends MPAbstractDB
+class PSOrderState extends MPAbstractDB
 {
     public function __construct()
     {
         parent::__construct();
-        $this->table = _DB_PREFIX_ . "mp_module";
+        $this->table = _DB_PREFIX_ . "order_state";
     }
 }

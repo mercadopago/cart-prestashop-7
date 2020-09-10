@@ -41,6 +41,8 @@ class AbstractNotification
     public $payments_data;
     public $transaction_id;
     public $mp_transaction;
+    public $ps_order_state;
+    public $order_state_lang;
     public $customer_secure_key;
 
     public function __construct($transaction_id = null, $customer_secure_key)
@@ -48,6 +50,8 @@ class AbstractNotification
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
         $this->mp_transaction = new MPTransaction();
+        $this->ps_order_state = new PSOrderState();
+        $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
         $this->customer_secure_key = $customer_secure_key;
 
@@ -378,10 +382,9 @@ class AbstractNotification
      */
     public function validateActualStatus($actual)
     {
-        $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . (int) $actual;
-        $sql = Db::getInstance()->getRow($query);
+        $result = $this->ps_order_state->where('id_order_state', '=', (int) $actual)->get();
 
-        if ($sql['module_name'] === 'mercadopago' || $this->getBackOrderStatus($actual)) {
+        if ($result['module_name'] === 'mercadopago' || $this->getBackOrderStatus($actual)) {
             return true;
         }
 
@@ -394,10 +397,11 @@ class AbstractNotification
      */
     public function getBackOrderStatus($actual)
     {
-        $query = 'SELECT id_order_state, name FROM `' . _DB_PREFIX_ . 'order_state_lang` WHERE template = "outofstock"';
-        $sql = Db::getInstance()->executeS($query);
+        $result = $this->ps_order_state_lang->columns(['id_order_state', 'name'])
+            ->where('template', '=', 'outofstock')
+            ->getAll();
 
-        foreach ($sql as $row) {
+        foreach ($result as $row) {
             if(strpos($row['name'], 'backorder') && $row['id_order_state'] == $actual) {
                 return true;
             }

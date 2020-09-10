@@ -31,8 +31,13 @@ abstract class MPAbstractDB
 {
     protected $table;
     protected $where;
+    protected $columns;
     protected $orderBy;
     protected $andWhere;
+
+    public function __construct() {
+        $this->columns = "*";
+    }
 
     /**
      * Execute query for database without return
@@ -49,7 +54,7 @@ abstract class MPAbstractDB
     }
 
     /**
-     * Execute query for database with return
+     * Execute query for database returning one row
      *
      * @param [string] $query
      * @return array|bool|object|null
@@ -61,12 +66,34 @@ abstract class MPAbstractDB
     }
 
     /**
+     * Execute query for database returning many rows
+     *
+     * @param [string] $query
+     * @return array|bool|object|null
+     */
+    public function selectMany($query)
+    {
+        $sql = Db::getInstance()->executeS($query);
+        return $sql;
+    }
+
+    /**
      * Get method
      */
     public function get()
     {
-        $query = "SELECT * FROM $this->table $this->where $this->orderBy";
+        $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
         $result = $this->selectQuery($query);
+        return $result;
+    }
+
+    /**
+     * Get all method
+     */
+    public function getAll()
+    {
+        $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
+        $result = $this->selectMany($query);
         return $result;
     }
 
@@ -80,6 +107,23 @@ abstract class MPAbstractDB
         $query = "SELECT COUNT(*) AS count FROM $this->table $this->where $this->andWhere";
         $result = $this->selectQuery($query);
         return $result['count'];
+    }
+
+    /**
+     * Set columns method, needs be called with select()
+     *
+     * @param $column
+     * @param $operator
+     * @param $value
+     * @return MPAbstractDB
+     */
+    public function columns($columns)
+    {
+        if (gettype($columns) == "array") {
+            $this->columns = implode(",", $columns);
+        }
+
+        return $this;
     }
 
     /**
