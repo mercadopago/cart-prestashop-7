@@ -42,7 +42,7 @@ abstract class MPAbstractDB
     /**
      * Execute query for database without return
      *
-     * @param [string] $query
+     * @param string $query
      * @return bool
      */
     public function executeQuery($query)
@@ -56,7 +56,7 @@ abstract class MPAbstractDB
     /**
      * Execute query for database returning one row
      *
-     * @param [string] $query
+     * @param string $query
      * @return array|bool|object|null
      */
     public function selectQuery($query)
@@ -68,7 +68,7 @@ abstract class MPAbstractDB
     /**
      * Execute query for database returning many rows
      *
-     * @param [string] $query
+     * @param string $query
      * @return array|bool|object|null
      */
     public function selectMany($query)
@@ -112,9 +112,7 @@ abstract class MPAbstractDB
     /**
      * Set columns method, needs be called with select()
      *
-     * @param $column
-     * @param $operator
-     * @param $value
+     * @param array $columns
      * @return MPAbstractDB
      */
     public function columns($columns)
@@ -129,9 +127,9 @@ abstract class MPAbstractDB
     /**
      * Where method, needs be called with count() or get()
      *
-     * @param $column
-     * @param $operator
-     * @param $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
      * @return MPAbstractDB
      */
     public function where($column, $operator, $value)
@@ -143,9 +141,9 @@ abstract class MPAbstractDB
     /**
      * And where method, needs be called with count() or get()
      *
-     * @param [string] $column
-     * @param [mixed] $operator
-     * @param [mixed] $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
      * @return MPAbstractDB
      */
     public function andWhere($column, $operator, $value)
@@ -157,8 +155,8 @@ abstract class MPAbstractDB
     /**
      * orderBy method, needs be called with get()
      *
-     * @param [string] $column
-     * @param [mixed] $operator
+     * @param string $column
+     * @param string $operator
      * @return MPAbstractDB
      */
     public function orderBy($column, $operator)
@@ -170,7 +168,7 @@ abstract class MPAbstractDB
     /**
      * Insert data in database
      *
-     * @param [type] $array
+     * @param array $array
      * @return bool|void
      */
     public function create($array)
@@ -199,7 +197,7 @@ abstract class MPAbstractDB
     /**
      * Update data in database
      *
-     * @param [type] $array
+     * @param array $array
      * @return bool|void
      */
     public function update($array)
