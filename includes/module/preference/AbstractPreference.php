@@ -35,6 +35,8 @@ class AbstractPreference
     public $mpuseful;
     public $cart_rule;
     public $mercadopago;
+    public $ps_cart_rule;
+    public $ps_cart_rule_rule;
 
     /**
      * AbstractPreference constructor.
@@ -45,6 +47,8 @@ class AbstractPreference
         $this->settings = $this->getMercadoPagoSettings();
         $this->mpuseful = MPUseful::getInstance();
         $this->mercadopago = MPApi::getInstance();
+        $this->ps_cart_rule = new PSCartRule();
+        $this->ps_cart_rule_rule = new PSCartRuleRule();
     }
 
     /**
@@ -481,16 +485,13 @@ class AbstractPreference
      */
     public function deleteCartRule()
     {
-        $sql = array();
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
+        $result_cart_rule = $this->ps_cart_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
+        $result_cart_rule_rule = $this->ps_cart_rule_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
 
-        foreach ($sql as $query) {
-            if (Db::getInstance()->execute($query) == false) {
-                $this->disableCartRule();
-                MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
-                return false;
-            }
+        if ($result_cart_rule == false || $result_cart_rule_rule == false) {
+            $this->disableCartRule();
+            MPLog::generate('Failed to delete cart_rule from database', 'error');
+            return false;
         }
     }
 

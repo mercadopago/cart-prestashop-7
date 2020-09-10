@@ -102,6 +102,8 @@ class Mercadopago extends PaymentModule
         require_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
         require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
         require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
+        require_once MP_ROOT_URL . '/includes/module/model/PSCartRule.php';
+        require_once MP_ROOT_URL . '/includes/module/model/PSCartRuleRule.php';
         require_once MP_ROOT_URL . '/includes/module/model/PSOrderState.php';
         require_once MP_ROOT_URL . '/includes/module/model/PSOrderStateLang.php';
         require_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';

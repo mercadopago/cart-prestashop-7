@@ -218,4 +218,15 @@ abstract class MPAbstractDB
 
         return false;
     }
+
+    /**
+     * Delete data from database
+     *
+     * @return bool|void
+     */
+    public function destroy() {
+        $query = "DELETE FROM $this->table $this->where";
+        $result = $this->executeQuery($query);
+        return $result;
+    }
 }
