@@ -545,7 +545,6 @@
     {
         hideErrors();
 
-        // Form.
         var form = getFormCustom();
 
         Mercadopago.createToken(form, sdkResponseHandler);
@@ -592,6 +591,7 @@
             }
         }
         focusInputError();
+        getConditionTerms();
         return;
     }
 
