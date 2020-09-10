@@ -417,7 +417,7 @@ class AbstractNotification
      * @param integer $code
      * @return void
      */
-    public function getNotificationResponse($message, $code)
+    public static function getNotificationResponse($message, $code)
     {
         header('Content-type: application/json');
         $response = array(

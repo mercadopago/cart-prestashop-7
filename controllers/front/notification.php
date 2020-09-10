@@ -57,8 +57,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
             $notification->receiveNotification($cart);
         } else {
             MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');
-            $notification = new WebhookNotification($transaction_id, $customer_secure_key);
-            $notification->getNotificationResponse("The notification does not have the necessary parameters", 422);
+            WebhookNotification::getNotificationResponse("The notification does not have the necessary parameters", 422);
         }
     }
 }
