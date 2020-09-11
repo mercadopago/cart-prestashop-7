@@ -35,7 +35,7 @@ class TicketCheckout
     public $payment;
 
     /**
-     * StandardCheckout constructor.
+     * Ticket Checkout constructor.
      * @param $payment
      */
     public function __construct($payment)

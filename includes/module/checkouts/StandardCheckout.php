@@ -27,7 +27,7 @@
 * to avoid any conflicts with others containers.
 */
 
-class CustomCheckout
+class StandardCheckout
 {
     /**
      * @var Mercadopago
@@ -35,7 +35,7 @@ class CustomCheckout
     public $payment;
 
     /**
-     * StandardCheckout constructor.
+     * Standard Checkout constructor.
      * @param $payment
      */
     public function __construct($payment)
@@ -47,11 +47,11 @@ class CustomCheckout
      * @param $cart
      * @return array
      */
-    public function getCustomCheckoutPS16($cart)
+    public function getStandardCheckoutPS16($cart)
     {
-        $checkoutInfo = $this->getCustomCheckout($cart);
+        $informations = $this->getStandard($cart);
         $frontInformations = array_merge(
-            $checkoutInfo,
+            $informations,
             array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
         );
         return $frontInformations;
@@ -61,10 +61,10 @@ class CustomCheckout
      * @param $cart
      * @return array
      */
-    public function getCustomCheckoutPS17($cart)
+    public function getStandardCheckoutPS17($cart)
     {
-        $checkoutInfo = $this->getCustomCheckout($cart);
-        $frontInformations = array_merge($checkoutInfo, array("module_dir" => $this->payment->path));
+        $informations = $this->getStandard($cart);
+        $frontInformations = array_merge($informations, array("module_dir" => $this->payment->path));
         return $frontInformations;
     }
 
@@ -72,49 +72,56 @@ class CustomCheckout
      * @param $cart
      * @return array
      */
-    public function getCustomCheckout($cart)
+    public function getStandard($cart)
     {
-        $this->loadJsCustom();
+        $count = 0;
         $debit = array();
         $credit = array();
+        $ticket = array();
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
+
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get($tarjeta['config']) != "") {
+                $count++;
                 if ($tarjeta['type'] == 'credit_card') {
                     $credit[] = $tarjeta;
                 } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
                     $debit[] = $tarjeta;
+                } else {
+                    $ticket[] = $tarjeta;
                 }
             }
         }
 
-        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
-        $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
-        $public_key = $this->payment->mercadopago->getPublicKey();
-        $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
-        
-        $amount = (float)$cart->getOrderTotal(true, 4);
-        $amount = ($discount != "") ? $amount - ($amount * ($discount / 100)) : $amount;
-        $amount = (float)$cart->getOrderTotal(true, 5) + $amount;
+        $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
+        $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'standard');
+        $preference_id = "";
+        $modal_link = "";
 
-        $checkoutInfo = array(
+        if ($modal != "") {
+            $preference = new StandardPreference();
+            $createPreference = $preference->createPreference($cart);
+
+            if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
+                $preference_id = $createPreference['id'];
+                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+                $modal_link = $this->payment->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
+                MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
+            }
+        }
+
+        $informations = array(
+            "count" => $count,
             "debit" => $debit,
             "credit" => $credit,
-            "amount" => $amount,
-            "site_id" => $site_id,
+            "ticket" => $ticket,
+            "modal" => $modal,
             "redirect" => $redirect,
-            "discount" => $discount,
-            "public_key" => $public_key,
+            "modal_link" => $modal_link,
+            "preference" => $preference_id,
+            "public_key" => $this->payment->mercadopago->getPublicKey(),
+            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
         );
-
-        return $checkoutInfo;
-    }
-
-    /**
-     *
-     */
-    public function loadJsCustom()
-    {
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card.js');
+        return $informations;
     }
 }

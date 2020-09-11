@@ -35,6 +35,8 @@ class AbstractPreference
     public $mpuseful;
     public $cart_rule;
     public $mercadopago;
+    public $ps_cart_rule;
+    public $ps_cart_rule_rule;
 
     /**
      * AbstractPreference constructor.
@@ -45,6 +47,8 @@ class AbstractPreference
         $this->settings = $this->getMercadoPagoSettings();
         $this->mpuseful = MPUseful::getInstance();
         $this->mercadopago = MPApi::getInstance();
+        $this->ps_cart_rule = new PSCartRule();
+        $this->ps_cart_rule_rule = new PSCartRuleRule();
     }
 
     /**
@@ -373,6 +377,9 @@ class AbstractPreference
             "collector" => $this->settings['MERCADOPAGO_SELLER_ID'],
             "test_mode" => $this->validateSandboxMode(),
             "site" => $this->settings['MERCADOPAGO_SITE_ID'],
+            "basic_settings" => $this->getStandardCheckoutSettings(),
+            "custom_settings" => $this->getCustomCheckoutSettings(),
+            "ticket_settings" => $this->getTicketCheckoutSettings(),
         );
 
         return $internal_metadata;
@@ -478,16 +485,13 @@ class AbstractPreference
      */
     public function deleteCartRule()
     {
-        $sql = array();
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
+        $result_cart_rule = $this->ps_cart_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
+        $result_cart_rule_rule = $this->ps_cart_rule_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
 
-        foreach ($sql as $query) {
-            if (Db::getInstance()->execute($query) == false) {
-                $this->disableCartRule();
-                MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
-                return false;
-            }
+        if ($result_cart_rule == false || $result_cart_rule_rule == false) {
+            $this->disableCartRule();
+            MPLog::generate('Failed to delete cart_rule from database', 'error');
+            return false;
         }
     }
 
@@ -502,6 +506,8 @@ class AbstractPreference
     }
 
     /**
+     * Get plugin settings on database
+     * 
      * @return mixed
      */
     public function getMercadoPagoSettings()
@@ -542,5 +548,53 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
         return $this->settings;
+    }
+
+    /**
+     * Get standard checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getStandardCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_STANDARD_CHECKOUT'] == "" ? false : true;
+        $settings['modal'] = $this->settings['MERCADOPAGO_STANDARD_MODAL'] == "" ? false : true;
+        $settings['auto_return'] = $this->settings['MERCADOPAGO_AUTO_RETURN'] == "" ? false : true;
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] == "" ? false : true;
+        $settings['installments'] = $this->settings['MERCADOPAGO_INSTALLMENTS'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
+
+        return $settings;
+    }
+
+    /**
+     * Get custom checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getCustomCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'];
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] == "" ? false : true;
+
+        return $settings;
+    }
+
+    /**
+     * Get ticket checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getTicketCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_TICKET_DISCOUNT'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_TICKET_EXPIRATION'];
+
+        return $settings;
     }
 }

@@ -198,7 +198,7 @@ class MPApi
     /**
      * Is valid access token
      *
-     * @param [string] $access_token
+     * @param string $access_token
      * @return boolean
      * @throws Exception
      */
@@ -243,7 +243,7 @@ class MPApi
     /**
      * Get merchant order
      *
-     * @param [integer] $id
+     * @param integer $id
      * @return bool
      * @throws Exception
      */
@@ -266,7 +266,7 @@ class MPApi
     /**
      * Get application_id
      *
-     * @param [integer] $seller
+     * @param integer $seller
      * @return int
      */
     public function getApplicationId()
@@ -299,8 +299,8 @@ class MPApi
     }
 
     /**
-     * @param null $message
-     * @return null
+     * @param string|null $message
+     * @return string|null
      */
     public static function validateMessageApi($message = null)
     {

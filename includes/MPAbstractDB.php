@@ -31,13 +31,18 @@ abstract class MPAbstractDB
 {
     protected $table;
     protected $where;
+    protected $columns;
     protected $orderBy;
     protected $andWhere;
+
+    public function __construct() {
+        $this->columns = "*";
+    }
 
     /**
      * Execute query for database without return
      *
-     * @param [string] $query
+     * @param string $query
      * @return bool
      */
     public function executeQuery($query)
@@ -49,9 +54,9 @@ abstract class MPAbstractDB
     }
 
     /**
-     * Execute query for database with return
+     * Execute query for database returning one row
      *
-     * @param [string] $query
+     * @param string $query
      * @return array|bool|object|null
      */
     public function selectQuery($query)
@@ -61,12 +66,34 @@ abstract class MPAbstractDB
     }
 
     /**
+     * Execute query for database returning many rows
+     *
+     * @param string $query
+     * @return array|bool|object|null
+     */
+    public function selectMany($query)
+    {
+        $sql = Db::getInstance()->executeS($query);
+        return $sql;
+    }
+
+    /**
      * Get method
      */
     public function get()
     {
-        $query = "SELECT * FROM $this->table $this->where $this->orderBy";
+        $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
         $result = $this->selectQuery($query);
+        return $result;
+    }
+
+    /**
+     * Get all method
+     */
+    public function getAll()
+    {
+        $query = "SELECT $this->columns FROM $this->table $this->where $this->orderBy";
+        $result = $this->selectMany($query);
         return $result;
     }
 
@@ -83,11 +110,26 @@ abstract class MPAbstractDB
     }
 
     /**
+     * Set columns method, needs be called with select()
+     *
+     * @param array $columns
+     * @return MPAbstractDB
+     */
+    public function columns($columns)
+    {
+        if (gettype($columns) == "array") {
+            $this->columns = implode(",", $columns);
+        }
+
+        return $this;
+    }
+
+    /**
      * Where method, needs be called with count() or get()
      *
-     * @param $column
-     * @param $operator
-     * @param $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
      * @return MPAbstractDB
      */
     public function where($column, $operator, $value)
@@ -99,9 +141,9 @@ abstract class MPAbstractDB
     /**
      * And where method, needs be called with count() or get()
      *
-     * @param [string] $column
-     * @param [mixed] $operator
-     * @param [mixed] $value
+     * @param string $column
+     * @param string $operator
+     * @param mixed $value
      * @return MPAbstractDB
      */
     public function andWhere($column, $operator, $value)
@@ -113,8 +155,8 @@ abstract class MPAbstractDB
     /**
      * orderBy method, needs be called with get()
      *
-     * @param [string] $column
-     * @param [mixed] $operator
+     * @param string $column
+     * @param string $operator
      * @return MPAbstractDB
      */
     public function orderBy($column, $operator)
@@ -126,7 +168,7 @@ abstract class MPAbstractDB
     /**
      * Insert data in database
      *
-     * @param [type] $array
+     * @param array $array
      * @return bool|void
      */
     public function create($array)
@@ -155,7 +197,7 @@ abstract class MPAbstractDB
     /**
      * Update data in database
      *
-     * @param [type] $array
+     * @param array $array
      * @return bool|void
      */
     public function update($array)
@@ -175,5 +217,16 @@ abstract class MPAbstractDB
         }
 
         return false;
+    }
+
+    /**
+     * Delete data from database
+     *
+     * @return bool|void
+     */
+    public function destroy() {
+        $query = "DELETE FROM $this->table $this->where";
+        $result = $this->executeQuery($query);
+        return $result;
     }
 }

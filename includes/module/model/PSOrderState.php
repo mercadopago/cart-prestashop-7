@@ -1,3 +1,4 @@
+<?php
 /**
 * 2007-2020 PrestaShop
 *
@@ -26,56 +27,13 @@
 * to avoid any conflicts with others containers.
 */
 
-//input mask
-function maskInput(o, f)
-{
-    v_obj = o
-    v_fun = f
-    setTimeout("execmascara()", 1)
-}
+require_once MP_ROOT_URL . '/includes/MPAbstractDB.php';
 
-function execmascara()
+class PSOrderState extends MPAbstractDB
 {
-    v_obj.value = v_fun(v_obj.value)
-}
-
-function mdate(v)
-{
-    v = v.replace(/\D/g, "");
-    v = v.replace(/(\d{2})(\d)/, "$1/$2");
-    v = v.replace(/(\d{2})(\d{2})$/, "$1$2");
-    return v;
-}
-
-function minteger(v)
-{
-    return v.replace(/\D/g, "")
-}
-
-function mcc(v)
-{
-    v = v.replace(/\D/g, "");
-    v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
-    v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
-    v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
-    return v;
-}
-
-function mcpf(v)
-{
-    v=v.replace(/\D/g,"")
-    v=v.replace(/(\d{3})(\d)/,"$1.$2")
-    v=v.replace(/(\d{3})(\d)/,"$1.$2")
-    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
-    return v
-}
-
-function mcnpj(v)
-{
-    v=v.replace(/\D/g,"")
-    v=v.replace(/^(\d{2})(\d)/,"$1.$2")
-    v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3")
-    v=v.replace(/\.(\d{3})(\d)/,".$1/$2")
-    v=v.replace(/(\d{4})(\d)/,"$1-$2")
-    return v
+    public function __construct()
+    {
+        parent::__construct();
+        $this->table = _DB_PREFIX_ . "order_state";
+    }
 }

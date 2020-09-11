@@ -1,3 +1,4 @@
+<?php
 /**
 * 2007-2020 PrestaShop
 *
@@ -25,57 +26,12 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-//input mask
-function maskInput(o, f)
-{
-    v_obj = o
-    v_fun = f
-    setTimeout("execmascara()", 1)
-}
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
-function execmascara()
-{
-    v_obj.value = v_fun(v_obj.value)
-}
-
-function mdate(v)
-{
-    v = v.replace(/\D/g, "");
-    v = v.replace(/(\d{2})(\d)/, "$1/$2");
-    v = v.replace(/(\d{2})(\d{2})$/, "$1$2");
-    return v;
-}
-
-function minteger(v)
-{
-    return v.replace(/\D/g, "")
-}
-
-function mcc(v)
-{
-    v = v.replace(/\D/g, "");
-    v = v.replace(/^(\d{4})(\d)/g, "$1 $2");
-    v = v.replace(/^(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3");
-    v = v.replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g, "$1 $2 $3 $4");
-    return v;
-}
-
-function mcpf(v)
-{
-    v=v.replace(/\D/g,"")
-    v=v.replace(/(\d{3})(\d)/,"$1.$2")
-    v=v.replace(/(\d{3})(\d)/,"$1.$2")
-    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
-    return v
-}
-
-function mcnpj(v)
-{
-    v=v.replace(/\D/g,"")
-    v=v.replace(/^(\d{2})(\d)/,"$1.$2")
-    v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3")
-    v=v.replace(/\.(\d{3})(\d)/,".$1/$2")
-    v=v.replace(/(\d{4})(\d)/,"$1-$2")
-    return v
-}
+header('Location: ../');
+exit;
