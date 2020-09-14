@@ -1,28 +1,31 @@
 <?php
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 class MPUseful
 {
@@ -55,42 +58,42 @@ class MPUseful
         $country_configs = array(
             'MCO' => array(
                 'site_id'    => 'MCO',
-                'sponsor_id' => 208687643,
+                'sponsor_id' => 237788769,
                 'currency'   => 'COP',
             ),
             'MLA' => array(
                 'site_id'    => 'MLA',
-                'sponsor_id' => 208682286,
+                'sponsor_id' => 237788409,
                 'currency'   => 'ARS',
             ),
             'MLB' => array(
                 'site_id'    => 'MLB',
-                'sponsor_id' => 208686191,
+                'sponsor_id' => 236914421,
                 'currency'   => 'BRL',
             ),
             'MLC' => array(
                 'site_id'    => 'MLC',
-                'sponsor_id' => 208690789,
+                'sponsor_id' => 237788173,
                 'currency'   => 'CLP',
             ),
             'MLM' => array(
                 'site_id'    => 'MLM',
-                'sponsor_id' => 208692380,
+                'sponsor_id' => 237793014,
                 'currency'   => 'MXN',
             ),
             'MLU' => array(
                 'site_id'    => 'MLU',
-                'sponsor_id' => 243692679,
+                'sponsor_id' => 241729464,
                 'currency'   => 'UYU',
             ),
             'MLV' => array(
                 'site_id'    => 'MLV',
-                'sponsor_id' => 208692735,
+                'sponsor_id' => 237789083,
                 'currency'   => 'VEF',
             ),
             'MPE' => array(
                 'site_id'    => 'MPE',
-                'sponsor_id' => 216998692,
+                'sponsor_id' => 237791025,
                 'currency'   => 'PEN',
             )
         );

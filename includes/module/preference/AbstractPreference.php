@@ -1,14 +1,13 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
+ * 2007-2020 PrestaShop
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Open Software License (OSL 3.0)
+ * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
+ * http://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
@@ -19,10 +18,13 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2020 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
  */
 
 class AbstractPreference
@@ -33,13 +35,20 @@ class AbstractPreference
     public $mpuseful;
     public $cart_rule;
     public $mercadopago;
+    public $ps_cart_rule;
+    public $ps_cart_rule_rule;
 
+    /**
+     * AbstractPreference constructor.
+     */
     public function __construct()
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->settings = $this->getMercadoPagoSettings();
         $this->mpuseful = MPUseful::getInstance();
         $this->mercadopago = MPApi::getInstance();
+        $this->ps_cart_rule = new PSCartRule();
+        $this->ps_cart_rule_rule = new PSCartRuleRule();
     }
 
     /**
@@ -52,8 +61,7 @@ class AbstractPreference
         $cart = $this->module->context->cart;
         $authorized = false;
 
-        if (
-            $cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
+        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
             $cart->id_address_invoice == 0 || !$this->module->active
         ) {
             Tools::redirect('index.php?controller=order&step=1');
@@ -66,22 +74,21 @@ class AbstractPreference
             }
         }
         if (!$authorized) {
-            die($this->module->l('Este método de pago no está disponible.'));
+            die($this->module->l('This payment method is not available.'));
         }
     }
 
     /**
-     * Return the common fields in preference
-     *
      * @param $cart
      * @return array
+     * @throws Exception
      */
     public function getCommonPreference($cart)
     {
         $preference = array(
             'external_reference' => $cart->id,
             'notification_url' => $this->getNotificationUrl($cart),
-            'statement_descriptor' => $this->settings['MERCADOPAGO_INVOICE_NAME'],
+            'statement_descriptor' => $this->getStatementDescriptor(),
         );
 
         if (!$this->mercadopago->isTestUser()) {
@@ -121,10 +128,6 @@ class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image['id_image'], "");
 
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
             $product_price = $product['price_wt'];
             if ($percent != null) {
                 $product_price = (float) $product_price - ($product_price * ($percent / 100));
@@ -134,11 +137,15 @@ class AbstractPreference
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? round($product_price) : $product_price,
+                'unit_price' => $round ? Tools::ps_round($product_price) : $product_price,
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
             );
+
+            if ($custom != true) {
+                $item['currency_id'] = $this->module->context->currency->iso_code;
+            }
 
             $items[] = $item;
         }
@@ -153,7 +160,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
             );
@@ -171,7 +178,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => $round ? round(-$discounts) : -$discounts,
+                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Discount provided by store',
             );
@@ -189,7 +196,7 @@ class AbstractPreference
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $round ? round($shipping_cost) : $shipping_cost,
+                'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
             );
@@ -198,6 +205,15 @@ class AbstractPreference
         }
 
         return $items;
+    }
+
+    public function getStatementDescriptor()
+    {
+        if ($this->settings['MERCADOPAGO_INVOICE_NAME'] == null) {
+            return '';
+        }
+
+        return $this->settings['MERCADOPAGO_INVOICE_NAME'];
     }
 
     /**
@@ -254,12 +270,7 @@ class AbstractPreference
     public function getSponsorId()
     {
         $sponsor_id = $this->mpuseful->getCountryConfigs($this->settings['MERCADOPAGO_SITE_ID']);
-
-        if ($this->settings['MERCADOPAGO_INTEGRATOR_ID'] == "") {
-            return $sponsor_id;
-        }
-
-       return $this->settings['MERCADOPAGO_INTEGRATOR_ID'];
+        return $sponsor_id;
     }
 
     /**
@@ -352,7 +363,7 @@ class AbstractPreference
 
     /**
      * Create the array for medatada informations
-     * 
+     *
      * @return array
      */
     public function getInternalMetadata()
@@ -366,6 +377,9 @@ class AbstractPreference
             "collector" => $this->settings['MERCADOPAGO_SELLER_ID'],
             "test_mode" => $this->validateSandboxMode(),
             "site" => $this->settings['MERCADOPAGO_SITE_ID'],
+            "basic_settings" => $this->getStandardCheckoutSettings(),
+            "custom_settings" => $this->getCustomCheckoutSettings(),
+            "ticket_settings" => $this->getTicketCheckoutSettings(),
         );
 
         return $internal_metadata;
@@ -393,14 +407,14 @@ class AbstractPreference
                 'customer_id' => $cart->id_customer,
                 'mp_module_id' => $mp_module['id_mp_module'],
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         } else {
             $mp_transaction->where('cart_id', '=', $cart->id)->update([
                 'total' => $cart->getOrderTotal(),
                 'customer_id' => $cart->id_customer,
                 'notification_url' => $notification_url,
-                'is_payment_test' => $this->settings['MERCADOPAGO_SANDBOX_STATUS']
+                'is_payment_test' => $this->validateSandboxMode()
             ]);
         }
     }
@@ -412,11 +426,11 @@ class AbstractPreference
      */
     public function validateSandboxMode()
     {
-        if ($this->settings['MERCADOPAGO_SANDBOX_STATUS'] == true) {
-            return true;
+        if ($this->settings['MERCADOPAGO_PROD_STATUS'] == true) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -471,15 +485,13 @@ class AbstractPreference
      */
     public function deleteCartRule()
     {
-        $sql = array();
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
-        $sql[] = 'DELETE FROM `' . _DB_PREFIX_ . 'cart_cart_rule` WHERE id_cart_rule = ' . $this->cart_rule;
+        $result_cart_rule = $this->ps_cart_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
+        $result_cart_rule_rule = $this->ps_cart_rule_rule->where('id_cart_rule', '=', $this->cart_rule)->destroy();
 
-        foreach ($sql as $query) {
-            if (Db::getInstance()->execute($query) == false) {
-                MPLog::generate('Failed to execute ' . $query . ' in database', 'error');
-                return false;
-            }
+        if ($result_cart_rule == false || $result_cart_rule_rule == false) {
+            $this->disableCartRule();
+            MPLog::generate('Failed to delete cart_rule from database', 'error');
+            return false;
         }
     }
 
@@ -490,13 +502,13 @@ class AbstractPreference
      */
     public function redirectError()
     {
-        Tools::redirect('index.php?controller=order&step=1&step=3&typeReturn=failure');
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 
     /**
-     * Get Mercado Pago settings
-     *
-     * @return void
+     * Get plugin settings on database
+     * 
+     * @return mixed
      */
     public function getMercadoPagoSettings()
     {
@@ -506,9 +518,9 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_COUNTRY_LINK'] = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
         //credentials
+        $this->settings['MERCADOPAGO_PROD_STATUS'] = Configuration::get('MERCADOPAGO_PROD_STATUS');
         $this->settings['MERCADOPAGO_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
-        $this->settings['MERCADOPAGO_SANDBOX_STATUS'] = Configuration::get('MERCADOPAGO_SANDBOX_STATUS');
         $this->settings['MERCADOPAGO_SANDBOX_PUBLIC_KEY'] = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $this->settings['MERCADOPAGO_SANDBOX_ACCESS_TOKEN'] = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
@@ -536,5 +548,53 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
         return $this->settings;
+    }
+
+    /**
+     * Get standard checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getStandardCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_STANDARD_CHECKOUT'] == "" ? false : true;
+        $settings['modal'] = $this->settings['MERCADOPAGO_STANDARD_MODAL'] == "" ? false : true;
+        $settings['auto_return'] = $this->settings['MERCADOPAGO_AUTO_RETURN'] == "" ? false : true;
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] == "" ? false : true;
+        $settings['installments'] = $this->settings['MERCADOPAGO_INSTALLMENTS'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
+
+        return $settings;
+    }
+
+    /**
+     * Get custom checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getCustomCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'];
+        $settings['binary_mode'] = $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] == "" ? false : true;
+
+        return $settings;
+    }
+
+    /**
+     * Get ticket checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getTicketCheckoutSettings() {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_TICKET_DISCOUNT'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_TICKET_EXPIRATION'];
+
+        return $settings;
     }
 }

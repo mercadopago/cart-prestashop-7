@@ -26,12 +26,14 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
+require_once MP_ROOT_URL . '/includes/MPAbstractDB.php';
 
-header('Location: ../');
-exit;
+class PSCartRuleRule extends MPAbstractDB
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->table = _DB_PREFIX_ . "cart_cart_rule";
+    }
+}

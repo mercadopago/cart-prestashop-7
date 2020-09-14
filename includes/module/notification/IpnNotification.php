@@ -1,14 +1,13 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
+ * 2007-2020 PrestaShop
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Open Software License (OSL 3.0)
+ * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
+ * http://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
@@ -19,10 +18,13 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2020 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
  */
 
 require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
@@ -42,21 +44,51 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->total = (float) $cart->getOrderTotal();
-        $this->order_id = Order::getOrderByCartId($cart->id);
-
-        $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
-        $payments = $merchant_order['payments'];
-
+        $this->total = $this->getTotal($cart);
+        $this->getOrderId($cart);
         $this->verifyWebhook($cart);
-        $this->verifyPayments($payments);
+
+        if ($this->order_id != 0) {
+            $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
+            $payments = $merchant_order['payments'];
+
+            $this->verifyPayments($payments);
+            $this->validateOrderState();
+            $this->updateTransactionId();
+            $this->updateOrder($cart);
+        } else {
+            $this->createStandardOrder($cart);
+        }
+    }
+
+    /**
+     * Create order for standard payments without notification
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function createStandardOrder($cart)
+    {
+        $this->getOrderId($cart);
+        $this->total = $this->getTotal($cart);
+        $this->status = 'pending';
+        $this->pending += $this->total;
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            return $this->createOrder($cart);
-        }else{
-            return $this->updateOrder($cart);
+            $this->createOrder($cart, true);
         }
+    }
+
+    /**
+     * Verify if order exists then get order_id
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function getOrderId($cart)
+    {
+        $this->order_id = Order::getOrderByCartId($cart->id);
     }
 
     /**
@@ -89,5 +121,19 @@ class IpnNotification extends AbstractNotification
                 $this->pending += $payment_info['transaction_amount'];
             }
         }
+    }
+
+    /**
+     * Update merchant_order_id on transaction id
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function updateTransactionId()
+    {
+        $order = new Order($this->order_id);
+        $payments = $order->getOrderPaymentCollection();
+        $payments[0]->transaction_id = $this->transaction_id;
+        $payments[0]->update();
     }
 }

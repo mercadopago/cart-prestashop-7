@@ -1,14 +1,13 @@
 <?php
-
 /**
- * 2007-2015 PrestaShop
+ * 2007-2020 PrestaShop
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Open Software License (OSL 3.0)
+ * This source file is subject to the Academic Free License (AFL 3.0)
  * that is bundled with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
+ * http://opensource.org/licenses/afl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
@@ -19,17 +18,19 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    MERCADOPAGO.COM REPRESENTA&Ccedil;&Otilde;ES LTDA.
- * @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
- *          International Registered Trademark & Property of MercadoPago
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2020 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
  */
 
 class MPApi
 {
     public function __construct()
-    { 
-        
+    {
     }
 
     /**
@@ -53,11 +54,11 @@ class MPApi
      */
     public function getAccessToken()
     {
-        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
-            return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
         }
 
-        return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
     }
 
     /**
@@ -67,11 +68,11 @@ class MPApi
      */
     public function getPublicKey()
     {
-        if (Configuration::get('MERCADOPAGO_SANDBOX_STATUS') == true) {
-            return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+        if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
+            return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
         }
 
-        return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
+        return Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
     }
 
     /**
@@ -97,8 +98,8 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
-            //ticket open for fix
-            if ($value['id'] == "pec") {
+            // remove on paypay release
+            if ($value['id'] == 'paypal') {
                 continue;
             }
 
@@ -108,6 +109,7 @@ class MPApi
                 'type' => $value['payment_type_id'],
                 'image' => $value['secure_thumbnail'],
                 'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+                'financial_institutions' => $value['financial_institutions'],
             );
         }
 
@@ -167,7 +169,7 @@ class MPApi
         //in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
-            return false;
+            return $response['response']['message'];
         }
 
         //response treatment
@@ -201,7 +203,7 @@ class MPApi
     /**
      * Is valid access token
      *
-     * @param [string] $access_token
+     * @param string $access_token
      * @return boolean
      * @throws Exception
      */
@@ -218,35 +220,6 @@ class MPApi
         //response treatment
         $result = $response['response'];
         return $result;
-    }
-
-    /**
-     * Is valid sponsor id
-     *
-     * @param $integrator_id
-     * @return boolean
-     * @throws Exception
-     */
-    public function isValidIntegratorId($integrator_id)
-    {
-        $response = MPRestCli::get('/users/' . $integrator_id);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API valid_integrator_id error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        //response treatment
-        $result = $response['response'];
-        if (
-            $result['site_id'] != Configuration::get('MERCADOPAGO_SITE_ID') ||
-            $result['id'] == Configuration::get('MERCADOPAGO_SELLER_ID')
-        ) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -275,7 +248,7 @@ class MPApi
     /**
      * Get merchant order
      *
-     * @param [integer] $id
+     * @param integer $id
      * @return bool
      * @throws Exception
      */
@@ -296,30 +269,9 @@ class MPApi
     }
 
     /**
-     * Send platform info to settings api
-     *
-     * @param [array] $params
-     * @return bool
-     * @throws Exception
-     */
-    public function saveApiSettings($params)
-    {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::post('/modules/tracking/settings', $params, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API save_api_settings error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get application_id
      *
-     * @param [integer] $seller
+     * @param integer $seller
      * @return int
      */
     public function getApplicationId()
@@ -349,5 +301,32 @@ class MPApi
         $result = $response['response'];
 
         return $result['scopes'];
+    }
+
+    /**
+     * @param string|null $message
+     * @return string|null
+     */
+    public static function validateMessageApi($message = null)
+    {
+        $module = Module::getInstanceByName('mercadopago');
+
+        switch (trim($message)) {
+            case 'Invalid payment_method_id':
+                return $module->l('The payment method is not valid or not available.', 'MPApi');
+            case 'Invalid transaction_amount':
+                return $module->l('The transaction amount cannot be processed by Mercado Pago. ', 'MPApi') .
+                    $module->l('Possible causes: Currency not supported; ', 'MPApi') .
+                    $module->l('Amounts below the minimum or above the maximum allowed.', 'MPApi');
+            case 'Invalid users involved':
+                return $module->l('The users are not valid. Possible causes: ', 'MPApi') .
+                    $module->l('Buyer and seller have the same account in Mercado Pago; ', 'MPApi') .
+                    $module->l('The transaction involving production and test users.', 'MPApi');
+            case 'Unauthorized use of live credentials':
+                return $module->l('Unauthorized use of production credentials. ', 'MPApi') .
+                    $module->l('Possible causes: Use permission in use for the credential of the seller.', 'MPApi');
+            default:
+                return null;
+        }
     }
 }

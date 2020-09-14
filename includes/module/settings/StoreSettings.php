@@ -1,29 +1,31 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 require_once MP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
 
@@ -48,23 +50,26 @@ class StoreSettings extends AbstractSettings
      */
     public function generateForm()
     {
-        $title = $this->module->l('Store Information');
+        $title = $this->module->l('Store Information', 'StoreSettings');
         $fields = array(
             array(
                 'col' => 6,
                 'type' => 'text',
-                'label' => $this->module->l('Name'),
+                'label' => $this->module->l('Name', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_INVOICE_NAME',
-                'desc' => $this->module->l('This is the name that will appear on the customers invoice.'),
+                'desc' => $this->module->l(
+                    'This is the name that will appear on the customers invoice.',
+                    'StoreSettings'
+                ),
             ),
             array(
                 'col' => 4,
                 'type' => 'select',
-                'label' => $this->module->l('Category'),
+                'label' => $this->module->l('Category', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_STORE_CATEGORY',
-                'desc' => $this->module->l('What category are your products? ') .
-                    $this->module->l('Choose the one that best characterizes them ') .
-                    $this->module->l('(choose "other" if your product is too specific).'),
+                'desc' => $this->module->l('What category do your products belong to? ', 'StoreSettings') .
+                    $this->module->l('Choose the one that best characterizes them ', 'StoreSettings') .
+                    $this->module->l('(choose other if your product is too specific).', 'StoreSettings'),
                 'options' => array(
                     'query' => $this->getCategories(),
                     'id' => 'id',
@@ -75,9 +80,9 @@ class StoreSettings extends AbstractSettings
                 'col' => 2,
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_INTEGRATOR_ID',
-                'label' => $this->module->l('Integrator ID'),
-                'desc' => $this->module->l('With this number we identify all your transactions ') .
-                    $this->module->l('and we know how many sales we process with your account.'),
+                'label' => $this->module->l('Integrator ID', 'StoreSettings'),
+                'desc' => $this->module->l('With this number we identify all your transactions ', 'StoreSettings') .
+                    $this->module->l('and know how many sales we process with your account.', 'StoreSettings'),
             ),
         );
 
@@ -91,10 +96,7 @@ class StoreSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = (['MERCADOPAGO_INTEGRATOR_ID' => 'integrator_id']);
-
         parent::postFormProcess();
-
         MPLog::generate('Store information saved successfully');
     }
 
@@ -120,7 +122,7 @@ class StoreSettings extends AbstractSettings
     public function getCategories()
     {
         $categories = array();
-        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Select the category'));
+        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Category'));
         $categories[] = array('id' => 'others', 'name' => 'Other categories');
         $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
         $categories[] = array(

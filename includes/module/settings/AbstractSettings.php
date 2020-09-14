@@ -1,29 +1,31 @@
 <?php
-
 /**
- * 2007-2018 PrestaShop.
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@prestashop.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    MercadoPago
- *  @copyright Copyright (c) MercadoPago [http://www.mercadopago.com]
- *  @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *  International Registered Trademark & Property of MercadoPago
- */
+* 2007-2020 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2020 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
 
 class AbstractSettings
 {
@@ -57,7 +59,7 @@ class AbstractSettings
                 'class' => 'credentials',
                 'input' => $fields,
                 'submit' => array(
-                    'title' => $this->module->l('Save')
+                    'title' => $this->module->l('Save', 'AbstractSettings')
                 ),
             ),
         );
@@ -98,8 +100,21 @@ class AbstractSettings
 
         if ($form_alert == false) {
             Mercadopago::$form_alert = 'alert-success';
-            Mercadopago::$form_message = $this->module->l('Settings saved successfully.');
+            Mercadopago::$form_message = $this->module->l('Settings saved successfully.', 'AbstractSettings');
         }
+    }
+
+    /**
+     * Get ticket excluded payment methods
+     * Enter the ids (uppercase) of the payment methods that must be removed to avoid errors
+     *
+     * @return array
+     */
+    public function getTicketExcludedMethods()
+    {
+        return array(
+            'PAYPAL', 'PSE'
+        );
     }
 
     /**
@@ -112,20 +127,13 @@ class AbstractSettings
     {
         if ($this->validate != null && array_key_exists($input, $this->validate)) {
             switch ($this->validate[$input]) {
-                case "integrator_id":
-                    if ($value != '' && !$this->mercadopago->isValidIntegratorId($value)) {
-                        Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('Integrator ID must be valid and ') . 
-                            $this->module->l('must be from the same country as the seller.');
-                        MPLog::generate('Invalid integrator_id submitted', 'warning');
-                        return false;
-                    }
-                    break;
-
-                case "expiration_preference";
+                case "expiration_preference":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('The time to save payment preferences ') . $this->module->l('must be an integer.');
+                        Mercadopago::$form_message .= $this->module->l(
+                            'The time to save payment preferences ',
+                            'AbstractSettings'
+                        ) . $this->module->l('must be an integer.', 'AbstractSettings');
                         MPLog::generate('Invalid expiration_date_to submitted', 'warning');
                         return false;
                     }
@@ -134,7 +142,11 @@ class AbstractSettings
                 case "public_key":
                     if ($value == '') {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        Mercadopago::$form_message = $this->module->l(
+                            'Credentials can not be empty and must be valid. ',
+                            'AbstractSettings'
+                        ) .
+                        $this->module->l('Please complete your credentials to enable the module.', 'AbstractSettings');
                         MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -143,7 +155,11 @@ class AbstractSettings
                 case "access_token":
                     if (!$this->validateCredentials($input, $value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Credentials can not be empty and must be valid. ') . $this->module->l('Please complete your credentials to enable the module.');
+                        Mercadopago::$form_message = $this->module->l(
+                            'Credentials can not be empty and must be valid. ',
+                            'AbstractSettings'
+                        ) .
+                        $this->module->l('Please complete your credentials to enable the module.', 'AbstractSettings');
                         MPLog::generate('Invalid ' . $input . ' submitted', 'warning');
                         return false;
                     }
@@ -152,16 +168,22 @@ class AbstractSettings
                 case "percentage":
                     if ($value != '' && is_numeric($value) && $value > 99 || $value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message = $this->module->l('Discount must be an integer and less than 100%');
+                        Mercadopago::$form_message = $this->module->l(
+                            'Discount must be an integer and less than 100%',
+                            'AbstractSettings'
+                        );
                         MPLog::generate('Invalid discount submitted', 'warning');
                         return false;
                     }
                     break;
 
-                case "payment_due";
+                case "payment_due":
                     if ($value != '' && !is_numeric($value)) {
                         Mercadopago::$form_alert = 'alert-danger';
-                        Mercadopago::$form_message .= $this->module->l('The payment due must be an integer.');
+                        Mercadopago::$form_message .= $this->module->l(
+                            'The payment due must be an integer.',
+                            'AbstractSettings'
+                        );
                         MPLog::generate('Invalid payment_due submitted', 'warning');
                         return false;
                     }
@@ -171,28 +193,6 @@ class AbstractSettings
                     return true;
             }
         }
-
-        return true;
-    }
-
-    /**
-     * Send info to settings api
-     *
-     * @return void
-     */
-    public function sendSettingsInfo()
-    {
-        $checkout_basic = (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) ? 'true' : 'false';
-
-        $data = array(
-            "platform" => "PrestaShop",
-            "platform_version" => _PS_VERSION_,
-            "module_version" => MP_VERSION,
-            "code_version" => phpversion(),
-            "checkout_basic" => $checkout_basic
-        );
-
-        $this->mercadopago->saveApiSettings($data);
 
         return true;
     }
