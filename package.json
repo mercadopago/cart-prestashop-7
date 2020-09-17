@@ -1,0 +1,18 @@
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.css": [
+      "stylelint **/*.css --fix"
+    ]
+  },
+  "devDependencies": {
+    "husky": "4.3.0",
+    "lint-staged": "10.4.0",
+    "stylelint": "^13.7.1",
+    "stylelint-config-standard": "^20.0.0"
+  }
+}
