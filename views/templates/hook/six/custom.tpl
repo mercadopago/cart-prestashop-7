@@ -37,7 +37,7 @@
         <!-- Cards Type -->
         <div class="col-xs-12 col-md-12 col-12 mp-pt-25 mp-m-px-0">
             <a class="mp-link-checkout-custom" id="button-show-payments">
-                {l s='With what cards can I pay' mod='mercadopago'} ⌵ 
+                {l s='With what cards can I pay' mod='mercadopago'} ⌵
             </a>
 
             {if $site_id == 'MLA'}
@@ -138,7 +138,7 @@
                 <p class="submp-title-checkout-six mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</p>
             </div>
 
-            <div class="row">   
+            <div class="row">
                 <!-- Select issuer -->
                 <div id="container-issuers" class="issuers-options col-md-4 col-4 mp-m-col">
                     <label for="id-issuers-options" class="issuers-options mp-pb-5 mp-pt-10">{l s='issuing bank' mod='mercadopago'}</label>
@@ -167,7 +167,7 @@
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">
                 <p class="submp-title-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
-            </div>          
+            </div>
 
             <div id="mp-doc-div" class="row">
                 <div id="mp-doc-type-div" class="col-md-4 col-4 mp-pb-20 mp-m-col">
@@ -200,7 +200,7 @@
                 <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
                 <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
             </div>
-    
+
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
                     <button id="mp-custom-finish-order" class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
@@ -208,7 +208,6 @@
             </div>
         </div>
     </div>
-
 </form>
 
 {if $public_key != ''}
@@ -255,7 +254,7 @@
     #uniform-id-installments span {
         background-position: unset !important;
     }
-    
+
     #uniform-id-docType,
     #uniform-id-docType span {
         width: 100% !important;

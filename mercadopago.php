@@ -368,7 +368,7 @@ class Mercadopago extends PaymentModule
     protected static function orderStateAvailable($id_order_state)
     {
         $result = Db::getInstance()->getRow(
-            "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state 
+            "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
             WHERE id_order_state = '" . $id_order_state . "'"
         );
         return $result['count_state'];
@@ -392,7 +392,7 @@ class Mercadopago extends PaymentModule
     public function hookHeader()
     {
         $this->context->controller->addCSS($this->_path . 'views/css/front.css');
-        $this->context->controller->addJS($this->_path . 'views/js/front.js');
+        $this->context->controller->addJS($this->_path . 'views/js/front.js?v=' . MP_VERSION);
     }
 
     /**
