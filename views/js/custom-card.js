@@ -90,11 +90,11 @@
   }
 
   /**
-  * Handle payment Method response
-  *
-  * @param number status
-  * @param object response
-  */
+    * Handle payment Method response
+    *
+    * @param number status
+    * @param object response
+    */
   function paymentMethodHandler (status, response) {
     if (status === 200) {
       objPaymentMethod = response[0]
@@ -130,9 +130,9 @@
    *
    * Load Additional Info to use for build payment form
    *
-   * @param array additionalInfoNeeded
+   * @param array sdkAdditionalInfoNeeded
    */
-  function loadAdditionalInfo (additionalInfoNeeded) {
+  function loadAdditionalInfo (sdkAdditionalInfoNeeded) {
     additionalInfoNeeded = {
       issuer: false,
       cardholder_name: false,
@@ -140,17 +140,17 @@
       cardholder_identification_number: false
     }
 
-    for (var i = 0; i < additionalInfoNeeded.length; i++) {
-      if (additionalInfoNeeded[i] === 'issuer_id') {
+    for (var i = 0; i < sdkAdditionalInfoNeeded.length; i++) {
+      if (sdkAdditionalInfoNeeded[i] === 'issuer_id') {
         additionalInfoNeeded.issuer = true
       }
-      if (additionalInfoNeeded[i] === 'cardholder_name') {
+      if (sdkAdditionalInfoNeeded[i] === 'cardholder_name') {
         additionalInfoNeeded.cardholder_name = true
       }
-      if (additionalInfoNeeded[i] === 'cardholder_identification_type') {
+      if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_type') {
         additionalInfoNeeded.cardholder_identification_type = true
       }
-      if (additionalInfoNeeded[i] === 'cardholder_identification_number') {
+      if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_number') {
         additionalInfoNeeded.cardholder_identification_number = true
       }
     }
@@ -421,10 +421,10 @@
   }
 
   /**
-  * Focus input with error
-  *
-  * @return bool
-  */
+    * Focus input with error
+    *
+    * @return bool
+    */
   function focusInputError () {
     if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
       var formInputs = document.querySelectorAll('.mp-form-control-error')
