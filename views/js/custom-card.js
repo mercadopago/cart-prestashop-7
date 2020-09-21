@@ -100,7 +100,7 @@
       objPaymentMethod = response[0]
       setPaymentMethodId(objPaymentMethod.id)
       setImageCard(objPaymentMethod.secure_thumbnail)
-      loadAdditionalInfo(objPaymentMethod.additionalInfoNeeded)
+      loadAdditionalInfo(objPaymentMethod.additional_info_needed)
       additionalInfoHandler()
     } else {
       document.getElementById('id-card-number').innerHTML = ''
@@ -236,8 +236,8 @@
     var paramsInstallments = {}
     var amount = getAmount()
     var issuer = false
-    for (var i = 0; i < objPaymentMethod.additionalInfoNeeded.length; i++) {
-      if (objPaymentMethod.additionalInfoNeeded[i] === 'issuer_id') {
+    for (var i = 0; i < objPaymentMethod.additional_info_needed.length; i++) {
+      if (objPaymentMethod.additional_info_needed[i] === 'issuer_id') {
         issuer = true
       }
     }

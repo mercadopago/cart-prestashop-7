@@ -47,13 +47,13 @@
    */
   window.validateDocumentInputs = function () {
     if (sellerTicket.site_id === 'MLB') {
-      var mpBoxLastname = document.getElementById('mpBoxLastname')
-      var mpBoxFirstname = document.getElementById('mpBoxFirstname')
-      var mpFirstnameLabel = document.getElementById('mpFirstnameLabel')
-      var mpSocialnameLabel = document.getElementById('mpSocialnameLabel')
-      var mpCpfLabel = document.getElementById('mpCpfLabel')
-      var mpCnpjLabel = document.getElementById('mpCnpjLabel')
-      var mpDocNumber = document.getElementById('mpDocNumber')
+      var mpBoxLastname = document.getElementById('mp_box_lastname')
+      var mpBoxFirstname = document.getElementById('mp_box_firstname')
+      var mpFirstnameLabel = document.getElementById('mp_firstname_label')
+      var mpSocialnameLabel = document.getElementById('mp_socialname_label')
+      var mpCpfLabel = document.getElementById('mp_cpf_label')
+      var mpCnpjLabel = document.getElementById('mp_cnpj_label')
+      var mpDocNumber = document.getElementById('mp_doc_number')
       var mpDocType = document.querySelectorAll('input[type=radio][name="mercadopago_ticket[docType]"]')
 
       mpCnpjLabel.style.display = 'none'
@@ -191,7 +191,7 @@
      * @return {bool}
      */
   function validateDocumentNumber () {
-    var docnumberInput = document.getElementById('mpDocNumber')
+    var docnumberInput = document.getElementById('mp_doc_number')
     var docnumberError = document.getElementById('mp_error_docnumber')
     var docnumberValidate = false
 
@@ -330,7 +330,7 @@
 
     var resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
 
-    if (resultado !== digitos.charAt(0)) {
+    if (resultado.toString() !== digitos.charAt(0)) {
       return false
     }
 
@@ -345,7 +345,7 @@
       }
     }
     resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-    if (resultado !== digitos.charAt(1)) {
+    if (resultado.toString() !== digitos.charAt(1)) {
       return false
     }
 
