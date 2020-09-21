@@ -92,7 +92,7 @@ class CustomCheckout
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
         $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
-        
+
         $amount = (float)$cart->getOrderTotal(true, 4);
         $amount = ($discount != "") ? $amount - ($amount * ($discount / 100)) : $amount;
         $amount = (float)$cart->getOrderTotal(true, 5) + $amount;
@@ -102,6 +102,7 @@ class CustomCheckout
             "credit" => $credit,
             "amount" => $amount,
             "site_id" => $site_id,
+            "version" => MP_VERSION,
             "redirect" => $redirect,
             "discount" => $discount,
             "public_key" => $public_key,
@@ -115,6 +116,6 @@ class CustomCheckout
      */
     public function loadJsCustom()
     {
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card.js');
+        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card.js?v=' . MP_VERSION);
     }
 }

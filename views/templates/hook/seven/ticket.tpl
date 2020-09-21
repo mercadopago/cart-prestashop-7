@@ -34,7 +34,7 @@
                     {l s='Enter your document number' mod='mercadopago'}
                 </h3>
             </div>
-            
+
             <div class="form-group">
                 <div class="col-md-4 col-4 mp-pb-20 mp-pl-0 mp-m-col">
                     <label for="mp-docType" class="mp-pb-5">{l s='Type' mod='mercadopago'}</label>
@@ -43,7 +43,7 @@
                         <option value="CI" selected>{l s='CI' mod='mercadopago'}</option>
                     </select>
                 </div>
-            
+
                 <!-- Input Doc Number -->
                 <div class="col-md-8 col-8 mp-pb-20 mp-pr-0 mp-m-col">
                     <label for="mp_doc_number" class="mp-pb-5">{l s='Document number' mod='mercadopago'}</label>
@@ -217,9 +217,10 @@
         </div>
     </div>
 </form>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js"/>
+
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js?v={$version}"/>
 <script type="text/javascript">
-    window.onload = loadTicket();   
+    window.onload = loadTicket();
     function loadTicket() {
         var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
         mpValidateSiteId(site_id);

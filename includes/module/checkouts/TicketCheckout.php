@@ -101,6 +101,7 @@ class TicketCheckout
             "ticket" => $ticket,
             "site_id" => $site_id,
             "address" => $address,
+            "version" => MP_VERSION,
             "customer" => $customer,
             "redirect" => $redirect,
             "discount" => $discount,
@@ -115,6 +116,6 @@ class TicketCheckout
      */
     public function getTicketJS()
     {
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/ticket.js');
+        $this->payment->context->controller->addJS($this->payment->path . '/views/js/ticket.js?v=' . MP_VERSION);
     }
 }
