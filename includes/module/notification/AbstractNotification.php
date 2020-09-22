@@ -356,7 +356,7 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
             ]
         );
     }
