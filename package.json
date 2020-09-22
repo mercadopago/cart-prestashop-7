@@ -10,10 +10,14 @@
     ],
     "*.js": [
       "semistandard **/*.js --fix --verbose --env browser | snazzy"
+    ],
+    "*.php": [
+      "bash cs-fixer.sh",
+      "git add"
     ]
   },
   "devDependencies": {
-    "husky": "4.3.0",
+    "husky": "^4.3.0",
     "lint-staged": "10.4.0",
     "semistandard": "^14.2.3",
     "snazzy": "^8.0.0",
