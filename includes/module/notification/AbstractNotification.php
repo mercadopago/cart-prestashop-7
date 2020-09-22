@@ -442,7 +442,7 @@ class AbstractNotification
      */
     public function getTotal($cart)
     {
-        $total = (float) $cart->getOrderTotal();
+        $total = (float)$cart->getOrderTotal();
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
         if ($localization == 'MCO' || $localization == 'MLC') {
             return Tools::ps_round($total, 2);
