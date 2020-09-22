@@ -1,31 +1,31 @@
 <?php
 /**
-* 2007-2020 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+ * 2007-2020 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
+ */
 
 abstract class MPAbstractDB
 {
@@ -35,14 +35,15 @@ abstract class MPAbstractDB
     protected $orderBy;
     protected $andWhere;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->columns = "*";
     }
 
     /**
      * Execute query for database without return
      *
-     * @param string $query
+     * @param  string $query
      * @return bool
      */
     public function executeQuery($query)
@@ -56,7 +57,7 @@ abstract class MPAbstractDB
     /**
      * Execute query for database returning one row
      *
-     * @param string $query
+     * @param  string $query
      * @return array|bool|object|null
      */
     public function selectQuery($query)
@@ -68,7 +69,7 @@ abstract class MPAbstractDB
     /**
      * Execute query for database returning many rows
      *
-     * @param string $query
+     * @param  string $query
      * @return array|bool|object|null
      */
     public function selectMany($query)
@@ -112,7 +113,7 @@ abstract class MPAbstractDB
     /**
      * Set columns method, needs be called with select()
      *
-     * @param array $columns
+     * @param  array $columns
      * @return MPAbstractDB
      */
     public function columns($columns)
@@ -127,9 +128,9 @@ abstract class MPAbstractDB
     /**
      * Where method, needs be called with count() or get()
      *
-     * @param string $column
-     * @param string $operator
-     * @param mixed $value
+     * @param  string $column
+     * @param  string $operator
+     * @param  mixed  $value
      * @return MPAbstractDB
      */
     public function where($column, $operator, $value)
@@ -141,9 +142,9 @@ abstract class MPAbstractDB
     /**
      * And where method, needs be called with count() or get()
      *
-     * @param string $column
-     * @param string $operator
-     * @param mixed $value
+     * @param  string $column
+     * @param  string $operator
+     * @param  mixed  $value
      * @return MPAbstractDB
      */
     public function andWhere($column, $operator, $value)
@@ -155,8 +156,8 @@ abstract class MPAbstractDB
     /**
      * orderBy method, needs be called with get()
      *
-     * @param string $column
-     * @param string $operator
+     * @param  string $column
+     * @param  string $operator
      * @return MPAbstractDB
      */
     public function orderBy($column, $operator)
@@ -168,7 +169,7 @@ abstract class MPAbstractDB
     /**
      * Insert data in database
      *
-     * @param array $array
+     * @param  array $array
      * @return bool|void
      */
     public function create($array)
@@ -197,7 +198,7 @@ abstract class MPAbstractDB
     /**
      * Update data in database
      *
-     * @param array $array
+     * @param  array $array
      * @return bool|void
      */
     public function update($array)
@@ -224,7 +225,8 @@ abstract class MPAbstractDB
      *
      * @return bool|void
      */
-    public function destroy() {
+    public function destroy()
+    {
         $query = "DELETE FROM $this->table $this->where";
         $result = $this->executeQuery($query);
         return $result;
