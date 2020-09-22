@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "build:assets": "gulp minify-assets"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -16,6 +19,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
+    "gulp-rename": "^2.0.0",
     "gulp-uglify": "^3.0.2",
     "husky": "^4.3.0",
     "lint-staged": "10.4.0",
