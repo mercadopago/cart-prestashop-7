@@ -12,7 +12,7 @@
       "semistandard **/*.js --fix --verbose --env browser | snazzy"
     ],
     "*.php": [
-      "bash cs-fixer.sh"
+      "./cs-fixer.sh"
     ]
   },
   "devDependencies": {
