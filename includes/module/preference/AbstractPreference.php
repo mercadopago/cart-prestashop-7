@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2020 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -61,8 +61,8 @@ class AbstractPreference
         $cart = $this->module->context->cart;
         $authorized = false;
 
-        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 ||
-            $cart->id_address_invoice == 0 || !$this->module->active
+        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 
+            || $cart->id_address_invoice == 0 || !$this->module->active
         ) {
             Tools::redirect('index.php?controller=order&step=1');
         }
@@ -79,7 +79,7 @@ class AbstractPreference
     }
 
     /**
-     * @param $cart
+     * @param  $cart
      * @return array
      * @throws Exception
      */
@@ -101,9 +101,9 @@ class AbstractPreference
     /**
      * Get all cart items
      *
-     * @param $cart
-     * @param bool $custom
-     * @param null $percent
+     * @param  $cart
+     * @param  bool $custom
+     * @param  null $percent
      * @return array
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
@@ -219,7 +219,7 @@ class AbstractPreference
     /**
      * Get notification url
      *
-     * @param $cart
+     * @param  $cart
      * @return string|void
      */
     public function getNotificationUrl($cart)
@@ -250,8 +250,8 @@ class AbstractPreference
     /**
      * Get return url
      *
-     * @param mixed $cart
-     * @param string $typeReturn
+     * @param  mixed  $cart
+     * @param  string $typeReturn
      * @return string
      */
     public function getReturnUrl($cart, $typeReturn)
@@ -388,8 +388,8 @@ class AbstractPreference
     /**
      * Save payments primary info on mp_transaction table
      *
-     * @param mixed $cart
-     * @param mixed $notification_url
+     * @param  mixed $cart
+     * @param  mixed $notification_url
      * @return void
      */
     public function saveCreatePreferenceData($cart, $notification_url)
@@ -401,21 +401,25 @@ class AbstractPreference
         $count = $mp_transaction->where('cart_id', '=', $cart->id)->count();
 
         if ($count == 0) {
-            $mp_transaction->create([
+            $mp_transaction->create(
+                [
                 'total' => $cart->getOrderTotal(),
                 'cart_id' => $cart->id,
                 'customer_id' => $cart->id_customer,
                 'mp_module_id' => $mp_module['id_mp_module'],
                 'notification_url' => $notification_url,
                 'is_payment_test' => $this->validateSandboxMode()
-            ]);
+                ]
+            );
         } else {
-            $mp_transaction->where('cart_id', '=', $cart->id)->update([
+            $mp_transaction->where('cart_id', '=', $cart->id)->update(
+                [
                 'total' => $cart->getOrderTotal(),
                 'customer_id' => $cart->id_customer,
                 'notification_url' => $notification_url,
                 'is_payment_test' => $this->validateSandboxMode()
-            ]);
+                ]
+            );
         }
     }
 
@@ -436,8 +440,8 @@ class AbstractPreference
     /**
      * Create and set ticket discount on CartRule()
      *
-     * @param mixed $cart
-     * @param $discount
+     * @param  mixed $cart
+     * @param  $discount
      * @return void
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
@@ -507,7 +511,7 @@ class AbstractPreference
 
     /**
      * Get plugin settings on database
-     * 
+     *
      * @return mixed
      */
     public function getMercadoPagoSettings()
@@ -555,7 +559,8 @@ class AbstractPreference
      *
      * @return void
      */
-    public function getStandardCheckoutSettings() {
+    public function getStandardCheckoutSettings()
+    {
         $settings = array();
 
         $settings['active'] = $this->settings['MERCADOPAGO_STANDARD_CHECKOUT'] == "" ? false : true;
@@ -573,7 +578,8 @@ class AbstractPreference
      *
      * @return void
      */
-    public function getCustomCheckoutSettings() {
+    public function getCustomCheckoutSettings()
+    {
         $settings = array();
 
         $settings['active'] = $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] == "" ? false : true;
@@ -588,7 +594,8 @@ class AbstractPreference
      *
      * @return void
      */
-    public function getTicketCheckoutSettings() {
+    public function getTicketCheckoutSettings()
+    {
         $settings = array();
 
         $settings['active'] = $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] == "" ? false : true;
