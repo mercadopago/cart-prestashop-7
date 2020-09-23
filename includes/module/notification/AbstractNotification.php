@@ -45,7 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id = null, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
