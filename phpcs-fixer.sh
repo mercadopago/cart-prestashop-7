@@ -11,6 +11,6 @@ fi
 for var in "$@"
 do
     ./vendor/bin/php-cs-fixer fix $var --rules=@PSR2
-    ./vendor/bin/phpcbf -d --standard=PSR2 $var
+    ./vendor/bin/phpcbf -d $var --standard=PSR2
     echo "CodeSniffer OK"
 done
