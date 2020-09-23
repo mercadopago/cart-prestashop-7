@@ -11,9 +11,11 @@
     "*.css": [
       "stylelint **/*.css --fix"
     ],
+    "*.js": [
+      "semistandard **/*.js --fix --verbose --env browser | snazzy"
+    ],
     "*.php": [
-      "bash cs-fixer.sh",
-      "git add"
+      "bash phpcs-fixer.sh"
     ]
   },
   "devDependencies": {
@@ -24,6 +26,8 @@
     "gulp-uglify": "^3.0.2",
     "husky": "^4.3.0",
     "lint-staged": "10.4.0",
+    "semistandard": "^14.2.3",
+    "snazzy": "^8.0.0",
     "stylelint": "^13.7.1",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-standard": "^20.0.0"

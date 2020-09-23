@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2020 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -63,14 +63,16 @@ class AbstractNotification
     /**
      * Verify if received notification and save on BD
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function verifyWebhook($cart)
     {
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
             "received_webhook" => true
-        ]);
+            ]
+        );
         MPLog::generate('Notification received on cart id ' . $cart->id);
     }
 
@@ -97,8 +99,8 @@ class AbstractNotification
     /**
      * Create order on Prestashop database
      *
-     * @param mixed $cart
-     * @param float $total
+     * @param  mixed $cart
+     * @param  float $total
      * @return void
      */
     public function createOrder($cart, $custom_create_order = false)
@@ -144,7 +146,7 @@ class AbstractNotification
     /**
      * Validate status to update order
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function updateOrder($cart)
@@ -165,43 +167,43 @@ class AbstractNotification
 
         if ($this->order_id != 0 && $this->status != null) {
             switch ($this->order_state) {
-                case $status_approved:
-                    $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
-                    break;
+            case $status_approved:
+                $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
+                break;
 
-                case $status_pending:
-                    $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
-                    break;
+            case $status_pending:
+                $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
+                break;
 
-                case $status_inprocess:
-                    $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
-                    break;
+            case $status_inprocess:
+                $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
+                break;
 
-                case $status_authorized:
-                    $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                    break;
+            case $status_authorized:
+                $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
+                break;
 
-                case $status_cancelled:
-                    $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
-                    break;
+            case $status_cancelled:
+                $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
+                break;
 
-                case $status_rejected:
-                    $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
-                    break;
+            case $status_rejected:
+                $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
+                break;
 
-                case $status_refunded:
-                    $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
-                    break;
+            case $status_refunded:
+                $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
+                break;
 
-                case $status_charged:
-                    $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
-                    break;
+            case $status_charged:
+                $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
+                break;
 
-                case $status_mediation:
-                    $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
-                    break;
-                default:
-                    break;
+            case $status_mediation:
+                $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
+                break;
+            default:
+                break;
             }
         } else {
             MPLog::generate('Order does not exist', 'warning');
@@ -291,7 +293,7 @@ class AbstractNotification
     /**
      * Update order on Prestashop database
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function updatePrestashopOrder($cart, $order)
@@ -313,9 +315,9 @@ class AbstractNotification
     /**
      * Save payments info on mp_transaction table
      *
-     * @param mixed $cart
-     * @param mixed $data
-     * @param int $order_id
+     * @param  mixed $cart
+     * @param  mixed $data
+     * @param  int   $order_id
      * @return void
      */
     public function saveCreateOrderData($cart)
@@ -326,7 +328,8 @@ class AbstractNotification
         $payments_status = $this->payments_data['payments_status'];
         $payments_amount = $this->payments_data['payments_amount'];
 
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
             "order_id" => $this->order_id,
             "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
             "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
@@ -336,27 +339,30 @@ class AbstractNotification
             "notification_url" => $_SERVER['REQUEST_URI'],
             "merchant_order_id" => $this->transaction_id,
             "received_webhook" => true,
-        ]);
+            ]
+        );
     }
 
     /**
      * Update payments info on mp_transaction table
      *
-     * @param mixed $cart
-     * @param mixed $data
+     * @param  mixed $cart
+     * @param  mixed $data
      * @return void
      */
     public function saveUpdateOrderData($cart)
     {
         $payments_status = $this->payments_data['payments_status'];
 
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
             "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
-        ]);
+            ]
+        );
     }
 
     /**
-     * @param $state
+     * @param  $state
      * @return mixed
      */
     public function getNotificationPaymentState($state)
@@ -377,7 +383,7 @@ class AbstractNotification
     }
 
     /**
-     * @param integer $actual
+     * @param  integer $actual
      * @return bool
      */
     public function validateActualStatus($actual)
@@ -392,7 +398,7 @@ class AbstractNotification
     }
 
     /**
-     * @param integer $actual
+     * @param  integer $actual
      * @return bool
      */
     public function getBackOrderStatus($actual)
@@ -401,8 +407,10 @@ class AbstractNotification
             ->where('template', '=', 'outofstock')
             ->getAll();
 
+        $count = count($result);
+
         foreach ($result as $row) {
-            if(strpos($row['name'], 'backorder') && $row['id_order_state'] == $actual) {
+            if ($row['id_order_state'] == $actual && $count > 0) {
                 return true;
             }
         }
@@ -413,8 +421,8 @@ class AbstractNotification
     /**
      * Get responses to send for notification
      *
-     * @param string $message
-     * @param integer $code
+     * @param  string  $message
+     * @param  integer $code
      * @return void
      */
     public static function getNotificationResponse($message, $code)

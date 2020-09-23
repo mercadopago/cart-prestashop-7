@@ -94,21 +94,21 @@ class Mercadopago extends PaymentModule
      */
     public function loadFiles()
     {
-        require_once MP_ROOT_URL . '/includes/MPApi.php';
-        require_once MP_ROOT_URL . '/includes/MPLog.php';
-        require_once MP_ROOT_URL . '/includes/MPUseful.php';
-        require_once MP_ROOT_URL . '/includes/MPRestCli.php';
-        require_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
-        require_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
-        require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
-        require_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
-        require_once MP_ROOT_URL . '/includes/module/model/PSCartRule.php';
-        require_once MP_ROOT_URL . '/includes/module/model/PSCartRuleRule.php';
-        require_once MP_ROOT_URL . '/includes/module/model/PSOrderState.php';
-        require_once MP_ROOT_URL . '/includes/module/model/PSOrderStateLang.php';
-        require_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';
-        require_once MP_ROOT_URL . '/includes/module/checkouts/CustomCheckout.php';
-        require_once MP_ROOT_URL . '/includes/module/checkouts/TicketCheckout.php';
+        include_once MP_ROOT_URL . '/includes/MPApi.php';
+        include_once MP_ROOT_URL . '/includes/MPLog.php';
+        include_once MP_ROOT_URL . '/includes/MPUseful.php';
+        include_once MP_ROOT_URL . '/includes/MPRestCli.php';
+        include_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
+        include_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
+        include_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
+        include_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
+        include_once MP_ROOT_URL . '/includes/module/model/PSCartRule.php';
+        include_once MP_ROOT_URL . '/includes/module/model/PSCartRuleRule.php';
+        include_once MP_ROOT_URL . '/includes/module/model/PSOrderState.php';
+        include_once MP_ROOT_URL . '/includes/module/model/PSOrderStateLang.php';
+        include_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';
+        include_once MP_ROOT_URL . '/includes/module/checkouts/CustomCheckout.php';
+        include_once MP_ROOT_URL . '/includes/module/checkouts/TicketCheckout.php';
     }
 
     /**
@@ -138,7 +138,7 @@ class Mercadopago extends PaymentModule
         }
 
         //Mercadopago configurations
-        include(MP_ROOT_URL . '/sql/install.php');
+        include MP_ROOT_URL . '/sql/install.php';
         MPLog::generate('Mercadopago plugin installed in the store');
 
         //install hooks and dependencies
@@ -160,7 +160,7 @@ class Mercadopago extends PaymentModule
     public function uninstall()
     {
         MPLog::generate('Mercadopago plugin uninstalled in the store');
-        include(MP_ROOT_URL . '/sql/uninstall.php');
+        include MP_ROOT_URL . '/sql/uninstall.php';
         return parent::uninstall();
     }
 
@@ -223,7 +223,8 @@ class Mercadopago extends PaymentModule
             $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
         }
 
-        $output = $this->context->smarty->assign(array(
+        $output = $this->context->smarty->assign(
+            array(
             //module requirements
             'alert' => self::$form_alert,
             'message' => self::$form_message,
@@ -250,7 +251,8 @@ class Mercadopago extends PaymentModule
             'standard_form' => $standard,
             'custom_form' => $custom,
             'ticket_form' => $ticket
-        ))->fetch($this->local_path . 'views/templates/admin/configure.tpl');
+            )
+        )->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
         return $output;
     }
@@ -262,22 +264,22 @@ class Mercadopago extends PaymentModule
      */
     public function loadSettings()
     {
-        require_once MP_ROOT_URL . '/includes/module/settings/StoreSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/RatingSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/CustomSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/TicketSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
-        require_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/StoreSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/RatingSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/CustomSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/TicketSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
     }
 
     /**
      * Render forms
      *
-     * @param $submit
-     * @param $values
-     * @param $form
+     * @param  $submit
+     * @param  $values
+     * @param  $form
      * @return string
      */
     protected function renderForm($submit, $values, $form)
@@ -362,7 +364,7 @@ class Mercadopago extends PaymentModule
     /**
      * Check if the state exist before create another one
      *
-     * @param integer $id_order_state
+     * @param  integer $id_order_state
      * @return void
      */
     protected static function orderStateAvailable($id_order_state)
@@ -392,13 +394,13 @@ class Mercadopago extends PaymentModule
     public function hookHeader()
     {
         $this->context->controller->addCSS($this->_path . 'views/css/front.css');
-        $this->context->controller->addJS($this->_path . 'views/js/front.js?v=' . MP_VERSION);
+        $this->context->controller->addJS($this->_path . 'views/js/front.js');
     }
 
     /**
      * Show payment options in version 1.6
      *
-     * @param $params
+     * @param  $params
      * @return array|string|mixed
      */
     public function hookPayment($params)
@@ -409,7 +411,7 @@ class Mercadopago extends PaymentModule
     /**
      * Show payment options in version 1.7
      *
-     * @param $params
+     * @param  $params
      * @return array|string|void
      */
     public function hookPaymentOptions($params)
@@ -445,8 +447,8 @@ class Mercadopago extends PaymentModule
     }
 
     /**
-     * @param $cart
-     * @param $version
+     * @param  $cart
+     * @param  $version
      * @return PaymentOption | string
      */
     public function getStandardCheckout($cart, $version)
@@ -469,8 +471,8 @@ class Mercadopago extends PaymentModule
     }
 
     /**
-     * @param $cart
-     * @param $version
+     * @param  $cart
+     * @param  $version
      * @return PaymentOption | string
      */
     public function getCustomCheckout($cart, $version)
@@ -497,8 +499,8 @@ class Mercadopago extends PaymentModule
     }
 
     /**
-     * @param $cart
-     * @param $version
+     * @param  $cart
+     * @param  $version
      * @return PaymentOption | string
      */
     public function getTicketCheckout($cart, $version)
@@ -527,7 +529,7 @@ class Mercadopago extends PaymentModule
     /**
      * Check currency
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return boolean
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
@@ -549,7 +551,7 @@ class Mercadopago extends PaymentModule
     /**
      * This hook is used to display the order confirmation page.
      *
-     * @param mixed $params
+     * @param  mixed $params
      * @return string
      */
     public function hookPaymentReturn($params)
@@ -561,20 +563,24 @@ class Mercadopago extends PaymentModule
         $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
 
         if ($this->getVersionPs() == self::PRESTA17) {
-            $this->context->smarty->assign(array(
+            $this->context->smarty->assign(
+                array(
                 "ticket_url" => $ticket_url
-            ));
+                )
+            );
             return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
         }
 
         $order = $params['objOrder'];
         $products = $order->getProducts();
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign(
+            array(
             'order' => $order,
             'order_products' => $products,
             "ticket_url" => $ticket_url
-        ));
+            )
+        );
 
         return $this->display(__FILE__, 'views/templates/hook/six/payment_return.tpl');
     }
