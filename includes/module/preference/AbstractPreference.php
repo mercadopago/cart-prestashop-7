@@ -61,8 +61,10 @@ class AbstractPreference
         $cart = $this->module->context->cart;
         $authorized = false;
 
-        if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 
-            || $cart->id_address_invoice == 0 || !$this->module->active
+        if ($cart->id_customer == 0 
+            || $cart->id_address_delivery == 0 
+            || $cart->id_address_invoice == 0 
+            || !$this->module->active
         ) {
             Tools::redirect('index.php?controller=order&step=1');
         }
@@ -403,21 +405,21 @@ class AbstractPreference
         if ($count == 0) {
             $mp_transaction->create(
                 [
-                'total' => $cart->getOrderTotal(),
-                'cart_id' => $cart->id,
-                'customer_id' => $cart->id_customer,
-                'mp_module_id' => $mp_module['id_mp_module'],
-                'notification_url' => $notification_url,
-                'is_payment_test' => $this->validateSandboxMode()
+                    'total' => $cart->getOrderTotal(),
+                    'cart_id' => $cart->id,
+                    'customer_id' => $cart->id_customer,
+                    'mp_module_id' => $mp_module['id_mp_module'],
+                    'notification_url' => $notification_url,
+                    'is_payment_test' => $this->validateSandboxMode()
                 ]
             );
         } else {
             $mp_transaction->where('cart_id', '=', $cart->id)->update(
                 [
-                'total' => $cart->getOrderTotal(),
-                'customer_id' => $cart->id_customer,
-                'notification_url' => $notification_url,
-                'is_payment_test' => $this->validateSandboxMode()
+                    'total' => $cart->getOrderTotal(),
+                    'customer_id' => $cart->id_customer,
+                    'notification_url' => $notification_url,
+                    'is_payment_test' => $this->validateSandboxMode()
                 ]
             );
         }

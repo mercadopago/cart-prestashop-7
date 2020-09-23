@@ -70,7 +70,7 @@ class AbstractNotification
     {
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "received_webhook" => true
+                "received_webhook" => true
             ]
         );
         MPLog::generate('Notification received on cart id ' . $cart->id);
@@ -330,15 +330,15 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "order_id" => $this->order_id,
-            "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
-            "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
-            "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
-            "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
-            "notification_url" => $_SERVER['REQUEST_URI'],
-            "merchant_order_id" => $this->transaction_id,
-            "received_webhook" => true,
+                "order_id" => $this->order_id,
+                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
+                "notification_url" => $_SERVER['REQUEST_URI'],
+                "merchant_order_id" => $this->transaction_id,
+                "received_webhook" => true,
             ]
         );
     }
@@ -356,7 +356,7 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
             ]
         );
     }
