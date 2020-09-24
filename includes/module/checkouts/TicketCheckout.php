@@ -120,6 +120,8 @@ class TicketCheckout
     public function getTicketJS()
     {
         $assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/ticket' . $assets_ext_min . '.js?v=' . MP_VERSION);
+        $this->payment->context->controller->addJS(
+            $this->payment->path . '/views/js/ticket' . $assets_ext_min . '.js?v=' . MP_VERSION
+        );
     }
 }

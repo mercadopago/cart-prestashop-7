@@ -45,7 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id = null, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
@@ -70,7 +70,7 @@ class AbstractNotification
     {
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "received_webhook" => true
+                "received_webhook" => true
             ]
         );
         MPLog::generate('Notification received on cart id ' . $cart->id);
@@ -167,43 +167,43 @@ class AbstractNotification
 
         if ($this->order_id != 0 && $this->status != null) {
             switch ($this->order_state) {
-            case $status_approved:
-                $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
-                break;
+                case $status_approved:
+                    $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
+                    break;
 
-            case $status_pending:
-                $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
-                break;
+                case $status_pending:
+                    $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
+                    break;
 
-            case $status_inprocess:
-                $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
-                break;
+                case $status_inprocess:
+                    $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
+                    break;
 
-            case $status_authorized:
-                $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                break;
+                case $status_authorized:
+                    $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
+                    break;
 
-            case $status_cancelled:
-                $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
-                break;
+                case $status_cancelled:
+                    $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
+                    break;
 
-            case $status_rejected:
-                $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
-                break;
+                case $status_rejected:
+                    $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
+                    break;
 
-            case $status_refunded:
-                $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
-                break;
+                case $status_refunded:
+                    $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
+                    break;
 
-            case $status_charged:
-                $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
-                break;
+                case $status_charged:
+                    $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
+                    break;
 
-            case $status_mediation:
-                $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
-                break;
-            default:
-                break;
+                case $status_mediation:
+                    $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
+                    break;
+                default:
+                    break;
             }
         } else {
             MPLog::generate('Order does not exist', 'warning');
@@ -330,15 +330,15 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "order_id" => $this->order_id,
-            "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
-            "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
-            "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
-            "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
-            "notification_url" => $_SERVER['REQUEST_URI'],
-            "merchant_order_id" => $this->transaction_id,
-            "received_webhook" => true,
+                "order_id" => $this->order_id,
+                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
+                "notification_url" => $_SERVER['REQUEST_URI'],
+                "merchant_order_id" => $this->transaction_id,
+                "received_webhook" => true,
             ]
         );
     }
@@ -356,7 +356,7 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
             ]
         );
     }
