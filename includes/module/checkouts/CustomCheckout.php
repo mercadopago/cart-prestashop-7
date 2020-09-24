@@ -119,6 +119,8 @@ class CustomCheckout
      */
     public function loadJsCustom()
     {
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card' . $this->assets_ext_min . '.js?v=' . MP_VERSION);
+        $this->payment->context->controller->addJS(
+            $this->payment->path . '/views/js/custom-card' . $this->assets_ext_min . '.js?v=' . MP_VERSION
+        );
     }
 }

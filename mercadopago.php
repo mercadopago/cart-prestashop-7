@@ -46,6 +46,7 @@ class Mercadopago extends PaymentModule
     public $displayName;
     public $description;
     public $need_instance;
+    public $assets_ext_min;
     public $customCheckout;
     public $ticketCheckout;
     public $standardCheckout;
@@ -174,7 +175,7 @@ class Mercadopago extends PaymentModule
     public function getContent()
     {
         //add css to configuration page
-        $this->context->controller->addCSS($this->_path . 'views/css/back' . $this->$this->assets_ext_min . '.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/back' . $this->assets_ext_min . '.css');
 
         $this->context->smarty->assign('module_dir', $this->_path);
 
@@ -394,8 +395,8 @@ class Mercadopago extends PaymentModule
      */
     public function hookHeader()
     {
-        $this->context->controller->addCSS($this->_path . 'views/css/front' . $this->$this->assets_ext_min . '.css');
-        $this->context->controller->addJS($this->_path . 'views/js/front' . $this->$this->assets_ext_min . '.js');
+        $this->context->controller->addCSS($this->_path . 'views/css/front' . $this->assets_ext_min . '.css');
+        $this->context->controller->addJS($this->_path . 'views/js/front' . $this->assets_ext_min . '.js');
     }
 
     /**
