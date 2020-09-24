@@ -42,6 +42,7 @@ class CustomCheckout
     public function __construct($payment)
     {
         $this->payment = $payment;
+        $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
     }
 
     /**
@@ -107,6 +108,7 @@ class CustomCheckout
             "redirect" => $redirect,
             "discount" => $discount,
             "public_key" => $public_key,
+            "assets_ext_min" => $this->assets_ext_min,
         );
 
         return $checkoutInfo;
@@ -117,7 +119,6 @@ class CustomCheckout
      */
     public function loadJsCustom()
     {
-        $assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
-        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card' . $assets_ext_min . '.js?v=' . MP_VERSION);
+        $this->payment->context->controller->addJS($this->payment->path . '/views/js/custom-card' . $this->assets_ext_min . '.js?v=' . MP_VERSION);
     }
 }

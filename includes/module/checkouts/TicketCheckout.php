@@ -42,6 +42,7 @@ class TicketCheckout
     public function __construct($payment)
     {
         $this->payment = $payment;
+        $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
     }
 
     /**
@@ -83,8 +84,8 @@ class TicketCheckout
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
-                if ($tarjeta['type'] != 'credit_card' 
-                    && $tarjeta['type'] != 'debit_card' 
+                if ($tarjeta['type'] != 'credit_card'
+                    && $tarjeta['type'] != 'debit_card'
                     && $tarjeta['type'] != 'prepaid_card'
                 ) {
                     $ticket[] = $tarjeta;
@@ -107,6 +108,7 @@ class TicketCheckout
             "redirect" => $redirect,
             "discount" => $discount,
             "module_dir" => $this->payment->path,
+            "assets_ext_min" => $this->assets_ext_min,
         );
 
         return $info;
