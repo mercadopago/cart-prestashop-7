@@ -81,6 +81,7 @@ class Mercadopago extends PaymentModule
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->ps_version = _PS_VERSION_;
+        $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
         $this->path = $this->_path;
         $this->standardCheckout = new StandardCheckout($this);
         $this->customCheckout = new CustomCheckout($this);
@@ -173,7 +174,7 @@ class Mercadopago extends PaymentModule
     public function getContent()
     {
         //add css to configuration page
-        $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/back' . $this->$this->assets_ext_min . '.css');
 
         $this->context->smarty->assign('module_dir', $this->_path);
 
@@ -393,8 +394,8 @@ class Mercadopago extends PaymentModule
      */
     public function hookHeader()
     {
-        $this->context->controller->addCSS($this->_path . 'views/css/front.css');
-        $this->context->controller->addJS($this->_path . 'views/js/front.js');
+        $this->context->controller->addCSS($this->_path . 'views/css/front' . $this->$this->assets_ext_min . '.css');
+        $this->context->controller->addJS($this->_path . 'views/js/front' . $this->$this->assets_ext_min . '.js');
     }
 
     /**
