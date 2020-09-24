@@ -8,12 +8,12 @@ const config = {
     './views/js/back.js',
     './views/js/custom-card.js',
     './views/js/front.js',
-    './views/js/ticket.js',
+    './views/js/ticket.js'
   ],
   stylesheets: [
     './views/css/front.css',
-    './views/css/back.css',
-  ],
+    './views/css/back.css'
+  ]
 };
 
 gulp.task('scripts', () => {
