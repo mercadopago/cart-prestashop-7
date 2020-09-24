@@ -44,18 +44,25 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->total = $this->getTotal($cart);
-        $this->getOrderId($cart);
         $this->verifyWebhook($cart);
+        $this->total = $this->getTotal($cart);
+        $orderId = Order::getOrderByCartId($cart->id);
 
-        if ($this->order_id != 0) {
+        if ($orderId != 0) {
             $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
             $payments = $merchant_order['payments'];
 
             $this->verifyPayments($payments);
             $this->validateOrderState();
-            $this->updateTransactionId();
-            $this->updateOrder($cart);
+
+            $baseOrder = new Order($orderId);
+            $orders = Order::getByReference($baseOrder->reference);
+
+            foreach ($orders as $order) {
+                $this->order_id = $order->id;
+                $this->updateTransactionId();
+                $this->updateOrder($cart);
+            }
         } else {
             $this->createStandardOrder($cart);
         }
