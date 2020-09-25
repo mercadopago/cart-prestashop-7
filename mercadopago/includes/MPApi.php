@@ -84,7 +84,7 @@ class MPApi
     public function getPaymentMethods()
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payment_methods?access_token=' . $access_token);
+        $response = MPRestCli::get('/v1/payment_methods', ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -102,7 +102,7 @@ class MPApi
             if ($value['id'] == 'paypal') {
                 continue;
             }
-            
+
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
@@ -117,8 +117,6 @@ class MPApi
     }
 
     /**
-     * Create preference
-     *
      * @param $preference
      * @return bool
      * @throws Exception
@@ -126,11 +124,16 @@ class MPApi
     public function createPreference($preference)
     {
         $access_token = $this->getAccessToken();
-        $tracking_id = "platform:desktop,type:prestashop,so:1.0.0";
-        $response = MPRestCli::postTracking(
-            '/checkout/preferences?access_token=' . $access_token,
+        $headers = [
+            "platform:desktop",
+            "type:prestashop",
+            "so:1.0.0",
+            "Authorization: Bearer " . $access_token
+        ];
+        $response = MPRestCli::post(
+            '/checkout/preferences',
             $preference,
-            $tracking_id
+            $headers
         );
 
         //in case of failures
@@ -145,20 +148,22 @@ class MPApi
     }
 
     /**
-     * Create payment
-     *
-     * @param array $preference
+     * @param $preference
      * @return bool
      * @throws Exception
      */
     public function createPayment($preference)
     {
         $access_token = $this->getAccessToken();
-        $tracking_id = "platform:desktop,type:prestashop,so:1.0.0";
-        $response = MPRestCli::postTracking(
-            '/v1/payments?access_token=' . $access_token,
+        $headers = [
+            "platform:desktop",
+            "type:prestashop",
+            "so:1.0.0",
+            "Authorization: Bearer " . $access_token
+        ];
+        $response = MPRestCli::post('/v1/payments',
             $preference,
-            $tracking_id
+            $headers
         );
 
         //in case of failures
@@ -182,7 +187,7 @@ class MPApi
     public function getPaymentStandard($transaction_id)
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payments/' . $transaction_id . '?access_token=' . $access_token);
+        $response = MPRestCli::get('/v1/payments/' . $transaction_id, ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -204,7 +209,7 @@ class MPApi
      */
     public function isValidAccessToken($access_token)
     {
-        $response = MPRestCli::get('/users/me?access_token=' . $access_token);
+        $response = MPRestCli::get('/users/me', ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -226,7 +231,7 @@ class MPApi
     public function isTestUser()
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/users/me?access_token=' . $access_token);
+        $response = MPRestCli::get('/users/me', ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -250,7 +255,7 @@ class MPApi
     public function getMerchantOrder($id)
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/merchant_orders/' . $id . '?access_token=' . $access_token);
+        $response = MPRestCli::get('/merchant_orders/' . $id, ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
