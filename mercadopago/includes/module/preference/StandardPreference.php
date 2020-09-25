@@ -229,7 +229,7 @@ class StandardPreference extends AbstractPreference
         if ($this->settings['MERCADOPAGO_STANDARD_MODAL'] == true) {
             $internal_metadata["checkout_type"] = "modal";
         }
-        
+
         return $internal_metadata;
     }
 }

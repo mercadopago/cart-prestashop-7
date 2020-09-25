@@ -188,7 +188,7 @@ abstract class MPAbstractDB
 
             $query = "INSERT INTO $this->table ($attrs) VALUES ($params)";
             $result = $this->executeQuery($query);
-            
+
             return $result;
         }
 

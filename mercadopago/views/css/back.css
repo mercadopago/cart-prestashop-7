@@ -700,7 +700,45 @@
   text-transform: lowercase;
 }
 
+.mp-checkout-list {
+    font-size: 13px;
+    font: 400 12px/1.42857 Open Sans, Helvetica, Arial, sans-serif;
+    text-transform: none;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0px !important;
+    margin-left: -5px !important;
+}
+
+.mp-panel-advanced-config {
+    cursor: pointer;
+    margin-top: 0 !important;
+    margin-bottom: 0px !important;
+    border-top: 1px solid #eee !important;
+    user-select: none;
+}
+
+.mp-input-collapsible, .mp-custom-input-collapsible, .mp-ticket-input-collapsible {
+    display: none;
+}
+
+.mp-plugin-version {
+    float: right !important;
+    margin-bottom: -5px !important;
+}
+
+.mp-plugin-version a, .mp-plugin-version a:hover {
+    color: #555;
+}
+
+.mp-plugin-version span {
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: lowercase;
+}
+
 @media (max-width: 768px) {
+<<<<<<< HEAD
   .mp-pl-30 {
     padding-left: 0 !important;
   }
@@ -709,3 +747,12 @@
     padding-right: 0 !important;
   }
 }
+=======
+    .mp-pl-30 {
+        padding-left: 0px !important;
+    }
+    .mp-pr-50 {
+        padding-right: 0px !important;
+    }
+}
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54

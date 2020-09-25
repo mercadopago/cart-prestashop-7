@@ -37,7 +37,11 @@
         <!-- Cards Type -->
         <div class="col-xs-12 col-md-12 col-12 mp-pt-25 mp-m-px-0">
             <a class="mp-link-checkout-custom" id="button-show-payments">
+<<<<<<< HEAD
                 {l s='With what cards can I pay' mod='mercadopago'} ⌵
+=======
+                {l s='With what cards can I pay' mod='mercadopago'} ⌵
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
             </a>
 
             {if $site_id == 'MLA'}
@@ -138,7 +142,11 @@
                 <p class="submp-title-checkout-six mp-pt-10">{l s='In how many installments do you want to pay?' mod='mercadopago'}</p>
             </div>
 
+<<<<<<< HEAD
             <div class="row">
+=======
+            <div class="row">
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
                 <!-- Select issuer -->
                 <div id="container-issuers" class="issuers-options col-md-4 col-4 mp-m-col">
                     <label for="id-issuers-options" class="issuers-options mp-pb-5 mp-pt-10">{l s='issuing bank' mod='mercadopago'}</label>
@@ -167,7 +175,11 @@
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">
                 <p class="submp-title-checkout-six">{l s='Enter your document number' mod='mercadopago'}</p>
+<<<<<<< HEAD
             </div>
+=======
+            </div>
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
 
             <div id="mp-doc-div" class="row">
                 <div id="mp-doc-type-div" class="col-md-4 col-4 mp-pb-20 mp-m-col">
@@ -200,14 +212,25 @@
                 <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
                 <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
             </div>
+<<<<<<< HEAD
 
             <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
                     <button id="mp-custom-finish-order" class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
+=======
+
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-12 mp-pt-15 mp-m-col">
+                    <button class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
                 </div>
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
 </form>
 
 {if $public_key != ''}
@@ -217,8 +240,12 @@
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
+<<<<<<< HEAD
                 select_choose: '{l s='Choose' mod='mercadopago'}...',
                 ps_version: 'six',
+=======
+                select_choose: '{l s='Choose' mod='mercadopago'}...'
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
             };
             initializeCustom(mp_custom);
         }
@@ -254,9 +281,17 @@
     #uniform-id-installments span {
         background-position: unset !important;
     }
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
     #uniform-id-docType,
     #uniform-id-docType span {
         width: 100% !important;
     }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54

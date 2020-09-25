@@ -102,7 +102,7 @@ class MPApi
             if ($value['id'] == 'paypal') {
                 continue;
             }
-            
+
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],

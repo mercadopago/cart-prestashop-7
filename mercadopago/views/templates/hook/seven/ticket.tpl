@@ -34,7 +34,11 @@
                     {l s='Enter your document number' mod='mercadopago'}
                 </h3>
             </div>
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
             <div class="form-group">
                 <div class="col-md-4 col-4 mp-pb-20 mp-pl-0 mp-m-col">
                     <label for="mp-docType" class="mp-pb-5">{l s='Type' mod='mercadopago'}</label>
@@ -43,7 +47,11 @@
                         <option value="CI" selected>{l s='CI' mod='mercadopago'}</option>
                     </select>
                 </div>
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
                 <!-- Input Doc Number -->
                 <div class="col-md-8 col-8 mp-pb-20 mp-pr-0 mp-m-col">
                     <label for="mp_doc_number" class="mp-pb-5">{l s='Document number' mod='mercadopago'}</label>
@@ -217,14 +225,26 @@
         </div>
     </div>
 </form>
+<<<<<<< HEAD
 
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket{$assets_ext_min}.js?v={$version}"/>
 <script type="text/javascript">
     window.onload = loadTicket();
+=======
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket.js"/>
+<script type="text/javascript">
+    window.onload = loadTicket();
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
     function loadTicket() {
         var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
         mpValidateSiteId(site_id);
         validateDocumentInputs();
+<<<<<<< HEAD
         mercadoPagoFormHandlerTicket('seven');
     }
 </script>
+=======
+        mercadoPagoFormHandlerTicket();
+    }
+</script>
+>>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
