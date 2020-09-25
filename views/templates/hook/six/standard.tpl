@@ -36,7 +36,7 @@
         <div class="col-xs-12 col-md-4">
             <div class="frame-tarjetas">
                 <p class="submp-title-checkout">
-                    {l s='Credit card' mod='mercadopago'} 
+                    {l s='Credit card' mod='mercadopago'}
                     <span class="mp-badge-checkout">
                         {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
                     </span>
@@ -85,7 +85,7 @@
 <script>
     var mercadopago_button = document.querySelector('.mercadopago-button');
     var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
-    
+
     mercadopago_button.style.display = 'none';
     mercadopago_redirect.setAttribute('href', '#');
 

@@ -27,187 +27,186 @@
 */
 
 window.onload = function () {
-    var element = document.querySelectorAll("#module_form");
-    for (var i=0; i < element.length; i++) {
-        element[i].id = "module_form_" + i;
+  var element = document.querySelectorAll('#module_form');
+  for (var i = 0; i < element.length; i++) {
+    element[i].id = 'module_form_' + i;
+  }
+
+  // credentials form
+  var formCredentials = document.querySelector('#module_form_0 .panel .form-wrapper');
+  var formPrepend = document.createElement('div');
+
+  formPrepend.innerHTML = '<div class="row">' +
+        '<div class="col-md-12">' +
+          '<h4 class="mp-title-checkout-body">Activa tus credenciales según lo que quieras hacer</h4>' +
+        '</div>' +
+      '</div>' +
+      '<div class="row mp-pt-15 mp-pb-25">' +
+      '<div class="col-md-12">' +
+        '<p class="mp-text-credenciais">Realiza pruebas antes de salir al mundo. <b>Opera de dos formas</b>:</p>' +
+        '<p class="mp-text-credenciais">Por defecto te dejamos <b>el modo Sandbox activo</b> para que hagas testeos antes de empezar a vender.</p>' +
+        '<p class="mp-text-credenciais">¿Todo va bien? <b>Desactiva Sandbox</b> al final de la configuración y abre paso a tus ventas online.</p>' +
+      '</div>' +
+    '</div>';
+
+  formCredentials.insertBefore(formPrepend, formCredentials.firstChild);
+
+  formCredentials.innerHTML += '<div class="row">' +
+      '<div class="col-md-6">' +
+        '<p class="text-branded lists-how-configure">' +
+          '<b>Atención:</b> Crea una cuenta en Mercado Pago para obtener tus credenciales. ' +
+          '<a href="#" target="_blank">Homologa tu cuenta</a> en Mercado Pago para ir a Producción y cobrar en tu tienda.' +
+        '</p>' +
+      '</div>' +
+    '</div>';
+
+  // basic configuration form
+  var checkbox = document.querySelectorAll('.checkbox');
+  for (var ii = 0; ii < checkbox.length; ii++) {
+    checkbox[ii].id = 'checkbox_' + ii;
+    checkbox[ii].style.border = '1px solid #ccc';
+    checkbox[ii].style.padding = '10px';
+  }
+
+  var formBasic = document.querySelector('#module_form_1 .panel .form-wrapper');
+  var formBasicPrepend = document.createElement('div');
+
+  formBasicPrepend.innerHTML = '<div class="row mp-pb-25">' +
+      '<div class="col-md-12">' +
+        '<h4 class="mp-title-checkout-body">Hagamos que tu cliente termine su compra de forma rápida, fácil y segura.</h4>' +
+      '</div>' +
+    '</div>';
+
+  formBasic.insertBefore(formBasicPrepend, formBasic.firstChild);
+
+  // online payments configuration form
+  var onlineChecked = '';
+  var countOnlineChecked = 0;
+  var onlineInputs = document.querySelectorAll('.payment-online-checkbox');
+  for (var ion = 0; ion < onlineInputs.length; ion++) {
+    if (onlineInputs[ion].checked === true) {
+      countOnlineChecked += 1;
     }
-    
-    //credentials form
-    var form_credentials = document.querySelector("#module_form_0 .panel .form-wrapper");
-    var form_prepend = document.createElement("div");
-    
-    form_prepend.innerHTML = "<div class='row'>\
-        <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body'>Activa tus credenciales según lo que quieras hacer</h4>\
-        </div>\
-    </div>\
-    <div class='row mp-pt-15 mp-pb-25'>\
-        <div class='col-md-12'>\
-            <p class='mp-text-credenciais'>Realiza pruebas antes de salir al mundo. <b>Opera de dos formas</b>:</p>\
-            <p class='mp-text-credenciais'>Por defecto te dejamos <b>el modo Sandbox activo</b> para que hagas testeos antes de empezar a vender.</p>\
-            <p class='mp-text-credenciais'>¿Todo va bien? <b>Desactiva Sandbox</b> al final de la configuración y abre paso a tus ventas online.</p>\
-        </div>\
-    </div>";
-    
-    form_credentials.insertBefore(form_prepend, form_credentials.firstChild);
-    
-    form_credentials.innerHTML += "<div class='row'>\
-        <div class='col-md-6'>\
-            <p class='text-branded lists-how-configure'>\
-                <b>Atención:</b> Crea una cuenta en Mercado Pago para obtener tus credenciales. \
-                <a href='#' target='_blank'>Homologa tu cuenta</a> en Mercado Pago para ir a Producción y cobrar en tu tienda.\
-            </p>\
-        </div>\
-    </div>";
-    
-    //basic configuration form
-    var checkbox = document.querySelectorAll(".checkbox");
-    for (var ii=0; ii < checkbox.length; ii++) {
-        checkbox[ii].id = "checkbox_"+ii;
-        checkbox[ii].style.border = "1px solid #ccc";
-        checkbox[ii].style.padding = "10px";
+  }
+  if (countOnlineChecked === onlineInputs.length) {
+    onlineChecked = 'checked';
+  }
+
+  var checkboxOnline = document.querySelector('#checkbox_0');
+  var checkboxOnlinePrepend = '<div class="mp-all_checkbox">' +
+      '<input type="checkbox" name="checkmeon" id="checkmeon' + onlineChecked + '" onclick="completeOnlineCheckbox()">' +
+      '<label for="checkmeon"><b class="mp-pointer mp-pl-5">Payment methods</b></label>' +
+    '</div>';
+  checkboxOnline.insertAdjacentHTML('beforebegin', checkboxOnlinePrepend);
+
+  // offline payments configuration form
+  var offlineChecked = '';
+  var countOfflineChecked = 0;
+  var offlineInputs = document.querySelectorAll('.payment-offline-checkbox');
+  for (var ioff = 0; ioff < offlineInputs.length; ioff++) {
+    if (offlineInputs[ioff].checked === true) {
+      countOfflineChecked += 1;
     }
-    
-    var form_basic = document.querySelector("#module_form_1 .panel .form-wrapper");
-    var form_basic_prepend = document.createElement("div");
-    
-    form_basic_prepend.innerHTML = "<div class='row mp-pb-25'>\
-        <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body'>Hagamos que tu cliente termine su compra de forma rápida, fácil y segura.</h4>\
-        </div>\
-    </div>";
-    
-    form_basic.insertBefore(form_basic_prepend, form_basic.firstChild);
-    
-    //online payments configuration form
-    var onlineChecked = "";
-    var countOnlineChecked = 0;
-    var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
-    for (var ion=0; ion < onlineInputs.length; ion++) {
-        if (onlineInputs[ion].checked == true) {
-            countOnlineChecked += 1;
-        }
+  }
+  if (countOfflineChecked === offlineInputs.length) {
+    offlineChecked = 'checked';
+  }
+
+  var countOnlineInputs = document.querySelectorAll('.payment-online-checkbox').length;
+  var checkboxOffline = document.querySelector('#checkbox_' + countOnlineInputs);
+  var checkboxOfflinePrepend = '<div class="mp-all_checkbox">' +
+      '<input type="checkbox" name="checkmeoff" id="checkmeoff' + offlineChecked + '" onclick="completeOfflineCheckbox()">' +
+      '<label for="checkmeoff"><b class="mp-pointer mp-pl-5">Select face payments</b></label>' +
+    '</div>';
+  checkboxOffline.insertAdjacentHTML('beforebegin', checkboxOfflinePrepend);
+
+  // advanced configuration form
+  var formModule = document.querySelector('#module_form_2 .panel .panel-heading');
+  var collapseBody = document.querySelector('#module_form_2 .panel .form-wrapper');
+  var collapseBodyPrepend = document.createElement('div');
+  var collapseFooter = document.querySelector('#module_form_2 .panel .panel-footer');
+  var collapsePanel = document.querySelector('#module_form_2 .panel');
+  var formGroup = document.querySelectorAll('#module_form_2 .panel .form-wrapper .form-group');
+
+  for (i = 0; i < formGroup.length; i++) {
+    if (i === 2) {
+      formGroup[i].innerHTML += '<hr class="mp-mt-50">' +
+        '<div class="row">' +
+          '<div class="col-md-12">' +
+            '<h4 class="mp-title-checkout-body">¿Eres un partner de Mercado Pago?</h4>' +
+          '</div>' +
+        '</div>';
     }
-    if (countOnlineChecked == onlineInputs.length) {
-        onlineChecked = "checked";
+  }
+
+  formModule.style.cursor = 'mp-pointer';
+  formModule.innerHTML += '<span class="mp-btn-collapsible" id="headerPlus" style="display:block">+</span>' +
+    '<span class="mp-btn-collapsible" id="headerLess" style="display:none">-</span>';
+
+  collapseBodyPrepend.innerHTML = '<div class="row mp-pb-25">' +
+      '<div class="col-md-12">' +
+        '<h4 class="mp-title-checkout-body">Activate other tools in our module ready to use.</h4>' +
+      '</div>' +
+    '</div>';
+
+  collapseBody.insertBefore(collapseBodyPrepend, collapseBody.firstChild);
+
+  var headerPlus = document.querySelector('#headerPlus');
+  var headerLess = document.querySelector('#headerLess');
+
+  collapseBody.style.display = 'none';
+  collapseFooter.style.display = 'none';
+  formModule.style.borderBottom = '0';
+  formModule.style.marginBottom = '0';
+  collapsePanel.style.paddingBottom = '0';
+
+  formModule.onclick = function () {
+    if (collapseBody.style.display === 'none') {
+      collapseBody.style.display = 'block';
+      collapseFooter.style.display = 'block';
+      headerLess.style.display = 'block';
+      headerPlus.style.display = 'none';
+
+      formModule.style.borderBottom = '1px solid #eee';
+      formModule.style.marginBottom = '15px';
+      collapsePanel.style.paddingBottom = '20px';
+    } else {
+      collapseBody.style.display = 'none';
+      collapseFooter.style.display = 'none';
+      headerLess.style.display = 'none';
+      headerPlus.style.display = 'block';
+
+      formModule.style.borderBottom = '0';
+      formModule.style.marginBottom = '0';
+      collapsePanel.style.paddingBottom = '0';
     }
-    
-    var checkbox_online = document.querySelector("#checkbox_0");
-    var checkbox_online_prepend = "<div class='mp-all_checkbox'>\
-            <input type='checkbox' name='checkmeon' id='checkmeon' "+onlineChecked+" onclick='completeOnlineCheckbox()'> \
-            <label for='checkmeon'><b class='mp-pointer mp-pl-5'>Payment methods</b></label>\
-    </div>";
-    checkbox_online.insertAdjacentHTML('beforebegin', checkbox_online_prepend);
-    
-    //offline payments configuration form
-    var offlineChecked = "";
-    var countOfflineChecked = 0;
-    var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
-    for (var ioff=0; ioff < offlineInputs.length; ioff++) {
-        if (offlineInputs[ioff].checked == true) {
-            countOfflineChecked += 1;
-        }
+  };
+};
+
+// Online payments
+// eslint-disable-next-line no-unused-vars
+function completeOnlineCheckbox () {
+  var onlineCheck = document.getElementById('checkmeon').checked;
+  var onlineInputs = document.querySelectorAll('.payment-online-checkbox');
+  for (var i = 0; i < onlineInputs.length; i++) {
+    if (onlineCheck === true) {
+      onlineInputs[i].checked = true;
+    } else {
+      onlineInputs[i].checked = false;
     }
-    if (countOfflineChecked == offlineInputs.length) {
-        offlineChecked = "checked";
-    }
-    
-    var countOnlineInputs = document.querySelectorAll(".payment-online-checkbox").length;
-    var checkbox_offline = document.querySelector("#checkbox_"+countOnlineInputs);
-    var checkbox_offline_prepend = "<div class='mp-all_checkbox'>\
-            <input type='checkbox' name='checkmeoff' id='checkmeoff' "+offlineChecked+" onclick='completeOfflineCheckbox()'> \
-            <label for='checkmeoff'><b class='mp-pointer mp-pl-5'>Select face payments</b></label>\
-    </div>";
-    checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
-    
-    //advanced configuration form
-    var form_module = document.querySelector("#module_form_2 .panel .panel-heading");
-    var collapse_body = document.querySelector("#module_form_2 .panel .form-wrapper");
-    var collapse_body_prepend = document.createElement("div");
-    var collapse_footer = document.querySelector("#module_form_2 .panel .panel-footer");
-    var collapse_panel = document.querySelector("#module_form_2 .panel");
-    var form_group = document.querySelectorAll("#module_form_2 .panel .form-wrapper .form-group");
-    
-    for (i=0; i < form_group.length; i++) {
-        if (i == 2) {
-            form_group[i].innerHTML += "<hr class='mp-mt-50'>\
-            <div class='row'>\
-                <div class='col-md-12'>\
-                    <h4 class='mp-title-checkout-body'>¿Eres un partner de Mercado Pago?</h4>\
-                </div>\
-            </div>";
-        }
-    }
-    
-    form_module.style.cursor = "mp-pointer";
-    form_module.innerHTML += "<span class='mp-btn-collapsible' id='header_plus' style='display:block'>+</span>\
-        <span class='mp-btn-collapsible' id='header_less' style='display:none'>-</span>";
-    
-    collapse_body_prepend.innerHTML = "<div class='row mp-pb-25'>\
-        <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body'>Activate other tools in our module ready to use.</h4>\
-        </div>\
-    </div>";
-    
-    collapse_body.insertBefore(collapse_body_prepend, collapse_body.firstChild);
-    
-    var header_plus = document.querySelector("#header_plus");
-    var header_less = document.querySelector("#header_less");
-    
-    collapse_body.style.display = "none";
-    collapse_footer.style.display = "none";
-    form_module.style.borderBottom = "0";
-    form_module.style.marginBottom = "0";
-    collapse_panel.style.paddingBottom = "0";
-    
-    form_module.onclick = function () {
-        if (collapse_body.style.display == "none") {
-            collapse_body.style.display = "block";
-            collapse_footer.style.display = "block";
-            header_less.style.display = "block";
-            header_plus.style.display = "none";
-            
-            form_module.style.borderBottom = "1px solid #eee";
-            form_module.style.marginBottom = "15px";
-            collapse_panel.style.paddingBottom = "20px";
-        } else {
-            collapse_body.style.display = "none";
-            collapse_footer.style.display = "none";
-            header_less.style.display = "none";
-            header_plus.style.display = "block";
-            
-            form_module.style.borderBottom = "0";
-            form_module.style.marginBottom = "0";
-            collapse_panel.style.paddingBottom = "0";
-        }
-        
-    }
+  }
 }
 
-//Online payments
-function completeOnlineCheckbox()
-{
-    var onlineCheck = document.getElementById("checkmeon").checked;
-    var onlineInputs = document.querySelectorAll(".payment-online-checkbox");
-    for (var i=0; i < onlineInputs.length; i++) {
-        if (onlineCheck == true) {
-            onlineInputs[i].checked = true;
-        } else {
-            onlineInputs[i].checked = false;
-        }
+// Offline payments
+// eslint-disable-next-line no-unused-vars
+function completeOfflineCheckbox () {
+  var offlineCheck = document.getElementById('checkmeoff').checked;
+  var offlineInputs = document.querySelectorAll('.payment-offline-checkbox');
+  for (var i = 0; i < offlineInputs.length; i++) {
+    if (offlineCheck === true) {
+      offlineInputs[i].checked = true;
+    } else {
+      offlineInputs[i].checked = false;
     }
-}
-
-//Offline payments
-function completeOfflineCheckbox()
-{
-    var offlineCheck = document.getElementById("checkmeoff").checked;
-    var offlineInputs = document.querySelectorAll(".payment-offline-checkbox");
-    for (var i=0; i < offlineInputs.length; i++) {
-        if (offlineCheck == true) {
-            offlineInputs[i].checked = true;
-        } else {
-            offlineInputs[i].checked = false;
-        }
-    }
+  }
 }

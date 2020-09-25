@@ -1,0 +1,9 @@
+{
+  "config": {
+    "prepend-autoloader": false
+  },
+  "require": {
+    "squizlabs/php_codesniffer": "3.5.6",
+    "friendsofphp/php-cs-fixer": "2.16.4"
+  }
+}

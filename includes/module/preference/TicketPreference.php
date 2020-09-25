@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2020 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -42,8 +42,8 @@ class TicketPreference extends AbstractPreference
     }
 
     /**
-     * @param $cart
-     * @param $ticket_info
+     * @param  $cart
+     * @param  $ticket_info
      * @return bool
      * @throws Exception
      */
@@ -101,7 +101,6 @@ class TicketPreference extends AbstractPreference
         //Update cart total with CartRule()
         $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
-        
         //Create preference
         $preferenceEncoded = Tools::jsonEncode($preference);
         MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
@@ -114,7 +113,7 @@ class TicketPreference extends AbstractPreference
     /**
      * Get transaction amount
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function getTransactionAmount($cart)
@@ -131,7 +130,7 @@ class TicketPreference extends AbstractPreference
     /**
      * Set ticket discount on CartRule()
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function setCartRule($cart, $discount)
@@ -206,11 +205,11 @@ class TicketPreference extends AbstractPreference
             if ($method['type'] == 'bank_transfer') {
                 array_push($bankTransfers, Tools::strtoupper($method['id']));
                 if (!empty($method['financial_institutions'])) {
-                    $this->financial_institutions[Tools::strtoupper($method['id'])] = $method['financial_institutions'][0]['id'];
+                    $this->financial_institutions[Tools::strtoupper($method['id'])] =$method['financial_institutions'][0]['id'];
                 }
             }
         }
-        
+
         return $bankTransfers;
     }
 }
