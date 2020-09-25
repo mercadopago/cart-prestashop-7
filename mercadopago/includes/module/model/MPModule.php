@@ -33,6 +33,7 @@ class MPModule extends MPAbstractDB
 {
     public function __construct()
     {
+        parent::__construct();
         $this->table = _DB_PREFIX_ . "mp_module";
     }
 }

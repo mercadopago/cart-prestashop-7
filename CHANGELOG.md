@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2020-09-25
+
+### Added
+- Refactor update order status
+- Add rule to validate backorder status
+- JS files versioning
+- JS files minification
+- CSS files versioning
+- CSS files minification
+- Code Standards for JS files
+- Code Standards for CSS files
+- Code Standards for PHP files
+
+### Fixed
+- Fix splitted orders update
+- Fix getConditionAndTerms on custom checkout validations
+- Fix getNotificationResponse to static and avoid unnecessary request to MP Payments API
+
+### Changed
+- Move checkouts classes from /model to /checkouts
+- Create new models for order_state, order_state_lang, cart_rule and cart_rule_rule
+
 ## [4.1.1] - 2020-06-03
 
 ### Added

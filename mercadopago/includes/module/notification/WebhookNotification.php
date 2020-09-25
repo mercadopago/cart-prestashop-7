@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2020 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -42,25 +42,33 @@ class WebhookNotification extends AbstractNotification
     /**
      * Receive and treat the notification
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function receiveNotification($cart)
     {
+        $this->verifyWebhook($cart);
         $this->total = $this->getTotal($cart);
-        $this->order_id = Order::getOrderByCartId($cart->id);
+        $orderId = Order::getOrderByCartId($cart->id);
 
-        if ($this->order_id != 0) {
+        if ($orderId != 0) {
             $this->verifyCustomPayment();
             $this->validateOrderState();
-            $this->updateOrder($cart);
+
+            $baseOrder = new Order($orderId);
+            $orders = Order::getByReference($baseOrder->reference);
+
+            foreach ($orders as $order) {
+                $this->order_id = $order->id;
+                $this->updateOrder($cart);
+            }
         }
     }
 
     /**
      * Create order for custom payments without notification
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function createCustomOrder($cart)

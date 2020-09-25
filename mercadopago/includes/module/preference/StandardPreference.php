@@ -223,13 +223,13 @@ class StandardPreference extends AbstractPreference
     public function getInternalMetadata()
     {
         $internal_metadata = parent::getInternalMetadata();
-        $internal_metadata["checkout"] = "smart";
-        $internal_metadata["checkout_type"] = "redirect";
+        $internal_metadata['checkout'] = 'smart';
+        $internal_metadata['checkout_type'] = 'redirect';
 
         if ($this->settings['MERCADOPAGO_STANDARD_MODAL'] == true) {
             $internal_metadata["checkout_type"] = "modal";
         }
-        
+
         return $internal_metadata;
     }
 }
