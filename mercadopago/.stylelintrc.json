@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recommended"
+  ],
+  "syntax": "css",
+  "rules": {
+    "indentation": 2,
+    "color-named": "never",
+    "string-quotes": "single",
+    "color-hex-length": "long",
+    "declaration-block-trailing-semicolon": "always",
+    "declaration-block-semicolon-newline-after": "always",
+    "font-family-no-missing-generic-family-keyword": [ true, {
+        "ignoreFontFamilies": ["FontAwesome", "Merriweather, Georgia"]
+      }
+    ]
+  }
+}

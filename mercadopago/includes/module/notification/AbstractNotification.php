@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2020 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2007-2020 PrestaShop SA
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -41,13 +41,17 @@ class AbstractNotification
     public $payments_data;
     public $transaction_id;
     public $mp_transaction;
+    public $ps_order_state;
+    public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id = null, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
         $this->mp_transaction = new MPTransaction();
+        $this->ps_order_state = new PSOrderState();
+        $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
         $this->customer_secure_key = $customer_secure_key;
 
@@ -59,14 +63,16 @@ class AbstractNotification
     /**
      * Verify if received notification and save on BD
      *
-     * @param mixed $cart
+     * @param  mixed $cart
      * @return void
      */
     public function verifyWebhook($cart)
     {
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
-            "received_webhook" => true
-        ]);
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
+                "received_webhook" => true
+            ]
+        );
         MPLog::generate('Notification received on cart id ' . $cart->id);
     }
 
@@ -93,8 +99,8 @@ class AbstractNotification
     /**
      * Create order on Prestashop database
      *
-     * @param mixed $cart
-     * @param float $total
+     * @param  mixed $cart
+     * @param  float $total
      * @return void
      */
     public function createOrder($cart, $custom_create_order = false)
@@ -137,55 +143,181 @@ class AbstractNotification
         }
     }
 
+    /**
+     * Validate status to update order
+     *
+     * @param  mixed $cart
+     * @return void
+     */
     public function updateOrder($cart)
     {
         $order = new Order($this->order_id);
         $actual_status = (int) $order->getCurrentState();
         $validate_actual = $this->validateActualStatus($actual_status);
+
         $status_approved = $this->getNotificationPaymentState('approved');
+        $status_pending = $this->getNotificationPaymentState('pending');
+        $status_inprocess = $this->getNotificationPaymentState('in_process');
+        $status_authorized = $this->getNotificationPaymentState('authorized');
+        $status_cancelled = $this->getNotificationPaymentState('cancelled');
+        $status_rejected = $this->getNotificationPaymentState('rejected');
         $status_refunded = $this->getNotificationPaymentState('refunded');
         $status_charged = $this->getNotificationPaymentState('charged_back');
         $status_mediation = $this->getNotificationPaymentState('in_mediation');
 
-        if ($this->status != null &&
-            $validate_actual == true &&
-            $actual_status == $status_approved &&
-            $this->order_state != $status_refunded &&
-            $this->order_state != $status_charged &&
-            $this->order_state != $status_mediation
-        ) {
-            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
-        } elseif ($validate_actual == false) {
+        if ($this->order_id != 0 && $this->status != null) {
+            switch ($this->order_state) {
+                case $status_approved:
+                    $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
+                    break;
+
+                case $status_pending:
+                    $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
+                    break;
+
+                case $status_inprocess:
+                    $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
+                    break;
+
+                case $status_authorized:
+                    $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
+                    break;
+
+                case $status_cancelled:
+                    $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
+                    break;
+
+                case $status_rejected:
+                    $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
+                    break;
+
+                case $status_refunded:
+                    $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
+                    break;
+
+                case $status_charged:
+                    $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
+                    break;
+
+                case $status_mediation:
+                    $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            MPLog::generate('Order does not exist', 'warning');
+            $this->getNotificationResponse('Order does not exist', 422);
+        }
+    }
+
+    /**
+     * Rule to update approved order
+     *
+     * @return void
+     */
+    public function ruleApproved($cart, $order, $status, $actual_status, $validate_actual)
+    {
+        if ($actual_status == $status) {
+            MPLog::generate('Order status is the same', 'warning');
+            $this->getNotificationResponse('Order status is the same', 422);
+        } elseif ($validate_actual == true) {
+            $this->updatePrestashopOrder($cart, $order);
+        } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
             $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+        }
+    }
+
+    /**
+     * Rule to update pending, in_process and authorized order
+     *
+     * @return void
+     */
+    public function ruleProcessing($cart, $order, $status, $actual_status, $validate_actual)
+    {
+        $status_approved = $this->getNotificationPaymentState('approved');
+
+        if ($actual_status == $status) {
+            MPLog::generate('Order status is the same', 'warning');
+            $this->getNotificationResponse('Order status is the same', 422);
+        } elseif ($actual_status == $status_approved) {
+            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
+            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+        } elseif ($validate_actual == true) {
+            $this->updatePrestashopOrder($cart, $order);
         } else {
-            if ($this->order_id != 0 && $this->order_state != $actual_status && $validate_actual == true) {
-                try {
-                    $order->setCurrentState($this->order_state);
-                    $this->saveUpdateOrderData($cart);
-                    MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
-                    $this->getNotificationResponse('The order has been updated', 201);
-                } catch (Exception $e) {
-                    MPLog::generate(
-                        'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
-                        'error'
-                    );
-                    $this->getNotificationResponse('The order has not been updated', 422);
-                }
-            } else {
-                MPLog::generate('Order does not exist or Order status is the same', 'warning');
-                $this->getNotificationResponse('Order does not exist or Order status is the same', 422);
-            }
+            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+        }
+    }
+
+    /**
+     * Rule to update pending, in_process and authorized order
+     *
+     * @return void
+     */
+    public function ruleFailed($cart, $order, $status, $actual_status, $validate_actual)
+    {
+        $status_approved = $this->getNotificationPaymentState('approved');
+
+        if ($actual_status == $status) {
+            MPLog::generate('Order status is the same', 'warning');
+            $this->getNotificationResponse('Order status is the same', 422);
+        } elseif ($actual_status == $status_approved) {
+            MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
+            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+        } elseif ($validate_actual == true) {
+            $this->updatePrestashopOrder($cart, $order);
+        } else {
+            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+        }
+    }
+
+    /**
+     * Rule to update chargedback, refunded and inmediation order
+     *
+     * @return void
+     */
+    public function ruleDevolution($cart, $order, $status, $actual_status)
+    {
+        if ($actual_status == $status) {
+            MPLog::generate('Order status is the same', 'warning');
+            $this->getNotificationResponse('Order status is the same', 422);
+        } else {
+            $this->updatePrestashopOrder($cart, $order);
+        }
+    }
+
+    /**
+     * Update order on Prestashop database
+     *
+     * @param  mixed $cart
+     * @return void
+     */
+    public function updatePrestashopOrder($cart, $order)
+    {
+        try {
+            $order->setCurrentState($this->order_state);
+            $this->saveUpdateOrderData($cart);
+            MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
+            $this->getNotificationResponse('The order has been updated', 201);
+        } catch (Exception $e) {
+            MPLog::generate(
+                'The order has not been updated on cart id ' . $cart->id . ' - ' . $e->getMessage(),
+                'error'
+            );
+            $this->getNotificationResponse('The order has not been updated', 422);
         }
     }
 
     /**
      * Save payments info on mp_transaction table
      *
-     * @param mixed $cart
-     * @param mixed $data
-     * @param int $order_id
+     * @param  mixed $cart
+     * @param  mixed $data
+     * @param  int   $order_id
      * @return void
      */
     public function saveCreateOrderData($cart)
@@ -196,37 +328,41 @@ class AbstractNotification
         $payments_status = $this->payments_data['payments_status'];
         $payments_amount = $this->payments_data['payments_amount'];
 
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
-            "order_id" => $this->order_id,
-            "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
-            "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
-            "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
-            "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
-            "notification_url" => $_SERVER['REQUEST_URI'],
-            "merchant_order_id" => $this->transaction_id,
-            "received_webhook" => true,
-        ]);
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
+                "order_id" => $this->order_id,
+                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
+                "notification_url" => $_SERVER['REQUEST_URI'],
+                "merchant_order_id" => $this->transaction_id,
+                "received_webhook" => true,
+            ]
+        );
     }
 
     /**
      * Update payments info on mp_transaction table
      *
-     * @param mixed $cart
-     * @param mixed $data
+     * @param  mixed $cart
+     * @param  mixed $data
      * @return void
      */
     public function saveUpdateOrderData($cart)
     {
         $payments_status = $this->payments_data['payments_status'];
 
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update([
-            "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
-        ]);
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
+            [
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+            ]
+        );
     }
 
     /**
-     * @param $state
+     * @param  $state
      * @return mixed
      */
     public function getNotificationPaymentState($state)
@@ -247,16 +383,36 @@ class AbstractNotification
     }
 
     /**
-     * @param integer $actual
+     * @param  integer $actual
      * @return bool
      */
     public function validateActualStatus($actual)
     {
-        $query = 'SELECT module_name FROM `' . _DB_PREFIX_ . 'order_state` WHERE id_order_state = ' . $actual;
-        $sql = Db::getInstance()->getRow($query);
+        $result = $this->ps_order_state->where('id_order_state', '=', (int) $actual)->get();
 
-        if ($sql['module_name'] === 'mercadopago') {
+        if ($result['module_name'] === 'mercadopago' || $this->getBackOrderStatus($actual)) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  integer $actual
+     * @return bool
+     */
+    public function getBackOrderStatus($actual)
+    {
+        $result = $this->ps_order_state_lang->columns(['id_order_state', 'name'])
+            ->where('template', '=', 'outofstock')
+            ->getAll();
+
+        $count = count($result);
+
+        foreach ($result as $row) {
+            if ($row['id_order_state'] == $actual && $count > 0) {
+                return true;
+            }
         }
 
         return false;
@@ -265,11 +421,11 @@ class AbstractNotification
     /**
      * Get responses to send for notification
      *
-     * @param string $message
-     * @param integer $code
+     * @param  string  $message
+     * @param  integer $code
      * @return void
      */
-    public function getNotificationResponse($message, $code)
+    public static function getNotificationResponse($message, $code)
     {
         header('Content-type: application/json');
         $response = array(
@@ -278,7 +434,7 @@ class AbstractNotification
         );
 
         echo Tools::jsonEncode($response);
-        return var_dump(http_response_code($code));
+        return http_response_code($code);
     }
 
     /**

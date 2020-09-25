@@ -156,9 +156,9 @@ class CustomPreference extends AbstractPreference
     public function getInternalMetadata()
     {
         $internal_metadata = parent::getInternalMetadata();
-        $internal_metadata["checkout"] = "custom";
-        $internal_metadata["checkout_type"] = "credit_card";
-        
+        $internal_metadata['checkout'] = 'custom';
+        $internal_metadata['checkout_type'] = 'credit_card';
+
         return $internal_metadata;
     }
 }

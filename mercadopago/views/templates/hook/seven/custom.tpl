@@ -1,5 +1,5 @@
 {*
-* 2007-2019 PrestaShop
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,7 +28,7 @@
     <div class="row mp-frame-checkout-custom-seven">
         <div class="col-xs-12 col-md-12 col-12">
             <a class="mp-link-checkout-custom" id="button-show-payments">
-                {l s='With what cards can I pay' mod='mercadopago'} ⌵ 
+                {l s='With what cards can I pay' mod='mercadopago'} ⌵
             </a>
 
             {if $site_id == 'MLA'}
@@ -65,7 +65,7 @@
             <div class="form-group">
                 <div class="col-md-12 col-12 mp-pb-10 mp-px-0 mp-m-col">
                     <label for="id-card-number" class="mp-pb-5">
-                        {l s='Card number' mod='mercadopago'} 
+                        {l s='Card number' mod='mercadopago'}
                     <em class="mp-required">*</em></label>
                     <input id="id-card-number" data-checkout="cardNumber" type="text"
                         class="form-control mp-form-control" onkeyup="maskInput(this, mcc);" maxlength="24"
@@ -81,7 +81,7 @@
             <div id="mp-card-holder-div" class="form-group">
                 <div class="col-md-12 col-12 mp-pb-10 mp-px-0 mp-m-col">
                     <label for="id-card-holder-name" class="mp-pb-5">
-                    {l s='Name and surname of the cardholder' mod='mercadopago'} 
+                    {l s='Name and surname of the cardholder' mod='mercadopago'}
                     <em class="mp-required">*</em></label>
                     <input id="id-card-holder-name" data-checkout="cardholderName" type="text"
                         class="form-control mp-form-control" autocomplete="off" />
@@ -94,7 +94,7 @@
                 <!-- Input expiration date -->
                 <div class="col-md-6 col-6 mp-pb-20 mp-pl-0 mp-m-col">
                     <label for="id-card-expiration" class="mp-pb-5">
-                    {l s='Expiration date' mod='mercadopago'} 
+                    {l s='Expiration date' mod='mercadopago'}
                     <em class="mp-required">*</em></label>
                     <input id="id-card-expiration" data-checkout="cardExpiration" type="text"
                         class="form-control mp-form-control" autocomplete="off" placeholder="MM/AAAA"
@@ -112,10 +112,10 @@
                 <!-- Input Security Code -->
                 <div class="col-md-6 col-6 mp-pb-20 mp-pr-0 mp-m-col">
                     <label for="id-security-code" class="mp-pb-5">
-                    {l s='Security code' mod='mercadopago'} 
+                    {l s='Security code' mod='mercadopago'}
                     <em class="mp-required">*</em></label>
                     <input id="id-security-code" data-checkout="securityCode" type="text"
-                        class="form-control mp-form-control" autocomplete="off" 
+                        class="form-control mp-form-control" autocomplete="off"
                         placeholder="{l s='CVV' mod='mercadopago'}" onkeyup="maskInput(this, minteger);"
                            maxlength="4"/>
                     <small class="mp-small mp-pt-5">
@@ -215,7 +215,7 @@
 </form>
 
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card.js" />
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min}.js?v={$version}" />
 {if $public_key != ''}
     <script type="text/javascript">
         // Set params to custom-card
@@ -223,7 +223,8 @@
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s='Choose' mod='mercadopago'}...'
+                select_choose: '{l s='Choose' mod='mercadopago'}...',
+                ps_version: 'seven',
             };
             initializeCustom(mp_custom);
         }

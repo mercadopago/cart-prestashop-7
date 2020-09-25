@@ -1,5 +1,5 @@
 {*
-* 2007-2019 PrestaShop
+* 2007-2020 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -94,7 +94,7 @@
 <script>
     var mercadopago_button = document.querySelector('.mercadopago-button');
     mercadopago_button.style.display = 'none';
-    document.forms['mp_standard_checkout'].onsubmit = function () { 
+    document.forms['mp_standard_checkout'].onsubmit = function () {
         mercadopago_button.click();
         return false;
     }
