@@ -1,1 +1,0 @@
-# Mercado Pago plugin for Prestashop (1.6.x and 1.7.x)
