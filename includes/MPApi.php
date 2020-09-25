@@ -85,7 +85,7 @@ class MPApi
     {
         $access_token = $this->getAccessToken();
         $response = MPRestCli::get(
-            '/test/plugins-credentials-wrapper/credentials',
+            '/plugins-credentials-wrapper/credentials',
             ["Authorization: Bearer " . $access_token]
         );
 
