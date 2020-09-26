@@ -151,63 +151,65 @@ class AbstractNotification
      */
     public function updateOrder($cart)
     {
-        $order = new Order($this->order_id);
-        $actual_status = (int) $order->getCurrentState();
-        $validate_actual = $this->validateActualStatus($actual_status);
+        if (AbstractNotification::isStatusNotInHistory($this->order_id, $this->order_state)) {
+            $order = new Order($this->order_id);
+            $actual_status = (int) $order->getCurrentState();
+            $validate_actual = $this->validateActualStatus($actual_status);
 
-        $status_approved = $this->getNotificationPaymentState('approved');
-        $status_pending = $this->getNotificationPaymentState('pending');
-        $status_inprocess = $this->getNotificationPaymentState('in_process');
-        $status_authorized = $this->getNotificationPaymentState('authorized');
-        $status_cancelled = $this->getNotificationPaymentState('cancelled');
-        $status_rejected = $this->getNotificationPaymentState('rejected');
-        $status_refunded = $this->getNotificationPaymentState('refunded');
-        $status_charged = $this->getNotificationPaymentState('charged_back');
-        $status_mediation = $this->getNotificationPaymentState('in_mediation');
+            $status_approved = $this->getNotificationPaymentState('approved');
+            $status_pending = $this->getNotificationPaymentState('pending');
+            $status_inprocess = $this->getNotificationPaymentState('in_process');
+            $status_authorized = $this->getNotificationPaymentState('authorized');
+            $status_cancelled = $this->getNotificationPaymentState('cancelled');
+            $status_rejected = $this->getNotificationPaymentState('rejected');
+            $status_refunded = $this->getNotificationPaymentState('refunded');
+            $status_charged = $this->getNotificationPaymentState('charged_back');
+            $status_mediation = $this->getNotificationPaymentState('in_mediation');
 
-        if ($this->order_id != 0 && $this->status != null) {
-            switch ($this->order_state) {
-                case $status_approved:
-                    $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
-                    break;
+            if ($this->order_id != 0 && $this->status != null) {
+                switch ($this->order_state) {
+                    case $status_approved:
+                        $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
+                        break;
 
-                case $status_pending:
-                    $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
-                    break;
+                    case $status_pending:
+                        $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
+                        break;
 
-                case $status_inprocess:
-                    $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
-                    break;
+                    case $status_inprocess:
+                        $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
+                        break;
 
-                case $status_authorized:
-                    $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
-                    break;
+                    case $status_authorized:
+                        $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
+                        break;
 
-                case $status_cancelled:
-                    $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
-                    break;
+                    case $status_cancelled:
+                        $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
+                        break;
 
-                case $status_rejected:
-                    $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
-                    break;
+                    case $status_rejected:
+                        $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
+                        break;
 
-                case $status_refunded:
-                    $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
-                    break;
+                    case $status_refunded:
+                        $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
+                        break;
 
-                case $status_charged:
-                    $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
-                    break;
+                    case $status_charged:
+                        $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
+                        break;
 
-                case $status_mediation:
-                    $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
-                    break;
-                default:
-                    break;
+                    case $status_mediation:
+                        $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                MPLog::generate('Order does not exist', 'warning');
+                $this->getNotificationResponse('Order does not exist', 422);
             }
-        } else {
-            MPLog::generate('Order does not exist', 'warning');
-            $this->getNotificationResponse('Order does not exist', 422);
         }
     }
 
@@ -395,6 +397,20 @@ class AbstractNotification
         }
 
         return false;
+    }
+
+    static public function isStatusNotInHistory($id_order, $id_order_state)
+    {
+        $query = "SELECT sum(`check`) from (
+SELECT count(1) as `check` FROM "._DB_PREFIX_."order_history
+WHERE id_order = $id_order AND id_order_state = $id_order_state
+union
+SELECT count(1) as `check` from "._DB_PREFIX_."order_history
+inner join "._DB_PREFIX_."order_state on "._DB_PREFIX_."order_state.id_order_state = "._DB_PREFIX_."order_history.id_order_state
+and "._DB_PREFIX_."order_state.deleted = 0 and ("._DB_PREFIX_."order_state.delivery = 1 or "._DB_PREFIX_."order_state.shipped = 1)
+and id_order = $id_order
+) as checks";
+        return Db::getInstance()->getValue($query) == 0;
     }
 
     /**
