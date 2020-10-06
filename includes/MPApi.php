@@ -76,6 +76,32 @@ class MPApi
     }
 
     /**
+     * Validate if the seller is homologated
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function getCredentialsWrapper()
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get(
+            '/plugins-credentials-wrapper/credentials',
+            ["Authorization: Bearer " . $access_token]
+        );
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API validate_homologation error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+
+        return $result;
+    }
+
+    /**
      * Get payment methods
      *
      * @return array|bool
@@ -114,6 +140,52 @@ class MPApi
         }
 
         return $payments;
+    }
+
+    /**
+     * Get standard payment
+     *
+     * @param integer $transaction_id
+     * @return bool
+     * @throws Exception
+     */
+    public function getPaymentStandard($transaction_id)
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/payments/' . $transaction_id, ["Authorization: Bearer " . $access_token]);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_payment_standard error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
+    }
+
+    /**
+     * Get merchant order
+     *
+     * @param integer $id
+     * @return bool
+     * @throws Exception
+     */
+    public function getMerchantOrder($id)
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/merchant_orders/' . $id, ["Authorization: Bearer " . $access_token]);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_merchant_orders error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
     }
 
     /**
@@ -178,29 +250,6 @@ class MPApi
     }
 
     /**
-     * Get standard payment
-     *
-     * @param integer $transaction_id
-     * @return bool
-     * @throws Exception
-     */
-    public function getPaymentStandard($transaction_id)
-    {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payments/' . $transaction_id, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_payment_standard error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
-    }
-
-    /**
      * Is valid access token
      *
      * @param string $access_token
@@ -243,64 +292,6 @@ class MPApi
         if (in_array('test_user', $response['response']['tags'])) {
             return true;
         }
-    }
-
-    /**
-     * Get merchant order
-     *
-     * @param integer $id
-     * @return bool
-     * @throws Exception
-     */
-    public function getMerchantOrder($id)
-    {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/merchant_orders/' . $id, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_merchant_orders error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
-    }
-
-    /**
-     * Get application_id
-     *
-     * @param integer $seller
-     * @return int
-     */
-    public function getApplicationId()
-    {
-        $seller = explode('-', $this->getAccessToken());
-        return $seller[1];
-    }
-
-    /**
-     * Get application_id
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function homologValidate()
-    {
-        $seller = $this->getApplicationId();
-        $response = MPRestCli::getMercadoLibre('/applications/' . $seller);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API application_search_owner_id error: ' . $response['response']['message'], 'error');
-            return false;
-        }
-
-        //response treatment
-        $result = $response['response'];
-
-        return $result['scopes'];
     }
 
     /**
