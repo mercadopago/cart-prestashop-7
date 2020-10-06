@@ -738,7 +738,6 @@
 }
 
 @media (max-width: 768px) {
-<<<<<<< HEAD
   .mp-pl-30 {
     padding-left: 0 !important;
   }
@@ -747,12 +746,3 @@
     padding-right: 0 !important;
   }
 }
-=======
-    .mp-pl-30 {
-        padding-left: 0px !important;
-    }
-    .mp-pr-50 {
-        padding-right: 0px !important;
-    }
-}
->>>>>>> 356cc1cb751e5caef7c74bec17fdb95bec7c3b54
