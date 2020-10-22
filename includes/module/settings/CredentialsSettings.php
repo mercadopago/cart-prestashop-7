@@ -197,13 +197,13 @@ class CredentialsSettings extends AbstractSettings
             return false;
         }
 
-        $credentialsWrapper = $this->mercadopago->getCredentialsWrapper();
+        $credentialsWrapper = $this->mercadopago->getCredentialsWrapper($value);
         if (!$credentialsWrapper) {
             return false;
         }
 
         if ($input == 'MERCADOPAGO_ACCESS_TOKEN') {
-            Configuration::updateValue('MERCADOPAGO_APPLICATION_ID',$credentialsWrapper['client_id']);
+            Configuration::updateValue('MERCADOPAGO_APPLICATION_ID', $credentialsWrapper['client_id']);
             Configuration::updateValue('MERCADOPAGO_SELLER_ID', $token_validation['id']);
             Configuration::updateValue('MERCADOPAGO_SITE_ID', $token_validation['site_id']);
         }
