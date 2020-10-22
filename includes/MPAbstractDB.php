@@ -49,6 +49,7 @@ abstract class MPAbstractDB
     public function executeQuery($query)
     {
         if (Db::getInstance()->execute($query) == false) {
+            MPLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
             return false;
         }
         return true;

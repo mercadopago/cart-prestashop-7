@@ -91,7 +91,10 @@ class MPApi
 
         //in case of failures
         if ($response['status'] > 202) {
-            MPLog::generate('API validate_homologation error: ' . $response['response']['message'], 'error');
+            MPLog::generate(
+                'Validate homologation error (plugins-credentials-wrapper API). Status: ' . $response['status'],
+                'error'
+            );
             return false;
         }
 
