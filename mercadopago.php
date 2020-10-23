@@ -207,10 +207,11 @@ class Mercadopago extends PaymentModule
         $access_token = Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
         $sandbox_public_key = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
-        $credentialsWrapper = $this->mercadopago->getCredentialsWrapper();
 
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
+            $credentialsWrapper = $this->mercadopago->getCredentialsWrapper($access_token);
+
             if ($homologated == false && $credentialsWrapper['homologated'] == true) {
                 $homologated = Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }

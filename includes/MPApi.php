@@ -81,9 +81,8 @@ class MPApi
      * @return bool
      * @throws Exception
      */
-    public function getCredentialsWrapper()
+    public function getCredentialsWrapper($access_token)
     {
-        $access_token = $this->getAccessToken();
         $response = MPRestCli::get(
             '/plugins-credentials-wrapper/credentials',
             ["Authorization: Bearer " . $access_token]
@@ -236,7 +235,8 @@ class MPApi
             "so:1.0.0",
             "Authorization: Bearer " . $access_token
         ];
-        $response = MPRestCli::post('/v1/payments',
+        $response = MPRestCli::post(
+            '/v1/payments',
             $preference,
             $headers
         );
