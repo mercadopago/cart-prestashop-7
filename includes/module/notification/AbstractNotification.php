@@ -352,11 +352,19 @@ class AbstractNotification
      */
     public function saveUpdateOrderData($cart)
     {
+        $payments_id = $this->payments_data['payments_id'];
+        $payments_type = $this->payments_data['payments_type'];
+        $payments_method = $this->payments_data['payments_method'];
         $payments_status = $this->payments_data['payments_status'];
+        $payments_amount = $this->payments_data['payments_amount'];
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
             ]
         );
     }
