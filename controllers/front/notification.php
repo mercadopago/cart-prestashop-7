@@ -39,6 +39,8 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
      */
     public function initContent()
     {
+        MPLog::generate('--------NOTIFICATION--------');
+
         $topic = Tools::getValue('topic');
         $checkout = Tools::getValue('checkout');
         $secure_key = Tools::getValue('customer');
@@ -50,9 +52,11 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
 
         //Validate checkout notification
         if ($checkout == 'standard' && $topic == 'merchant_order' && $customer_secure_key == $secure_key) {
+            MPLog::generate('Entered the IpnNotification rule');
             $notification = new IpnNotification($transaction_id, $customer_secure_key);
             $notification->receiveNotification($cart);
         } elseif ($checkout == 'custom' && $topic == 'payment' && $customer_secure_key == $secure_key) {
+            MPLog::generate('Entered the WebhookNotification rule');
             $notification = new WebhookNotification($transaction_id, $customer_secure_key);
             $notification->receiveNotification($cart);
         } else {

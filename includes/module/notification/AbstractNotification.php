@@ -33,7 +33,6 @@ class AbstractNotification
     public $module;
     public $status;
     public $amount;
-    public $method;
     public $aproved;
     public $pending;
     public $order_id;
@@ -479,8 +478,6 @@ class AbstractNotification
      */
     public function generateLogs()
     {
-        MPLog::generate('--------------NOTIFICATION--------------');
-        MPLog::generate('Entered the ' . $this->method . ' rule');
         MPLog::generate('Transaction id: ' . $this->transaction_id);
         MPLog::generate('Cart total: ' . $this->total);
         MPLog::generate('Order id: ' . $this->order_id);
