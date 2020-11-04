@@ -45,8 +45,6 @@ class IpnNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->verifyWebhook($cart);
-        $this->method = 'IpnNotification';
-
         $this->total = $this->getTotal($cart);
         $orderId = Order::getOrderByCartId($cart->id);
 
