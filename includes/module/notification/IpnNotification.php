@@ -139,8 +139,13 @@ class IpnNotification extends AbstractNotification
     public function updateTransactionId()
     {
         $order = new Order($this->order_id);
-        $payments = $order->getOrderPaymentCollection();
-        $payments[0]->transaction_id = $this->transaction_id;
-        $payments[0]->update();
+
+        try {
+            $payments = $order->getOrderPaymentCollection();
+            $payments[0]->transaction_id = $this->transaction_id;
+            $payments[0]->update();
+        } catch (Exception $e) {
+            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
+        }
     }
 }
