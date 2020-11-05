@@ -31,7 +31,7 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractNotification
 {
-    public function __construct($transaction_id, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key = null)
     {
         parent::__construct($transaction_id, $customer_secure_key);
     }
