@@ -33,7 +33,7 @@ class WebhookNotification extends AbstractNotification
 {
     public $payment;
 
-    public function __construct($transaction_id, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key = null)
     {
         parent::__construct($transaction_id, $customer_secure_key);
         $this->payment = $this->mercadopago->getPaymentStandard($transaction_id);
