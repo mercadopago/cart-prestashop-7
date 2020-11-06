@@ -56,7 +56,7 @@ class MPLog
         }
 
         $date = date('Y-m-d H:i:s');
-        $file = MP_ROOT_URL . '/logs/mercadopago.log';
+        $file = MP_ROOT_URL . '/logs/mercadopago' . MP_VERSION . '.log';
         $message = sprintf("[%s] [%s]: %s%s", $date, $status_log, $message, PHP_EOL);
         error_log($message, 3, $file);
     }

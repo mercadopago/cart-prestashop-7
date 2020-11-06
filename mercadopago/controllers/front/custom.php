@@ -55,10 +55,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
                 MPLog::generate('Cart id ' . $this->context->cart->id . ' - Custom payment created successfully');
 
                 //create order
-                $notification = new WebhookNotification(
-                    $customPreference['id'],
-                    $this->context->cart->customer_secure_key
-                );
+                $notification = new WebhookNotification($customPreference['id']);
                 $notification->createCustomOrder($this->context->cart);
                 $preference->disableCartRule();
 
@@ -88,7 +85,7 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
         }
-        
+
         $preference->deleteCartRule();
         $preference->redirectError();
     }
