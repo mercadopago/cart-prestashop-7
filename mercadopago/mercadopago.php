@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.2.0');
+define('MP_VERSION', '4.3.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,7 +72,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.2.0';
+        $this->version = '4.3.0';
 
         parent::__construct();
 
@@ -210,7 +210,9 @@ class Mercadopago extends PaymentModule
 
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
-            if ($homologated == false && in_array('payments', $this->mercadopago->homologValidate())) {
+            $credentialsWrapper = $this->mercadopago->getCredentialsWrapper($access_token);
+
+            if ($homologated == false && $credentialsWrapper['homologated'] == true) {
                 $homologated = Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
 
