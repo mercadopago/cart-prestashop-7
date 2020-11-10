@@ -216,6 +216,9 @@ class AbstractNotification
                     default:
                         break;
                 }
+            } else {	
+                MPLog::generate('Order does not exist', 'warning');	
+                $this->getNotificationResponse('Order does not exist', 422);
             }
         }
     }
