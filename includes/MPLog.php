@@ -33,6 +33,29 @@ class MPLog
     {
     }
 
+    public static function isWritableFile() {
+        try {
+            return is_writable(self::LOG_FILEPATH);
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+    public static function isReadableFile() {
+        try {
+            return is_readable(self::LOG_FILEPATH);
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+    public static function getLogUrl() {
+        return __PS_BASE_URI__ . substr(MP_ROOT_URL, strpos(MP_ROOT_URL, '/modules') + 1) . self::PARTIAL_PATH;
+    }
+    
+    private const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
+    private const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
+
     /**
      * Generate logs on mercadopago.log
      *
@@ -56,8 +79,7 @@ class MPLog
         }
 
         $date = date('Y-m-d H:i:s');
-        $file = MP_ROOT_URL . '/logs/mercadopago' . MP_VERSION . '.log';
         $message = sprintf("[%s] [%s]: %s%s", $date, $status_log, $message, PHP_EOL);
-        error_log($message, 3, $file);
+        error_log($message, 3, self::LOG_FILEPATH);
     }
 }

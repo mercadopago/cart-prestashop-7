@@ -35,6 +35,7 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
     <li><a href="#template_2" role="tab" data-toggle="tab">{l s='About Mercado Pago' mod='mercadopago'}</a></li>
+    <li><a href="#template_3" role="tab" data-toggle="tab">{l s='Log Mercado Pago' mod='mercadopago'}</a></li>
     <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version|escape:'html':'UTF-8'}</span></a></li>
 </ul>
 
@@ -42,6 +43,7 @@
 <div class="tab-content">
 	<div class="tab-pane active" id="template_1">{include file='./template_1.tpl'}</div>
 	<div class="tab-pane" id="template_2">{include file='./template_2.tpl'}</div>
+    <div class="tab-pane" id="template_3">{include file='./template_3.tpl'}</div>
 </div>
 
 <!-- JavaScript -->
