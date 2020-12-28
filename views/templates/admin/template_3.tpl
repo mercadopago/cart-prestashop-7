@@ -28,11 +28,17 @@
         <i class="icon-cogs"></i> {l s='Logging' mod='mercadopago'}
     </div>
 
-    {if !$log->isWritable}
-        <div class='alert alert-warning alert-dismissible'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span
-                    aria-hidden='true'>&times;</span></button>
-            {l s='Cause a security setting we are unable to log data, please check it to see new logs.' mod='mercadopago'}
+    {if !$log->isWritable && !$log->isReadable}
+        <div class='alert alert-warning'>
+            {l s='Cause a security setting we are unable to register and read log data, please check it to use this tool.' mod='mercadopago'}
+        </div>
+    {elseif !$log->isWritable}
+        <div class='alert alert-warning'>
+            {l s='Cause a security setting we are unable to log data, please check it to register new logs.' mod='mercadopago'}
+        </div>
+    {elseif !$log->isReadable}
+        <div class='alert alert-warning'>
+            {l s='Cause a security setting we are unable to read logged data, please check it to see the logs.' mod='mercadopago'}
         </div>
     {/if}
 
@@ -60,12 +66,6 @@
                         download>{l s='Download log' mod='mercadopago'}</a>
                 </div>
             </div>
-        </div>
-    {else}
-        <div class='alert alert-warning alert-dismissible'>
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span
-                    aria-hidden='true'>&times;</span></button>
-            {l s='Cause a security setting we are unable to read logged data, please check it to see the logs.' mod='mercadopago'}
         </div>
     {/if}
 </div>
