@@ -36,24 +36,27 @@ class MPLog
     {
     }
 
-    public static function isWritableFile() {
+    public static function isWritableFile()
+    {
         try {
             return is_writable(self::LOG_FILEPATH);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
 
-    public static function isReadableFile() {
+    public static function isReadableFile()
+    {
         try {
             return is_readable(self::LOG_FILEPATH);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
 
-    public static function getLogUrl() {
-        return __PS_BASE_URI__ . substr(MP_ROOT_URL, strpos(MP_ROOT_URL, '/modules') + 1) . self::PARTIAL_PATH;
+    public static function getLogUrl()
+    {
+        return __PS_BASE_URI__ . Tools::substr(MP_ROOT_URL, strpos(MP_ROOT_URL, '/modules') + 1) . self::PARTIAL_PATH;
     }
 
     /**
