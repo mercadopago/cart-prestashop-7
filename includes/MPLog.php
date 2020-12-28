@@ -29,6 +29,9 @@
 
 class MPLog
 {
+    private const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
+    private const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
+
     public function __construct()
     {
     }
@@ -52,9 +55,6 @@ class MPLog
     public static function getLogUrl() {
         return __PS_BASE_URI__ . substr(MP_ROOT_URL, strpos(MP_ROOT_URL, '/modules') + 1) . self::PARTIAL_PATH;
     }
-    
-    private const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
-    private const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
 
     /**
      * Generate logs on mercadopago.log
