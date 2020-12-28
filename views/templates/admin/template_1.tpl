@@ -34,14 +34,14 @@
 	</div>
 
 	<hr />
-	
+
 	<div class="mercadopago-content">
 		<div class="row">
             <div class="col-md-12">
                 <h4 class="mp-title-checkout-body">{l s='Follow these steps and maximize your conversion:' mod='mercadopago'}</h4>
             </div>
 		</div>
-        
+
         <div class="row mp-pt-15">
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $access_token != '' && $sandbox_access_token != ''}
@@ -49,54 +49,54 @@
                 {else}
                     <p class="mp-number-checkout-body">1</p>
                 {/if}
-                
+
                 <p class="mp-text-checkout-body">
-                    {l s='Get your' mod='mercadopago'} 
+                    {l s='Get your' mod='mercadopago'}
                     {l s='credentials' mod='mercadopago'}
                     {l s='in your Mercado Pago account.' mod='mercadopago'}
                 </p>
             </div>
-            
+
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $seller_homolog == true}
                     <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
                     <p class="mp-number-checkout-body">2</p>
                 {/if}
-                
+
                 <p class="mp-text-checkout-body">
                     {l s='Approve your account to securely charge your customers.' mod='mercadopago'}
                 </p>
             </div>
-            
+
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $standard_test == true}
                     <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
                     <p class="mp-number-checkout-body">3</p>
                 {/if}
-                
+
                 <p class="mp-text-checkout-body">
-                    {l s='Choose the' mod='mercadopago'} 
+                    {l s='Choose the' mod='mercadopago'}
                     {l s='payment methods' mod='mercadopago'}
                     {l s='available in your store.' mod='mercadopago'}
                 </p>
             </div>
-            
+
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $count_test != 0}
                     <p class="mp-number-checked"><i class="icon-check"></i></p>
                 {else}
                     <p class="mp-number-checkout-body">4</p>
                 {/if}
-                
+
                 <p class="mp-text-checkout-body">
-                    {l s='Activate the' mod='mercadopago'} 
+                    {l s='Activate the' mod='mercadopago'}
                     {l s='Sandbox' mod='mercadopago'}
                     {l s='test environment to test your store.' mod='mercadopago'}
                 </p>
             </div>
-            
+
             <div class="col-md-2 text-center mp-w-25 mp-px-10">
                 {if $sandbox_status == true}
                     <p class="mp-number-checked"><i class="icon-check"></i></p>
@@ -106,7 +106,7 @@
                 <p class="mp-text-checkout-body">{l s='Deactivate it if you’re ready to receive payments.' mod='mercadopago'}</p>
             </div>
 		</div>
-		
+
 		<div class="row mp-pt-30">
             <div class="col-md-6">
                 <p class="text-branded lists-how-configure">
@@ -115,7 +115,7 @@
                     {l s='You don`t need to know how to design or program to activate us in your store. ' mod='mercadopago'}
                 </p>
             </div>
-		</div>        
+		</div>
 	</div>
 </div>
 
@@ -124,34 +124,34 @@
 {html_entity_decode($credentials|escape:'html':'UTF-8')}
 
 {if $access_token != '' && $public_key != ''  && $sandbox_access_token != '' && $sandbox_public_key != ''}
-  
+
     {if $sandbox_status != true || $seller_homolog == true}
         <div style="display: none">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>
     {else}
         <div style="display: block">{html_entity_decode($homolog_form|escape:'html':'UTF-8')}</div>
     {/if}
-    
+
     {html_entity_decode($store_form|escape:'html':'UTF-8')}
 
     <!-- Nav tabs checkouts -->
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Mercado Pago Checkout' mod='mercadopago'}</a></li>
+        <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Checkout Pro' mod='mercadopago'}</a></li>
         <li><a href="#custom_checkout" role="tab" data-toggle="tab">{l s='Custom Checkout' mod='mercadopago'}</a></li>
         <li><a href="#ticket_checkout" role="tab" data-toggle="tab">{l s='Ticket checkout' mod='mercadopago'}</a></li>
     </ul>
-    
+
     <!-- Tab panes checkouts -->
     <div class="tab-content">
         <div class="tab-pane active" id="standard_checkout">{html_entity_decode($standard_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="custom_checkout">{html_entity_decode($custom_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div>
     </div>
-    
+
     {if $sandbox_status != true}
     <div class="panel">
         <div class="panel-heading">
             <i class="icon-cogs"></i> {l s='Test yor store' mod='mercadopago'}
-        </div>        
+        </div>
 
         <div class="mercadopago-content">
             <div class="row">
@@ -177,7 +177,7 @@
     <div class="panel">
         <div class="panel-heading">
             <i class="icon-cogs"></i> {l s='Comienza a vender' mod='mercadopago'}
-        </div>        
+        </div>
 
         <div class="mercadopago-content">
             <div class="row">
@@ -208,14 +208,14 @@
 <div class="row">
     <div class="col-md-8">
         {l s='Something`s wrong?' mod='mercadopago'}
-        
+
         {if $country_link == 'mlb'}
           <a href="https://www.mercadopago.com.br/developers/pt/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
         {else}
           <a href="https://www.mercadopago.com.br/developers/es/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
         {/if}
     </div>
-    
+
     <div class="col-md-4 text-right">
         <a class="mp-link-modal-trigger lists-how-configure" data-toggle="modal" data-target="#mp-rating-modal">
             {l s='Your opinion helps us improving' mod='mercadopago'}
@@ -229,7 +229,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h3 class="modal-title" id="myModalLabel">{l s='Your opinion helps us improving.' mod='mercadopago'}</h3>
                     </div>
-                        
+
                     <form action="" method="post">
                         <div class="modal-body mp-rating-modal-body">
                             <div class="row">
