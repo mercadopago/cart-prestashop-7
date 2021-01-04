@@ -275,7 +275,7 @@ $_MODULE['<{mercadopago}prestashop>template_1_9e71c2e834abb091bae5fab9bba7754a']
 $_MODULE['<{mercadopago}prestashop>template_1_5a1313cc21947818bfdbd9f5e7a3b8b6'] =
 'Você não precisa de conhecimentos de programação ou design para ativar o Mercado Pago na sua loja.';
 $_MODULE['<{mercadopago}prestashop>template_1_de6b2e0f77335f7f48c28e2df309a753'] =
-'Checkout do Mercado Pago';
+'Checkout Pro';
 $_MODULE['<{mercadopago}prestashop>template_1_e05dacc06bcd12a1dbc7340983ac5a03'] =
 'Checkout de pagamentos com cartão';
 $_MODULE['<{mercadopago}prestashop>template_1_055e6bd0167d88d8c87ed8e4db5b7108'] =
@@ -458,6 +458,44 @@ $_MODULE['<{mercadopago}prestashop>template_2_bb0a503f6022dd9ad15e450f25480f8b']
 'Somos parceiros oficiais de Prestashop';
 $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917'] =
 'Programa de proteção de vendedores.';
+$_MODULE['<{mercadopago}prestashop>template_3_0066916a42383e8435dafda43e096dc2'] =
+'Devido a uma configuração de segurança, não podemos registrar nem ler os dados de log, verifique para usar esta ferramenta.';
+$_MODULE['<{mercadopago}prestashop>template_3_99989c85b571a24c9beb220c2b880a48'] =
+'Devido a uma configuração de segurança, não podemos registrar os dados de log. Por favor verifique para registrar novos logs.';
+$_MODULE['<{mercadopago}prestashop>template_3_92233d32feee4a3cd5cb4756492cf02c'] =
+'Devido a uma configuração de segurança, não podemos ler os dados registrados. Por favor verifique para ver os registros de log.';
+$_MODULE['<{mercadopago}prestashop>template_3_d81791e7ca2c5131fa6edb44dafac45b'] =
+'Aqui você pode obter os logs do plugin do Mercado Pago';
+$_MODULE['<{mercadopago}prestashop>template_3_895c78d5287e82e33e0bd925c1d58cb9'] =
+'Apenas para fins de suporte. Não compartilhe isto com pessoas não autorizadas!';
+$_MODULE['<{mercadopago}prestashop>template_3_7fe1bf192fbc1906e6f55e8b7114895b'] =
+'Ver o log';
+$_MODULE['<{mercadopago}prestashop>template_3_58e1197a08841b9e38c70703933aacc8'] =
+'Baixar o log';
+$_MODULE['<{mercadopago}prestashop>template_3_6eca86a8671f52bc8d9a73d1c677922c'] =
+'Há algum problema?';
+$_MODULE['<{mercadopago}prestashop>template_3_0e6444c61d2aebf9a778787ee9322559'] =
+'Fale com a nossa equipe de suporte.';
+$_MODULE['<{mercadopago}prestashop>template_3_0b50f5dd5293d9a770a6f6370fc72d0c'] =
+'Ajude-nos a melhorar';
+$_MODULE['<{mercadopago}prestashop>template_3_776ad719457341aa0913807e47260a8e'] =
+'Ajude-nos a melhorar.';
+$_MODULE['<{mercadopago}prestashop>template_3_f27513a2f23d3c32b5dd948902ba470e'] =
+'De 1 a 10, qual é a probabilidade de você nos recomendar a um amigo?';
+$_MODULE['<{mercadopago}prestashop>template_3_6932676695a18a04d771736f169c31dd'] =
+'Nada provável';
+$_MODULE['<{mercadopago}prestashop>template_3_389344a1748d5b72b78ffe1ded4df6b4'] =
+'Pouco provável';
+$_MODULE['<{mercadopago}prestashop>template_3_97aeaf0de4598b006e47a1384a2e3646'] =
+'Muito provável';
+$_MODULE['<{mercadopago}prestashop>template_3_9fe6b590f9b933c4fc5acd9be20fb52e'] =
+'Comentários ou sugestões? Este é o espaço ideal:';
+$_MODULE['<{mercadopago}prestashop>template_3_70258a400d27560f7e24fca8eb24ee48'] =
+'Deixe seu comentário';
+$_MODULE['<{mercadopago}prestashop>template_3_d3d2e617335f08df83599665eef8a418'] =
+'Fechar';
+$_MODULE['<{mercadopago}prestashop>template_3_94966d90747b97d1f0f206c98a8b1ac3'] =
+'Enviar';
 $_MODULE['<{mercadopago}prestashop>failure_55d37c0a3c1b32de6e3f9ceb1f8c0a4a'] =
 'Ops! Ocorreu um erro no seu pagamento, tente novamente ...';
 $_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] =
