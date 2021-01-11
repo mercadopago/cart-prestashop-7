@@ -29,8 +29,8 @@
 
 class MPLog
 {
-    private const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
-    private const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
+    const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
+    const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
 
     public function __construct()
     {
