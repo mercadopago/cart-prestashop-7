@@ -45,7 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id, $customer_secure_key)
+    public function __construct($transaction_id, $customer_secure_key = null)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
@@ -82,10 +82,10 @@ class AbstractNotification
     public function validateOrderState()
     {
         if ($this->status != null) {
-            if ($this->approved >= $this->total) {
+            if ($this->total > 0 && $this->approved >= $this->total) {
                 $this->amount = $this->approved;
                 $this->order_state = $this->getNotificationPaymentState('approved');
-            } elseif ($this->pending >= $this->total) {
+            } elseif ($this->total > 0 && $this->pending >= $this->total) {
                 $this->amount = $this->pending;
                 $this->order_state = $this->getNotificationPaymentState('in_process');
             } else {
@@ -168,40 +168,50 @@ class AbstractNotification
         if ($this->order_id != 0 && $this->status != null) {
             switch ($this->order_state) {
                 case $status_approved:
+                    MPLog::generate('Entered the APPROVED rule');
                     $this->ruleApproved($cart, $order, $status_approved, $actual_status, $validate_actual);
                     break;
 
                 case $status_pending:
+                    MPLog::generate('Entered the PENDING rule');
                     $this->ruleProcessing($cart, $order, $status_pending, $actual_status, $validate_actual);
                     break;
 
                 case $status_inprocess:
+                    MPLog::generate('Entered the IN_PROCESS rule');
                     $this->ruleProcessing($cart, $order, $status_inprocess, $actual_status, $validate_actual);
                     break;
 
                 case $status_authorized:
+                    MPLog::generate('Entered the AUTHORIZED rule');
                     $this->ruleProcessing($cart, $order, $status_authorized, $actual_status, $validate_actual);
                     break;
 
                 case $status_cancelled:
+                    MPLog::generate('Entered the CANCELLED rule');
                     $this->ruleFailed($cart, $order, $status_cancelled, $actual_status, $validate_actual);
                     break;
 
                 case $status_rejected:
+                    MPLog::generate('Entered the REJECTED rule');
                     $this->ruleFailed($cart, $order, $status_rejected, $actual_status, $validate_actual);
                     break;
 
                 case $status_refunded:
+                    MPLog::generate('Entered the REFUNDED rule');
                     $this->ruleDevolution($cart, $order, $status_refunded, $actual_status);
                     break;
 
                 case $status_charged:
+                    MPLog::generate('Entered the CHARGED_BACK rule');
                     $this->ruleDevolution($cart, $order, $status_charged, $actual_status);
                     break;
 
                 case $status_mediation:
+                    MPLog::generate('Entered the MEDIATION rule');
                     $this->ruleDevolution($cart, $order, $status_mediation, $actual_status);
                     break;
+
                 default:
                     break;
             }
@@ -299,8 +309,11 @@ class AbstractNotification
     public function updatePrestashopOrder($cart, $order)
     {
         try {
+            $this->generateLogs();
+
             $order->setCurrentState($this->order_state);
             $this->saveUpdateOrderData($cart);
+
             MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $this->order_state);
             $this->getNotificationResponse('The order has been updated', 201);
         } catch (Exception $e) {
@@ -352,11 +365,19 @@ class AbstractNotification
      */
     public function saveUpdateOrderData($cart)
     {
+        $payments_id = $this->payments_data['payments_id'];
+        $payments_type = $this->payments_data['payments_type'];
+        $payments_method = $this->payments_data['payments_method'];
         $payments_status = $this->payments_data['payments_status'];
+        $payments_amount = $this->payments_data['payments_amount'];
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status
+                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
+                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
+                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
+                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
+                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
             ]
         );
     }
@@ -430,9 +451,10 @@ class AbstractNotification
         header('Content-type: application/json');
         $response = array(
             "code" => $code,
-            "message" => $message
+            "message" => $message,
+            "version" => MP_VERSION
         );
-
+    
         echo Tools::jsonEncode($response);
         return http_response_code($code);
     }
@@ -449,5 +471,20 @@ class AbstractNotification
         }
 
         return $total;
+    }
+
+    /**
+     * @param  string $method
+     * @return void
+     */
+    public function generateLogs()
+    {
+        MPLog::generate('Transaction id: ' . $this->transaction_id);
+        MPLog::generate('Cart total: ' . $this->total);
+        MPLog::generate('Order id: ' . $this->order_id);
+        MPLog::generate('Payment status: ' . $this->status);
+        MPLog::generate('Approved order_state: ' . $this->approved);
+        MPLog::generate('Pending order_state: ' . $this->pending);
+        MPLog::generate('Order state: ' . $this->order_state);
     }
 }

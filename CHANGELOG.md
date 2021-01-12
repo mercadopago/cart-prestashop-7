@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2020-12-28
+
+### Added
+- Added admin tab to view or download the plugin log
+- Added plugin version o notification response
+
+### Changed
+- Renamed from Checkout Mercado Pago for Checkout Pro
+
+### Fixed
+- Fixed getIssuers method on custom-card.js
+
+## [4.3.0] - 2020-11-10
+
+### Added
+- Improved security (added access token in the header for all calls to Mercado Livre and Mercado Pago endpoints)
+- Added new endpoint to validate Access Token to substitute old validation process
+- Added logs by plugin version
+- Added try catch in the updateTransactionId method
+- Added more logs in the notification methods
+- Added validation to verify that the cart total is greater than zero in the validateOrderState method
+- Added logs for database failures
+
+### Fixed
+- Fixed homologation flow
+
 ## [4.2.0] - 2020-09-25
 
 ### Added

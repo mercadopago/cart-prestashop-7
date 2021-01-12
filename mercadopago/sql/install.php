@@ -72,7 +72,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'mp_transactions` (
 //Create tables
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
-        MPLog::generate('Failed to create tables (mp_module and mp_transactions) in database', 'error');
+        MPLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
         return false;
     }
 }
