@@ -29,7 +29,7 @@
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
             <p class="mp-m-pt-10">
                 {l s='Pay with payment methods in cash' mod='mercadopago'}
-                {if $discount != ""} ({$discount}% OFF) {/if}
+                {if $discount != ""} ({$discount|escape:'htmlall':'UTF-8'}% OFF) {/if}
             </p>
         </div>
 

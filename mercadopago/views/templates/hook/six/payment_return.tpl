@@ -64,7 +64,7 @@
 
         {foreach from=$order_products item=product}
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6 mp-table">{$product.product_name}</div>
+                <div class="col-md-6 col-sm-6 col-xs-6 mp-table">{$product.product_name|escape:'htmlall':'UTF-8'}</div>
                 <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">
                     {if $use_taxes}
                         {displayPrice price=$product.total_price_tax_incl}
@@ -72,7 +72,7 @@
                         {displayPrice price=$product.total_price_tax_excl}
                     {/if}
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">{$product.product_quantity}</div>
+                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">{$product.product_quantity|escape:'htmlall':'UTF-8'}</div>
             </div>
         {/foreach}
 
