@@ -101,4 +101,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Mercado Envíos.
 - Discount coupons.
+<<<<<<< HEAD
 - Installment calculator.
+=======
+- Installment calculator.
+>>>>>>> 67ef7918a9cd12191a3ed5cfc02a9420b778e2ed
