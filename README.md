@@ -4,11 +4,7 @@
   </a>
 </p>
 
-<<<<<<< HEAD
 # Prestashop 1.6.x & 1.7.x - Mercado Pago Module (v4.4.1)
-=======
-# Prestashop 1.6.x & 1.7.x - Mercado Pago Module (v4.4.0)
->>>>>>> 67ef7918a9cd12191a3ed5cfc02a9420b778e2ed
 
 With the official module of Mercado Pago you will have an integration, hundreds of solutions and thousands of sales. Maximize your conversions and make your customers return to your store by increasing their confidence in the shopping experience.
 
