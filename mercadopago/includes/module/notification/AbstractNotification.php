@@ -467,9 +467,10 @@ and id_order = $id_order
         header('Content-type: application/json');
         $response = array(
             "code" => $code,
-            "message" => $message
+            "message" => $message,
+            "version" => MP_VERSION
         );
-
+    
         echo Tools::jsonEncode($response);
         return http_response_code($code);
     }
