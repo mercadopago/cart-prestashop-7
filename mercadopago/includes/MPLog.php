@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2020 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
+*  @copyright 2007-2021 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *
@@ -29,8 +29,8 @@
 
 class MPLog
 {
-    private const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
-    private const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
+    const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
+    const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
 
     public function __construct()
     {
