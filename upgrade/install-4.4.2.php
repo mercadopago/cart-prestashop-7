@@ -4,7 +4,7 @@
 function upgrade_module_4_4_2($module)
 {
 	// Execute module update MySQL commands
-	$sql_file = dirname(__FILE__).'/sql/install-4.4.1.sql';
+	$sql_file = dirname(__FILE__).'/sql/install-4.4.2.sql';
 	if (!$module->loadSQLFile($sql_file))
         return false;
 
