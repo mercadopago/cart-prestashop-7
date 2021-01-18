@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2020 PrestaShop.
+ * 2007-2021 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.4.0');
+define('MP_VERSION', '4.4.1');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,7 +72,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.4.0';
+        $this->version = '4.4.1';
 
         parent::__construct();
 
