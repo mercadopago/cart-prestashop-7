@@ -339,25 +339,35 @@ class AbstractNotification
      */
     public function saveCreateOrderData($cart)
     {
-        $payments_id = $this->payments_data['payments_id'];
-        $payments_type = $this->payments_data['payments_type'];
-        $payments_method = $this->payments_data['payments_method'];
-        $payments_status = $this->payments_data['payments_status'];
-        $payments_amount = $this->payments_data['payments_amount'];
+        $payments_id = is_array($this->payments_data['payments_id']) ? implode(',', $this->payments_data['payments_id']) : $this->payments_data['payments_id'];
+        $payments_type = is_array($this->payments_data['payments_type']) ? implode(',', $this->payments_data['payments_type']) : $this->payments_data['payments_type'];
+        $payments_method = is_array($this->payments_data['payments_method']) ? implode(',', $this->payments_data['payments_method']) : $this->payments_data['payments_method'];
+        $payments_status = is_array($this->payments_data['payments_status']) ? implode(',', $this->payments_data['payments_status']) : $this->payments_data['payments_status'];
+        $payments_amount = is_array($this->payments_data['payments_amount']) ? implode(',', $this->payments_data['payments_amount']) : $this->payments_data['payments_amount'];
 
-        $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
-            [
-                "order_id" => $this->order_id,
-                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
-                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
-                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
-                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
-                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
-                "notification_url" => $_SERVER['REQUEST_URI'],
-                "merchant_order_id" => $this->transaction_id,
-                "received_webhook" => true,
-            ]
-        );
+        $dataToCreate =  [
+            "order_id" => $this->order_id,
+            "notification_url" => $_SERVER['REQUEST_URI'],
+            "merchant_order_id" => $this->transaction_id,
+            "received_webhook" => true,
+        ];
+
+        if($payments_id)
+          $dataToCreate['payment_id'] = $payments_id;
+
+        if($payments_type)
+          $dataToCreate['payment_type'] = $payments_type;
+
+        if($payments_method)
+          $dataToCreate['payment_method'] = $payments_method;
+
+        if($payments_status)
+          $dataToCreate['payment_status'] = $payments_status;
+
+        if($payments_amount)
+          $dataToCreate['payment_amount'] = $payments_amount;
+
+        $this->mp_transaction->where('cart_id', '=', $cart->id)->update($dataToCreate);
     }
 
     /**
