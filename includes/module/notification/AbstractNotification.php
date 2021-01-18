@@ -89,7 +89,11 @@ class AbstractNotification
                 $this->amount = $this->pending;
                 $this->order_state = $this->getNotificationPaymentState('in_process');
             } else {
-                $this->order_state = $this->getNotificationPaymentState($this->status);
+                if ($this->total > $this->approved) {
+                    $this->order_state = $this->getNotificationPaymentState('in_process');
+                } else {
+                    $this->order_state = $this->getNotificationPaymentState($this->status);
+                }
             }
 
             return $this->order_state;
