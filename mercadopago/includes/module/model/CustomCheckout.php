@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2020 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2020 PrestaShop SA
+*  @copyright 2007-2021 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *
@@ -92,7 +92,7 @@ class CustomCheckout
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
         $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
-        
+
         $amount = (float)$cart->getOrderTotal(true, 4);
         $amount = ($discount != "") ? $amount - ($amount * ($discount / 100)) : $amount;
         $amount = (float)$cart->getOrderTotal(true, 5) + $amount;
