@@ -56,6 +56,9 @@ class IpnNotification extends AbstractNotification
             $this->validateOrderState();
 
             $baseOrder = new Order($orderId);
+            $payments = $baseOrder->getOrderPaymentCollection();
+            $payments[0]->amount = $this->approved;
+            $payments[0]->update();
             $orders = Order::getByReference($baseOrder->reference);
 
             foreach ($orders as $order) {
