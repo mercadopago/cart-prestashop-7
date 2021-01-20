@@ -44,17 +44,17 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'mp_module` (
 
 //transactions table
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'mp_transactions` (
-      `id_mp_transaction` INT(11) NOT NULL AUTO_INCREMENT,
-      `cart_id` INT NOT NULL,
-      `order_id` INT NULL,
-      `customer_id` INT NOT NULL,
+      `id_mp_transaction` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `cart_id` INT(10) UNSIGNED NOT NULL,
+      `order_id` INT(10) UNSIGNED NULL,
+      `customer_id` INT(11) UNSIGNED NOT NULL,
       `total` DECIMAL(15,2) NULL,
       `payment_id` VARCHAR(100) NULL,
       `payment_method` VARCHAR(100) NULL,
       `payment_type` VARCHAR(100) NULL,
       `payment_status` VARCHAR(100) NULL,
       `payment_amount` VARCHAR(100) NULL,
-      `merchant_order_id` INT NULL,
+      `merchant_order_id` VARCHAR(100) NULL,
       `notification_url` TEXT NULL,
       `is_payment_test` TINYINT(1) NULL,
       `received_webhook` TINYINT(1) NULL,
