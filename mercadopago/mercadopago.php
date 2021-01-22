@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.4.2');
+define('MP_VERSION', '4.4.3');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,7 +72,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.4.2';
+        $this->version = '4.4.3';
 
         parent::__construct();
 
@@ -646,7 +646,7 @@ class Mercadopago extends PaymentModule
     public function loadSQLFile($sql_file)
     {
         // Get install SQL file content
-        $sql_content = file_get_contents($sql_file);
+        $sql_content = Tools::file_get_contents($sql_file);
 
         // Replace prefix and store SQL command in array
         $sql_content = str_replace('PREFIX_', _DB_PREFIX_, $sql_content);
