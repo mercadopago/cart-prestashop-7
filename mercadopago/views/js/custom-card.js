@@ -30,64 +30,65 @@
 /* eslint no-return-assign: 0 */
 
 (function () {
-  var objPaymentMethod = {};
-  var additionalInfoNeeded = {};
+    var objPaymentMethod = {};
+    var additionalInfoNeeded = {};
 
-  var sellerCustom = {
-    site_id: ''
-  };
+    var sellerCustom = {
+        site_id: ''
+    };
 
-  var translateCustom = {
-    select_choose: ''
-  };
+    var translateCustom = {
+        select_choose: ''
+    };
 
-  var psVersion = '';
+    var psVersion = '';
 
   /*
     * Initialise vars to use on JS custom-card.js
     *
     * @param object customVars
     */
-  window.initializeCustom = function (mpCustom) {
-    sellerCustom.site_id = mpCustom.site_id;
-    translateCustom.select_choose = mpCustom.select_choose;
-    psVersion = mpCustom.psVersion;
-  };
+    window.initializeCustom = function (mpCustom) {
+        sellerCustom.site_id = mpCustom.site_id;
+        translateCustom.select_choose = mpCustom.select_choose;
+        psVersion = mpCustom.psVersion;
+    };
 
   /*
     * Execute before event focusout on input Card Number
     *
     * @param object event
     */
-  function guessingPaymentMethod (event) {
-    clearIssuer();
-    clearInstallments();
-    clearTax();
-    clearDoc();
+    function guessingPaymentMethod(event)
+    {
+        clearIssuer();
+        clearInstallments();
+        clearTax();
+        clearDoc();
 
-    var bin = getBin();
+        var bin = getBin();
 
-    if (bin.length < 6) {
-      resetBackgroundCard();
-      return;
-    }
-
-    if (event.type === 'keyup') {
-      if (bin.length >= 6) {
-        Mercadopago.getPaymentMethod({
-          bin: bin
-        }, paymentMethodHandler);
-      }
-    } else {
-      setTimeout(function () {
-        if (bin.length >= 6) {
-          Mercadopago.getPaymentMethod({
-            bin: bin
-          }, paymentMethodHandler);
+        if (bin.length < 6) {
+            resetBackgroundCard();
+            return;
         }
-      }, 100);
+
+        if (event.type === 'keyup') {
+            if (bin.length >= 6) {
+                Mercadopago.getPaymentMethod({
+                    bin: bin
+                }, paymentMethodHandler);
+            }
+        } else {
+            setTimeout(function () {
+                if (bin.length >= 6) {
+                    Mercadopago.getPaymentMethod({
+                        bin: bin
+                    }, paymentMethodHandler);
+                }
+            }, 100);
+        }
     }
-  }
 
   /**
     * Handle payment Method response
@@ -95,36 +96,39 @@
     * @param number status
     * @param object response
     */
-  function paymentMethodHandler (status, response) {
-    if (status === 200) {
-      objPaymentMethod = response[0];
-      setPaymentMethodId(objPaymentMethod.id);
-      setImageCard(objPaymentMethod.secure_thumbnail);
-      loadAdditionalInfo(objPaymentMethod.additional_info_needed);
-      additionalInfoHandler();
-    } else {
-      document.getElementById('id-card-number').innerHTML = '';
+    function paymentMethodHandler(status, response)
+    {
+        if (status === 200) {
+            objPaymentMethod = response[0];
+            setPaymentMethodId(objPaymentMethod.id);
+            setImageCard(objPaymentMethod.secure_thumbnail);
+            loadAdditionalInfo(objPaymentMethod.additional_info_needed);
+            additionalInfoHandler();
+        } else {
+            document.getElementById('id-card-number').innerHTML = '';
+        }
     }
-  }
 
   /**
    * Set value on paymentMethodId element
    *
    * @param string paymentMethodId
    */
-  function setPaymentMethodId (paymentMethodId) {
-    var paymentMethodElement = document.getElementById('payment_method_id');
-    paymentMethodElement.value = paymentMethodId;
-  }
+    function setPaymentMethodId(paymentMethodId)
+    {
+        var paymentMethodElement = document.getElementById('payment_method_id');
+        paymentMethodElement.value = paymentMethodId;
+    }
 
   /**
    * Set Imagem card on element
    *
    * @param string secureThumbnail
    */
-  function setImageCard (secureThumbnail) {
-    document.getElementById('id-card-number').style.background = 'url(' + secureThumbnail + ') 98% 50% no-repeat #fff';
-  }
+    function setImageCard(secureThumbnail)
+    {
+        document.getElementById('id-card-number').style.background = 'url(' + secureThumbnail + ') 98% 50% no-repeat #fff';
+    }
 
   /**
    *
@@ -132,73 +136,75 @@
    *
    * @param array sdkAdditionalInfoNeeded
    */
-  function loadAdditionalInfo (sdkAdditionalInfoNeeded) {
-    additionalInfoNeeded = {
-      issuer: false,
-      cardholder_name: false,
-      cardholder_identification_type: false,
-      cardholder_identification_number: false
-    };
+    function loadAdditionalInfo(sdkAdditionalInfoNeeded)
+    {
+        additionalInfoNeeded = {
+            issuer: false,
+            cardholder_name: false,
+            cardholder_identification_type: false,
+            cardholder_identification_number: false
+        };
 
-    for (var i = 0; i < sdkAdditionalInfoNeeded.length; i++) {
-      if (sdkAdditionalInfoNeeded[i] === 'issuer_id') {
-        additionalInfoNeeded.issuer = true;
-      }
-      if (sdkAdditionalInfoNeeded[i] === 'cardholder_name') {
-        additionalInfoNeeded.cardholder_name = true;
-      }
-      if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_type') {
-        additionalInfoNeeded.cardholder_identification_type = true;
-      }
-      if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_number') {
-        additionalInfoNeeded.cardholder_identification_number = true;
-      }
+        for (var i = 0; i < sdkAdditionalInfoNeeded.length; i++) {
+            if (sdkAdditionalInfoNeeded[i] === 'issuer_id') {
+                additionalInfoNeeded.issuer = true;
+            }
+            if (sdkAdditionalInfoNeeded[i] === 'cardholder_name') {
+                additionalInfoNeeded.cardholder_name = true;
+            }
+            if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_type') {
+                additionalInfoNeeded.cardholder_identification_type = true;
+            }
+            if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_number') {
+                additionalInfoNeeded.cardholder_identification_number = true;
+            }
+        }
     }
-  }
 
   /**
    * Check what information is necessary to pay and show inputs
    */
-  function additionalInfoHandler () {
-    if (additionalInfoNeeded.cardholder_name) {
-      document.getElementById('mp-card-holder-div').style.display = 'block';
-    } else {
-      document.getElementById('mp-card-holder-div').style.display = 'none';
-    }
+    function additionalInfoHandler()
+    {
+        if (additionalInfoNeeded.cardholder_name) {
+            document.getElementById('mp-card-holder-div').style.display = 'block';
+        } else {
+            document.getElementById('mp-card-holder-div').style.display = 'none';
+        }
 
-    if (additionalInfoNeeded.issuer) {
-      document.getElementById('container-issuers').style.display = 'block';
-      document.getElementById('container-installments').classList.remove('col-md-12');
-      document.getElementById('container-installments').classList.add('col-md-8');
-      Mercadopago.getIssuers(objPaymentMethod.id, getBin(), issuersHandler);
-    } else {
-      clearIssuer();
-      setInstallments();
-    }
+        if (additionalInfoNeeded.issuer) {
+            document.getElementById('container-issuers').style.display = 'block';
+            document.getElementById('container-installments').classList.remove('col-md-12');
+            document.getElementById('container-installments').classList.add('col-md-8');
+            Mercadopago.getIssuers(objPaymentMethod.id, getBin(), issuersHandler);
+        } else {
+            clearIssuer();
+            setInstallments();
+        }
 
-    if (additionalInfoNeeded.cardholder_identification_type) {
-      document.getElementById('mp-doc-div-title').style.display = 'block';
-      document.getElementById('mp-doc-div').style.display = 'block';
-      document.getElementById('mp-doc-type-div').style.display = 'block';
-      Mercadopago.getIdentificationTypes();
-    } else {
-      document.getElementById('mp-doc-type-div').style.display = 'none';
-    }
+        if (additionalInfoNeeded.cardholder_identification_type) {
+            document.getElementById('mp-doc-div-title').style.display = 'block';
+            document.getElementById('mp-doc-div').style.display = 'block';
+            document.getElementById('mp-doc-type-div').style.display = 'block';
+            Mercadopago.getIdentificationTypes();
+        } else {
+            document.getElementById('mp-doc-type-div').style.display = 'none';
+        }
 
-    if (additionalInfoNeeded.cardholder_identification_number) {
-      document.getElementById('mp-doc-div-title').style.display = 'block';
-      document.getElementById('mp-doc-div').style.display = 'block';
-      document.getElementById('mp-doc-number-div').style.display = 'block';
-    } else {
-      document.getElementById('mp-doc-number-div').style.display = 'none';
-    }
+        if (additionalInfoNeeded.cardholder_identification_number) {
+            document.getElementById('mp-doc-div-title').style.display = 'block';
+            document.getElementById('mp-doc-div').style.display = 'block';
+            document.getElementById('mp-doc-number-div').style.display = 'block';
+        } else {
+            document.getElementById('mp-doc-number-div').style.display = 'none';
+        }
 
-    if (!additionalInfoNeeded.cardholder_identification_type &&
+        if (!additionalInfoNeeded.cardholder_identification_type &&
             !additionalInfoNeeded.cardholder_identification_number) {
-      document.getElementById('mp-doc-div-title').style.display = 'none';
-      document.getElementById('mp-doc-div').style.display = 'none';
+            document.getElementById('mp-doc-div-title').style.display = 'none';
+            document.getElementById('mp-doc-div').style.display = 'none';
+        }
     }
-  }
 
   /**
    * Handle issuers response and build select
@@ -206,60 +212,62 @@
    * @param status status
    * @param object response
    */
-  function issuersHandler (status, response) {
-    if (status === 200) {
-      // If the API does not return any bank.
-      var issuersSelector = document.getElementById('id-issuers-options');
-      var fragment = document.createDocumentFragment();
+    function issuersHandler(status, response)
+    {
+        if (status === 200) {
+          // If the API does not return any bank.
+            var issuersSelector = document.getElementById('id-issuers-options');
+            var fragment = document.createDocumentFragment();
 
-      issuersSelector.options.length = 0;
-      var option = new Option(translateCustom.select_choose, '-1');
-      fragment.appendChild(option);
+            issuersSelector.options.length = 0;
+            var option = new Option(translateCustom.select_choose, '-1');
+            fragment.appendChild(option);
 
-      for (var i = 0; i < response.length; i++) {
-        var name = response[i].name === 'default' ? 'Otro' : response[i].name;
-        fragment.appendChild(new Option(name, response[i].id));
-      }
+            for (var i = 0; i < response.length; i++) {
+                var name = response[i].name === 'default' ? 'Otro' : response[i].name;
+                fragment.appendChild(new Option(name, response[i].id));
+            }
 
-      issuersSelector.appendChild(fragment);
-      issuersSelector.removeAttribute('disabled');
-      $('body').on('change', '#id-issuers-options', setInstallments);
-    } else {
-      clearIssuer();
+            issuersSelector.appendChild(fragment);
+            issuersSelector.removeAttribute('disabled');
+            $('body').on('change', '#id-issuers-options', setInstallments);
+        } else {
+            clearIssuer();
+        }
     }
-  }
 
   /**
    * Call insttalments with issuer ou not, depends on additionalInfoHandler()
    */
-  function setInstallments () {
-    var paramsInstallments = {};
-    var amount = getAmount();
-    var issuer = false;
-    for (var i = 0; i < objPaymentMethod.additional_info_needed.length; i++) {
-      if (objPaymentMethod.additional_info_needed[i] === 'issuer_id') {
-        issuer = true;
-      }
-    }
-    if (issuer) {
-      var issuerId = document.getElementById('id-issuers-options').value;
-      paramsInstallments = {
-        bin: getBin(),
-        amount: amount,
-        issuer_id: issuerId
-      };
+    function setInstallments()
+    {
+        var paramsInstallments = {};
+        var amount = getAmount();
+        var issuer = false;
+        for (var i = 0; i < objPaymentMethod.additional_info_needed.length; i++) {
+            if (objPaymentMethod.additional_info_needed[i] === 'issuer_id') {
+                issuer = true;
+            }
+        }
+        if (issuer) {
+            var issuerId = document.getElementById('id-issuers-options').value;
+            paramsInstallments = {
+                bin: getBin(),
+                amount: amount,
+                issuer_id: issuerId
+            };
 
-      if (issuerId === '-1') {
-        return;
-      }
-    } else {
-      paramsInstallments = {
-        bin: getBin(),
-        amount: amount
-      };
+            if (issuerId === '-1') {
+                return;
+            }
+        } else {
+            paramsInstallments = {
+                bin: getBin(),
+                amount: amount
+            };
+        }
+        Mercadopago.getInstallments(paramsInstallments, installmentHandler);
     }
-    Mercadopago.getInstallments(paramsInstallments, installmentHandler);
-  }
 
   /**
    * Get instalments
@@ -267,34 +275,35 @@
    * @param number status
    * @param object response
    */
-  function installmentHandler (status, response) {
-    clearInstallments();
-    if (status === 200) {
-      var htmlOption = new Option(translateCustom.select_choose, '', true, true);
-      $('#id-installments').append(htmlOption);
+    function installmentHandler(status, response)
+    {
+        clearInstallments();
+        if (status === 200) {
+            var htmlOption = new Option(translateCustom.select_choose, '', true, true);
+            $('#id-installments').append(htmlOption);
 
-      var payerCosts = [];
-      for (var i = 0; i < response.length; i++) {
-        if (response[i].processing_mode === 'aggregator') {
-          payerCosts = response[i].payer_costs;
+            var payerCosts = [];
+            for (var i = 0; i < response.length; i++) {
+                if (response[i].processing_mode === 'aggregator') {
+                    payerCosts = response[i].payer_costs;
+                }
+            }
+
+            for (var e = 0; e < payerCosts.length; e++) {
+                htmlOption = new Option((payerCosts[e].recommended_message || payerCosts[e].installments), payerCosts[e].installments);
+                htmlOption.setAttribute('data-tax', argentinaResolution(payerCosts[e].labels));
+                $('#id-installments').append(htmlOption);
+            }
+
+            if (sellerCustom.site_id === 'MLA') {
+                clearTax();
+                $('body').on('change', '#id-installments', showTaxes);
+            }
+        } else {
+            clearInstallments();
+            clearTax();
         }
-      }
-
-      for (var e = 0; e < payerCosts.length; e++) {
-        htmlOption = new Option((payerCosts[e].recommended_message || payerCosts[e].installments), payerCosts[e].installments);
-        htmlOption.setAttribute('data-tax', argentinaResolution(payerCosts[e].labels));
-        $('#id-installments').append(htmlOption);
-      }
-
-      if (sellerCustom.site_id === 'MLA') {
-        clearTax();
-        $('body').on('change', '#id-installments', showTaxes);
-      }
-    } else {
-      clearInstallments();
-      clearTax();
     }
-  }
 
   /**
    * Resolution 51/2017
@@ -302,232 +311,246 @@
    * @param * payerCosts
    * @returns string
    */
-  function argentinaResolution (payerCosts) {
-    var dataInput = '';
-    if (sellerCustom.site_id === 'MLA') {
-      for (var l = 0; l < payerCosts.length; l++) {
-        if (payerCosts[l].indexOf('CFT_') !== -1) {
-          dataInput = payerCosts[l];
+    function argentinaResolution(payerCosts)
+    {
+        var dataInput = '';
+        if (sellerCustom.site_id === 'MLA') {
+            for (var l = 0; l < payerCosts.length; l++) {
+                if (payerCosts[l].indexOf('CFT_') !== -1) {
+                    dataInput = payerCosts[l];
+                }
+            }
+            return dataInput;
         }
-      }
-      return dataInput;
+        return dataInput;
     }
-    return dataInput;
-  }
 
   /**
    * Show taxes resolution 51/2017 for MLA
    */
-  function showTaxes () {
-    var selectorInstallments = document.querySelector('#id-installments');
-    if (selectorInstallments.options.length > 0) {
-      var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
-      var cft = '';
-      var tea = '';
-      if (tax !== null) {
-        var taxSplit = tax.split('|');
-        cft = taxSplit[0].replace('_', ' ');
-        tea = taxSplit[1].replace('_', ' ');
-        if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
-          cft = '';
-          tea = '';
+    function showTaxes()
+    {
+        var selectorInstallments = document.querySelector('#id-installments');
+        if (selectorInstallments.options.length > 0) {
+            var tax = selectorInstallments.options[selectorInstallments.selectedIndex].getAttribute('data-tax');
+            var cft = '';
+            var tea = '';
+            if (tax !== null) {
+                var taxSplit = tax.split('|');
+                cft = taxSplit[0].replace('_', ' ');
+                tea = taxSplit[1].replace('_', ' ');
+                if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
+                    cft = '';
+                    tea = '';
+                }
+            }
+            document.querySelector('.mp-text-cft').innerHTML = cft;
+            document.querySelector('.mp-text-tea').innerHTML = tea;
+        } else {
+            var span = document.querySelector('#uniform-id-installments').children[0].tagName;
+            if (span === 'SPAN') {
+                document.querySelector('#uniform-id-installments').children[0].innerHTML = '';
+            }
         }
-      }
-      document.querySelector('.mp-text-cft').innerHTML = cft;
-      document.querySelector('.mp-text-tea').innerHTML = tea;
-    } else {
-      var span = document.querySelector('#uniform-id-installments').children[0].tagName;
-      if (span === 'SPAN') {
-        document.querySelector('#uniform-id-installments').children[0].innerHTML = '';
-      }
     }
-  }
 
   /**
    * Get Amount end calculate discount for hide inputs
    */
-  function getAmount () {
-    return document.getElementById('amount').value;
-  }
+    function getAmount()
+    {
+        return document.getElementById('amount').value;
+    }
 
   /**
    * Get Bin from Card Number
    */
-  function getBin () {
-    var cardnumber = $('#id-card-number').val().replace(/ /g, '').replace(/-/g, '').replace(/\./g, '');
-    return cardnumber.substr(0, 6);
-  }
+    function getBin()
+    {
+        var cardnumber = $('#id-card-number').val().replace(/ /g, '').replace(/-/g, '').replace(/\./g, '');
+        return cardnumber.substr(0, 6);
+    }
 
   /**
    * Remove background image from imput
    */
-  function resetBackgroundCard () {
-    document.getElementById('id-card-number').style.background = 'no-repeat #fff';
-  }
+    function resetBackgroundCard()
+    {
+        document.getElementById('id-card-number').style.background = 'no-repeat #fff';
+    }
 
   /**
    * Clear input select
    */
-  function clearInstallments () {
-    document.getElementById('id-installments').innerHTML = '';
-  }
+    function clearInstallments()
+    {
+        document.getElementById('id-installments').innerHTML = '';
+    }
 
   /**
    * Clear Tax
    */
-  function clearTax () {
-    document.querySelector('.mp-text-cft').innerHTML = '';
-    document.querySelector('.mp-text-tea').innerHTML = '';
-  }
+    function clearTax()
+    {
+        document.querySelector('.mp-text-cft').innerHTML = '';
+        document.querySelector('.mp-text-tea').innerHTML = '';
+    }
 
   /**
    * Clear input select and change to default layout
    */
-  function clearIssuer () {
-    document.getElementById('container-issuers').style.display = 'none';
-    document.getElementById('container-installments').classList.remove('col-md-8');
-    document.getElementById('container-installments').classList.add('mp-md-12');
-    document.getElementById('id-issuers-options').innerHTML = '';
-  }
+    function clearIssuer()
+    {
+        document.getElementById('container-issuers').style.display = 'none';
+        document.getElementById('container-installments').classList.remove('col-md-8');
+        document.getElementById('container-installments').classList.add('mp-md-12');
+        document.getElementById('id-issuers-options').innerHTML = '';
+    }
 
   /**
    * Clear input select and change to default layout
    */
-  function clearDoc () {
-    document.getElementById('mp-doc-div-title').style.display = 'none';
-    document.getElementById('mp-doc-div').style.display = 'none';
-    document.getElementById('mp-doc-type-div').style.display = 'none';
-    document.getElementById('mp-doc-number-div').style.display = 'none';
-    document.getElementById('id-docType').innerHTML = '';
-    document.getElementById('id-doc-number').value = '';
-  }
+    function clearDoc()
+    {
+        document.getElementById('mp-doc-div-title').style.display = 'none';
+        document.getElementById('mp-doc-div').style.display = 'none';
+        document.getElementById('mp-doc-type-div').style.display = 'none';
+        document.getElementById('mp-doc-number-div').style.display = 'none';
+        document.getElementById('id-docType').innerHTML = '';
+        document.getElementById('id-doc-number').value = '';
+    }
 
   /**
    * Validate Inputs to Create Token
    *
    * @return bool
    */
-  function validateInputsCreateToken () {
-    hideErrors();
-    var fixedInputs = validateFixedInputs();
-    var additionalInputs = validateAdditionalInputs();
+    function validateInputsCreateToken()
+    {
+        hideErrors();
+        var fixedInputs = validateFixedInputs();
+        var additionalInputs = validateAdditionalInputs();
 
-    if (fixedInputs || additionalInputs) {
-      focusInputError();
-      return false;
+        if (fixedInputs || additionalInputs) {
+            focusInputError();
+            return false;
+        }
+
+        return true;
     }
-
-    return true;
-  }
 
   /**
     * Focus input with error
     *
     * @return bool
     */
-  function focusInputError () {
-    if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
-      var formInputs = document.querySelectorAll('.mp-form-control-error');
-      formInputs[0].focus();
+    function focusInputError()
+    {
+        if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
+            var formInputs = document.querySelectorAll('.mp-form-control-error');
+            formInputs[0].focus();
+        }
     }
-  }
 
   /**
     * Validate fixed Inputs is empty
     *
     * @return bool
     */
-  function validateFixedInputs () {
-    var emptyInputs = false;
-    var form = getFormCustom();
-    var formInputs = form.querySelectorAll('[data-checkout]');
-    var fixedInputs = [
-      'cardNumber',
-      'cardExpiration',
-      'securityCode',
-      'installments'
-    ];
+    function validateFixedInputs()
+    {
+        var emptyInputs = false;
+        var form = getFormCustom();
+        var formInputs = form.querySelectorAll('[data-checkout]');
+        var fixedInputs = [
+        'cardNumber',
+        'cardExpiration',
+        'securityCode',
+        'installments'
+        ];
 
-    for (var x = 0; x < formInputs.length; x++) {
-      var element = formInputs[x];
-      // Check is a input to create token.
-      if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
-        if (element.value === -1 || element.value === '') {
-          var small = form.querySelectorAll('small[data-main="#' + element.id + '"]');
-          if (small.length > 0) {
-            small[0].style.display = 'block';
-          }
-          element.classList.add('mp-form-control-error');
-          emptyInputs = true;
+        for (var x = 0; x < formInputs.length; x++) {
+            var element = formInputs[x];
+          // Check is a input to create token.
+            if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
+                if (element.value === -1 || element.value === '') {
+                    var small = form.querySelectorAll('small[data-main="#' + element.id + '"]');
+                    if (small.length > 0) {
+                        small[0].style.display = 'block';
+                    }
+                    element.classList.add('mp-form-control-error');
+                    emptyInputs = true;
+                }
+            }
         }
-      }
-    }
 
-    if (emptyInputs) {
-      return emptyInputs;
-    } else {
-      return emptyInputs;
+        if (emptyInputs) {
+            return emptyInputs;
+        } else {
+            return emptyInputs;
+        }
     }
-  }
 
   /**
    * Validate Additional Inputs
    *
    * @return bool
    */
-  function validateAdditionalInputs () {
-    var emptyInputs = false;
+    function validateAdditionalInputs()
+    {
+        var emptyInputs = false;
 
-    if (additionalInfoNeeded.issuer) {
-      var inputMpIssuer = document.getElementById('id-issuers-options');
-      if (inputMpIssuer.value === -1 || inputMpIssuer.value === '') {
-        inputMpIssuer.classList.add('mp-form-control-error');
-        emptyInputs = true;
-      }
-    }
-    if (additionalInfoNeeded.cardholder_name) {
-      var inputCardholderName = document.getElementById('id-card-holder-name');
-      if (inputCardholderName.value === -1 || inputCardholderName.value === '') {
-        inputCardholderName.classList.add('mp-form-control-error');
-        emptyInputs = true;
-      }
-    }
-    if (additionalInfoNeeded.cardholder_identification_type) {
-      var inputDocType = document.getElementById('id-docType');
-      if (inputDocType.value === -1 || inputDocType.value === '') {
-        inputDocType.classList.add('mp-form-control-error');
-        emptyInputs = true;
-      }
-    }
-    if (additionalInfoNeeded.cardholder_identification_number) {
-      var docNumber = document.getElementById('id-doc-number');
-      if (docNumber.value === -1 || docNumber.value === '') {
-        docNumber.classList.add('mp-form-control-error');
-        document.getElementById('mp-error-324').style.display = 'inline-block';
-        emptyInputs = true;
-      }
-    }
+        if (additionalInfoNeeded.issuer) {
+            var inputMpIssuer = document.getElementById('id-issuers-options');
+            if (inputMpIssuer.value === -1 || inputMpIssuer.value === '') {
+                inputMpIssuer.classList.add('mp-form-control-error');
+                emptyInputs = true;
+            }
+        }
+        if (additionalInfoNeeded.cardholder_name) {
+            var inputCardholderName = document.getElementById('id-card-holder-name');
+            if (inputCardholderName.value === -1 || inputCardholderName.value === '') {
+                inputCardholderName.classList.add('mp-form-control-error');
+                emptyInputs = true;
+            }
+        }
+        if (additionalInfoNeeded.cardholder_identification_type) {
+            var inputDocType = document.getElementById('id-docType');
+            if (inputDocType.value === -1 || inputDocType.value === '') {
+                inputDocType.classList.add('mp-form-control-error');
+                emptyInputs = true;
+            }
+        }
+        if (additionalInfoNeeded.cardholder_identification_number) {
+            var docNumber = document.getElementById('id-doc-number');
+            if (docNumber.value === -1 || docNumber.value === '') {
+                docNumber.classList.add('mp-form-control-error');
+                document.getElementById('mp-error-324').style.display = 'inline-block';
+                emptyInputs = true;
+            }
+        }
 
-    if (emptyInputs) {
-      return emptyInputs;
-    } else {
-      return emptyInputs;
+        if (emptyInputs) {
+            return emptyInputs;
+        } else {
+            return emptyInputs;
+        }
     }
-  }
 
   /**
    *  Create Token call Mercadopago.createToken
    *
    *  @return bool
    */
-  function createToken () {
-    hideErrors();
+    function createToken()
+    {
+        hideErrors();
 
-    var form = getFormCustom();
+        var form = getFormCustom();
 
-    Mercadopago.createToken(form, sdkResponseHandler);
-    return false;
-  }
+        Mercadopago.createToken(form, sdkResponseHandler);
+        return false;
+    }
 
   /**
    * Handler Response of Mercadopago.createToken
@@ -535,104 +558,110 @@
    * @param number status
    * @param object response
    */
-  function sdkResponseHandler (status, response) {
-    if (status !== 200 && status !== 201) {
-      showErrors(response);
-    } else {
-      var token = document.querySelector('#card_token_id');
-      token.value = response.id;
-      document.forms.mp_custom_checkout.submit();
+    function sdkResponseHandler(status, response)
+    {
+        if (status !== 200 && status !== 201) {
+            showErrors(response);
+        } else {
+            var token = document.querySelector('#card_token_id');
+            token.value = response.id;
+            document.forms.mp_custom_checkout.submit();
+        }
     }
-  }
 
   /**
    *
    * @param  obje  response
    */
-  function showErrors (response) {
-    var form = getFormCustom();
-    for (var x = 0; x < response.cause.length; x++) {
-      var error = response.cause[x];
-      var small = '';
-      if (error.code === '208' || error.code === '209' || error.code === '325' || error.code === '326') {
-        small = form.querySelector('#mp-error-208');
-      } else {
-        small = form.querySelector('#mp-error-' + error.code);
-      }
+    function showErrors(response)
+    {
+        var form = getFormCustom();
+        for (var x = 0; x < response.cause.length; x++) {
+            var error = response.cause[x];
+            var small = '';
+            if (error.code === '208' || error.code === '209' || error.code === '325' || error.code === '326') {
+                small = form.querySelector('#mp-error-208');
+            } else {
+                small = form.querySelector('#mp-error-' + error.code);
+            }
 
-      if (small !== undefined) {
-        var input = form.querySelector(small.getAttribute('data-main'));
-        small.style.display = 'block';
-        input.classList.add('mp-form-control-error');
-      }
+            if (small !== undefined) {
+                var input = form.querySelector(small.getAttribute('data-main'));
+                small.style.display = 'block';
+                input.classList.add('mp-form-control-error');
+            }
+        }
+        focusInputError();
+        getConditionTerms();
     }
-    focusInputError();
-    getConditionTerms();
-  }
 
   /**
    * Hide errors when return of cardToken error
    */
-  function hideErrors () {
-    for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
-      var field = document.querySelectorAll('[data-checkout]')[x];
-      field.classList.remove('mp-error-input');
-      field.classList.remove('mp-form-control-error');
-    }
+    function hideErrors()
+    {
+        for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
+            var field = document.querySelectorAll('[data-checkout]')[x];
+            field.classList.remove('mp-error-input');
+            field.classList.remove('mp-form-control-error');
+        }
 
-    for (var y = 0; y < document.querySelectorAll('.mp-erro-form').length; y++) {
-      var small = document.querySelectorAll('.mp-erro-form')[y];
-      small.style.display = 'none';
+        for (var y = 0; y < document.querySelectorAll('.mp-erro-form').length; y++) {
+            var small = document.querySelectorAll('.mp-erro-form')[y];
+            small.style.display = 'none';
+        }
     }
-  }
 
   /**
    * Get form
    */
-  function getFormCustom () {
-    return document.querySelector('#mp_custom_checkout');
-  }
+    function getFormCustom()
+    {
+        return document.querySelector('#mp_custom_checkout');
+    }
 
   /**
    * Get condition terms input on PS17
    */
-  function getConditionTerms () {
-    var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
-    if (typeof terms === 'object' && terms !== null) {
-      return terms.checked = false;
+    function getConditionTerms()
+    {
+        var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
+        if (typeof terms === 'object' && terms !== null) {
+            return terms.checked = false;
+        }
     }
-  }
 
   /**
    * Disable finish order button
    * @param {string} psVersion
    */
-  function disableFinishOrderButton (psVersion) {
-    if (psVersion === 'six') {
-      var sixButton = document.getElementById('mp-custom-finish-order');
-      sixButton.setAttribute('disabled', 'disabled');
-    } else if (psVersion === 'seven') {
-      var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
-      sevenButton.setAttribute('disabled', 'disabled');
+    function disableFinishOrderButton(psVersion)
+    {
+        if (psVersion === 'six') {
+            var sixButton = document.getElementById('mp-custom-finish-order');
+            sixButton.setAttribute('disabled', 'disabled');
+        } else if (psVersion === 'seven') {
+            var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+            sevenButton.setAttribute('disabled', 'disabled');
+        }
     }
-  }
 
-  jQuery(function () {
-    $('input[data-checkout="cardNumber"]').on('focusout', guessingPaymentMethod);
+    jQuery(function () {
+        $('input[data-checkout="cardNumber"]').on('focusout', guessingPaymentMethod);
 
-    if (document.forms.mp_custom_checkout !== undefined) {
-      document.forms.mp_custom_checkout.onsubmit = function () {
-        if (validateInputsCreateToken()) {
-          disableFinishOrderButton(psVersion);
-          return createToken();
+        if (document.forms.mp_custom_checkout !== undefined) {
+            document.forms.mp_custom_checkout.onsubmit = function () {
+                if (validateInputsCreateToken()) {
+                    disableFinishOrderButton(psVersion);
+                    return createToken();
+                }
+
+                getConditionTerms();
+                return false;
+            };
         }
 
-        getConditionTerms();
-        return false;
-      };
-    }
-
-    $('#uniform-id-docType').removeClass('selector');
-    $('#uniform-id-installments').removeClass('selector');
-  });
+        $('#uniform-id-docType').removeClass('selector');
+        $('#uniform-id-installments').removeClass('selector');
+    });
 })();
