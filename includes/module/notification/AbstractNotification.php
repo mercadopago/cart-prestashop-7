@@ -352,20 +352,25 @@ class AbstractNotification
             "received_webhook" => true,
         ];
 
-        if($payments_id)
-          $dataToCreate['payment_id'] = $payments_id;
+        if ($payments_id) {
+            $dataToCreate['payment_id'] = $payments_id;
+        }
 
-        if($payments_type)
-          $dataToCreate['payment_type'] = $payments_type;
+        if ($payments_type) {
+            $dataToCreate['payment_type'] = $payments_type;
+        }
 
-        if($payments_method)
-          $dataToCreate['payment_method'] = $payments_method;
+        if ($payments_method) {
+            $dataToCreate['payment_method'] = $payments_method;
+        }
 
-        if($payments_status)
-          $dataToCreate['payment_status'] = $payments_status;
+        if ($payments_status) {
+            $dataToCreate['payment_status'] = $payments_status;
+        }
 
-        if($payments_amount)
-          $dataToCreate['payment_amount'] = $payments_amount;
+        if ($payments_amount) {
+            $dataToCreate['payment_amount'] = $payments_amount;
+        }
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update($dataToCreate);
     }
