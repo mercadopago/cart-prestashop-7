@@ -1,5 +1,5 @@
 {*
-* 2007-2020 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2020 PrestaShop SA
+* @copyright 2007-2021 PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -61,10 +61,10 @@
             <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center"><b>{l s='Price' mod='mercadopago'}</b></div>
             <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center"><b>{l s='Qty' mod='mercadopago'}</b></div>
         </div>
-        
+
         {foreach from=$order_products item=product}
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6 mp-table">{$product.product_name}</div>
+                <div class="col-md-6 col-sm-6 col-xs-6 mp-table">{$product.product_name|escape:'htmlall':'UTF-8'}</div>
                 <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">
                     {if $use_taxes}
                         {displayPrice price=$product.total_price_tax_incl}
@@ -72,7 +72,7 @@
                         {displayPrice price=$product.total_price_tax_excl}
                     {/if}
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">{$product.product_quantity}</div>
+                <div class="col-md-3 col-sm-3 col-xs-3 mp-table mp-align-center">{$product.product_quantity|escape:'htmlall':'UTF-8'}</div>
             </div>
         {/foreach}
 

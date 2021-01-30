@@ -1,3 +1,4 @@
+<?php
 /**
  * 2007-2021 PrestaShop.
  *
@@ -23,36 +24,23 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-const gulp = require('gulp');
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
-const cleanCSS = require('gulp-clean-css');
+function upgrade_module_4_4_2($module)
+{
+    // Execute module update MySQL commands
+    $sql_file = dirname(__FILE__).'/sql/install-4.4.2.sql';
+    if (!$module->loadSQLFile($sql_file)) {
+        return false;
+    }
 
-const config = {
-    scripts: [
-    './views/js/back.js',
-    './views/js/custom-card.js',
-    './views/js/front.js',
-    './views/js/ticket.js'
-    ],
-    stylesheets: [
-    './views/css/front.css',
-    './views/css/back.css'
-    ]
-};
+    //Insert necessary data on DB
+    $mp_module = new MPModule();
+    $count = $mp_module->where('version', '=', MP_VERSION)->count();
 
-gulp.task('scripts', () => {
-    return gulp.src(config.scripts)
-    .pipe(uglify())
-    .pipe(rename({ extname: '.min.js' }))
-    .pipe(gulp.dest('./views/js/'));
-});
+    if ($count == 0) {
+        $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
+        $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
+        $mp_module->create(["version" => MP_VERSION]);
+    }
 
-gulp.task('stylesheets', () => {
-    return gulp.src(config.stylesheets)
-    .pipe(cleanCSS({ compatibility: 'ie8' }))
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./views/css/'));
-});
-
-gulp.task('minify-assets', gulp.series('scripts', 'stylesheets'));
+    return true;
+}

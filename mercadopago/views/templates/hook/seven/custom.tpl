@@ -1,5 +1,5 @@
 {*
-* 2007-2020 PrestaShop
+* 2007-2021 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2020 PrestaShop SA
+* @copyright 2007-2021 PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -215,7 +215,7 @@
 </form>
 
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min}.js?v={$version}" />
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}" />
 {if $public_key != ''}
     <script type="text/javascript">
         // Set params to custom-card
