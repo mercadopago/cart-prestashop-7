@@ -245,10 +245,10 @@ class StandardPreference extends AbstractPreference
     public function generateLogs($preference, $cart)
     {
         $logs = [
-            cart_id => $preference['external_reference'],
-            cart_total => $cart->getOrderTotal(),
-            cart_items => $preference['items'],
-            metadata => array_diff_key($preference['metadata'], array_flip(['collector'])),
+            "cart_id" => $preference['external_reference'],
+            "cart_total" => $cart->getOrderTotal(),
+            "cart_items" => $preference['items'],
+            "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
         ];
 
         $encodedLogs = Tools::jsonEncode($logs);

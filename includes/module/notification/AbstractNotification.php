@@ -499,13 +499,13 @@ class AbstractNotification
     public function generateLogs()
     {
         $logs = [
-          transaction_id => $this->transaction_id,
-          cart_total => $this->total,
-          order_id => $this->order_id,
-          payment_status => $this->status,
-          approved_order_state => $this->approved,
-          pending_order_state => $this->pending,
-          order_state => $this->order_state,
+          "transaction_id" => $this->transaction_id,
+          "cart_total" => $this->total,
+          "order_id" => $this->order_id,
+          "payment_status" => $this->status,
+          "approved_order_state" => $this->approved,
+          "pending_order_state" => $this->pending,
+          "order_state" => $this->order_state,
         ];
 
         $encodedLogs = Tools::jsonEncode($logs);
