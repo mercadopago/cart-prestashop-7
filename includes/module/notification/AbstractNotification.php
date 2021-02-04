@@ -498,12 +498,17 @@ class AbstractNotification
      */
     public function generateLogs()
     {
-        MPLog::generate('Transaction id: ' . $this->transaction_id);
-        MPLog::generate('Cart total: ' . $this->total);
-        MPLog::generate('Order id: ' . $this->order_id);
-        MPLog::generate('Payment status: ' . $this->status);
-        MPLog::generate('Approved order_state: ' . $this->approved);
-        MPLog::generate('Pending order_state: ' . $this->pending);
-        MPLog::generate('Order state: ' . $this->order_state);
+        $logs = [
+          transaction_id => $this->transaction_id,
+          cart_total => $this->total,
+          order_id => $this->order_id,
+          payment_status => $this->status,
+          approved_order_state => $this->approved,
+          pending_order_state => $this->pending,
+          order_state => $this->order_state,
+        ];
+
+        $encodedLogs = Tools::jsonEncode($logs);
+        MPLog::generate('Order id ' . $this->order_id . ' notification logs: ' . $encodedLogs);
     }
 }
