@@ -101,11 +101,14 @@ class TicketPreference extends AbstractPreference
         //Update cart total with CartRule()
         $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
         $preference['transaction_amount'] = $this->getTransactionAmount($cart);
-        //Create preference
+
+        //Generate preference
+        $this->generateLogs($preference, 'ticket');
         $preferenceEncoded = Tools::jsonEncode($preference);
-        MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
+
+        //Create preference
         $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
-        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
+        MPLog::generate('Cart id ' . $cart->id . ' - Ticket Preference created successfully');
 
         return $createPreference;
     }
