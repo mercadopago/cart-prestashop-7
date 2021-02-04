@@ -56,11 +56,13 @@ class StandardPreference extends AbstractPreference
         $preference['expiration_date_to'] = $this->getExpirationDate();
         $preference['metadata'] = $this->getInternalMetadata();
 
-        //Create preference
+        //Generate preference
+        $this->generateLogs($preference, $cart);
         $preferenceEncoded = Tools::jsonEncode($preference);
-        MPLog::generate('Create Preference Infos: ' . $preferenceEncoded);
+
+        //Create preference
         $createPreference = $this->mercadopago->createPreference($preferenceEncoded);
-        MPLog::generate('Created Preference: ' . Tools::jsonEncode($createPreference));
+        MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
 
         return $createPreference;
     }
@@ -231,5 +233,25 @@ class StandardPreference extends AbstractPreference
         }
 
         return $internal_metadata;
+    }
+
+    /**
+     * Generate preference logs
+     *
+     * @param array $preference
+     * @param mixed $cart
+     * @return void
+     */
+    public function generateLogs($preference, $cart)
+    {
+        $logs = [
+            cart_id => $preference['external_reference'],
+            cart_total => $cart->getOrderTotal(),
+            cart_items => $preference['items'],
+            metadata => array_diff_key($preference['metadata'], array_flip(['collector'])),
+        ];
+
+        $encodedLogs = Tools::jsonEncode($logs);
+        MPLog::generate('standard preference logs: ' . $encodedLogs);
     }
 }
