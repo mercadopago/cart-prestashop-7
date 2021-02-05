@@ -208,7 +208,10 @@ class TicketPreference extends AbstractPreference
             if ($method['type'] == 'bank_transfer') {
                 array_push($bankTransfers, Tools::strtoupper($method['id']));
                 if (!empty($method['financial_institutions'])) {
-                    $this->financial_institutions[Tools::strtoupper($method['id'])] =$method['financial_institutions'][0]['id'];
+                    $method_id = Tools::strtoupper($method['id']);
+                    $financial_institution = $method['financial_institutions'][0]['id'];
+
+                    $this->financial_institutions[$method_id] = $financial_institution;
                 }
             }
         }

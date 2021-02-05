@@ -389,7 +389,6 @@ class Mercadopago extends PaymentModule
      */
     public function getOrderShippingCost()
     {
-        return;
     }
 
     /**
