@@ -70,7 +70,6 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         $createPreference = $preference->createPreference($cart);
         if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
             $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
-            MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
             Tools::redirectLink($createPreference['init_point']);
         }
 

@@ -32,7 +32,7 @@
                     <div class="mp-label-banner">
                         <h2 class="mp-title-banner">{l s='Take off your online sales.' mod='mercadopago'}</h2>
                         <p class="mp-text-banner">{l s='Offer your customers the best' mod='mercadopago'} <br> {l s='payment experience.' mod='mercadopago'}</p>
-                        <a onclick="document.querySelectorAll('.nav-tabs li a')[0].click()" class="btn btn-default mp-btn-banner">
+                        <a href="" class="btn btn-default mp-btn-banner">
                             {l s='Configure Mercado Pago in your store' mod='mercadopago'}
                         </a>
                     </div>

@@ -29,60 +29,50 @@
 
 class MPLog
 {
-    const LOG_FILEPATH = MP_ROOT_URL . self::PARTIAL_PATH;
-    const PARTIAL_PATH = '/logs/mercadopago' . MP_VERSION . '.log';
+    const LOG_SEVERITY_INFORMATIVE = 1;
+    const LOG_SEVERITY_WARNING = 2;
+    const LOG_SEVERITY_ERROR = 3;
 
     public function __construct()
     {
     }
 
-    public static function isWritableFile()
-    {
-        try {
-            return is_writable(self::LOG_FILEPATH);
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    public static function isReadableFile()
-    {
-        try {
-            return is_readable(self::LOG_FILEPATH);
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
+    /**
+     * Get url for adminto view the logs
+     *
+     * @return void
+     */
     public static function getLogUrl()
     {
-        return __PS_BASE_URI__ . Tools::substr(MP_ROOT_URL, strpos(MP_ROOT_URL, '/modules') + 1) . self::PARTIAL_PATH;
+        $ps_link = new Link();
+        return $ps_link->getAdminLink('AdminLogs', true);
     }
 
     /**
-     * Generate logs on mercadopago.log
+     * Generate plugin logs
      *
      * @param string $message
-     * @param string $status
+     * @param string $severity
      * @return void
      */
-    public static function generate($message, $status = 'INFO')
+    public static function generate($message, $severity = 1)
     {
-        switch ($status) {
+        switch ($severity) {
             case 'warning':
-                $status_log = 'WARNING';
+                $severity_log = self::LOG_SEVERITY_WARNING;
                 break;
 
             case 'error':
-                $status_log = 'ERROR';
+                $severity_log = self::LOG_SEVERITY_ERROR;
                 break;
 
             default:
-                $status_log = 'INFO';
+            $severity_log = self::LOG_SEVERITY_INFORMATIVE;
         }
 
-        $date = date('Y-m-d H:i:s');
-        $message = sprintf("[%s] [%s]: %s%s", $date, $status_log, $message, PHP_EOL);
-        error_log($message, 3, self::LOG_FILEPATH);
+        $object_id = str_replace('.', '', MP_VERSION);
+        $object_type = 'Mercadopago';
+
+        PrestaShopLogger::addLog($message, $severity, null, $object_type, $object_id, true, null);
     }
 }

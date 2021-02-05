@@ -106,7 +106,6 @@ class StandardCheckout
                 $preference_id = $createPreference['id'];
                 $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
                 $modal_link = $this->payment->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
-                MPLog::generate('Cart id ' . $cart->id . ' - Preference created successfully');
             }
         }
 

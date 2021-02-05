@@ -235,11 +235,7 @@ class Mercadopago extends PaymentModule
             'message' => self::$form_message,
             'mp_version' => MP_VERSION,
             'url_base' => __PS_BASE_URI__,
-            'log' => (object) array(
-                'url' => MPLog::getLogUrl(),
-                'isWritable' => MPLog::isWritableFile(),
-                'isReadable' => MPLog::isReadableFile()
-            ),
+            'log' => MPLog::getLogUrl(),
             'country_link' => $country_link,
             'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
             'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
