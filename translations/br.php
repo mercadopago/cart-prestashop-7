@@ -285,7 +285,8 @@ $_MODULE['<{mercadopago}prestashop>template_1_34e8683b67ce338dc5d22bd0c1958458']
 $_MODULE['<{mercadopago}prestashop>template_1_295a38ad46665a436f94cc11ba5033ff'] =
 'Tudo configurado? Veja sua loja no modo Sandbox';
 $_MODULE['<{mercadopago}prestashop>template_1_a2d1c5986e732ef32d7d7ec6e1c02ffb'] =
-'Visita sua loja como se fosse um dos seus melhores clientes. Confira se está tudo em ordem para impressionar os clientes e aumentar suas vendas.';
+'Visita sua loja como se fosse um dos seus melhores clientes. Confira se está tudo em ordem para impressionar os
+clientes e aumentar suas vendas.';
 $_MODULE['<{mercadopago}prestashop>template_1_0611191252088be4f499b8674236f3cb'] =
 'Quero testar minhas vendas';
 $_MODULE['<{mercadopago}prestashop>template_1_35e1af020b043e72d20163fbb8a908c2'] =
@@ -459,11 +460,14 @@ $_MODULE['<{mercadopago}prestashop>template_2_bb0a503f6022dd9ad15e450f25480f8b']
 $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917'] =
 'Programa de proteção de vendedores.';
 $_MODULE['<{mercadopago}prestashop>template_3_0066916a42383e8435dafda43e096dc2'] =
-'Devido a uma configuração de segurança, não podemos registrar nem ler os dados de log, verifique para usar esta ferramenta.';
+'Devido a uma configuração de segurança, não podemos registrar nem ler os dados de log,
+verifique para usar esta ferramenta.';
 $_MODULE['<{mercadopago}prestashop>template_3_99989c85b571a24c9beb220c2b880a48'] =
-'Devido a uma configuração de segurança, não podemos registrar os dados de log. Por favor verifique para registrar novos logs.';
+'Devido a uma configuração de segurança, não podemos registrar os dados de log. Por favor
+verifique para registrar novos logs.';
 $_MODULE['<{mercadopago}prestashop>template_3_92233d32feee4a3cd5cb4756492cf02c'] =
-'Devido a uma configuração de segurança, não podemos ler os dados registrados. Por favor verifique para ver os registros de log.';
+'Devido a uma configuração de segurança, não podemos ler os dados registrados. Por favor
+verifique para ver os registros de log.';
 $_MODULE['<{mercadopago}prestashop>template_3_d81791e7ca2c5131fa6edb44dafac45b'] =
 'Aqui você pode obter os logs do plugin do Mercado Pago';
 $_MODULE['<{mercadopago}prestashop>template_3_895c78d5287e82e33e0bd925c1d58cb9'] =

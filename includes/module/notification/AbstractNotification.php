@@ -339,11 +339,25 @@ class AbstractNotification
      */
     public function saveCreateOrderData($cart)
     {
-        $payments_id = is_array($this->payments_data['payments_id']) ? implode(',', $this->payments_data['payments_id']) : $this->payments_data['payments_id'];
-        $payments_type = is_array($this->payments_data['payments_type']) ? implode(',', $this->payments_data['payments_type']) : $this->payments_data['payments_type'];
-        $payments_method = is_array($this->payments_data['payments_method']) ? implode(',', $this->payments_data['payments_method']) : $this->payments_data['payments_method'];
-        $payments_status = is_array($this->payments_data['payments_status']) ? implode(',', $this->payments_data['payments_status']) : $this->payments_data['payments_status'];
-        $payments_amount = is_array($this->payments_data['payments_amount']) ? implode(',', $this->payments_data['payments_amount']) : $this->payments_data['payments_amount'];
+        $payments_id = is_array($this->payments_data['payments_id'])
+            ? implode(',', $this->payments_data['payments_id'])
+            : $this->payments_data['payments_id'];
+
+        $payments_type = is_array($this->payments_data['payments_type'])
+            ? implode(',', $this->payments_data['payments_type'])
+            : $this->payments_data['payments_type'];
+
+        $payments_method = is_array($this->payments_data['payments_method'])
+            ? implode(',', $this->payments_data['payments_method'])
+            : $this->payments_data['payments_method'];
+
+        $payments_status = is_array($this->payments_data['payments_status'])
+            ? implode(',', $this->payments_data['payments_status'])
+            : $this->payments_data['payments_status'];
+
+        $payments_amount = is_array($this->payments_data['payments_amount'])
+            ? implode(',', $this->payments_data['payments_amount'])
+            : $this->payments_data['payments_amount'];
 
         $dataToCreate =  [
             "order_id" => $this->order_id,
