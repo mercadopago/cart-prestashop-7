@@ -124,7 +124,7 @@
                         {l s='of your customers and the adaptation to the regulations or legal ' mod='mercadopago'} \
                         {l s='provisions of each country.' mod='mercadopago'} \
                     </p>\
-                    <a href='https://www.mercadopago.com/{$country_link|escape:'html':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
+                    <a href='https://www.mercadopago.com/{$country_link|escape:'htmlall':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
                 </div>\
             </div>";
 

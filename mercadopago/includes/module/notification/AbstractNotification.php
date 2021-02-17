@@ -339,11 +339,25 @@ class AbstractNotification
      */
     public function saveCreateOrderData($cart)
     {
-        $payments_id = is_array($this->payments_data['payments_id']) ? implode(',', $this->payments_data['payments_id']) : $this->payments_data['payments_id'];
-        $payments_type = is_array($this->payments_data['payments_type']) ? implode(',', $this->payments_data['payments_type']) : $this->payments_data['payments_type'];
-        $payments_method = is_array($this->payments_data['payments_method']) ? implode(',', $this->payments_data['payments_method']) : $this->payments_data['payments_method'];
-        $payments_status = is_array($this->payments_data['payments_status']) ? implode(',', $this->payments_data['payments_status']) : $this->payments_data['payments_status'];
-        $payments_amount = is_array($this->payments_data['payments_amount']) ? implode(',', $this->payments_data['payments_amount']) : $this->payments_data['payments_amount'];
+        $payments_id = is_array($this->payments_data['payments_id'])
+            ? implode(',', $this->payments_data['payments_id'])
+            : $this->payments_data['payments_id'];
+
+        $payments_type = is_array($this->payments_data['payments_type'])
+            ? implode(',', $this->payments_data['payments_type'])
+            : $this->payments_data['payments_type'];
+
+        $payments_method = is_array($this->payments_data['payments_method'])
+            ? implode(',', $this->payments_data['payments_method'])
+            : $this->payments_data['payments_method'];
+
+        $payments_status = is_array($this->payments_data['payments_status'])
+            ? implode(',', $this->payments_data['payments_status'])
+            : $this->payments_data['payments_status'];
+
+        $payments_amount = is_array($this->payments_data['payments_amount'])
+            ? implode(',', $this->payments_data['payments_amount'])
+            : $this->payments_data['payments_amount'];
 
         $dataToCreate =  [
             "order_id" => $this->order_id,
@@ -498,12 +512,17 @@ class AbstractNotification
      */
     public function generateLogs()
     {
-        MPLog::generate('Transaction id: ' . $this->transaction_id);
-        MPLog::generate('Cart total: ' . $this->total);
-        MPLog::generate('Order id: ' . $this->order_id);
-        MPLog::generate('Payment status: ' . $this->status);
-        MPLog::generate('Approved order_state: ' . $this->approved);
-        MPLog::generate('Pending order_state: ' . $this->pending);
-        MPLog::generate('Order state: ' . $this->order_state);
+        $logs = [
+          "transaction_id" => $this->transaction_id,
+          "cart_total" => $this->total,
+          "order_id" => $this->order_id,
+          "payment_status" => $this->status,
+          "approved_order_state" => $this->approved,
+          "pending_order_state" => $this->pending,
+          "order_state" => $this->order_state,
+        ];
+
+        $encodedLogs = Tools::jsonEncode($logs);
+        MPLog::generate('Order id ' . $this->order_id . ' notification logs: ' . $encodedLogs);
     }
 }
