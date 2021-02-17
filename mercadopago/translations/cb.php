@@ -459,9 +459,11 @@ $_MODULE['<{mercadopago}prestashop>template_2_bb0a503f6022dd9ad15e450f25480f8b']
 $_MODULE['<{mercadopago}prestashop>template_2_f8e3823fce704473f01e4781d07bf917'] =
 'Programa de Protección de vendedores.';
 $_MODULE['<{mercadopago}prestashop>template_3_0066916a42383e8435dafda43e096dc2'] =
-'Debido a una configuración de seguridad no podemos registrar y leer los datos de log, verifíquela para usar esta herramienta.';
+'Debido a una configuración de seguridad no podemos registrar y leer los datos de log,
+verifíquela para usar esta herramienta.';
 $_MODULE['<{mercadopago}prestashop>template_3_99989c85b571a24c9beb220c2b880a48'] =
-'Debido a una configuración de seguridad no podemos registrar los datos de log, verifíquela para registrar nuevos logs.';
+'Debido a una configuración de seguridad no podemos registrar los datos de log, verifíquela para registrar
+nuevos logs.';
 $_MODULE['<{mercadopago}prestashop>template_3_92233d32feee4a3cd5cb4756492cf02c'] =
 'Debido a una configuración de seguridad no podemos leer los datos de log, verifíquela para ver los logs.';
 $_MODULE['<{mercadopago}prestashop>template_3_d81791e7ca2c5131fa6edb44dafac45b'] =

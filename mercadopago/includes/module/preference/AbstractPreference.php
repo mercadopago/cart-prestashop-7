@@ -606,4 +606,25 @@ class AbstractPreference
 
         return $settings;
     }
+
+    /**
+     * Generate preference logs
+     *
+     * @param array $preference
+     * @param string $checkout
+     * @return void
+     */
+    public function generateLogs($preference, $checkout)
+    {
+        $logs = [
+            "cart_id" => $preference['external_reference'],
+            "cart_total" => $preference['transaction_amount'],
+            "payment_method" => $preference['payment_method_id'],
+            "cart_items" => $preference['additional_info']['items'],
+            "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
+        ];
+
+        $encodedLogs = Tools::jsonEncode($logs);
+        MPLog::generate($checkout . ' preference logs: ' . $encodedLogs);
+    }
 }
