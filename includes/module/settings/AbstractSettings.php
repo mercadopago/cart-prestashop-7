@@ -87,7 +87,7 @@ class AbstractSettings
         $form_alert = false;
 
         foreach (array_keys($this->values) as $key) {
-            $value = Tools::getValue($key);
+            $value = strip_tags(Tools::getValue($key));
 
             if (!$this->validateInput($key, $value)) {
                 $form_alert = true;
