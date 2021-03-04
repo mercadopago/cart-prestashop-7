@@ -232,8 +232,11 @@ class AbstractNotification
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 202);
         } elseif ($this->total > $this->approved) {
-            MPLog::generate('The order has been updated by a possible fraud', 'error');
-            $this->getNotificationResponse('The order has been updated by a possible fraud', 200);
+            MPLog::generate('The order '. $this->order_id .' has not been updated by a possible fraud', 'error');
+            $this->getNotificationResponse(
+                'The order ' . $this->order_id . ' has not been updated by a possible fraud',
+                200
+            );
         } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
