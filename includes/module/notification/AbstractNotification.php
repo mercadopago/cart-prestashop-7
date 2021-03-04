@@ -89,11 +89,7 @@ class AbstractNotification
                 $this->amount = $this->pending;
                 $this->order_state = $this->getNotificationPaymentState('in_process');
             } else {
-                if ($this->total > $this->approved && $this->status === 'approved') {
-                    $this->order_state = $this->getNotificationPaymentState('in_process');
-                } else {
-                    $this->order_state = $this->getNotificationPaymentState($this->status);
-                }
+                $this->order_state = $this->getNotificationPaymentState($this->status);
             }
 
             return $this->order_state;
@@ -220,8 +216,8 @@ class AbstractNotification
                     break;
             }
         } else {
-            MPLog::generate('Order does not exist', 'warning');
-            $this->getNotificationResponse('Order does not exist', 422);
+            MPLog::generate('Order does not exist', 'error');
+            $this->getNotificationResponse('Order does not exist', 404);
         }
     }
 
@@ -234,12 +230,15 @@ class AbstractNotification
     {
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
+            $this->getNotificationResponse('Order status is the same', 202);
+        } elseif ($this->total > $this->approved) {
+            MPLog::generate('The order has been updated by a possible fraud', 'error');
+            $this->getNotificationResponse('The order has been updated by a possible fraud', 200);
         } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 200);
         }
     }
 
@@ -254,15 +253,15 @@ class AbstractNotification
 
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
+            $this->getNotificationResponse('Order status is the same', 202);
         } elseif ($actual_status == $status_approved) {
             MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+            $this->getNotificationResponse('It is not possible to update this approved payment', 200);
         } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 200);
         }
     }
 
@@ -277,15 +276,15 @@ class AbstractNotification
 
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
+            $this->getNotificationResponse('Order status is the same', 202);
         } elseif ($actual_status == $status_approved) {
             MPLog::generate('It is only possible to mediate, chargeback or refund an approved payment', 'warning');
-            $this->getNotificationResponse('It is not possible to update this approved payment', 422);
+            $this->getNotificationResponse('It is not possible to update this approved payment', 200);
         } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
-            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 422);
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 200);
         }
     }
 
@@ -298,7 +297,7 @@ class AbstractNotification
     {
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
-            $this->getNotificationResponse('Order status is the same', 422);
+            $this->getNotificationResponse('Order status is the same', 202);
         } else {
             $this->updatePrestashopOrder($cart, $order);
         }
