@@ -33,10 +33,6 @@ class MPLog
     const LOG_SEVERITY_WARNING = 2;
     const LOG_SEVERITY_ERROR = 3;
 
-    public function __construct()
-    {
-    }
-
     /**
      * Get url for adminto view the logs
      *
