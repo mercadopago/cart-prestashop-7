@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-function upgrade_module_4_5_1($module)
+function upgrade_module_4_5_1()
 {
     $files = [
         'mercadopago.log',
