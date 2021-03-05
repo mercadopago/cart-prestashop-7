@@ -87,7 +87,7 @@ class AbstractSettings
         $form_alert = false;
 
         foreach (array_keys($this->values) as $key) {
-            $value = strip_tags(Tools::getValue($key));
+            $value = htmlentities(strip_tags(Tools::getValue($key)), ENT_QUOTES, 'UTF-8');
 
             if (!$this->validateInput($key, $value)) {
                 $form_alert = true;
