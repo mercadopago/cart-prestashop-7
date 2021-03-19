@@ -85,16 +85,16 @@
         var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
         mercadopago_redirect.setAttribute('href', '#');
 
-        var modalScript = document.createElement("script");
-        var modalForm = document.getElementById("mp_standard_checkout");
-        modalForm.appendChild(modalScript);
+        var modal_script = document.createElement("script");
+        var modal_form = document.getElementById("mp_standard_checkout");
+        modal_form.appendChild(modal_script);
 
-        modalScript.src = '{$modal_link|escape:"html":"UTF-8"}';
-        modalScript.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
-        modalScript.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
-        modalScript.setAttribute('data-open', 'false');
-        modalScript.async = true;
-        modalScript.onload = function () {
+        modal_script.src = '{$modal_link|escape:"html":"UTF-8"}';
+        modal_script.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
+        modal_script.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
+        modal_script.setAttribute('data-open', 'false');
+        modal_script.async = true;
+        modal_script.onload = function () {
             var mercadopago_button = document.querySelector('.mercadopago-button');
             mercadopago_button.style.display = 'none';
 
