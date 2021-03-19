@@ -75,23 +75,34 @@
     </div>
 
     {if $modal == true && $preference != ""}
-        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
-            <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
-        </form>
+        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}"></form>
     {/if}
 </a>
 
 {if $modal == true && $preference != ""}
 <script>
-    var mercadopago_button = document.querySelector('.mercadopago-button');
-    var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+    window.addEventListener('load', (event) => {
+        var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+        mercadopago_redirect.setAttribute('href', '#');
 
-    mercadopago_button.style.display = 'none';
-    mercadopago_redirect.setAttribute('href', '#');
+        var modalScript = document.createElement("script");
+        var modalForm = document.getElementById("mp_standard_checkout");
+        modalForm.appendChild(modalScript);
 
-    mercadopago_redirect.onclick = function () {
-        mercadopago_button.click();
-        return false;
-    }
-</script>
+        modalScript.src = '{$modal_link|escape:"html":"UTF-8"}';
+        modalScript.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
+        modalScript.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
+        modalScript.setAttribute('data-open', 'false');
+        modalScript.async = true;
+        modalScript.onload = function () {
+            var mercadopago_button = document.querySelector('.mercadopago-button');
+            mercadopago_button.style.display = 'none';
+
+            mercadopago_redirect.onclick = function () {
+                mercadopago_button.click();
+                return false;
+            }
+        };
+    });
+  </script>
 {/if}
