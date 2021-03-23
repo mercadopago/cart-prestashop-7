@@ -75,23 +75,34 @@
     </div>
 
     {if $modal == true && $preference != ""}
-        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}">
-            <script src="{$modal_link|escape:'html':'UTF-8'}" data-public-key="{$public_key|escape:'html':'UTF-8'}" data-preference-id="{$preference|escape:'html':'UTF-8'}"></script>
-        </form>
+        <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}"></form>
     {/if}
 </a>
 
 {if $modal == true && $preference != ""}
 <script>
-    var mercadopago_button = document.querySelector('.mercadopago-button');
-    var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+    window.addEventListener('load', (event) => {
+        var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+        mercadopago_redirect.setAttribute('href', '#');
 
-    mercadopago_button.style.display = 'none';
-    mercadopago_redirect.setAttribute('href', '#');
+        var modal_script = document.createElement("script");
+        var modal_form = document.getElementById("mp_standard_checkout");
+        modal_form.appendChild(modal_script);
 
-    mercadopago_redirect.onclick = function () {
-        mercadopago_button.click();
-        return false;
-    }
-</script>
+        modal_script.src = '{$modal_link|escape:"html":"UTF-8"}';
+        modal_script.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
+        modal_script.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
+        modal_script.setAttribute('data-open', 'false');
+        modal_script.async = true;
+        modal_script.onload = function () {
+            var mercadopago_button = document.querySelector('.mercadopago-button');
+            mercadopago_button.style.display = 'none';
+
+            mercadopago_redirect.onclick = function () {
+                mercadopago_button.click();
+                return false;
+            }
+        };
+    });
+  </script>
 {/if}
