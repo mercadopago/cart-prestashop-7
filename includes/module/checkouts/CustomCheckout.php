@@ -93,16 +93,20 @@ class CustomCheckout
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
-        $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
 
-        $cartTotal = (float)$cart->getOrderTotal();
-        $shipping = (float)$cart->getOrderTotal(true, 5);
-        $products = (float)$cart->getOrderTotal(true, 4);
-        $products = ($discount != "") ? $products - ($products * ($discount / 100)) : $products;
+        $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $discount = (float) $strDiscount;
+
+        $shipping = (float) $cart->getOrderTotal(true, 5);
+        $products = (float) $cart->getOrderTotal(true, 4);
+        $cartTotal = (float) $cart->getOrderTotal();
+
+        $discount = $products * ($discount / 100);
+        $products = ($discount != 0) ? $products - $discount : $products;
 
         $subtotal = $products + $shipping;
-        $total = $cartTotal - $subtotal;
-        $amount = $subtotal + $total;
+        $difference = $cartTotal - $subtotal - $discount;
+        $amount = $subtotal + $difference;
 
         $checkoutInfo = array(
             "debit" => $debit,
@@ -111,7 +115,7 @@ class CustomCheckout
             "site_id" => $site_id,
             "version" => MP_VERSION,
             "redirect" => $redirect,
-            "discount" => $discount,
+            "discount" => $strDiscount,
             "public_key" => $public_key,
             "assets_ext_min" => $this->assets_ext_min,
         );
