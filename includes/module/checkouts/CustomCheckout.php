@@ -94,22 +94,15 @@ class CustomCheckout
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
         $discount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
-        $cartRules = $cart->getDiscounts();
 
+        $cartTotal = (float)$cart->getOrderTotal();
         $shipping = (float)$cart->getOrderTotal(true, 5);
         $products = (float)$cart->getOrderTotal(true, 4);
         $products = ($discount != "") ? $products - ($products * ($discount / 100)) : $products;
 
-        foreach ($cartRules as $rule) {
-            if ($rule['free_shipping'] === "1") {
-                $shipping = 0;
-                break;
-            }
-
-            continue;
-        }
-
-        $amount = $products + $shipping;
+        $subtotal = $products + $shipping;
+        $total = $cartTotal - $subtotal;
+        $amount = $subtotal + $total;
 
         $checkoutInfo = array(
             "debit" => $debit,
