@@ -51,13 +51,15 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
             $payment_id = explode(',', $payment_ids)[0];
             $payment = $this->mercadopago->getPaymentStandard($payment_id);
 
-            $cart_id = $payment['external_reference'];
-            $transaction_id = $payment['order']['id'];
+            if ($payment !== false) {
+                $cart_id = $payment['external_reference'];
+                $transaction_id = $payment['order']['id'];
 
-            $cart = new Cart($cart_id);
-            $order = $this->createOrder($cart, $transaction_id);
+                $cart = new Cart($cart_id);
+                $order = $this->createOrder($cart, $transaction_id);
 
-            $this->redirectOrderConfirmation($cart, $order);
+                $this->redirectOrderConfirmation($cart, $order);
+            }
         }
 
         $this->redirectError();
