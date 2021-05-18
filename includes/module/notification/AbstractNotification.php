@@ -96,6 +96,27 @@ class AbstractNotification
         }
     }
 
+    public function validateAndUpdateTransaction($order)
+    {
+        $order_payments = $order->getOrderPaymentCollection();
+        $transaction_id = $order_payments[0]->transaction_id;
+
+        if ($transaction_id != $this->transaction_id) {
+            MPLog::generate('The order transaction id is different from the request transaction id', 'error');
+            $this->getNotificationResponse(
+                'The order transaction id is different from the request transaction id',
+                200
+            );
+
+            return false;
+        }
+
+        $order_payments[0]->amount = $this->approved;
+        $order_payments[0]->update();
+
+        return true;
+    }
+
     /**
      * Create order on Prestashop database
      *
@@ -231,7 +252,7 @@ class AbstractNotification
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 202);
-        } elseif ($this->total > $this->approved) {
+        } elseif ($this->total != $this->approved) {
             MPLog::generate('The order '. $this->order_id .' has not been updated by a possible fraud', 'error');
             $this->getNotificationResponse(
                 'The order ' . $this->order_id . ' has not been updated by a possible fraud',

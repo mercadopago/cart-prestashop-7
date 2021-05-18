@@ -56,11 +56,14 @@ class WebhookNotification extends AbstractNotification
             $this->validateOrderState();
 
             $baseOrder = new Order($orderId);
-            $orders = Order::getByReference($baseOrder->reference);
 
-            foreach ($orders as $order) {
-                $this->order_id = $order->id;
-                $this->updateOrder($cart);
+            if ($this->validateAndUpdateTransaction($baseOrder)) {
+                $orders = Order::getByReference($baseOrder->reference);
+
+                foreach ($orders as $order) {
+                    $this->order_id = $order->id;
+                    $this->updateOrder($cart);
+                }
             }
         }
     }
