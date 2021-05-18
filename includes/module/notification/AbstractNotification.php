@@ -96,25 +96,49 @@ class AbstractNotification
         }
     }
 
-    public function validateAndUpdateTransaction($order)
+    /**
+     * Validate if the order transaction id is the same from request
+     *
+     * @param mixed $order
+     * @return boolean
+     */
+    public function validateOrderTransactionId($order)
     {
-        $order_payments = $order->getOrderPaymentCollection();
-        $transaction_id = $order_payments[0]->transaction_id;
+        try {
+            $order_payments = $order->getOrderPaymentCollection();
+            $transaction_id = $order_payments[0]->transaction_id;
 
-        if ($transaction_id != $this->transaction_id) {
-            MPLog::generate('The order transaction id is different from the request transaction id', 'error');
-            $this->getNotificationResponse(
-                'The order transaction id is different from the request transaction id',
-                200
-            );
+            if ($transaction_id != $this->transaction_id) {
+                MPLog::generate('The order transaction id is different from the request transaction id', 'error');
+                $this->getNotificationResponse(
+                    'The order transaction id is different from the request transaction id',
+                    200
+                );
 
-            return false;
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
         }
+    }
 
-        $order_payments[0]->amount = $this->approved;
-        $order_payments[0]->update();
-
-        return true;
+    /**
+     * Update order transaction
+     *
+     * @param mixed $order
+     * @return void
+     */
+    public function updateOrderTransaction($order)
+    {
+        try {
+            $order_payments = $order->getOrderPaymentCollection();
+            $order_payments[0]->amount = $this->approved;
+            $order_payments[0]->update();
+        } catch (Exception $e) {
+            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
+        }
     }
 
     /**

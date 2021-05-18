@@ -57,11 +57,12 @@ class IpnNotification extends AbstractNotification
 
             $baseOrder = new Order($orderId);
 
-            if ($this->validateAndUpdateTransaction($baseOrder)) {
+            if ($this->validateOrderTransactionId($baseOrder)) {
                 $orders = Order::getByReference($baseOrder->reference);
 
                 foreach ($orders as $order) {
                     $this->order_id = $order->id;
+                    $this->updateOrderTransaction($order);
                     $this->updateOrder($cart);
                 }
             }
