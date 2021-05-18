@@ -142,7 +142,7 @@ class Mercadopago extends PaymentModule
 
         //Mercadopago configurations
         include MP_ROOT_URL . '/sql/install.php';
-        MPLog::generate('Mercadopago plugin installed in the store');
+        MPLog::generate(sprintf('Mercadopago plugin %s installed in the store', MP_VERSION));
 
         //install hooks and dependencies
         return parent::install() &&

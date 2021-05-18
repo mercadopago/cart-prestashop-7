@@ -31,6 +31,12 @@ require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->mercadopago = MPApi::getInstance();
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
@@ -39,12 +45,18 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
     public function initContent()
     {
         $typeReturn = Tools::getValue('typeReturn');
-        $payment_id = Tools::getValue('collection_id');
+        $payment_ids = Tools::getValue('collection_id');
 
-        if (isset($payment_id) && $payment_id != 'null' && $typeReturn != 'failure') {
-            $cart_id = Tools::getValue('external_reference');
+        if (isset($payment_ids) && $payment_ids != 'null' && $typeReturn != 'failure') {
+            $payment_id = explode(',', $payment_ids)[0];
+            $payment = $this->mercadopago->getPaymentStandard($payment_id);
+
+            $cart_id = $payment['external_reference'];
+            $transaction_id = $payment['order']['id'];
+
             $cart = new Cart($cart_id);
-            $order = $this->createOrder($cart);
+            $order = $this->createOrder($cart, $transaction_id);
+
             $this->redirectOrderConfirmation($cart, $order);
         }
 
@@ -55,13 +67,13 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      * Create order without notification
      *
      * @param mixed $cart
-     * @param string $url
+     * @param integer $transaction_id
      * @return void
      */
-    public function createOrder($cart)
+    public function createOrder($cart, $transaction_id)
     {
         $customer_secure_key = $cart->secure_key;
-        $notification = new IpnNotification(null, $customer_secure_key);
+        $notification = new IpnNotification($transaction_id, $customer_secure_key);
         $notification = $notification->createStandardOrder($cart);
 
         $order = Order::getOrderByCartId($cart->id);
@@ -82,9 +94,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $url = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
         $url .= '&key=' . $order->secure_key;
         $url .= '&total=' . $cart->getOrderTotal();
-        $url .= '&id_cart=' . $order->id_cart;
-        $url .= '&id_order=' . $order->id;
-        $url .= '&id_module=' . $this->module->id;
+        $url .= '&order_id=' . $order->id;
 
         return Tools::redirectLink($url);
     }

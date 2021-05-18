@@ -32,6 +32,11 @@ require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.ph
 
 class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
