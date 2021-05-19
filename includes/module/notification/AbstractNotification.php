@@ -45,7 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id, $customer_secure_key = null)
+    public function __construct($transaction_id)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
@@ -53,7 +53,6 @@ class AbstractNotification
         $this->ps_order_state = new PSOrderState();
         $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
-        $this->customer_secure_key = $customer_secure_key;
 
         $this->amount = 0;
         $this->pending = 0;
@@ -93,34 +92,6 @@ class AbstractNotification
             }
 
             return $this->order_state;
-        }
-    }
-
-    /**
-     * Validate if the order transaction id is the same from request
-     *
-     * @param mixed $order
-     * @return boolean
-     */
-    public function validateOrderTransactionId($order)
-    {
-        try {
-            $order_payments = $order->getOrderPaymentCollection();
-            $transaction_id = $order_payments[0]->transaction_id;
-
-            if ($transaction_id != $this->transaction_id) {
-                MPLog::generate('The order transaction id is different from the request transaction id', 'error');
-                $this->getNotificationResponse(
-                    'The order transaction id is different from the request transaction id',
-                    200
-                );
-
-                return false;
-            }
-
-            return true;
-        } catch (Exception $e) {
-            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
         }
     }
 

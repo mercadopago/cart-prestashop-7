@@ -74,8 +74,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      */
     public function createOrder($cart, $transaction_id)
     {
-        $customer_secure_key = $cart->secure_key;
-        $notification = new IpnNotification($transaction_id, $customer_secure_key);
+        $notification = new IpnNotification($transaction_id, null);
         $notification = $notification->createStandardOrder($cart);
 
         $order = Order::getOrderByCartId($cart->id);
@@ -96,7 +95,9 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $url = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
         $url .= '&key=' . $order->secure_key;
         $url .= '&total=' . $cart->getOrderTotal();
-        $url .= '&order_id=' . $order->id;
+        $url .= '&id_cart=' . $order->id_cart;
+        $url .= '&id_order=' . $order->id;
+        $url .= '&id_module=' . $this->module->id;
 
         return Tools::redirectLink($url);
     }

@@ -35,6 +35,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
     public function __construct()
     {
         parent::__construct();
+        $this->mercadopago = MPApi::getInstance();
     }
 
     /**
@@ -51,25 +52,81 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         $secure_key = Tools::getValue('customer');
         $transaction_id = Tools::getValue('id');
 
-        $cart = new Cart(Tools::getValue('cart_id'));
+        //Validate checkout notification
+        if ($checkout == 'standard' && $topic == 'merchant_order') {
+            $this->processIpnNotification($transaction_id, $secure_key);
+        } elseif ($checkout == 'custom' && $topic == 'payment') {
+            $this->processWebhookNotification($transaction_id, $secure_key);
+        } else {
+            $this->getErrorResponse();
+        }
+    }
+
+    /**
+     * Process IPN Notification
+     *
+     * @param integer $transaction_id
+     * @param string $secure_key
+     * @return void
+     */
+    public function processIpnNotification($transaction_id, $secure_key)
+    {
+        MPLog::generate('Entered the IpnNotification rule');
+
+        $merchant_order = $this->mercadopago->getMerchantOrder($transaction_id);
+        $cart_id = $merchant_order['external_reference'];
+
+        $cart = new Cart($cart_id);
         $customer = new Customer((int) $cart->id_customer);
         $customer_secure_key = $customer->secure_key;
 
-        //Validate checkout notification
-        if ($checkout == 'standard' && $topic == 'merchant_order' && $customer_secure_key == $secure_key) {
-            MPLog::generate('Entered the IpnNotification rule');
-            $notification = new IpnNotification($transaction_id, $customer_secure_key);
-            $notification->receiveNotification($cart);
-        } elseif ($checkout == 'custom' && $topic == 'payment' && $customer_secure_key == $secure_key) {
-            MPLog::generate('Entered the WebhookNotification rule');
-            $notification = new WebhookNotification($transaction_id, $customer_secure_key);
-            $notification->receiveNotification($cart);
-        } else {
-            MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');
-            WebhookNotification::getNotificationResponse(
-                'The notification does not have the necessary parameters',
-                200
-            );
+        if ($customer_secure_key != $secure_key) {
+            $this->getErrorResponse();
+            return;
         }
+
+        $notification = new IpnNotification($transaction_id, $merchant_order);
+        $notification->receiveNotification($cart);
+    }
+
+    /**
+     * Process Webhook Notification
+     *
+     * @param integer $transaction_id
+     * @param string $secure_key
+     * @return void
+     */
+    public function processWebhookNotification($transaction_id, $secure_key)
+    {
+        MPLog::generate('Entered the WebhookNotification rule');
+
+        $payment = $this->mercadopago->getPaymentStandard($transaction_id);
+        $cart_id = $payment['external_reference'];
+
+        $cart = new Cart($cart_id);
+        $customer = new Customer((int) $cart->id_customer);
+        $customer_secure_key = $customer->secure_key;
+
+        if ($customer_secure_key != $secure_key) {
+            $this->getErrorResponse();
+            return;
+        }
+
+        $notification = new WebhookNotification($transaction_id, $payment);
+        $notification->receiveNotification($cart);
+    }
+
+    /**
+     * Get error response
+     *
+     * @return void
+     */
+    public function getErrorResponse()
+    {
+        MPLog::generate('The notification does not have the necessary parameters to create an order', 'error');
+        WebhookNotification::getNotificationResponse(
+            'The notification does not have the necessary parameters',
+            200
+        );
     }
 }

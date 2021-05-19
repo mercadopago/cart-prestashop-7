@@ -31,9 +31,12 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractNotification
 {
-    public function __construct($transaction_id, $customer_secure_key = null)
+    public $merchant_order;
+
+    public function __construct($transaction_id, $merchant_order = null)
     {
-        parent::__construct($transaction_id, $customer_secure_key);
+        parent::__construct($transaction_id);
+        $this->merchant_order = $merchant_order;
     }
 
     /**
@@ -49,22 +52,18 @@ class IpnNotification extends AbstractNotification
         $orderId = $this->getOrderId($cart);
 
         if ($orderId != 0) {
-            $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
-            $payments = $merchant_order['payments'];
+            $payments = $this->merchant_order['payments'];
 
             $this->verifyPayments($payments);
             $this->validateOrderState();
 
             $baseOrder = new Order($orderId);
+            $orders = Order::getByReference($baseOrder->reference);
 
-            if ($this->validateOrderTransactionId($baseOrder)) {
-                $orders = Order::getByReference($baseOrder->reference);
-
-                foreach ($orders as $order) {
-                    $this->order_id = $order->id;
-                    $this->updateOrderTransaction($order);
-                    $this->updateOrder($cart);
-                }
+            foreach ($orders as $order) {
+                $this->order_id = $order->id;
+                $this->updateOrderTransaction($order);
+                $this->updateOrder($cart);
             }
         } else {
             $this->createStandardOrder($cart);
