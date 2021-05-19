@@ -247,7 +247,7 @@ class AbstractNotification
         if ($actual_status == $status) {
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 202);
-        } elseif ($this->total != $this->approved) {
+        } elseif ($this->total > $this->approved) {
             MPLog::generate('The order '. $this->order_id .' has not been updated by a possible fraud', 'error');
             $this->getNotificationResponse(
                 'The order ' . $this->order_id . ' has not been updated by a possible fraud',
