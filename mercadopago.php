@@ -332,6 +332,7 @@ class Mercadopago extends PaymentModule
             array('#b280b2', $this->l('Transaction in Mediation'), 'in_mediation', '110010000'),
             array('#fffb96', $this->l('Transaction Pending'), 'pending', '110010000'),
             array('#ccfbff', $this->l('Transaction Authorized'), 'authorized', '100010000'),
+            array('#ff87c3', $this->l('Transaction in possible fraud'), 'payment_error', '100010000'),
         );
 
         foreach ($order_states as $key => $value) {
