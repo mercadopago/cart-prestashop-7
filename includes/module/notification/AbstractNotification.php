@@ -468,8 +468,8 @@ class AbstractNotification
             'charged_back' => 'MERCADOPAGO_STATUS_5',
             'in_mediation' => 'MERCADOPAGO_STATUS_6',
             'pending' => 'MERCADOPAGO_STATUS_7',
-            'authorized' => 'MERCADOPAGO_STATUS_8'
-            'possible_fraud' => 'MERCADOPAGO_STATUS_9'
+            'authorized' => 'MERCADOPAGO_STATUS_8',
+            'possible_fraud' => 'MERCADOPAGO_STATUS_9',
         );
 
         return Configuration::get($payment_states[$state]);
