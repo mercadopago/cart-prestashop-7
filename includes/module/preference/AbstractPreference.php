@@ -232,7 +232,7 @@ class AbstractPreference
             $notification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
                 '?fc=module&module=mercadopago&controller=notification&' .
                 'checkout=' . $this->checkout . '&cart_id=' . $cart->id . '&customer=' . $customer->secure_key .
-                '&notification=ipn';
+                '&notification=ipn&source_news=ipn';
 
             return $notification_url;
         }
