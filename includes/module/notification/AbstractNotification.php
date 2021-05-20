@@ -319,7 +319,7 @@ class AbstractNotification
     }
 
     /**
-     * Rule to update payment with possible fraud
+     * Rule to update order with payment with possible fraud
      *
      * @return void
      */
