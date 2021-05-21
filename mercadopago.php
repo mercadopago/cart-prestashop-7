@@ -324,12 +324,12 @@ class Mercadopago extends PaymentModule
     {
         $order_states = array(
             array('#ccfbff', $this->l('Transaction in Process'), 'in_process', '110010000'),
-            array('#c9fecd', $this->l('Transaction Completed'), 'payment', '100010010'),
+            array('#c9fecd', $this->l('Transaction Completed'), 'payment', '110010010'),
             array('#fec9c9', $this->l('Transaction Canceled'), 'order_canceled', '100010000'),
             array('#fec9c9', $this->l('Transaction Declined'), 'payment_error', '100010000'),
             array('#ffeddb', $this->l('Transaction Refunded'), 'refund', '100010000'),
-            array('#c28566', $this->l('Transaction Chargedback'), 'charged_back', '110010000'),
-            array('#b280b2', $this->l('Transaction in Mediation'), 'in_mediation', '110010000'),
+            array('#c28566', $this->l('Transaction Chargedback'), 'charged_back', '100010000'),
+            array('#b280b2', $this->l('Transaction in Mediation'), 'in_mediation', '100010000'),
             array('#fffb96', $this->l('Transaction Pending'), 'pending', '110010000'),
             array('#ccfbff', $this->l('Transaction Authorized'), 'authorized', '100010000'),
             array('#ffb0d9', $this->l('Transaction in Possible Fraud'), 'payment_error', '100010000'),
