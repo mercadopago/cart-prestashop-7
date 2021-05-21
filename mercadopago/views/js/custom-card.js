@@ -51,7 +51,7 @@
   window.initializeCustom = function (mpCustom) {
     sellerCustom.site_id = mpCustom.site_id;
     translateCustom.select_choose = mpCustom.select_choose;
-    psVersion = mpCustom.psVersion;
+    psVersion = mpCustom.ps_version;
   };
 
   /*

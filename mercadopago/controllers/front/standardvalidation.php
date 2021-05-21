@@ -31,6 +31,12 @@ require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->mercadopago = MPApi::getInstance();
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
@@ -39,13 +45,21 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
     public function initContent()
     {
         $typeReturn = Tools::getValue('typeReturn');
-        $payment_id = Tools::getValue('collection_id');
+        $payment_ids = Tools::getValue('collection_id');
 
-        if (isset($payment_id) && $payment_id != 'null' && $typeReturn != 'failure') {
-            $cart_id = Tools::getValue('external_reference');
-            $cart = new Cart($cart_id);
-            $order = $this->createOrder($cart);
-            $this->redirectOrderConfirmation($cart, $order);
+        if (isset($payment_ids) && $payment_ids != 'null' && $typeReturn != 'failure') {
+            $payment_id = explode(',', $payment_ids)[0];
+            $payment = $this->mercadopago->getPaymentStandard($payment_id);
+
+            if ($payment !== false) {
+                $cart_id = $payment['external_reference'];
+                $transaction_id = $payment['order']['id'];
+
+                $cart = new Cart($cart_id);
+                $order = $this->createOrder($cart, $transaction_id);
+
+                $this->redirectOrderConfirmation($cart, $order);
+            }
         }
 
         $this->redirectError();
@@ -55,13 +69,12 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      * Create order without notification
      *
      * @param mixed $cart
-     * @param string $url
+     * @param integer $transaction_id
      * @return void
      */
-    public function createOrder($cart)
+    public function createOrder($cart, $transaction_id)
     {
-        $customer_secure_key = $cart->secure_key;
-        $notification = new IpnNotification(null, $customer_secure_key);
+        $notification = new IpnNotification($transaction_id, null);
         $notification = $notification->createStandardOrder($cart);
 
         $order = Order::getOrderByCartId($cart->id);

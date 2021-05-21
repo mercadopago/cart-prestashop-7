@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.5.1');
+define('MP_VERSION', '4.6.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,7 +72,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.5.1';
+        $this->version = '4.6.0';
 
         parent::__construct();
 
@@ -142,7 +142,7 @@ class Mercadopago extends PaymentModule
 
         //Mercadopago configurations
         include MP_ROOT_URL . '/sql/install.php';
-        MPLog::generate('Mercadopago plugin installed in the store');
+        MPLog::generate(sprintf('Mercadopago plugin %s installed in the store', MP_VERSION));
 
         //install hooks and dependencies
         return parent::install() &&
@@ -324,14 +324,15 @@ class Mercadopago extends PaymentModule
     {
         $order_states = array(
             array('#ccfbff', $this->l('Transaction in Process'), 'in_process', '110010000'),
-            array('#c9fecd', $this->l('Transaction Completed'), 'payment', '100010010'),
+            array('#c9fecd', $this->l('Transaction Completed'), 'payment', '110010010'),
             array('#fec9c9', $this->l('Transaction Canceled'), 'order_canceled', '100010000'),
             array('#fec9c9', $this->l('Transaction Declined'), 'payment_error', '100010000'),
             array('#ffeddb', $this->l('Transaction Refunded'), 'refund', '100010000'),
-            array('#c28566', $this->l('Transaction Chargedback'), 'charged_back', '110010000'),
-            array('#b280b2', $this->l('Transaction in Mediation'), 'in_mediation', '110010000'),
+            array('#c28566', $this->l('Transaction Chargedback'), 'charged_back', '100010000'),
+            array('#b280b2', $this->l('Transaction in Mediation'), 'in_mediation', '100010000'),
             array('#fffb96', $this->l('Transaction Pending'), 'pending', '110010000'),
             array('#ccfbff', $this->l('Transaction Authorized'), 'authorized', '100010000'),
+            array('#ffb0d9', $this->l('Transaction in Possible Fraud'), 'payment_error', '100010000'),
         );
 
         foreach ($order_states as $key => $value) {

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.6.0] - 2021-05-21
+
+### Added
+- Added source_news to receive only one type of notification
+- Added plugin version to logs on install hook
+- Added new features to improve security
+- Added payment fraud status and rules to update orders
+- Added rule on notification to update order payment transaction total
+
+### Removed
+- Removed cart_id as query param to improve security
+- Removed unused evaluation modal
+
+### Fixed
+- Fixed modal javascript on Checkout Pro for PS 1.6
+- Fixed cart total on CustomCheckout to show correct values with automatic cart rules
+- Fixed disableFinishOrderButton method on custom card JS
+
 ## [4.5.1] - 2021-03-05
 
 ### Added
