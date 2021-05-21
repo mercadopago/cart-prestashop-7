@@ -285,7 +285,7 @@ class AbstractNotification
      *
      * @return void
      */
-    public function ruleFailed($cart, $order, $actual_status, $validate_actual)
+    public function ruleFailed($cart, $order, $status, $actual_status, $validate_actual)
     {
         $status_approved = $this->getNotificationPaymentState('approved');
 
