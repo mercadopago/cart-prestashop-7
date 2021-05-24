@@ -320,7 +320,7 @@ class Mercadopago extends PaymentModule
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    protected function createPaymentStates()
+    public function createPaymentStates()
     {
         $order_states = array(
             array('#ccfbff', $this->l('Transaction in Process'), 'in_process', '110010000'),
@@ -374,7 +374,7 @@ class Mercadopago extends PaymentModule
      * @param  integer $id_order_state
      * @return void
      */
-    protected static function orderStateAvailable($id_order_state)
+    public static function orderStateAvailable($id_order_state)
     {
         $result = Db::getInstance()->getRow(
             "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
