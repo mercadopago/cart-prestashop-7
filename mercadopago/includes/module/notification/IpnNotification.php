@@ -31,9 +31,12 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 
 class IpnNotification extends AbstractNotification
 {
-    public function __construct($transaction_id, $customer_secure_key = null)
+    public $merchant_order;
+
+    public function __construct($transaction_id, $merchant_order = null)
     {
-        parent::__construct($transaction_id, $customer_secure_key);
+        parent::__construct($transaction_id);
+        $this->merchant_order = $merchant_order;
     }
 
     /**
@@ -46,24 +49,20 @@ class IpnNotification extends AbstractNotification
     {
         $this->verifyWebhook($cart);
         $this->total = $this->getTotal($cart);
-        $orderId = Order::getOrderByCartId($cart->id);
+        $orderId = $this->getOrderId($cart);
 
         if ($orderId != 0) {
-            $merchant_order = $this->mercadopago->getMerchantOrder($this->transaction_id);
-            $payments = $merchant_order['payments'];
+            $payments = $this->merchant_order['payments'];
 
             $this->verifyPayments($payments);
             $this->validateOrderState();
 
             $baseOrder = new Order($orderId);
-            $payments = $baseOrder->getOrderPaymentCollection();
-            $payments[0]->amount = $this->approved;
-            $payments[0]->update();
             $orders = Order::getByReference($baseOrder->reference);
 
             foreach ($orders as $order) {
                 $this->order_id = $order->id;
-                $this->updateTransactionId();
+                $this->updateOrderTransaction($order);
                 $this->updateOrder($cart);
             }
         } else {
@@ -98,7 +97,10 @@ class IpnNotification extends AbstractNotification
      */
     public function getOrderId($cart)
     {
-        $this->order_id = Order::getOrderByCartId($cart->id);
+        $orderId = Order::getOrderByCartId($cart->id);
+        $this->order_id = $orderId;
+
+        return $orderId;
     }
 
     /**
@@ -130,25 +132,6 @@ class IpnNotification extends AbstractNotification
             } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
                 $this->pending += $payment_info['transaction_amount'];
             }
-        }
-    }
-
-    /**
-     * Update merchant_order_id on transaction id
-     *
-     * @param mixed $cart
-     * @return void
-     */
-    public function updateTransactionId()
-    {
-        $order = new Order($this->order_id);
-
-        try {
-            $payments = $order->getOrderPaymentCollection();
-            $payments[0]->transaction_id = $this->transaction_id;
-            $payments[0]->update();
-        } catch (Exception $e) {
-            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
         }
     }
 }

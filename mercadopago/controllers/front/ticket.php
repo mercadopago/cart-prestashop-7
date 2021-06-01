@@ -62,7 +62,7 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 
                 //create order
                 $transaction_id = $ticketPreference['id'];
-                $notification = new WebhookNotification($transaction_id, $this->context->cart->secure_key);
+                $notification = new WebhookNotification($transaction_id, $ticketPreference);
                 $notification->createCustomOrder($this->context->cart);
                 $preference->disableCartRule();
 

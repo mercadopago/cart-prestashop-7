@@ -45,7 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
 
-    public function __construct($transaction_id, $customer_secure_key = null)
+    public function __construct($transaction_id)
     {
         $this->module = Module::getInstanceByName('mercadopago');
         $this->mercadopago = MPApi::getInstance();
@@ -53,7 +53,6 @@ class AbstractNotification
         $this->ps_order_state = new PSOrderState();
         $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
-        $this->customer_secure_key = $customer_secure_key;
 
         $this->amount = 0;
         $this->pending = 0;
@@ -93,6 +92,23 @@ class AbstractNotification
             }
 
             return $this->order_state;
+        }
+    }
+
+    /**
+     * Update order transaction
+     *
+     * @param mixed $order
+     * @return void
+     */
+    public function updateOrderTransaction($order)
+    {
+        try {
+            $order_payments = $order->getOrderPaymentCollection();
+            $order_payments[0]->amount = $this->approved;
+            $order_payments[0]->update();
+        } catch (Exception $e) {
+            MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
         }
     }
 
@@ -232,11 +248,7 @@ class AbstractNotification
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 202);
         } elseif ($this->total > $this->approved) {
-            MPLog::generate('The order '. $this->order_id .' has not been updated by a possible fraud', 'error');
-            $this->getNotificationResponse(
-                'The order ' . $this->order_id . ' has not been updated by a possible fraud',
-                200
-            );
+            $this->ruleFraud($cart, $order, $actual_status, $validate_actual);
         } elseif ($validate_actual == true) {
             $this->updatePrestashopOrder($cart, $order);
         } else {
@@ -303,6 +315,30 @@ class AbstractNotification
             $this->getNotificationResponse('Order status is the same', 202);
         } else {
             $this->updatePrestashopOrder($cart, $order);
+        }
+    }
+
+    /**
+     * Rule to update order with payment with possible fraud
+     *
+     * @return void
+     */
+    public function ruleFraud($cart, $order, $actual_status, $validate_actual)
+    {
+        MPLog::generate('The order '. $this->order_id .' have a possible payment fraud', 'error');
+
+        $status_fraud = $this->getNotificationPaymentState('possible_fraud');
+        $this->order_state = $status_fraud;
+
+        if ($actual_status == $status_fraud) {
+            MPLog::generate('Order status is the same', 'warning');
+            $this->getNotificationResponse('Order status is the same', 202);
+        } elseif ($validate_actual == true) {
+            MPLog::generate('The order '. $this->order_id .' has been updated to possible fraud status', 'error');
+            $this->updatePrestashopOrder($cart, $order);
+        } else {
+            MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
+            $this->getNotificationResponse('The order has been updated to a status that does not belong to MP', 200);
         }
     }
 
@@ -432,7 +468,8 @@ class AbstractNotification
             'charged_back' => 'MERCADOPAGO_STATUS_5',
             'in_mediation' => 'MERCADOPAGO_STATUS_6',
             'pending' => 'MERCADOPAGO_STATUS_7',
-            'authorized' => 'MERCADOPAGO_STATUS_8'
+            'authorized' => 'MERCADOPAGO_STATUS_8',
+            'possible_fraud' => 'MERCADOPAGO_STATUS_9',
         );
 
         return Configuration::get($payment_states[$state]);
