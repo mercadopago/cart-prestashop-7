@@ -222,7 +222,7 @@ class AbstractPreference
             $items[] = array(
                 'title' => 'Difference',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($priceDif) : $priceDiff,
+                'unit_price' => $round ? Tools::ps_round($priceDiff) : $priceDiff,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Adjustment for the Mercado Pago price to be the same as the store',
             );
