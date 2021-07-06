@@ -48,10 +48,9 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
             $custom_info = Tools::getValue('mercadopago_custom');
             $customPreference = $preference->createPreference($this->context->cart, $custom_info);
 
-            if (is_array($customPreference) && array_key_exists('notification_url', $customPreference)
-                && $customPreference['status'] != 'rejected') {
+            if (is_array($customPreference) && $customPreference['status'] != 'rejected') {
                 //payment created
-                $preference->saveCreatePreferenceData($this->context->cart, $customPreference['notification_url']);
+                $preference->saveCreatePreferenceData($this->context->cart);
                 MPLog::generate('Cart id ' . $this->context->cart->id . ' - Custom payment created successfully');
 
                 //create order

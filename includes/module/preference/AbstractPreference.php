@@ -89,7 +89,6 @@ class AbstractPreference
     {
         $preference = array(
             'external_reference' => $cart->id,
-            'notification_url' => $this->getNotificationUrl($cart),
             'statement_descriptor' => $this->getStatementDescriptor(),
         );
 
@@ -238,26 +237,6 @@ class AbstractPreference
         }
 
         return $this->settings['MERCADOPAGO_INVOICE_NAME'];
-    }
-
-    /**
-     * Get notification url
-     *
-     * @param  $cart
-     * @return string|void
-     */
-    public function getNotificationUrl($cart)
-    {
-        $customer = new Customer((int) $cart->id_customer);
-
-        if (!strrpos($this->getSiteUrl(), 'localhost')) {
-            $notification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-                '?fc=module&module=mercadopago&controller=notification&' .
-                'checkout=' . $this->checkout . '&customer=' . $customer->secure_key .
-                '&notification=ipn&&source_news=ipn';
-
-            return $notification_url;
-        }
     }
 
     /**
@@ -413,10 +392,9 @@ class AbstractPreference
      * Save payments primary info on mp_transaction table
      *
      * @param  mixed $cart
-     * @param  mixed $notification_url
      * @return void
      */
-    public function saveCreatePreferenceData($cart, $notification_url)
+    public function saveCreatePreferenceData($cart)
     {
         $mp_module = new MPModule();
         $mp_module = $mp_module->where('version', '=', MP_VERSION)->get();
@@ -431,7 +409,7 @@ class AbstractPreference
                     'cart_id' => $cart->id,
                     'customer_id' => $cart->id_customer,
                     'mp_module_id' => $mp_module['id_mp_module'],
-                    'notification_url' => $notification_url,
+                    'notification_url' => '',
                     'is_payment_test' => $this->validateSandboxMode()
                 ]
             );
@@ -440,7 +418,7 @@ class AbstractPreference
                 [
                     'total' => $cart->getOrderTotal(),
                     'customer_id' => $cart->id_customer,
-                    'notification_url' => $notification_url,
+                    'notification_url' => '',
                     'is_payment_test' => $this->validateSandboxMode()
                 ]
             );

@@ -104,7 +104,7 @@ class StandardCheckout
 
             if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
                 $preference_id = $createPreference['id'];
-                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+                $preference->saveCreatePreferenceData($cart);
                 $modal_link = $this->payment->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
             }
         }
