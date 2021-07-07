@@ -80,8 +80,7 @@ class Cryptography {
 				$key    = base64_encode($hmac);
 				return $key;
 			} catch (Exception $e) {
-				$message =  "Error while encrypting. <br> $e";
-				return $message;
+				throw new Exception($e);
 			}
 		} else {
 			throw new Exception('Empty parameters');
