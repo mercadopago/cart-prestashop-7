@@ -37,12 +37,8 @@ class Request {
 	public static function getAuthorizationHeader() {
 		$headers = null;
 		if (isset($_SERVER['Authorization'])) {
-			// @todo need fix Processing form data without nonce verification
-			// @codingStandardsIgnoreLine
 			$headers = trim($_SERVER['Authorization']);
 		} elseif ( isset($_SERVER['HTTP_AUTHORIZATION']) ) {
-			// @todo need fix Processing form data without nonce verification
-			// @codingStandardsIgnoreLine
 			$headers = trim($_SERVER['HTTP_AUTHORIZATION']);
 		} elseif (function_exists('apache_request_headers')) {
 			$requestHeaders = apache_request_headers();

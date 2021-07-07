@@ -77,7 +77,7 @@ class Cryptography {
 			try {
 				$string = self::obj_to_string($data);
 				$hmac   = hash_hmac('sha256', $string, $secret, true);
-				$key    = base64_encode($hmac);// phpcs:ignore
+				$key    = base64_encode($hmac);
 				return $key;
 			} catch (Exception $e) {
 				$message =  "Error while encrypting. <br> $e";
