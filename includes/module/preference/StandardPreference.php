@@ -54,7 +54,7 @@ class StandardPreference extends AbstractPreference
         $preference['binary_mode'] = $this->getBinaryMode();
         $preference['expires'] = $this->getExpirationStatus();
         $preference['expiration_date_to'] = $this->getExpirationDate();
-        $preference['metadata'] = $this->getInternalMetadata();
+        $preference['metadata'] = $this->getInternalMetadata($cart);
 
         //Generate preference
         $this->generateLogs($preference, $cart);
@@ -220,11 +220,12 @@ class StandardPreference extends AbstractPreference
     /**
      * Get internal metadata
      *
+     * @param mixed $cart
      * @return array
      */
-    public function getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
-        $internal_metadata = parent::getInternalMetadata();
+        $internal_metadata = parent::getInternalMetadata($cart);
         $internal_metadata['checkout'] = 'smart';
         $internal_metadata['checkout_type'] = 'redirect';
 
