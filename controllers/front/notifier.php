@@ -60,15 +60,13 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 && !empty($time_stamp)
             ) {
                 $this->getNotificationResponse(
-                    'Deu tudo certo',
+                    'ok',
                     200
                 );
             }
             else {
                 $this->getNotificationResponse('Some parameters are empty', 400);
             }
-
-
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
         }
