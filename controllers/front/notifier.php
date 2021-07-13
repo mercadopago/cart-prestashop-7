@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2021 PrestaShop
  *
@@ -48,12 +49,30 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         MPLog::generate('--------Core Notification--------');
 
-        $this->getNotificationResponse(
-            'Deu tudo certo',
-            200
-        );
-    }
+        try {
+            $payment_id = Tools::getValue('payment_id');
+            $external_reference = Tools::getValue('external_reference');
+            $time_stamp = Tools::getValue('timestamp');
 
+            if (
+                !empty($payment_id)
+                && !empty($external_reference)
+                && !empty($time_stamp)
+            ) {
+                $this->getNotificationResponse(
+                    'Deu tudo certo',
+                    200
+                );
+            }
+            else {
+                $this->getNotificationResponse('Some parameters are empty', 400);
+            }
+
+
+        } catch (Exception $e) {
+            MPLog::generate('Exception Message: ' . $e->getMessage());
+        }
+    }
     /**
      * Get error response
      *
@@ -78,7 +97,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         header('Content-type: application/json');
         $response = array(
             "code" => $code,
-            "message" => $message,            
+            "message" => $message,
             "version" => MP_VERSION
         );
 
