@@ -48,17 +48,10 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         MPLog::generate('--------Core Notification--------');
 
-        //Validate request
-        if (true) {
-            MPLog::generate('Resquest parameters: Entrou');
-            $this->getNotificationResponse(
-                'Deu tudo certo',
-                200
-            );
-            
-        } else {
-            $this->getErrorResponse();
-        }
+        $this->getNotificationResponse(
+            'Deu tudo certo',
+            200
+        );
     }
 
     /**
@@ -85,7 +78,8 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         header('Content-type: application/json');
         $response = array(
             "code" => $code,
-            "message" => $message
+            "message" => $message,            
+            "version" => MP_VERSION
         );
 
         echo Tools::jsonEncode($response);
