@@ -54,7 +54,7 @@ class TicketPreference extends AbstractPreference
         $preference['description'] = $this->getPreferenceDescription($cart);
         $preference['payment_method_id'] = $ticket_info['paymentMethodId'];
         $preference['payer']['email'] = $this->getCustomerEmail();
-        $preference['metadata'] = $this->getInternalMetadata();
+        $preference['metadata'] = $this->getInternalMetadata($cart);
 
         if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLB') {
             $preference['payer']['first_name'] = $ticket_info['firstname'];
@@ -186,11 +186,12 @@ class TicketPreference extends AbstractPreference
     /**
      * Get internal metadata
      *
+     * @param mixed $cart
      * @return array
      */
-    public function getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
-        $internal_metadata = parent::getInternalMetadata();
+        $internal_metadata = parent::getInternalMetadata($cart);
         $internal_metadata['checkout'] ='custom';
         $internal_metadata['checkout_type'] ='ticket';
 

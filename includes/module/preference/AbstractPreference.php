@@ -242,7 +242,7 @@ class AbstractPreference
     /**
      * Get site url
      *
-     * @return void
+     * @return string
      */
     public function getSiteUrl()
     {
@@ -367,9 +367,10 @@ class AbstractPreference
     /**
      * Create the array for medatada informations
      *
+     * @param mixed $cart
      * @return array
      */
-    public function getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
         $internal_metadata = array(
             "details" => "",
@@ -383,6 +384,7 @@ class AbstractPreference
             "basic_settings" => $this->getStandardCheckoutSettings(),
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
+            "store_url" => $this->getStoreUrl($cart),
         );
 
         return $internal_metadata;
@@ -409,7 +411,7 @@ class AbstractPreference
                     'cart_id' => $cart->id,
                     'customer_id' => $cart->id_customer,
                     'mp_module_id' => $mp_module['id_mp_module'],
-                    'notification_url' => '',
+                    'notification_url' => $this->getStoreUrl($cart),
                     'is_payment_test' => $this->validateSandboxMode()
                 ]
             );
@@ -418,7 +420,7 @@ class AbstractPreference
                 [
                     'total' => $cart->getOrderTotal(),
                     'customer_id' => $cart->id_customer,
-                    'notification_url' => '',
+                    'notification_url' =>  $this->getStoreUrl($cart),
                     'is_payment_test' => $this->validateSandboxMode()
                 ]
             );
@@ -626,5 +628,25 @@ class AbstractPreference
 
         $encodedLogs = Tools::jsonEncode($logs);
         MPLog::generate($checkout . ' preference logs: ' . $encodedLogs);
+    }
+
+
+     /**
+     * Get Store Url to Notification 
+     *
+     * @param mixed $cart
+     * @return string
+     */
+    public function getStoreUrl($cart)
+    {
+        $customer = new Customer((int) $cart->id_customer);
+
+        if (!strrpos($this->getSiteUrl(), 'localhost')) {
+            $store_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
+                '?fc=module&module=mercadopago&controller=notifier&' .
+                'checkout=' . $this->checkout . '&customer=' . $customer->secure_key;
+
+            return $store_url;
+        }
     }
 }
