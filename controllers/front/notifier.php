@@ -72,19 +72,41 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 if (is_null($secret) || empty($secret)) {
                     $this->getNotificationResponse('Credentials not found', 500);
                 }
-
+                
                 $auth  = Cryptography::encrypt($data, $secret);
                 $token = Request::getBearerToken();
 
                 if (!$token) {
                     $this->getNotificationResponse('Unauthorized', 401);
                 } elseif ($auth === $token) {
+                    $cart = new Cart($external_reference);
+                    $order_id = Order::getOrderByCartId($cart->id);
 
-                    $this->getNotificationResponse(
-                        'Authorized',
-                        200
-                    );
-                } else {
+                    if ($order_id != 0) {
+                        $order = new Order($order_id);
+
+                        $response                       = array();
+                        $response['order_id']           = $order_id;
+                        $response['external_reference'] = $external_reference;
+                        $response['status']             = $order->getCurrentState();
+                        $response['created_at']         = $order->date_add;
+                        $response['total']              = $this->getTotal($cart);
+                        $response['timestamp']          = time();
+                        
+                        MPLog::generate('Response: ' . Tools::jsonEncode($response));
+
+                        $hmac             = Cryptography::encrypt($response, $secret);
+                        $response['hmac'] = $hmac;
+
+
+                        $this->getNotificationResponse(
+                            'Authorized',
+                            200
+                        );
+                    } else {
+                        $this->getNotificationResponse('Order not found', 404);
+                    }
+                }else {
                     $this->getNotificationResponse('Some parameters are empty', 400);
                 }
             }
@@ -92,6 +114,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
             MPLog::generate('Exception Message: ' . $e->getMessage());
         }
     }
+
     /**
      * Get error response
      *
@@ -110,10 +133,10 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
      *
      * @return void
      */
-
     public function getNotificationResponse($message, $code)
     {
         header('Content-type: application/json');
+
         $response = array(
             "code" => $code,
             "message" => $message,
@@ -122,5 +145,20 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 
         echo Tools::jsonEncode($response);
         return http_response_code($code);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotal($cart)
+    {
+        $total = (float) $cart->getOrderTotal();
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            return Tools::ps_round($total, 2);
+        }
+
+        return $total;
     }
 }
