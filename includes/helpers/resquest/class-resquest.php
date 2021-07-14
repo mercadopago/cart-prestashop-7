@@ -27,6 +27,8 @@
  * to avoid any conflicts with others containers.
  */
 
+namespace Helpers;
+
 /**
  * Class Request
  */

@@ -31,6 +31,8 @@
  * to avoid any conflicts with others containers.
  */
 
+use Helpers\Cryptography;
+use Helpers\Request;
 
 class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 {
@@ -59,13 +61,32 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 && !empty($external_reference)
                 && !empty($time_stamp)
             ) {
-                $this->getNotificationResponse(
-                    'ok',
-                    200
-                );
-            }
-            else {
-                $this->getNotificationResponse('Some parameters are empty', 400);
+                $data = array();
+
+                $data['payment_id'] = $payment_id;
+                $data['external_reference'] = $external_reference;
+                $data['timestamp'] = $time_stamp;
+
+                $secret = $this->mercadopago->getaccessToken();
+
+                if (is_null($secret) || empty($secret)) {
+                    $this->getNotificationResponse('Credentials not found', 500);
+                }
+
+                $auth  = Cryptography::encrypt($data, $secret);
+                $token = Request::getBearerToken();
+
+                if (!$token) {
+                    $this->getNotificationResponse('Unauthorized', 401);
+                } elseif ($auth === $token) {
+
+                    $this->getNotificationResponse(
+                        'Authorized',
+                        200
+                    );
+                } else {
+                    $this->getNotificationResponse('Some parameters are empty', 400);
+                }
             }
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
