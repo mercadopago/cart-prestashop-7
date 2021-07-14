@@ -54,12 +54,12 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         try {
             $payment_id = Tools::getValue('payment_id');
             $external_reference = Tools::getValue('external_reference');
-            $time_stamp = Tools::getValue('timestamp');
+            $timestamp = Tools::getValue('timestamp');
 
             if (
                 !empty($payment_id)
                 && !empty($external_reference)
-                && !empty($time_stamp)
+                && !empty($timestamp)
             ) {
                 $data = array();
 
