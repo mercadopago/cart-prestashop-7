@@ -65,7 +65,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 
                 $data['payment_id'] = $payment_id;
                 $data['external_reference'] = $external_reference;
-                $data['timestamp'] = $time_stamp;
+                $data['timestamp'] = $timestamp;
 
                 $secret = $this->mercadopago->getaccessToken();
 
