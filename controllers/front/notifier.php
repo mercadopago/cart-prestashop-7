@@ -52,19 +52,19 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         MPLog::generate('--------Core Notification--------');
 
         try {
-            $payment_id = Tools::getValue('payment_id');
-            $external_reference = Tools::getValue('external_reference');
+            $paymentId = Tools::getValue('payment_id');
+            $externalReference = Tools::getValue('external_reference');
             $timestamp = Tools::getValue('timestamp');
 
             if (
-                !empty($payment_id)
-                && !empty($external_reference)
+                !empty($paymentId)
+                && !empty($externalReference)
                 && !empty($timestamp)
             ) {
                 $data = array();
 
-                $data['payment_id'] = $payment_id;
-                $data['external_reference'] = $external_reference;
+                $data['payment_id'] = $paymentId;
+                $data['external_reference'] = $externalReference;
                 $data['timestamp'] = $timestamp;
 
                 $secret = $this->mercadopago->getaccessToken();
@@ -79,19 +79,45 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 if (!$token) {
                     $this->getNotificationResponse('Unauthorized', 401);
                 } elseif ($auth === $token) {
+                    $cart = new Cart($externalReference);
+                    $orderId = Order::getOrderByCartId($cart->id);
 
-                    $this->getNotificationResponse(
-                        'Authorized',
-                        200
-                    );
+                    if ($orderId != 0) {
+                        $order = new Order($orderId);
+
+                        $response                       = array();
+                        $response['order_id']           = $orderId;
+                        $response['external_reference'] = $externalReference;
+                        $response['status']             = $order->getCurrentState();
+                        $response['created_at']         = $order->date_add;
+                        $response['total']              = $this->getTotal($cart);
+                        $response['timestamp']          = time();
+
+                        MPLog::generate('Response: ' . Tools::jsonEncode($response));
+
+                        $hmac             = Cryptography::encrypt($response, $secret);
+                        $response['hmac'] = $hmac;
+
+
+                        $this->getNotificationResponse(
+                            $response,
+                            200 
+                        );
+                    } else {
+                        $this->getNotificationResponse('Order not found', 404);
+                    }
                 } else {
-                    $this->getNotificationResponse('Some parameters are empty', 400);
+                    $this->getNotificationResponse('Unauthorized', 401);
                 }
+            } else {
+                $this->getNotificationResponse('Some parameters are empty', 400);
             }
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
+            $this->getNotificationResponse('Bad Request', 400);
         }
     }
+
     /**
      * Get error response
      *
@@ -101,7 +127,8 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         $this->getNotificationResponse(
             'The notification does not have the necessary parameters',
-            500
+            500, 
+            null
         );
     }
 
@@ -110,17 +137,38 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
      *
      * @return void
      */
-
-    public function getNotificationResponse($message, $code)
+    public function getNotificationResponse($body, $code)
     {
         header('Content-type: application/json');
         $response = array(
             "code" => $code,
-            "message" => $message,
             "version" => MP_VERSION
         );
-
+        if (is_string($body)) {
+            $response['message'] = $body;
+        } else {
+            foreach ($body as $key=>$value) {
+                $response[$key] = $value;
+            }
+        }
         echo Tools::jsonEncode($response);
         return http_response_code($code);
+    }
+
+    /**
+     * Get order total
+     * 
+     * @return mixed
+     */
+    public function getTotal($cart)
+    {
+        $total = (float) $cart->getOrderTotal();
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            return Tools::ps_round($total, 2);
+        }
+
+        return $total;
     }
 }
