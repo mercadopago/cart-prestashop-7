@@ -52,19 +52,19 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         MPLog::generate('--------Core Notification--------');
 
         try {
-            $payment_id = Tools::getValue('payment_id');
-            $external_reference = Tools::getValue('external_reference');
+            $paymentId = Tools::getValue('payment_id');
+            $externalReference = Tools::getValue('external_reference');
             $timestamp = Tools::getValue('timestamp');
 
             if (
-                !empty($payment_id)
-                && !empty($external_reference)
+                !empty($paymentId)
+                && !empty($externalReference)
                 && !empty($timestamp)
             ) {
                 $data = array();
 
-                $data['payment_id'] = $payment_id;
-                $data['external_reference'] = $external_reference;
+                $data['payment_id'] = $paymentId;
+                $data['external_reference'] = $externalReference;
                 $data['timestamp'] = $timestamp;
 
                 $secret = $this->mercadopago->getaccessToken();
@@ -79,15 +79,15 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 if (!$token) {
                     $this->getNotificationResponse('Unauthorized', 401);
                 } elseif ($auth === $token) {
-                    $cart = new Cart($external_reference);
-                    $order_id = Order::getOrderByCartId($cart->id);
+                    $cart = new Cart($externalReference);
+                    $orderId = Order::getOrderByCartId($cart->id);
 
-                    if ($order_id != 0) {
-                        $order = new Order($order_id);
+                    if ($orderId != 0) {
+                        $order = new Order($orderId);
 
                         $response                       = array();
-                        $response['order_id']           = $order_id;
-                        $response['external_reference'] = $external_reference;
+                        $response['order_id']           = $orderId;
+                        $response['external_reference'] = $externalReference;
                         $response['status']             = $order->getCurrentState();
                         $response['created_at']         = $order->date_add;
                         $response['total']              = $this->getTotal($cart);
