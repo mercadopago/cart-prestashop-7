@@ -114,6 +114,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
             }
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
+            $this->getNotificationResponse('Bad Request', 400);
         }
     }
 
