@@ -100,8 +100,8 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 
 
                         $this->getNotificationResponse(
-                            'Authorized',
-                            200
+                            $response,
+                            200 
                         );
                     } else {
                         $this->getNotificationResponse('Order not found', 404);
@@ -126,7 +126,8 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         $this->getNotificationResponse(
             'The notification does not have the necessary parameters',
-            500
+            500, 
+            null
         );
     }
 
@@ -135,16 +136,20 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
      *
      * @return void
      */
-    public function getNotificationResponse($message, $code)
+    public function getNotificationResponse($body, $code)
     {
         header('Content-type: application/json');
-
         $response = array(
             "code" => $code,
-            "message" => $message,
             "version" => MP_VERSION
         );
-
+        if (is_string($body)) {
+            $response['message'] = $body;
+        } else {
+            foreach ($body as $key=>$value) {
+                $response[$key] = $value;
+            }
+        }
         echo Tools::jsonEncode($response);
         return http_response_code($code);
     }
