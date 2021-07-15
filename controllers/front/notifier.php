@@ -72,7 +72,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 if (is_null($secret) || empty($secret)) {
                     $this->getNotificationResponse('Credentials not found', 500);
                 }
-                
+
                 $auth  = Cryptography::encrypt($data, $secret);
                 $token = Request::getBearerToken();
 
@@ -92,7 +92,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                         $response['created_at']         = $order->date_add;
                         $response['total']              = $this->getTotal($cart);
                         $response['timestamp']          = time();
-                        
+
                         MPLog::generate('Response: ' . Tools::jsonEncode($response));
 
                         $hmac             = Cryptography::encrypt($response, $secret);
@@ -106,9 +106,11 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                     } else {
                         $this->getNotificationResponse('Order not found', 404);
                     }
-                }else {
-                    $this->getNotificationResponse('Some parameters are empty', 400);
+                } else {
+                    $this->getNotificationResponse('Unauthorized', 401);
                 }
+            } else {
+                $this->getNotificationResponse('Some parameters are empty', 400);
             }
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
@@ -148,6 +150,8 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     }
 
     /**
+     * Get order total
+     * 
      * @return mixed
      */
     public function getTotal($cart)
