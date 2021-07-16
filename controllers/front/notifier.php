@@ -190,7 +190,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         $this->getNotificationResponse(
             'The notification does not have the necessary parameters',
-            500,
+            500
         );
     }
 
