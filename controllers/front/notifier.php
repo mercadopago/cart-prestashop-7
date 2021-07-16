@@ -90,48 +90,21 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                 && !empty($externalReference)
                 && !empty($timestamp)
             ) {
-                $data = array();
 
+                $data = array();
                 $data['payment_id'] = $paymentId;
                 $data['external_reference'] = $externalReference;
                 $data['timestamp'] = $timestamp;
-
                 $secret = $this->mercadopago->getaccessToken();
 
-                if (is_null($secret) || empty($secret)) {
-                    return $this->getNotificationResponse('Credentials not found', 500);
-                }
+                if ($this->isAuthenticated($data, $secret)) {
 
-                $cryptography = new Cryptography();
-                $auth         = $cryptography->encrypt($data, $secret);
-
-                $request = new Request();
-                $token   = $request->getBearerToken();
-
-                if (!$token) {
-                    return $this->getNotificationResponse('Unauthorized', 401);
-                }
-
-                if ($auth === $token) {
                     $cart = new Cart($externalReference);
                     $orderId = Order::getOrderByCartId($cart->id);
 
                     if ($orderId != 0) {
-                        $order = new Order($orderId);
 
-                        $response                       = array();
-                        $response['order_id']           = $orderId;
-                        $response['external_reference'] = $externalReference;
-                        $response['status']             = $order->getCurrentState();
-                        $response['created_at']         = $order->date_add;
-                        $response['total']              = $this->getTotal($cart);
-                        $response['timestamp']          = time();
-                        $response['hmac']               = "********************";
-
-                        MPLog::generate('Response: ' . Tools::jsonEncode($response));
-
-                        $hmac = $cryptography->encrypt($response, $secret);
-                        $response['hmac'] = $hmac;
+                        $response = $this->buildOrderResponse($orderId, $secret, $externalReference, $cart);
 
                         return $this->getNotificationResponse($response, 200);
                     }
@@ -260,5 +233,61 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         }
 
         return $total;
+    }
+
+    /**
+     * Token authentication 
+     * 
+     * @param mixed $data, $secret
+     * 
+     * @return boolean
+     */
+    private function isAuthenticated($data, $secret)
+    {
+
+        if (is_null($secret) || empty($secret)) {
+            return $this->getNotificationResponse('Credentials not found', 500);
+        }
+
+        $cryptography = new Cryptography();
+        $auth         = $cryptography->encrypt($data, $secret);
+
+        $request = new Request();
+        $token   = $request->getBearerToken();
+
+        if (!$token) {
+            return $this->getNotificationResponse('Unauthorized', 401);
+        }
+        return ($auth === $token);
+    }
+
+     /**
+     * Build order response
+     * 
+     * @param mixed $orderId, $secret, $externalReference, $cart
+     * 
+     * @return array
+     */
+    private function buildOrderResponse($orderId, $secret, $externalReference, $cart)
+    {
+
+        $order = new Order($orderId);
+        $cryptography = new Cryptography();
+
+        $response                       = array();
+        $response['order_id']           = $orderId;
+        $response['external_reference'] = $externalReference;
+        $response['status']             = $order->getCurrentState();
+        $response['created_at']         = $order->date_add;
+        $response['total']              = $this->getTotal($cart);
+        $response['timestamp']          = time();
+        $response['hmac']               = "********************";
+
+        MPLog::generate('Response: ' . Tools::jsonEncode($response));
+
+        $hmac = $cryptography->encrypt($response, $secret);
+        $response['hmac'] = $hmac;
+
+        return $response;
     }
 }
