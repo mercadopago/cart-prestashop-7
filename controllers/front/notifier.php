@@ -31,8 +31,9 @@
  * to avoid any conflicts with others containers.
  */
 
-use Helpers\Cryptography;
-use Helpers\Request;
+
+require_once MP_ROOT_URL . '/includes/helpers/cryptography/cryptography.php';
+require_once MP_ROOT_URL . '/includes/helpers/request/request.php';
 
 class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 {
@@ -51,13 +52,40 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     {
         MPLog::generate('--------Core Notification--------');
 
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            // @codingStandardsIgnoreLine
+            $method = $_SERVER['REQUEST_METHOD'];
+
+            switch ($method) {
+            case 'GET':
+                MPLog::generate('Request GET from Core Notifier');
+                $this->getOrder();
+                break;
+
+            case 'POST':
+                MPLog::generate('Request POST from Core Notifier');
+                $this->updateOrder();
+                break;
+
+            default:
+                return $this->getNotificationResponse('Method not allowed', 405);
+            }
+        }        
+    }
+
+    /**
+     * Get Order
+     * 
+     * @return void
+     */
+    public function getOrder()
+    {
         try {
             $paymentId = Tools::getValue('payment_id');
             $externalReference = Tools::getValue('external_reference');
             $timestamp = Tools::getValue('timestamp');
 
-            if (
-                !empty($paymentId)
+            if (!empty($paymentId)
                 && !empty($externalReference)
                 && !empty($timestamp)
             ) {
@@ -73,8 +101,11 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                     $this->getNotificationResponse('Credentials not found', 500);
                 }
 
-                $auth  = Cryptography::encrypt($data, $secret);
-                $token = Request::getBearerToken();
+                $cryptography = new Cryptography();
+                $auth         = $cryptography->encrypt($data, $secret);
+
+                $request = new Request();
+                $token   = $request->getBearerToken();
 
                 if (!$token) {
                     $this->getNotificationResponse('Unauthorized', 401);
@@ -92,17 +123,14 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
                         $response['created_at']         = $order->date_add;
                         $response['total']              = $this->getTotal($cart);
                         $response['timestamp']          = time();
+                        $response['hmac']               = "********************";
 
                         MPLog::generate('Response: ' . Tools::jsonEncode($response));
 
-                        $hmac             = Cryptography::encrypt($response, $secret);
+                        $hmac = $cryptography->encrypt($response, $secret);
                         $response['hmac'] = $hmac;
 
-
-                        $this->getNotificationResponse(
-                            $response,
-                            200 
-                        );
+                        $this->getNotificationResponse($response, 200);
                     } else {
                         $this->getNotificationResponse('Order not found', 404);
                     }
@@ -116,6 +144,69 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
             MPLog::generate('Exception Message: ' . $e->getMessage());
             $this->getNotificationResponse('Bad Request', 400);
         }
+    }
+
+    /**
+     * Update Order
+     * 
+     * @return void
+     */
+    public function updateOrder()
+    {
+
+        $request = new Request();
+        $data = $request->getJsonBody();
+
+        if ($this->_validateUpdateOrderParams($data)) {
+            $secret = $this->mercadopago->getaccessToken();
+
+            if (is_null($secret) || empty($secret)) {
+                $this->getNotificationResponse('Credentials not found', 500);
+            }
+
+            $cryptography = new Cryptography();
+            $auth         = $cryptography->encrypt($data, $secret);
+
+            $request = new Request();
+            $token   = $request->getBearerToken();
+
+            if (!$token) {
+                return $this->getNotificationResponse('Unauthorized', 401);
+            } 
+            
+            if ($auth === $token) {
+                return $this->getNotificationResponse('Authorized', 200);
+            }
+
+            return $this->getNotificationResponse('Unauthorized', 401);
+
+        } else {
+            $this->getNotificationResponse('Some parameters are empty', 400);
+        }
+    }
+
+    /**
+     * Validate Update Order Params
+     * 
+     * @param mixed $order 
+     * 
+     * @return bool
+     */
+    private function _validateUpdateOrderParams($order) 
+    {
+        return isset($order['status']) 
+                && isset($order['timestamp']) 
+                && isset($order['payment_id']) 
+                && isset($order['external_reference']) 
+                && isset($order['checkout']) 
+                && isset($order['checkout_type']) 
+                && isset($order['order_id']) 
+                && isset($order['payment_type_id']) 
+                && isset($order['payment_method_id']) 
+                && isset($order['payment_created_at']) 
+                && isset($order['total']) 
+                && isset($order['total_paid']) 
+                && isset($order['total_refunded']);
     }
 
     /**
