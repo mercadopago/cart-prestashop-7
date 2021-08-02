@@ -30,10 +30,26 @@
 /**
  * Class Request
  */
-class Request 
+class Request
 {
     /**
+     * Instance the class
+     *
+     * @return Request
+     */
+    public static function getinstance()
+    {
+        static $request = null;
+        if (null === $request) {
+            $request = new Request();
+        }
+        return $request;
+    }
+
+    /**
      * Get header Authorization
+     * 
+     * @return String
      */
     public static function getAuthorizationHeader() {
         $headers = null;
@@ -54,8 +70,11 @@ class Request
 
     /**
      * Get access token from header
+     * 
+     * @return mixed
      */
-    public static function getBearerToken() {
+    public static function getBearerToken() 
+    {
         $headers = self::getAuthorizationHeader();
 
         // HEADER: Get the access token from the header
@@ -70,6 +89,8 @@ class Request
 
     /**
      * Get json body
+     * 
+     * @return mixed
      */
     public static function getJsonBody() {
         $post = file_get_contents('php://input');
@@ -81,4 +102,56 @@ class Request
 
         return null;
     }
+
+    /**
+     * Get error response
+     * 
+     * @param mixed   $body Request Body
+     * @param integer $code Status Code
+     * 
+     * @return void
+     */
+    public function response($body, $code)
+    {
+        header('Content-type: application/json');
+        $response = array(
+            "code" => $code,
+            "version" => MP_VERSION
+        );
+        if (is_string($body)) {
+            $response['message'] = $body;
+        } else {
+            foreach ($body as $key => $value) {
+                $response[$key] = $value;
+            }
+            $mercadopago = MPApi::getInstance();
+            $secret = $mercadopago->getaccessToken();
+            $cryptography = new Cryptography();
+            $hmac = $cryptography->encrypt($response, $secret);
+            $response['hmac'] = $hmac;
+        }
+
+        $responseEncoded = Tools::jsonEncode($response);
+
+        MPLog::generate("Core Notifier Response: " . $responseEncoded);
+
+        echo $responseEncoded;
+
+        return http_response_code($code);
+    }
+
+    /**
+     * Get error response
+     *
+     * @return void
+     */
+    public function erroResponse()
+    {
+        $this->response(
+            'The notification does not have the necessary parameters',
+            500
+        );
+    }
+
+
 }

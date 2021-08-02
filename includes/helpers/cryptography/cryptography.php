@@ -32,6 +32,19 @@
  */
 class Cryptography 
 {
+    /**
+     * Instance the class
+     *
+     * @return Cryptography
+     */
+    public static function getinstance()
+    {
+        static $cryptography = null;
+        if (null === $cryptography) {
+            $cryptography = new Cryptography();
+        }
+        return $cryptography;
+    }
 
     /**
      * Object to String

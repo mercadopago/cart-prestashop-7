@@ -31,16 +31,18 @@
  * to avoid any conflicts with others containers.
  */
 
-
-require_once MP_ROOT_URL . '/includes/helpers/cryptography/cryptography.php';
-require_once MP_ROOT_URL . '/includes/helpers/request/request.php';
-
 class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
 {
+    public $mercadopago;
+    public $request;
+    public $cryptography;
+
     public function __construct()
     {
         parent::__construct();
-        $this->mercadopago = MPApi::getInstance();
+        $this->mercadopago  = MPApi::getInstance();
+        $this->request      = Request::getInstance();
+        $this->cryptography = Cryptography::getInstance();
     }
 
     /**
@@ -53,22 +55,19 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         MPLog::generate('--------Core Notification--------');
 
         if (isset($_SERVER['REQUEST_METHOD'])) {
-            // @codingStandardsIgnoreLine
             $method = $_SERVER['REQUEST_METHOD'];
 
             switch ($method) {
-                case 'GET':
-                    MPLog::generate('Request GET from Core Notifier');
-                    $this->getOrder();
-                    break;
+            case 'GET':
+                MPLog::generate('Request GET from Core Notifier');
+                return $this->getOrder();
 
-                case 'POST':
-                    MPLog::generate('Request POST from Core Notifier');
-                    $this->updateOrder();
-                    break;
+            case 'POST':
+                MPLog::generate('Request POST from Core Notifier');
+                return $this->updateOrder();
 
-                default:
-                    return $this->getNotificationResponse('Method not allowed', 405);
+            default:
+                return $this->request->response('Method not allowed', 405);
             }
         }
     }
@@ -81,41 +80,45 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     public function getOrder()
     {
         try {
-            $paymentId = Tools::getValue('payment_id');
-            $externalReference = Tools::getValue('external_reference');
-            $timestamp = Tools::getValue('timestamp');
+                $paymentId = Tools::getValue('payment_id');
+                $externalReference = Tools::getValue('external_reference');
+                $timestamp = Tools::getValue('timestamp');
 
-            if (
-                !empty($paymentId)
-                && !empty($externalReference)
-                && !empty($timestamp)
-            ) {
+                if (empty($paymentId)
+                    || empty($externalReference)
+                    || empty($timestamp)) 
+                {
+                    return  $this->request->response('Some parameters are empty', 400);
+                }
 
                 $data = array();
                 $data['payment_id'] = $paymentId;
                 $data['external_reference'] = $externalReference;
                 $data['timestamp'] = $timestamp;
+
                 $secret = $this->mercadopago->getaccessToken();
 
-                if ($this->isAuthenticated($data, $secret)) {
-
-                    $cart = new Cart($externalReference);
-                    $orderId = Order::getOrderByCartId($cart->id);
-
-                    if ($orderId != 0) {
-
-                        $response = $this->buildOrderResponse($orderId, $secret, $externalReference, $cart);
-
-                        return $this->getNotificationResponse($response, 200);
-                    }
-                    return  $this->getNotificationResponse('Order not found', 404);
+                if (!$this->_isAuthenticated($data, $secret)) 
+                {
+                    return  $this->request->response('Unauthorized', 401);
                 }
-                return  $this->getNotificationResponse('Unauthorized', 401);
-            }
-            return  $this->getNotificationResponse('Some parameters are empty', 400);
+
+                $cart = new Cart($externalReference);
+                $orderId = Order::getOrderByCartId($cart->id);
+
+                if ($orderId == 0) 
+                {
+                    return  $this->request->response('Order not found', 404);
+                }
+
+                $response = $this->_buildOrderResponse($orderId, 
+                                                        $externalReference, 
+                                                        $cart);
+
+                return $this->request->response($response, 200);
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
-            $this->getNotificationResponse('Bad Request', 400);
+            return $this->request->response('Server Internal Error', 500);
         }
     }
 
@@ -126,35 +129,43 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
      */
     public function updateOrder()
     {
+        try {
+                $data = $this->request->getJsonBody();
 
-        $request = new Request();
-        $data = $request->getJsonBody();
+                if (!$this->_validateUpdateOrderParams($data)) 
+                {
+                    return $this->request->response('Some parameters are empty', 400);
+                }
 
-        if ($this->_validateUpdateOrderParams($data)) {
-            $secret = $this->mercadopago->getaccessToken();
+                $secret = $this->mercadopago->getaccessToken();
+                
+                if (!$this->_isAuthenticated($data, $secret)) 
+                {
+                    return $this->request->response('Unauthorized', 401);
+                }
 
-            if (is_null($secret) || empty($secret)) {
-                $this->getNotificationResponse('Credentials not found', 500);
-            }
+                $cartId = $data['external_reference'];
+                $cart = new Cart($cartId);
+                $customer = new Customer((int) $cart->id_customer);
+                $customer_secure_key = $customer->secure_key;
+                $secureKey = Tools::getValue('customer');
 
-            $cryptography = new Cryptography();
-            $auth         = $cryptography->encrypt($data, $secret);
+                if ($customer_secure_key != $secureKey) {
+                    MPLog::generate('Missing secure-key on request');
+                    return $this->request->erroResponse();                    
+                }
+                                
+                $transactionId = $data['payment_id'];
+                $status = $data['status'];
+                $mpOrder = new MP_Order($transactionId, $status);
 
-            $request = new Request();
-            $token   = $request->getBearerToken();
-
-            if (!$token) {
-                return $this->getNotificationResponse('Unauthorized', 401);
-            }
-
-            if ($auth === $token) {
-                return $this->getNotificationResponse('Authorized', 200);
-            }
-
-            return $this->getNotificationResponse('Unauthorized', 401);
-        }
-
-        return $this->getNotificationResponse('Some parameters are empty', 400);
+                return $mpOrder->receiveNotification($cart);
+        } catch (Exception $e) {
+            MPLog::generate('Exception Message: ' . $e->getMessage());
+            return $this->request->response('Server Internal Error', 500);
+        }   
+        
+        
     }
 
     /**
@@ -171,54 +182,13 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
             && isset($order['payment_id'])
             && isset($order['external_reference'])
             && isset($order['checkout'])
-            && isset($order['checkout_type'])
-            && isset($order['order_id'])
-            && isset($order['payment_type_id'])
-            && isset($order['payment_method_id'])
-            && isset($order['payment_created_at'])
-            && isset($order['total'])
-            && isset($order['total_paid'])
-            && isset($order['total_refunded']);
-    }
-
-    /**
-     * Get error response
-     *
-     * @return void
-     */
-    public function getErrorResponse()
-    {
-        $this->getNotificationResponse(
-            'The notification does not have the necessary parameters',
-            500
-        );
-    }
-
-    /**
-     * Get error response
-     *
-     * @return void
-     */
-    public function getNotificationResponse($body, $code)
-    {
-        header('Content-type: application/json');
-        $response = array(
-            "code" => $code,
-            "version" => MP_VERSION
-        );
-        if (is_string($body)) {
-            $response['message'] = $body;
-        } else {
-            foreach ($body as $key => $value) {
-                $response[$key] = $value;
-            }
-        }
-        echo Tools::jsonEncode($response);
-        return http_response_code($code);
-    }
+            && isset($order['checkout_type']);
+    }    
 
     /**
      * Get order total
+     * 
+     * @param mixed $cart Cart
      * 
      * @return mixed
      */
@@ -237,56 +207,67 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
     /**
      * Token authentication 
      * 
-     * @param mixed $data, $secret
+     * @param mixed  $data   Params from Request
+     * @param String $secret Client Access Token
      * 
      * @return boolean
      */
-    private function isAuthenticated($data, $secret)
+    private function _isAuthenticated($data, $secret)
     {
 
         if (is_null($secret) || empty($secret)) {
-            return $this->getNotificationResponse('Credentials not found', 500);
+            MPLog::generate('Credentials not found');
+            return $this->request->response('Unauthorized', 400);
         }
 
-        $cryptography = new Cryptography();
-        $auth         = $cryptography->encrypt($data, $secret);
-
-        $request = new Request();
-        $token   = $request->getBearerToken();
+        $auth  = $this->cryptography->encrypt($data, $secret);
+        $token = $this->request->getBearerToken();
 
         if (!$token) {
-            return $this->getNotificationResponse('Unauthorized', 401);
+            return $this->request->response('Unauthorized', 401);
         }
         return ($auth === $token);
     }
 
-     /**
+    /**
      * Build order response
      * 
-     * @param mixed $orderId, $secret, $externalReference, $cart
+     * @param integer $orderId           OrderID
+     * @param String  $secret            Client access token
+     * @param String  $externalReference PaymentID
+     * @param mixed   $cart              Cart
      * 
      * @return array
      */
-    private function buildOrderResponse($orderId, $secret, $externalReference, $cart)
+    private function _buildOrderResponse($orderId, $externalReference, $cart)
     {
-
         $order = new Order($orderId);
-        $cryptography = new Cryptography();
 
         $response                       = array();
-        $response['order_id']           = $orderId;
+        $response['order_id']           = $orderId."";
         $response['external_reference'] = $externalReference;
-        $response['status']             = $order->getCurrentState();
-        $response['created_at']         = $order->date_add;
+        $response['status']             = $this->getOrderState($order->getCurrentState());
+        $response['created_at']         = strtotime($order->date_add);
         $response['total']              = $this->getTotal($cart);
-        $response['timestamp']          = time();
-        $response['hmac']               = "********************";
-
+        $response['timestamp']          = time();   
+        
         MPLog::generate('Response: ' . Tools::jsonEncode($response));
 
-        $hmac = $cryptography->encrypt($response, $secret);
-        $response['hmac'] = $hmac;
-
         return $response;
+    }
+
+    /**
+     * @param  $state
+     * @return mixed
+     */
+    public function getOrderState($state)
+    {
+
+        $this->ps_order_state_lang = new PSOrderStateLang();
+        $result = $this->ps_order_state_lang->columns(['template'])
+        ->where('id_order_state', '=', "$state")
+        ->get();
+
+        return $result['template'];
     }
 }

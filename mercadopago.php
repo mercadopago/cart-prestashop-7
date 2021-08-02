@@ -112,6 +112,9 @@ class Mercadopago extends PaymentModule
         include_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';
         include_once MP_ROOT_URL . '/includes/module/checkouts/CustomCheckout.php';
         include_once MP_ROOT_URL . '/includes/module/checkouts/TicketCheckout.php';
+        include_once MP_ROOT_URL . '/includes/helpers/cryptography/cryptography.php';
+        include_once MP_ROOT_URL . '/includes/helpers/request/request.php';
+        include_once MP_ROOT_URL . '/includes/module/order/MP_Order.php';
     }
 
     /**
