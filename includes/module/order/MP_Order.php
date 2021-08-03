@@ -302,7 +302,7 @@ class MP_Order
      * @param mixed $payments
      * @return void
      */
-    public function verifyPayments($paymentId)
+    public function verifyPayments($payment)
     {
         $this->payments_data['payments_id'] = array();
         $this->payments_data['payments_type'] = array();
@@ -310,20 +310,16 @@ class MP_Order
         $this->payments_data['payments_status'] = array();
         $this->payments_data['payments_amount'] = array();
 
-        
-        $payment_info = $this->mercadopago->getPaymentStandard($paymentId);
-        $this->status = $payment_info['status'];
-
-        $this->payments_data['payments_id'][] = $payment_info['id'];
-        $this->payments_data['payments_type'][] = $payment_info['payment_type_id'];
-        $this->payments_data['payments_method'][] = $payment_info['payment_method_id'];
-        $this->payments_data['payments_amount'][] = $payment_info['transaction_amount'];
+        $this->payments_data['payments_id'][] = $payment['id'];
+        $this->payments_data['payments_type'][] = $payment['payment_type_id'];
+        $this->payments_data['payments_method'][] = $payment['payment_method_id'];
+        $this->payments_data['payments_amount'][] = $payment['total'];
         $this->payments_data['payments_status'][] = $this->status;
 
         if ($this->status == 'approved') {
-            $this->approved += $payment_info['transaction_amount'];
+            $this->approved += $payment['transaction_amount'];
         } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
-            $this->pending += $payment_info['transaction_amount'];
+            $this->pending += $payment['transaction_amount'];
         }
     }
 
@@ -637,7 +633,7 @@ class MP_Order
      * 
      * @return void
      */
-    public function receiveNotification($cart)
+    public function receiveNotification($cart, $payment)
     {
         $this->verifyWebhook($cart);
         $this->total = $this->getTotal($cart);
@@ -645,7 +641,7 @@ class MP_Order
 
         if ($orderId != 0) {
 
-            $this->verifyPayments($this->transaction_id);
+            $this->verifyPayments($payment);
 
             $baseOrder = new Order($orderId);
             $orders = Order::getByReference($baseOrder->reference);
