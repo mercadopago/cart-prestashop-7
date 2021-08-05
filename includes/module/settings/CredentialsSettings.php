@@ -81,23 +81,7 @@ class CredentialsSettings extends AbstractSettings
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
                     '/account/credentials" target="_blank" class="btn btn-default mp-btn-credenciais">'
                     . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>'
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
-                'label' => $this->module->l('Access token', 'CredentialsSettings'),
-                'required' => true
-            ),
+            ),          
             array(
                 'col' => 8,
                 'type' => 'text',
@@ -114,6 +98,22 @@ class CredentialsSettings extends AbstractSettings
                 'label' => $this->module->l('Access token', 'CredentialsSettings'),
                 'required' => true
             ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
+                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
+                'required' => true
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
+                'label' => $this->module->l('Access token', 'CredentialsSettings'),
+                'required' => true
+            )
         );
 
         return $this->buildForm($title, $fields);
