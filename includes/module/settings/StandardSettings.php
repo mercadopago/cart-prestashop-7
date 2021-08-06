@@ -253,7 +253,9 @@ class StandardSettings extends AbstractSettings
                     'id' => $pm_id,
                     'name' => $payment_method['name'],
                 );
-            } else {
+            } elseif($payment_method['type'] != 'account_money' &&
+                strtolower($payment_method['id']) != 'meliplace'
+            ){
                 $this->offline_payments[] = array(
                     'id' => $pm_id,
                     'name' => $payment_method['name'],
