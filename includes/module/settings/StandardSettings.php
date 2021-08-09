@@ -224,7 +224,7 @@ class StandardSettings extends AbstractSettings
         MPLog::generate('Standard checkout configuration saved successfully');
     }
 
-     /**
+    /**
      * Set values for the form inputs
      *
      * @return array
@@ -313,7 +313,7 @@ class StandardSettings extends AbstractSettings
 
         return true;
         }
-        
+
     return false;
     }
 }
