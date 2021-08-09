@@ -103,10 +103,10 @@
 
             for (var i=0; i < form_credentials_inputs.length; i++) {
                 if(i == 1){
-                    form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_pruebas_append);
+                    form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_produccion_append);
                 }
                 else if(i == 3){
-                    form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_produccion_append);
+                    form_credentials_inputs[i].insertAdjacentHTML('afterend', form_credentials_pruebas_append);
                 }
             }
 
