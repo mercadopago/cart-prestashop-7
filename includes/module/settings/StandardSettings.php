@@ -309,7 +309,7 @@ class StandardSettings extends AbstractSettings
      */
     private function offlineExcludedPaymentMethodsCheck($payment_method){
     if($payment_method['type'] != 'account_money' &&
-        strtolower($payment_method['id']) != 'meliplace') { 
+        Tools::strtolower($payment_method['id']) != 'meliplace') { 
 
         return true;
         }
