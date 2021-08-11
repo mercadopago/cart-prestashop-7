@@ -20,13 +20,8 @@
     "add-minify": "git add *.min.js && git add *.min.css",
     "commit:pre": "npm run lint:js && npm run lint:css && npm run build:js && npm run build:css && npm run add-minify"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run commit:pre"
-    }
-  },
   "devDependencies": {
-    "husky": "^4.3.0",
+    "husky": "^7.0.0",
     "jshint": "^2.13.1",
     "minify": "^7.0.2",
     "stylelint": "^13.13.1",
