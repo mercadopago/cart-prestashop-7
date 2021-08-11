@@ -1,4 +1,4 @@
-<?php
+<?php namespace StandardSettings;
 /**
 * 2007-2021 PrestaShop
 *
@@ -251,15 +251,15 @@ class StandardSettings extends AbstractSettings
                     'id' => $pm_id,
                     'name' => $payment_method['name'],
                 );
-            } 
-            if(!$this->onlinePaymentMethodsCheck($payment_method) && 
+            }
+            if (!$this->onlinePaymentMethodsCheck($payment_method) &&
                 $this->offlineExcludedPaymentMethodsCheck($payment_method)
             ) {
                 $this->offline_payments[] = array(
                 'id' => $pm_id,
                 'name' => $payment_method['name'],
-            );            
-        }
+                );
+            }
 
             $form_values[$pm_name] = Configuration::get($pm_name);
         }
@@ -289,16 +289,15 @@ class StandardSettings extends AbstractSettings
      * @param mixed $payment_method
      * @return boolean
      */
-    private function onlinePaymentMethodsCheck($payment_method){
+    private function onlinePaymentMethodsCheck($payment_method)
+    {
         if ($payment_method['type'] == 'credit_card' ||
         $payment_method['type'] == 'debit_card' ||
         $payment_method['type'] == 'prepaid_card'
-    ) {
-
-        return true; 
-    }
-
-    return false;
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -307,13 +306,12 @@ class StandardSettings extends AbstractSettings
      * @param mixed $payment_method
      * @return boolean
      */
-    private function offlineExcludedPaymentMethodsCheck($payment_method){
-    if($payment_method['type'] != 'account_money' &&
-        strtolower($payment_method['id']) != 'meliplace') { 
-
-        return true;
+    private function offlineExcludedPaymentMethodsCheck($payment_method)
+    {
+        if ($payment_method['type'] != 'account_money' &&
+            strtolower($payment_method['id']) != 'meliplace') {
+                return true;
         }
-
-    return false;
+        return false;
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php namespace MercadoPagoNotificationModuleFrontController;
 /**
  * 2007-2021 PrestaShop
  *
@@ -30,7 +30,9 @@
 require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
 
+// @codingStandardsIgnoreStart
 class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
+// @codingStandardsIgnoreEnd
 {
     public function __construct()
     {

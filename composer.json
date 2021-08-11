@@ -9,7 +9,7 @@
   "scripts": {
     "phpcs": [
         "Composer\\Config::disableProcessTimeout",
-        "phpcs --extensions=php --standard=phpcs.xml ."
+        "phpcs --extensions=php --warning-severity=0 --standard=phpcs.xml ."
     ],
     "phpcbf": [
         "Composer\\Config::disableProcessTimeout",

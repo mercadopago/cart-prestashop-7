@@ -1,4 +1,4 @@
-<?php
+<?php namespace PSOrderStateLang;
 /**
 * 2007-2021 PrestaShop
 *

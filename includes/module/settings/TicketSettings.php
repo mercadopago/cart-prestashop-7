@@ -1,4 +1,4 @@
-<?php
+<?php namespace TicketSettings;
 /**
  * 2007-2021 PrestaShop
  *
@@ -172,7 +172,7 @@ class TicketSettings extends AbstractSettings
 
         $payment_methods = $this->mercadopago->getPaymentMethods();
         foreach ($payment_methods as $payment_method) {
-            if ($payment_method['type'] == 'ticket' && 
+            if ($payment_method['type'] == 'ticket' &&
                 strtolower($payment_method['id']) != 'meliplace' &&
                 !in_array($payment_method['id'], $this->getTicketExcludedMethods())
             ) {

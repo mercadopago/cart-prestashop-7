@@ -1,4 +1,4 @@
-<?php
+<?php namespace StandardPreference;
 /**
  * 2007-2021 PrestaShop
  *

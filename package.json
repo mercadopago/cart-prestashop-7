@@ -18,7 +18,7 @@
     "lint:js": "jshint ./views/js --exclude **/*.min.js",
     "lint:css": "stylelint **/*.css --fix",
     "add-minify": "git add *.min.js && git add *.min.css",
-    "commit:pre": "npm run lint:js && npm run lint:css && npm run build:js && npm run build:css && npm run add-minify"
+    "commit:pre": "npm run lint:js && npm run lint:css && npm run php:lint && npm run build:js && npm run build:css && npm run add-minify"
   },
   "devDependencies": {
     "husky": "^7.0.0",

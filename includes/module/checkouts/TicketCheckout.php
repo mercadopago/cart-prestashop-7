@@ -1,4 +1,4 @@
-<?php
+<?php namespace TicketCheckout;
 /**
  * 2007-2021 PrestaShop
  *
@@ -83,7 +83,7 @@ class TicketCheckout
         $ticket = array();
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
-            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {   
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
                 if ($tarjeta['type'] == 'ticket' &&
                      strtolower($tarjeta['id']) != 'meliplace'
                 ) {
