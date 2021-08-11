@@ -85,7 +85,7 @@ class TicketCheckout
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {   
                 if ($tarjeta['type'] == 'ticket' &&
-                     strtolower($tarjeta['id']) != 'meliplace'
+                     Tools::strtolower($tarjeta['id']) != 'meliplace'
                 ) {
                     $ticket[] = $tarjeta;
                 }

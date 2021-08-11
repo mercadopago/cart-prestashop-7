@@ -137,7 +137,7 @@ class StandardCheckout
      * @return int
      */
     private function paymentMethodsCheck($tarjeta){
-        if (strtolower($tarjeta['id']) != 'meliplace' && $tarjeta['type'] != 'account_money') {
+        if (Tools::strtolower($tarjeta['id']) != 'meliplace' && $tarjeta['type'] != 'account_money') {
             if ($tarjeta['type'] == 'credit_card') {
                 return self::METHOD_CREDIT_CARD;
             } 
