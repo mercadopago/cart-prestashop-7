@@ -113,6 +113,8 @@ class StandardPreference extends AbstractPreference
         $excluded_payment_methods = array();
         $payment_methods = $this->mercadopago->getPaymentMethods();
 
+        Configuration::updateValue('MERCADOPAGO_PAYMENT_ACCOUNT_MONEY', 'on');
+
         foreach ($payment_methods as $payment_method) {
             $pm_variable_name = 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($payment_method['id']);
             $value = Configuration::get($pm_variable_name);
