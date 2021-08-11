@@ -172,9 +172,9 @@ class TicketSettings extends AbstractSettings
 
         $payment_methods = $this->mercadopago->getPaymentMethods();
         foreach ($payment_methods as $payment_method) {
-            if ($payment_method['type'] == 'ticket' &&
-                strtolower($payment_method['id']) != 'meliplace' &&
-                !in_array($payment_method['id'], $this->getTicketExcludedMethods())
+            if ($payment_method['type'] == 'ticket'
+                && Tools::strtolower($payment_method['id']) != 'meliplace'
+                && !in_array($payment_method['id'], $this->getTicketExcludedMethods())
             ) {
                 $pm_id = $payment_method['id'];
                 $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $pm_id;
