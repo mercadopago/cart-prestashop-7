@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Reversed the credential configuration order
 
+### Removed
+- Removed meliplaces, pix, account money payments from Ticket and Checkout Pro (These payments don't work yet)
+
 ## [4.6.1] - 2021-06-08
 
 ### Fixed

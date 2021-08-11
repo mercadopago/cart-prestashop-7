@@ -29,6 +29,10 @@
 
 class StandardCheckout
 {
+    const METHOD_CREDIT_CARD = 1;
+    const METHOD_DEBIT_CARD = 2;
+    const METHOD_TICKET = 3;
+
     /**
      * @var Mercadopago
      */
@@ -83,11 +87,13 @@ class StandardCheckout
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get($tarjeta['config']) != "") {
                 $count++;
-                if ($tarjeta['type'] == 'credit_card') {
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_CREDIT_CARD) {
                     $credit[] = $tarjeta;
-                } elseif ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                }
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_DEBIT_CARD) {
                     $debit[] = $tarjeta;
-                } else {
+                }
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_TICKET) {
                     $ticket[] = $tarjeta;
                 }
             }
@@ -122,5 +128,25 @@ class StandardCheckout
             "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
         );
         return $informations;
+    }
+
+    /**
+     * Payment Methods check
+     *
+     * @param mixed $tarjeta
+     * @return int
+     */
+    private function paymentMethodsCheck($tarjeta)
+    {
+        if (Tools::strtolower($tarjeta['id']) != 'meliplace' && $tarjeta['type'] != 'account_money') {
+            if ($tarjeta['type'] == 'credit_card') {
+                return self::METHOD_CREDIT_CARD;
+            }
+            if ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                return self::METHOD_DEBIT_CARD;
+            } else {
+                return self::METHOD_TICKET;
+            }
+        }
     }
 }

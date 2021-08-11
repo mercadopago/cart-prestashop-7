@@ -245,18 +245,19 @@ class StandardSettings extends AbstractSettings
             $pm_id = $payment_method['id'];
             $pm_name = 'MERCADOPAGO_PAYMENT_' . $pm_id;
 
-            if ($payment_method['type'] == 'credit_card' ||
-                $payment_method['type'] == 'debit_card' ||
-                $payment_method['type'] == 'prepaid_card'
+            if ($this->onlinePaymentMethodsCheck($payment_method)
             ) {
                 $this->online_payments[] = array(
                     'id' => $pm_id,
                     'name' => $payment_method['name'],
                 );
-            } else {
+            }
+            if (!$this->onlinePaymentMethodsCheck($payment_method) &&
+                $this->offlineExcludedPaymentMethodsCheck($payment_method)
+            ) {
                 $this->offline_payments[] = array(
-                    'id' => $pm_id,
-                    'name' => $payment_method['name'],
+                'id' => $pm_id,
+                'name' => $payment_method['name'],
                 );
             }
 
@@ -280,5 +281,39 @@ class StandardSettings extends AbstractSettings
         }
 
         return $installments;
+    }
+
+    /**
+     * Online Payment Methods Check
+     *
+     * @param mixed $payment_method
+     * @return boolean
+     */
+    private function onlinePaymentMethodsCheck($payment_method)
+    {
+        if ($payment_method['type'] == 'credit_card' ||
+        $payment_method['type'] == 'debit_card' ||
+        $payment_method['type'] == 'prepaid_card'
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Offline Excluded Payment Methods Check
+     *
+     * @param mixed $payment_method
+     * @return boolean
+     */
+    private function offlineExcludedPaymentMethodsCheck($payment_method)
+    {
+        if ($payment_method['type'] != 'account_money' &&
+        Tools::strtolower($payment_method['id']) != 'meliplace') {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -81,7 +81,7 @@ class CredentialsSettings extends AbstractSettings
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
                     '/account/credentials" target="_blank" class="btn btn-default mp-btn-credenciais">'
                     . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>'
-            ),          
+            ),
             array(
                 'col' => 8,
                 'type' => 'text',

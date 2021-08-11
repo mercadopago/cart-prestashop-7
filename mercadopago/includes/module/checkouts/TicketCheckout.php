@@ -84,9 +84,8 @@ class TicketCheckout
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
-                if ($tarjeta['type'] != 'credit_card'
-                    && $tarjeta['type'] != 'debit_card'
-                    && $tarjeta['type'] != 'prepaid_card'
+                if ($tarjeta['type'] == 'ticket' &&
+                    Tools::strtolower($tarjeta['id']) != 'meliplace'
                 ) {
                     $ticket[] = $tarjeta;
                 }
