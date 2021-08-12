@@ -1,4 +1,4 @@
-<?php namespace CustomSettings;
+<?php
 /**
 * 2007-2021 PrestaShop
 *

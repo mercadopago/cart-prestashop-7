@@ -1,4 +1,4 @@
-<?php namespace StandardCheckout;
+<?php
 /**
 * 2007-2021 PrestaShop
 *

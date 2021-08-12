@@ -1,4 +1,4 @@
-<?php namespace AbstractSettings;
+<?php
 /**
 * 2007-2021 PrestaShop
 *

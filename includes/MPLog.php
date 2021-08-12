@@ -1,4 +1,4 @@
-<?php namespace MPLog;
+<?php
 /**
 * 2007-2021 PrestaShop
 *

@@ -1,4 +1,4 @@
-<?php namespace MPModule;
+<?php
 /**
 * 2007-2021 PrestaShop
 *

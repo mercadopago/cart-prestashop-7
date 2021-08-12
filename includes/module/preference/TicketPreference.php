@@ -1,4 +1,4 @@
-<?php namespace TicketPreference;
+<?php
 /**
  * 2007-2021 PrestaShop
  *

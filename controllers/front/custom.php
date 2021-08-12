@@ -1,4 +1,4 @@
-<?php namespace MercadoPagoCustomModuleFrontController;
+<?php
 /**
  * 2007-2021 PrestaShop
  *

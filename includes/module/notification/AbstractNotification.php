@@ -1,4 +1,4 @@
-<?php namespace AbstractNotification;
+<?php
 /**
  * 2007-2021 PrestaShop
  *

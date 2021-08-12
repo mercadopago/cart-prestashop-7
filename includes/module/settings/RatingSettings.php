@@ -1,4 +1,4 @@
-<?php namespace RatingSettings;
+<?php
 /**
 * 2007-2021 PrestaShop
 *
