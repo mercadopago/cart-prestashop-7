@@ -599,7 +599,8 @@
   function getConditionTerms () {
     var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
     if (typeof terms === 'object' && terms !== null) {
-      return terms.checked = false;
+      terms.checked = false;
+      return terms.checked;
     }
   }
 

@@ -59,32 +59,34 @@
       mpCnpjLabel.style.display = 'none';
       mpSocialnameLabel.style.display = 'none';
 
+      var onChangeValidateDocumentInput = function () {
+        if (this.value === 'CPF') {
+          mpCpfLabel.style.display = 'table-cell';
+          mpBoxLastname.style.display = 'block';
+          mpFirstnameLabel.style.display = 'table-cell';
+          mpCnpjLabel.style.display = 'none';
+          mpSocialnameLabel.style.display = 'none';
+          mpBoxFirstname.classList.add('col-md-4');
+          mpBoxFirstname.classList.remove('col-md-8');
+          mpDocNumber.setAttribute('maxlength', '14');
+          mpDocNumber.setAttribute('onkeyup', 'maskInput(this, mcpf)');
+          mercadoPagoDocnumber = 'CPF';
+        } else {
+          mpCpfLabel.style.display = 'none';
+          mpBoxLastname.style.display = 'none';
+          mpFirstnameLabel.style.display = 'none';
+          mpCnpjLabel.style.display = 'table-cell';
+          mpSocialnameLabel.style.display = 'table-cell';
+          mpBoxFirstname.classList.add('col-md-8');
+          mpBoxFirstname.classList.remove('col-md-4');
+          mpDocNumber.setAttribute('maxlength', '18');
+          mpDocNumber.setAttribute('onkeyup', 'maskInput(this, mcnpj)');
+          mercadoPagoDocnumber = 'CNPJ';
+        }
+      };
+
       for (var i = 0; i < mpDocType.length; i++) {
-        mpDocType[i].addEventListener('change', function () {
-          if (this.value === 'CPF') {
-            mpCpfLabel.style.display = 'table-cell';
-            mpBoxLastname.style.display = 'block';
-            mpFirstnameLabel.style.display = 'table-cell';
-            mpCnpjLabel.style.display = 'none';
-            mpSocialnameLabel.style.display = 'none';
-            mpBoxFirstname.classList.add('col-md-4');
-            mpBoxFirstname.classList.remove('col-md-8');
-            mpDocNumber.setAttribute('maxlength', '14');
-            mpDocNumber.setAttribute('onkeyup', 'maskInput(this, mcpf)');
-            mercadoPagoDocnumber = 'CPF';
-          } else {
-            mpCpfLabel.style.display = 'none';
-            mpBoxLastname.style.display = 'none';
-            mpFirstnameLabel.style.display = 'none';
-            mpCnpjLabel.style.display = 'table-cell';
-            mpSocialnameLabel.style.display = 'table-cell';
-            mpBoxFirstname.classList.add('col-md-8');
-            mpBoxFirstname.classList.remove('col-md-4');
-            mpDocNumber.setAttribute('maxlength', '18');
-            mpDocNumber.setAttribute('onkeyup', 'maskInput(this, mcnpj)');
-            mercadoPagoDocnumber = 'CNPJ';
-          }
-        });
+        mpDocType[i].addEventListener('change', onChangeValidateDocumentInput);
       }
     }
   };
@@ -133,7 +135,8 @@
   function getConditionTerms () {
     var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
     if (typeof terms === 'object' && terms !== null) {
-      return terms.checked = false;
+      terms.checked = false;
+      return false;
     }
   }
 

@@ -89,10 +89,10 @@ class StandardCheckout
                 $count++;
                 if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_CREDIT_CARD) {
                     $credit[] = $tarjeta;
-                } 
+                }
                 if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_DEBIT_CARD) {
                     $debit[] = $tarjeta;
-                } 
+                }
                 if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_TICKET) {
                     $ticket[] = $tarjeta;
                 }
@@ -136,15 +136,15 @@ class StandardCheckout
      * @param mixed $tarjeta
      * @return int
      */
-    private function paymentMethodsCheck($tarjeta){
+    private function paymentMethodsCheck($tarjeta)
+    {
         if (Tools::strtolower($tarjeta['id']) != 'meliplace' && $tarjeta['type'] != 'account_money') {
             if ($tarjeta['type'] == 'credit_card') {
                 return self::METHOD_CREDIT_CARD;
-            } 
+            }
             if ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
                 return self::METHOD_DEBIT_CARD;
-            }
-            else {
+            } else {
                 return self::METHOD_TICKET;
             }
         }
