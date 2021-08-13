@@ -453,11 +453,10 @@ class AbstractPreference
     public function getOrUpdateMpModule()
     {
         $mp_module = new MPModule();
-        $mp_module = $mp_module->where('version', '=', MP_VERSION)->get();
 
-        $count = $mp_module->where('cart_id', '=', $cart->id)->count();
+        $count = $mp_module->where('version', '=', MP_VERSION)->count();
         if ($count) {
-            return $mp_module;
+            return $mp_module->where('version', '=', MP_VERSION)->get();
         }
 
         $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
