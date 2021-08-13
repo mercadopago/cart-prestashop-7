@@ -297,6 +297,7 @@ class StandardSettings extends AbstractSettings
         ) {
             return true;
         }
+
         return false;
     }
 
@@ -311,6 +312,7 @@ class StandardSettings extends AbstractSettings
         if ($payment_method['type'] != 'account_money' && Tools::strtolower($payment_method['id']) != 'meliplace') {
             return true;
         }
+
         return false;
     }
 }
