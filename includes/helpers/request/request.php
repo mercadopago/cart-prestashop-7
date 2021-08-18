@@ -133,7 +133,7 @@ class Request
 
         $responseEncoded = Tools::jsonEncode($response);
 
-        MPLog::generate("Core Notifier Response: " . $responseEncoded);
+        MPLog::generate("Plugin Response to Core Notifier");
 
         echo $responseEncoded;
 

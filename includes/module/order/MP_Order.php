@@ -142,15 +142,15 @@ class MP_Order
     public function getNotificationPaymentState($state)
     {
         $payment_states = array(
-            'in_process' => 'MERCADOPAGO_STATUS_0',
-            'approved' => 'MERCADOPAGO_STATUS_1',
-            'cancelled' => 'MERCADOPAGO_STATUS_2',
-            'rejected' => 'MERCADOPAGO_STATUS_3',
-            'refunded' => 'MERCADOPAGO_STATUS_4',
-            'charged_back' => 'MERCADOPAGO_STATUS_5',
-            'in_mediation' => 'MERCADOPAGO_STATUS_6',
-            'pending' => 'MERCADOPAGO_STATUS_7',
-            'authorized' => 'MERCADOPAGO_STATUS_8',
+            'in_process'     => 'MERCADOPAGO_STATUS_0',
+            'approved'       => 'MERCADOPAGO_STATUS_1',
+            'cancelled'      => 'MERCADOPAGO_STATUS_2',
+            'rejected'       => 'MERCADOPAGO_STATUS_3',
+            'refunded'       => 'MERCADOPAGO_STATUS_4',
+            'charged_back'   => 'MERCADOPAGO_STATUS_5',
+            'in_mediation'   => 'MERCADOPAGO_STATUS_6',
+            'pending'        => 'MERCADOPAGO_STATUS_7',
+            'authorized'     => 'MERCADOPAGO_STATUS_8',
             'possible_fraud' => 'MERCADOPAGO_STATUS_9',
         );
 
@@ -382,7 +382,7 @@ class MP_Order
             $order->setCurrentState($status);
             $this->saveUpdateOrderData($cart);            
 
-            MPLog::generate('Updated order ' . $this->order_id . ' for the status of ' . $status);
+            MPLog::generate('Updated order ' . $this->order_id . ' to [' . $status . ']'. $this->getOrderState($status));
 
             $response         	    = array();
             $response['old_status'] = $this->getOrderState($actual_status);
@@ -405,13 +405,19 @@ class MP_Order
      */
     public function getOrderState($state)
     {
+        $payment_states = array();
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_0')] = 'in_process';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_1')] = 'approved';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_2')] = 'cancelled';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_3')] = 'rejected';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_4')] = 'refunded';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_5')] = 'charged_back';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_6')] = 'in_mediation';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_7')] = 'pending';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_8')] = 'authorized';
+        $payment_states[Configuration::get('MERCADOPAGO_STATUS_9')] = 'possible_fraud';
 
-        $this->ps_order_state_lang = new PSOrderStateLang();
-        $result = $this->ps_order_state_lang->columns(['template'])
-        ->where('id_order_state', '=', "$state")
-        ->get();
-
-        return $result['template'];
+        return $payment_states[$state];
     }
 
     /**

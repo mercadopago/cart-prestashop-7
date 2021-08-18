@@ -258,9 +258,7 @@ class MercadoPagoNotifierModuleFrontController extends ModuleFrontController
         $response['status']             = $this->getOrderState($order->getCurrentState());
         $response['created_at']         = strtotime($order->date_add);
         $response['total']              = $this->getTotal($cart);
-        $response['timestamp']          = time();   
-        
-        MPLog::generate('Response: ' . Tools::jsonEncode($response));
+        $response['timestamp']          = time();
 
         return $response;
     }
