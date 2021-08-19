@@ -86,22 +86,6 @@ class CredentialsSettings extends AbstractSettings
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
-                'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
-                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
-                'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
-                'label' => $this->module->l('Access token', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
-                'col' => 8,
-                'type' => 'text',
-                'desc' => '',
                 'name' => 'MERCADOPAGO_PUBLIC_KEY',
                 'label' => $this->module->l('Public Key', 'CredentialsSettings'),
                 'required' => true
@@ -114,6 +98,22 @@ class CredentialsSettings extends AbstractSettings
                 'label' => $this->module->l('Access token', 'CredentialsSettings'),
                 'required' => true
             ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
+                'label' => $this->module->l('Public Key', 'CredentialsSettings'),
+                'required' => true
+            ),
+            array(
+                'col' => 8,
+                'type' => 'text',
+                'desc' => '',
+                'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
+                'label' => $this->module->l('Access token', 'CredentialsSettings'),
+                'required' => true
+            )
         );
 
         return $this->buildForm($title, $fields);
