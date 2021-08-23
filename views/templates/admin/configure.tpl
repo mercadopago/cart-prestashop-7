@@ -233,6 +233,9 @@
             </div>";
             checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
+            //standard psj
+            var form_standard_psj_append = getPsjButton();
+            
             //advanced configuration
             var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
                 <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
@@ -248,11 +251,13 @@
             for (i=0; i < form_standard_group.length; i++) {
                 if(i == 3){
                     form_standard_group[i].insertAdjacentHTML('afterend', form_standard_append);
+                    form_standard_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
                 }
                 else if(i > 3) {
                     form_standard_group[i].classList.add("mp-input-collapsible");
-                    form_standard_group[i].querySelector("p").style.width = "400px";
                 }
+          
+                form_standard_group[i].querySelector("p").style.width = "400px";
             }
 
             var style_collapsible = false;
@@ -329,16 +334,15 @@
                 </div>\
             </div>";
 
-            for (i=0; i < form_custom_group.length; i++) {
-                if(i == 0){
+             for (i=0; i < form_custom_group.length; i++) {
+               if(i == 0){
                     form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append);
+                    form_custom_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
                 }
                 if(i > 0) {
                     form_custom_group[i].classList.add("mp-custom-input-collapsible");
-                }
-                if(i >= 1){
+                }                
                     form_custom_group[i].querySelector("p").style.width = "400px";
-                }
             }
 
             var style_collapsible_custom = false;
