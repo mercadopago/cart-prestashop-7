@@ -103,6 +103,10 @@
   margin-bottom: 15px !important;
 }
 
+.mp-mb-30 {
+  margin-bottom: 30px !important;
+}
+
 .mp-w-25 {
   width: 20% !important;
 }
@@ -121,6 +125,10 @@
 
 .mp-text-center {
   text-align: center !important;
+}
+
+.mp-w-300 {
+  width: 300px !important;
 }
 
 .hr-mp-modal {
