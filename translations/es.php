@@ -628,3 +628,9 @@ $_MODULE['<{mercadopago}prestashop>ticket_49ee3087348e8d44e1feda1917443987'] =
 'Nombre';
 $_MODULE['<{mercadopago}prestashop>ticket_377e99e7404b414341a9621f7fb3f906'] =
 'Finalizar';
+$_MODULE['<{mercadopago}prestashop>configure_c788e817e851e24feee5b482bdc63519'] = 
+'Configurar cuotas e intereses';
+$_MODULE['<{mercadopago}prestashop>configure_c336d38134732b6ada4ec01355679c3c'] = 
+'En Mercado Pago puedes elegir la tarifa que pagas en cada compra y también ofrecer meses sin intereses a tu cliente.';
+$_MODULE['<{mercadopago}prestashop>configure_1dfec00b2c34af6dfd4a8cc33468a6c0'] = 
+'Configura meses sin intereses';

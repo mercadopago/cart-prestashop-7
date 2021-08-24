@@ -628,3 +628,9 @@ $_MODULE['<{mercadopago}prestashop>ticket_49ee3087348e8d44e1feda1917443987'] =
 'Nome';
 $_MODULE['<{mercadopago}prestashop>ticket_377e99e7404b414341a9621f7fb3f906'] =
 'Finalizar pedido';
+$_MODULE['<{mercadopago}prestashop>configure_c788e817e851e24feee5b482bdc63519'] = 
+'Configure seu parcelamento e juros';
+$_MODULE['<{mercadopago}prestashop>configure_c336d38134732b6ada4ec01355679c3c'] = 
+'No Mercado Pago você pode escolher a taxa que vai pagar em cada compra e também oferecer parcelas sem juros para seu cliente.';
+$_MODULE['<{mercadopago}prestashop>configure_1dfec00b2c34af6dfd4a8cc33468a6c0'] = 
+'Configurar parcelamento e juros';

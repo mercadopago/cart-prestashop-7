@@ -542,8 +542,8 @@
                 </div>\
             </div>\
             <div class='row mp-pt-5 mp-pb-25'>\
-                <div class='col-md-6 '>\
-                    <p class='mp-text-credenciais mp-pb-30 mp-w-820'>{l s='At Mercado Pago you can choose the rate you pay on each purchase and also offer interest-free installments to your customers.' mod='mercadopago'}</p>\
+                <div class='col-md-12'>\
+                    <p class='mp-text-credenciais mp-pb-30'>{l s='At Mercado Pago you can choose the rate you pay on each purchase and also offer interest-free installments to your customers.' mod='mercadopago'}</p>\
                     <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>{l s='Set up interest-free installments' mod='mercadopago'}</a>\
                 </div>\
             </div>";
