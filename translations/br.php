@@ -628,9 +628,15 @@ $_MODULE['<{mercadopago}prestashop>ticket_49ee3087348e8d44e1feda1917443987'] =
 'Nome';
 $_MODULE['<{mercadopago}prestashop>ticket_377e99e7404b414341a9621f7fb3f906'] =
 'Finalizar pedido';
+$_MODULE['<{mercadopago}prestashop>configure_fc54b11a6e493b53ee51223b2fe64136'] = 
+'Configure tarifas';
+$_MODULE['<{mercadopago}prestashop>configure_1f289555a859f1f72e2106e5e22e6230'] = 
+'No Mercado Pago você pode escolher a tarifa que vai pagar em cada compra.';
+$_MODULE['<{mercadopago}prestashop>configure_db61f0106282fdece56611495848f3c4'] = 
+'Configurar tarifas';
 $_MODULE['<{mercadopago}prestashop>configure_c788e817e851e24feee5b482bdc63519'] = 
 'Configure seu parcelamento e juros';
-$_MODULE['<{mercadopago}prestashop>configure_c336d38134732b6ada4ec01355679c3c'] = 
-'No Mercado Pago você pode escolher a taxa que vai pagar em cada compra e também oferecer parcelas sem juros para seu cliente.';
-$_MODULE['<{mercadopago}prestashop>configure_1dfec00b2c34af6dfd4a8cc33468a6c0'] = 
+$_MODULE['<{mercadopago}prestashop>configure_b828a06ef824adc9e9436d044e1353cf'] = 
+'No Mercado Pago você pode escolher a tarifa que vai pagar em cada compra e também oferecer parcelas sem juros para seu cliente.';
+$_MODULE['<{mercadopago}prestashop>configure_e9bab24bfb44527799e8a3550717e20a'] = 
 'Configurar parcelamento e juros';
