@@ -241,6 +241,7 @@ class Mercadopago extends PaymentModule
             'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
             'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
             'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
+            'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
             //credentials
             'public_key' => $public_key,
             'access_token' => $access_token,
