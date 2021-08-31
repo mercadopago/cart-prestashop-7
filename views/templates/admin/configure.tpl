@@ -536,31 +536,21 @@
        //PSJ button
         function getPsjButton(){
             const country_link = '{$country_link}';
-        
-            if(country_link.toLowerCase() == 'mco'){
-                return "<hr class='mp-mt-15'>\
-                <div class='row'>\
-                    <div class='col-md-12 mp-pb-10'>\
-                        <h4 class='mp-title-checkout-body'>{l s='Set up your interest payments' mod='mercadopago'}</h4>\
-                    </div>\
-                </div>\
-                <div class='row mp-pt-5 mp-pb-25'>\
-                    <div class='col-md-12'>\
-                        <p class='mp-text-credenciais mp-pb-30'>{l s='At Mercado Pago you can choose the fee you pay for each purchase.' mod='mercadopago'}</p>\
-                        <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>{l s='Set up interest payments' mod='mercadopago'}</a>\
-                    </div>\
-                </div>";
-            } 
+
+            const textHeader = (country_link.toLowerCase() == 'mco') ? "{l s='Set up your interest payments' mod='mercadopago'}" : "{l s='Set up your installment and interest payments' mod='mercadopago'}";
+            const textBody = (country_link.toLowerCase() == 'mco') ? "{l s='At Mercado Pago you can choose the fee you pay for each purchase.' mod='mercadopago'}" : "{l s='At Mercado Pago you can choose the fee you pay for each purchase and also offer interest-free installments to your customer.' mod='mercadopago'}";
+            const textButton = (country_link.toLowerCase() == 'mco') ? "{l s='Set up interest payments' mod='mercadopago'}" : "{l s='Set up installment and interest' mod='mercadopago'}";
+
             return "<hr class='mp-mt-15'>\
                 <div class='row'>\
                     <div class='col-md-12 mp-pb-10'>\
-                        <h4 class='mp-title-checkout-body'>{l s='Set up your installment and interest payments' mod='mercadopago'}</h4>\
+                        <h4 class='mp-title-checkout-body'>" + textHeader + "</h4>\
                     </div>\
                 </div>\
                 <div class='row mp-pt-5 mp-pb-25'>\
                     <div class='col-md-12'>\
-                        <p class='mp-text-credenciais mp-pb-30'>{l s='At Mercado Pago you can choose the fee you pay for each purchase and also offer interest-free installments to your customer.' mod='mercadopago'}</p>\
-                        <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>{l s='Set up installment and interest' mod='mercadopago'}</a>\
+                        <p class='mp-text-credenciais mp-pb-30'>" + textBody + "</p>\
+                        <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
                     </div>\
                 </div>";
         }
