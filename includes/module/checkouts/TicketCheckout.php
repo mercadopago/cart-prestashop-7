@@ -29,6 +29,8 @@
 
 class TicketCheckout
 {
+    const ALLOW_PAYMENT_METHOD_TYPES = ['ticket', 'atm'];
+
     /**
      * @var Mercadopago
      */
@@ -81,13 +83,13 @@ class TicketCheckout
     {
         $this->getTicketJS();
         $ticket = array();
-        $tarjetas = $this->payment->mercadopago->getPaymentMethods();
-        foreach ($tarjetas as $tarjeta) {
-            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $tarjeta['id']) != "") {
-                if ($tarjeta['type'] == 'ticket' &&
-                     Tools::strtolower($tarjeta['id']) != 'meliplace'
+        $paymentMethods = $this->payment->mercadopago->getPaymentMethods();
+        foreach ($paymentMethods as $paymentMethod) {
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $paymentMethod['id']) != "") {
+                if (in_array($paymentMethod['type'], self::ALLOW_PAYMENT_METHOD_TYPES) &&
+                     Tools::strtolower($paymentMethod['id']) != 'meliplace'
                 ) {
-                    $ticket[] = $tarjeta;
+                    $ticket[] = $paymentMethod;
                 }
             }
         }
