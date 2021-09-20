@@ -348,8 +348,7 @@ class AbstractPreference
      */
     public function getShipmentAddress($cart)
     {
-        $address_shipment = null;
-        ($this->use_same_address)? $address_shipment = new Address((int) $cart->id_address_invoice) : $address_shipment = new Address((int) $cart->id_address_delivery);
+        $address_shipment = ($this->use_same_address) ? new Address((int) $cart->id_address_invoice) : new Address((int) $cart->id_address_delivery);
 
         $shipment = array(
             'receiver_address' => array(
