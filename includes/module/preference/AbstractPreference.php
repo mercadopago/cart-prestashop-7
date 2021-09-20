@@ -348,15 +348,16 @@ class AbstractPreference
      */
     public function getShipmentAddress($cart)
     {
-        $address_invoice = new Address((int) $cart->id_address_invoice);
+        $address_shipment = null;
+        ($this->use_same_address)? $address_shipment = new Address((int) $cart->id_address_invoice) : $address_shipment = new Address((int) $cart->id_address_delivery);
 
         $shipment = array(
             'receiver_address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
+                'zip_code' => $address_shipment->postcode,
+                'street_name' => $address_shipment->address1 . ' - ' .
+                    $address_shipment->address2 . ' - ' .
+                    $address_shipment->city . ' - ' .
+                    $address_shipment->country,
                 'street_number' => '-',
                 'apartment' => '-',
                 'floor' => '-',
