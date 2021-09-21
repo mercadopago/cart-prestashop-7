@@ -390,8 +390,10 @@ class AbstractPreference
      *
      * @return array
      */
-    public function getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
+        $address_invoice = new Address((int) $cart->id_address_invoice);
+
         $internal_metadata = array(
             "details" => "",
             "platform" => MPRestCli::PLATFORM_ID,
@@ -405,6 +407,14 @@ class AbstractPreference
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
             "seller_website"=> Tools::getShopDomainSsl(true, true),
+            'billing_address' => array(
+                  'zip_code' => $address_invoice->postcode,
+                  'street_name' => $address_invoice->address1 . ' - ' .
+                      $address_invoice->address2,          
+                  'street_number' => '-',
+                  'city_name'=> $address_invoice->city,
+                  'country_name' => $address_invoice->country,
+            )
         );
 
         return $internal_metadata;
