@@ -404,6 +404,7 @@ class AbstractPreference
             "basic_settings" => $this->getStandardCheckoutSettings(),
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
+            "seller_website"=> Tools::getShopDomainSsl(true, true),
         );
 
         return $internal_metadata;
