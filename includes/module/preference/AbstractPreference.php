@@ -360,6 +360,7 @@ class AbstractPreference
                 'street_number' => '-',
                 'apartment' => '-',
                 'floor' => '-',
+                'city_name' => $address_shipment->city,
             ),
         );
 
