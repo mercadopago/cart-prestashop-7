@@ -348,7 +348,7 @@ class AbstractPreference
      */
     public function getShipmentAddress($cart)
     {
-        $address_shipment = ($this->use_same_address) ? new Address((int) $cart->id_address_invoice) : new Address((int) $cart->id_address_delivery);
+        $address_shipment = new Address((int) $cart->id_address_delivery);
 
         $shipment = array(
             'receiver_address' => array(
@@ -408,14 +408,14 @@ class AbstractPreference
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
             "seller_website"=> Tools::getShopDomainSsl(true, true),
-            'billing_address' => array(
-                  'zip_code' => $address_invoice->postcode,
-                  'street_name' => $address_invoice->address1 . ' - ' .
-                      $address_invoice->address2,          
-                  'street_number' => '-',
-                  'city_name'=> $address_invoice->city,
-                  'country_name' => $address_invoice->country,
-            )
+            "billing_address" => array(
+                'zip_code' => $address_invoice->postcode,
+                'street_name' => $address_invoice->address1 . ' - ' .
+                    $address_invoice->address2,          
+                'street_number' => '-',
+                'city_name'=> $address_invoice->city,
+                'country_name' => $address_invoice->country,
+            ),
         );
 
         return $internal_metadata;
