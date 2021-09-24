@@ -335,7 +335,12 @@ class AbstractPreference
                     $address_invoice->city . ' - ' .
                     $address_invoice->country,
                 'street_number' => '-',
-            )
+            ),
+            "user" => array(
+                "user_email" => $customer_fields['email'],
+                "user_registration_date" => $customer_fields['date_add'],
+                "registered_user" => "yes",
+              ),
         );
 
         return $customer_data;
@@ -394,6 +399,8 @@ class AbstractPreference
     public function getInternalMetadata($cart)
     {
         $address_invoice = new Address((int) $cart->id_address_invoice);
+        $customer_fields = Context::getContext()->customer->getFields();
+        $is_logged = Context::getContext()->customer->isLogged();
 
         $internal_metadata = array(
             "details" => "",
@@ -411,11 +418,16 @@ class AbstractPreference
             "billing_address" => array(
                 'zip_code' => $address_invoice->postcode,
                 'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2,          
+                    $address_invoice->address2,
                 'street_number' => '-',
                 'city_name'=> $address_invoice->city,
                 'country_name' => $address_invoice->country,
             ),
+            "user" => array(
+            "registered_user" => (($is_logged) ? 'yes' : 'no'),
+            "user_email" => (($is_logged) ? $customer_fields['email'] : " "),
+            "user_registration_date" => (($is_logged) ? $customer_fields['date_add'] : " "),
+          ),
         );
 
         return $internal_metadata;
