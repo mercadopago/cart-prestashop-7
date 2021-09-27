@@ -330,7 +330,7 @@ class AbstractPreference
             ),
             'address' => array(
                 'zip_code' => $address_invoice->postcode,
-                'street_name' => $this->build_street_name($address_invoice),
+                'street_name' => $this->buildStreetName($address_invoice),
                 'street_number' => '-',
             ),
         );
@@ -350,7 +350,7 @@ class AbstractPreference
         $shipment = array(
             'receiver_address' => array(
                 'zip_code' => $address_shipment->postcode,
-                'street_name' => $this->build_street_name($address_shipment),
+                'street_name' => $this->buildStreetName($address_shipment),
                 'street_number' => '-',
                 'apartment' => '-',
                 'floor' => '-',
@@ -412,9 +412,9 @@ class AbstractPreference
                 'country_name' => $address_invoice->country,
             ),
             "user" => array(
-            "registered_user" => (($is_logged) ? 'yes' : 'no'),
-            "user_email" => (($is_logged) ? $customer_fields['email'] : " "),
-            "user_registration_date" => (($is_logged) ? $customer_fields['date_add'] : " "),
+            "registered_user" => $is_logged ? 'yes' : 'no',
+            "user_email" => $is_logged ? $customer_fields['email'] : " ",
+            "user_registration_date" => $is_logged ? $customer_fields['date_add'] : " ",
           ),
         );
 
@@ -688,7 +688,7 @@ class AbstractPreference
      * @param object $address_data
      * @return string
      */
-    function build_street_name($address_data)
+    function buildStreetName($address_data)
     {
         $address = $address_data->address1 . ' - ' .
         $address_data->address2 . ' - ' .
