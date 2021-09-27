@@ -333,11 +333,6 @@ class AbstractPreference
                 'street_name' => $this->build_street_name($address_invoice),
                 'street_number' => '-',
             ),
-            "user" => array(
-                "user_email" => $customer_fields['email'],
-                "user_registration_date" => $customer_fields['date_add'],
-                "registered_user" => "yes",
-              ),
         );
 
         return $customer_data;
