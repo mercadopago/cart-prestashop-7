@@ -330,10 +330,7 @@ class AbstractPreference
             ),
             'address' => array(
                 'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
+                'street_name' => $this->build_street_name($address_invoice),
                 'street_number' => '-',
             ),
             "user" => array(
@@ -358,10 +355,7 @@ class AbstractPreference
         $shipment = array(
             'receiver_address' => array(
                 'zip_code' => $address_shipment->postcode,
-                'street_name' => $address_shipment->address1 . ' - ' .
-                    $address_shipment->address2 . ' - ' .
-                    $address_shipment->city . ' - ' .
-                    $address_shipment->country,
+                'street_name' => $this->build_street_name($address_shipment),
                 'street_number' => '-',
                 'apartment' => '-',
                 'floor' => '-',
@@ -417,8 +411,7 @@ class AbstractPreference
             "seller_website"=> Tools::getShopDomainSsl(true, true),
             "billing_address" => array(
                 'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2,
+                'street_name' => $address_invoice->address1 . ' - ' . $address_invoice->address2,
                 'street_number' => '-',
                 'city_name'=> $address_invoice->city,
                 'country_name' => $address_invoice->country,
@@ -692,5 +685,21 @@ class AbstractPreference
 
         $encodedLogs = Tools::jsonEncode($logs);
         MPLog::generate($checkout . ' preference logs: ' . $encodedLogs);
+    }
+
+    /**
+     * build street name
+     *
+     * @param object $address_data
+     * @return string
+     */
+    function build_street_name($address_data)
+    {
+        $address = $address_data->address1 . ' - ' .
+        $address_data->address2 . ' - ' .
+        $address_data->city . ' - ' .
+        $address_data->country;
+
+        return $address;
     }
 }
