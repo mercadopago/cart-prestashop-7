@@ -688,7 +688,7 @@ class AbstractPreference
      * @param object $address_data
      * @return string
      */
-    function buildStreetName($address_data)
+    public function buildStreetName($address_data)
     {
         $address = $address_data->address1 . ' - ' .
         $address_data->address2 . ' - ' .

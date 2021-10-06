@@ -535,7 +535,7 @@
 
        //PSJ button
         function getPsjButton(){
-            const country_link = '{$country_link}';
+            const country_link = '{$country_link|escape:'htmlall':'UTF-8'}';
 
             const textHeader = (country_link.toLowerCase() == 'mco') ? "{l s='Set up your interest payments' mod='mercadopago'}" : "{l s='Set up your installment and interest payments' mod='mercadopago'}";
             const textBody = (country_link.toLowerCase() == 'mco') ? "{l s='At Mercado Pago you can choose the fee you pay for each purchase.' mod='mercadopago'}" : "{l s='At Mercado Pago you can choose the fee you pay for each purchase and also offer interest-free installments to your customer.' mod='mercadopago'}";
