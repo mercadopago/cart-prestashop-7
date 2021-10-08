@@ -233,6 +233,9 @@
             </div>";
             checkbox_offline.insertAdjacentHTML('beforebegin', checkbox_offline_prepend);
 
+            //standard psj
+            var form_standard_psj_append = getPsjButton();
+            
             //advanced configuration
             var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
                 <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
@@ -248,11 +251,13 @@
             for (i=0; i < form_standard_group.length; i++) {
                 if(i == 3){
                     form_standard_group[i].insertAdjacentHTML('afterend', form_standard_append);
+                    form_standard_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
                 }
                 else if(i > 3) {
                     form_standard_group[i].classList.add("mp-input-collapsible");
-                    form_standard_group[i].querySelector("p").style.width = "400px";
                 }
+          
+                form_standard_group[i].querySelector("p").style.width = "400px";
             }
 
             var style_collapsible = false;
@@ -329,16 +334,15 @@
                 </div>\
             </div>";
 
-            for (i=0; i < form_custom_group.length; i++) {
-                if(i == 0){
+             for (i=0; i < form_custom_group.length; i++) {
+               if(i == 0){
                     form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append);
+                    form_custom_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
                 }
                 if(i > 0) {
                     form_custom_group[i].classList.add("mp-custom-input-collapsible");
-                }
-                if(i >= 1){
+                }                
                     form_custom_group[i].querySelector("p").style.width = "400px";
-                }
             }
 
             var style_collapsible_custom = false;
@@ -527,5 +531,27 @@
                     ticketInputs[i].checked = false;
                 }
             }
+        }
+
+       //PSJ button
+        function getPsjButton(){
+            const country_link = '{$country_link|escape:'htmlall':'UTF-8'}';
+
+            const textHeader = (country_link.toLowerCase() == 'mco') ? "{l s='Set up your interest payments' mod='mercadopago'}" : "{l s='Set up your installment and interest payments' mod='mercadopago'}";
+            const textBody = (country_link.toLowerCase() == 'mco') ? "{l s='At Mercado Pago you can choose the fee you pay for each purchase.' mod='mercadopago'}" : "{l s='At Mercado Pago you can choose the fee you pay for each purchase and also offer interest-free installments to your customer.' mod='mercadopago'}";
+            const textButton = (country_link.toLowerCase() == 'mco') ? "{l s='Set up interest payments' mod='mercadopago'}" : "{l s='Set up installment and interest' mod='mercadopago'}";
+
+            return "<hr class='mp-mt-15'>\
+                <div class='row'>\
+                    <div class='col-md-12 mp-pb-10'>\
+                        <h4 class='mp-title-checkout-body'>" + textHeader + "</h4>\
+                    </div>\
+                </div>\
+                <div class='row mp-pt-5 mp-pb-25'>\
+                    <div class='col-md-12'>\
+                        <p class='mp-text-credenciais mp-pb-30'>" + textBody + "</p>\
+                        <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
+                    </div>\
+                </div>";
         }
     </script>
