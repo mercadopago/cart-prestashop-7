@@ -47,14 +47,14 @@ class StandardPreference extends AbstractPreference
         $preference = $this->getCommonPreference($cart);
         $preference['items'] = $this->getCartItems($cart);
         $preference['payer'] = $this->getCustomerData($cart);
-        $preference['shipments'] = $this->getShipment();
+        $preference['shipments'] = $this->getShipment($cart);
         $preference['back_urls'] = $this->getBackUrls($cart);
         $preference['payment_methods'] = $this->getPaymentOptions();
         $preference['auto_return'] = $this->getAutoReturn();
         $preference['binary_mode'] = $this->getBinaryMode();
         $preference['expires'] = $this->getExpirationStatus();
         $preference['expiration_date_to'] = $this->getExpirationDate();
-        $preference['metadata'] = $this->getInternalMetadata();
+        $preference['metadata'] = $this->getInternalMetadata($cart);
 
         //Generate preference
         $this->generateLogs($preference, $cart);
@@ -140,11 +140,25 @@ class StandardPreference extends AbstractPreference
      *
      * @return array
      */
-    public function getShipment()
+    public function getShipment($cart)
     {
-        return array(
-            'mode' => 'not_specified'
+        $address_shipment = new Address((int) $cart->id_address_delivery);
+
+        $shipment = array(
+            'receiver_address' => array(
+                'zip_code' => $address_shipment->postcode,
+                'street_name' => $address_shipment->address1 . ' - ' .
+                    $address_shipment->address2 . ' - ' .
+                    $address_shipment->city . ' - ' .
+                    $address_shipment->country,
+                'street_number' => '-',
+                'apartment' => '-',
+                'floor' => '-',
+                'city_name' => $address_shipment->city,
+            ),
         );
+
+        return $shipment;
     }
 
     /**
@@ -224,9 +238,9 @@ class StandardPreference extends AbstractPreference
      *
      * @return array
      */
-    public function getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
-        $internal_metadata = parent::getInternalMetadata();
+        $internal_metadata = parent::getInternalMetadata($cart);
         $internal_metadata['checkout'] = 'smart';
         $internal_metadata['checkout_type'] = 'redirect';
 

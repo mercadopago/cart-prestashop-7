@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.7.0');
+define('MP_VERSION', '4.7.1');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -72,7 +72,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.7.0';
+        $this->version = '4.7.1';
 
         parent::__construct();
 
@@ -241,6 +241,7 @@ class Mercadopago extends PaymentModule
             'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
             'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
             'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
+            'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
             //credentials
             'public_key' => $public_key,
             'access_token' => $access_token,
