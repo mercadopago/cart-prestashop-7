@@ -189,7 +189,7 @@ class MPUseful
             'mld' => 'https://www.mercadopago.com/',
             'mco' => 'https://www.mercadopago.com.co/costs-section#from-section=menu',
             'mla' => 'https://www.mercadopago.com.ar/costs-section#from-section=menu',
-            'mlb' => 'https://www.mercadopago.com.br//costs-section#from-section=menu',
+            'mlb' => 'https://www.mercadopago.com.br/costs-section#from-section=menu',
             'mlc' => 'https://www.mercadopago.cl/costs-section#from-section=menu',
             'mlm' => 'https://www.mercadopago.com.mx/costs-section#from-section=menu',
             'mlu' => 'https://www.mercadopago.com.uy/costs-section#from-section=menu',
@@ -209,15 +209,15 @@ class MPUseful
     public function getTermsAndPoliciesLink($country)
     {
         $terms_link = array(
-            'mld' => 'https://www.mercadopago.com/',
-            'mco' => 'https://www.mercadopago.com.co/ayuda/terminos-y-politicas_194',
-            'mla' => 'https://www.mercadopago.com.ar/ayuda/terminos-y-politicas_194',
-            'mlb' => 'https://www.mercadopago.com.br/ajuda/termos-e-politicas_194',
-            'mlc' => 'https://www.mercadopago.cl/ayuda/terminos-y-politicas_194',
-            'mlm' => 'https://www.mercadopago.com.mx/ayuda/terminos-y-politicas_194',
-            'mlu' => 'https://www.mercadopago.com.uy/ayuda/terminos-y-politicas_194',
-            'mlv' => 'https://www.mercadopago.com.ve/ayuda/terminos-y-politicas_194',
-            'mpe' => 'https://www.mercadopago.com.pe/ayuda/terminos-y-politicas_194',
+            'MLD' => 'https://www.mercadopago.com/',
+            'MCO' => 'https://www.mercadopago.com.co/ayuda/terminos-y-politicas_194',
+            'MLA' => 'https://www.mercadopago.com.ar/ayuda/terminos-y-politicas_194',
+            'MLB' => 'https://www.mercadopago.com.br/ajuda/termos-e-politicas_194',
+            'MLC' => 'https://www.mercadopago.cl/ayuda/terminos-y-politicas_194',
+            'MLM' => 'https://www.mercadopago.com.mx/ayuda/terminos-y-politicas_194',
+            'MLU' => 'https://www.mercadopago.com.uy/ayuda/terminos-y-politicas_194',
+            'MLV' => 'https://www.mercadopago.com.ve/ayuda/terminos-y-politicas_194',
+            'MPE' => 'https://www.mercadopago.com.pe/ayuda/terminos-y-politicas_194',
         );
 
         return $terms_link[$country];

@@ -34,6 +34,8 @@ class CustomCheckout
      */
     public $payment;
 
+    public $mpuseful;
+
     /**
      * Custom Checkout constructor.
      *
@@ -43,6 +45,7 @@ class CustomCheckout
     {
         $this->payment = $payment;
         $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -116,6 +119,7 @@ class CustomCheckout
             "discount" => $strDiscount,
             "public_key" => $public_key,
             "assets_ext_min" => $this->assets_ext_min,
+            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
         );
 
         return $checkoutInfo;
