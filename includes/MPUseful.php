@@ -1,31 +1,32 @@
 <?php
+
 /**
-* 2007-2021 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2021 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+ * 2007-2021 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2021 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ *
+ * Don't forget to prefix your containers with your own identifier
+ * to avoid any conflicts with others containers.
+ */
 
 class MPUseful
 {
@@ -176,7 +177,7 @@ class MPUseful
         return $protect_link[$country];
     }
 
-     /**
+    /**
      * Set Country Link PSJ
      *
      * @param  string $country
@@ -197,5 +198,28 @@ class MPUseful
         );
 
         return $psj_link[$country];
+    }
+
+    /**
+     * Set the terms and policies link
+     *
+     * @param  string $country
+     * @return string
+     */
+    public function getTermsAndPoliciesLink($country)
+    {
+        $terms_link = array(
+            'mld' => 'https://www.mercadopago.com/',
+            'mco' => 'https://www.mercadopago.com.co/ayuda/terminos-y-politicas_194',
+            'mla' => 'https://www.mercadopago.com.ar/ayuda/terminos-y-politicas_194',
+            'mlb' => 'https://www.mercadopago.com.br/ajuda/termos-e-politicas_194',
+            'mlc' => 'https://www.mercadopago.cl/ayuda/terminos-y-politicas_194',
+            'mlm' => 'https://www.mercadopago.com.mx/ayuda/terminos-y-politicas_194',
+            'mlu' => 'https://www.mercadopago.com.uy/ayuda/terminos-y-politicas_194',
+            'mlv' => 'https://www.mercadopago.com.ve/ayuda/terminos-y-politicas_194',
+            'mpe' => 'https://www.mercadopago.com.pe/ayuda/terminos-y-politicas_194',
+        );
+
+        return $terms_link[$country];
     }
 }
