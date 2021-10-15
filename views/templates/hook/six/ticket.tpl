@@ -226,6 +226,16 @@
             </div>
 
             <div class="row">
+                <div class="col-xs-12 col-md-12 col-12 mp-pt-25">
+                    <label> {l s='By continuing, you agree to our ' mod='mercadopago'}
+                        <u><a class="mp-link-checkout-custom" href={$terms_url|escape:"html":"UTF-8"} target="_blank">
+                            {l s='Terms and Conditions' mod='mercadopago'}
+                        </a></u>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12 col-xs-12 col-12 mp-pt-25 mp-m-col">
                     <button id="mp-ticket-finish-order" class="btn btn-primary mp-btn-primary">{l s='Check out' mod='mercadopago'}</button>
                 </div>
