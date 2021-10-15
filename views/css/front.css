@@ -272,9 +272,7 @@ body#checkout section.checkout-step .payment-options label {
   user-select: none;
 }
 
-.mp-link-checkout-custom
-.mp-link-checkout-terms
-:hover {
+.mp-link-checkout-custom .mp-link-checkout-terms :hover {
   color: #1a8196 !important;
 }
 
