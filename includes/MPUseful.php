@@ -209,7 +209,6 @@ class MPUseful
     public function getTermsAndPoliciesLink($country)
     {
         $terms_link = array(
-            'MLD' => 'https://www.mercadopago.com/',
             'MCO' => 'https://www.mercadopago.com.co/ayuda/terminos-y-politicas_194',
             'MLA' => 'https://www.mercadopago.com.ar/ayuda/terminos-y-politicas_194',
             'MLB' => 'https://www.mercadopago.com.br/ajuda/termos-e-politicas_194',
@@ -220,6 +219,6 @@ class MPUseful
             'MPE' => 'https://www.mercadopago.com.pe/ayuda/terminos-y-politicas_194',
         );
 
-        return $terms_link[$country];
+        return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
     }
 }

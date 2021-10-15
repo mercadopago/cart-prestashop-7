@@ -200,13 +200,13 @@
                 <p class="mp-all-required"><em class="mp-required text-bold">*</em> {l s='Obligatory field' mod='mercadopago'}</p>
             </div>
 
-            <div class="col-md-12 col-xs-12 col-12 mp-px-0 mp-m-col">
-                <p class="mp-pb-5">
-                    {l s='By continuing, you agree to our' mod='mercadopago'} 
+            <div class="col-md-12 col-xs-12 col-12 mp-px-0 mp-m-col mp-pt-5">
+                <label class="mp-pb-20">
+                    {l s='By continuing, you agree to our ' mod='mercadopago'} 
                     <u><a class="mp-link-checkout-custom" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
                     {l s='Terms and Conditions' mod='mercadopago'}
                     </a></u>
-                </p>
+                </label>
             </div>
         </div>
 
