@@ -189,7 +189,7 @@ class MPUseful
             'mld' => 'https://www.mercadopago.com/',
             'mco' => 'https://www.mercadopago.com.co/costs-section#from-section=menu',
             'mla' => 'https://www.mercadopago.com.ar/costs-section#from-section=menu',
-            'mlb' => 'https://www.mercadopago.com.br//costs-section#from-section=menu',
+            'mlb' => 'https://www.mercadopago.com.br/costs-section#from-section=menu',
             'mlc' => 'https://www.mercadopago.cl/costs-section#from-section=menu',
             'mlm' => 'https://www.mercadopago.com.mx/costs-section#from-section=menu',
             'mlu' => 'https://www.mercadopago.com.uy/costs-section#from-section=menu',
