@@ -203,7 +203,7 @@
             <div class="col-md-12 col-xs-12 col-12 mp-px-0 mp-m-col">
                 <p class="mp-pb-5">
                     {l s='Upon continuing, you agree with our' mod='mercadopago'} 
-                    <u><a class="mp-link-checkout-custom" href="{$terms_url}" target="_blank">
+                    <u><a class="mp-link-checkout-custom" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
                     {l s='Terms and Conditions' mod='mercadopago'}
                     </a></u>
                 </p>
