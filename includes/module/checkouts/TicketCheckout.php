@@ -36,6 +36,8 @@ class TicketCheckout
      */
     public $payment;
 
+    public $mpuseful;
+
     /**
      * Ticket Checkout constructor.
      *
@@ -45,6 +47,7 @@ class TicketCheckout
     {
         $this->payment = $payment;
         $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -110,6 +113,7 @@ class TicketCheckout
             "discount" => $discount,
             "module_dir" => $this->payment->path,
             "assets_ext_min" => $this->assets_ext_min,
+            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
         );
 
         return $info;

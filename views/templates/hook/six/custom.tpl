@@ -193,6 +193,16 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-12 mp-pt-25">
+                    <label> {l s='By continuing, you agree to our ' mod='mercadopago'} 
+                        <u><a class="mp-link-checkout-terms" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
+                            {l s='Terms and Conditions' mod='mercadopago'}
+                        </a></u>
+                    </label>
+                </div>
+            </div>
+
             <div id="mercadopago-utilities">
                 <input type="hidden" id="amount" value="{$amount|escape:'htmlall':'UTF-8'}" />
                 <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
