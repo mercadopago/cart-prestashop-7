@@ -38,6 +38,8 @@ class StandardCheckout
      */
     public $payment;
 
+    public $mpuseful;
+
     /**
      * Standard Checkout constructor.
      * @param $payment
@@ -45,6 +47,7 @@ class StandardCheckout
     public function __construct($payment)
     {
         $this->payment = $payment;
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -99,6 +102,7 @@ class StandardCheckout
             }
         }
 
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'standard');
         $preference_id = "";
@@ -125,7 +129,8 @@ class StandardCheckout
             "modal_link" => $modal_link,
             "preference" => $preference_id,
             "public_key" => $this->payment->mercadopago->getPublicKey(),
-            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS')
+            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
+            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
         );
         return $informations;
     }

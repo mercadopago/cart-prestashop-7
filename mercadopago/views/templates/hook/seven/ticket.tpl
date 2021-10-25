@@ -212,6 +212,17 @@
                     {/foreach}
                 {/if}
             </div>
+
+            <div class="form-group">
+                <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col mp-pt-25">
+                    <label class="mp-pb-5">
+                        {l s='By continuing, you agree to our ' mod='mercadopago'}
+                        <u><a class="mp-link-checkout-custom" href={$terms_url|escape:"html":"UTF-8"} target="_blank">
+                            {l s='Terms and Conditions' mod='mercadopago'}
+                        </a></u>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </form>
