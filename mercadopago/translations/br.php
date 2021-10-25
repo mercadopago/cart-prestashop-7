@@ -1,7 +1,7 @@
 <?php
 
 global $_MODULE;
-$_MODULE =array();
+$_MODULE = array();
 $_MODULE['<{mercadopago}prestashop>mercadopago_3ce3662af6cffea8677b4cb92dea4939'] =
 'Mercado Pago';
 $_MODULE['<{mercadopago}prestashop>mercadopago_b9a2e0f33da43f952a816aa78f78ee2e'] =
