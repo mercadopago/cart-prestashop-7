@@ -403,6 +403,7 @@ class AbstractPreference
             "basic_settings" => $this->getStandardCheckoutSettings(),
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
+            "pix_settings" => $this->getPixCheckoutSettings(),
             "seller_website"=> Tools::getShopDomainSsl(true, true),
             "billing_address" => array(
                 'zip_code' => $address_invoice->postcode,
@@ -607,6 +608,11 @@ class AbstractPreference
         $this->settings['MERCADOPAGO_TICKET_DISCOUNT'] = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $this->settings['MERCADOPAGO_TICKET_EXPIRATION'] = Configuration::get('MERCADOPAGO_TICKET_EXPIRATION');
 
+        //pix checkout
+        $this->settings['MERCADOPAGO_PIX_CHECKOUT'] = Configuration::get('MERCADOPAGO_PIX_CHECKOUT');
+        $this->settings['MERCADOPAGO_PIX_DISCOUNT'] = Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
+        $this->settings['MERCADOPAGO_PIX_EXPIRATION'] = Configuration::get('MERCADOPAGO_PIX_EXPIRATION');
+
         return $this->settings;
     }
 
@@ -657,6 +663,22 @@ class AbstractPreference
         $settings['active'] = $this->settings['MERCADOPAGO_TICKET_CHECKOUT'] == "" ? false : true;
         $settings['discount'] = (float) $this->settings['MERCADOPAGO_TICKET_DISCOUNT'];
         $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_TICKET_EXPIRATION'];
+
+        return $settings;
+    }
+
+    /**
+     * Get pix checkout settings for metadata
+     *
+     * @return void
+     */
+    public function getPixCheckoutSettings()
+    {
+        $settings = array();
+
+        $settings['active'] = $this->settings['MERCADOPAGO_PIX_CHECKOUT'] == "" ? false : true;
+        $settings['discount'] = (float) $this->settings['MERCADOPAGO_PIX_DISCOUNT'];
+        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_PIX_EXPIRATION'];
 
         return $settings;
     }

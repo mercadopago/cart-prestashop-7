@@ -50,6 +50,7 @@ class Mercadopago extends PaymentModule
     public $customCheckout;
     public $ticketCheckout;
     public $standardCheckout;
+    public $pixCheckout;
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
@@ -87,6 +88,7 @@ class Mercadopago extends PaymentModule
         $this->standardCheckout = new StandardCheckout($this);
         $this->customCheckout = new CustomCheckout($this);
         $this->ticketCheckout = new TicketCheckout($this);
+        $this->pixCheckout = new PixCheckout($this);
     }
 
 
@@ -112,6 +114,7 @@ class Mercadopago extends PaymentModule
         include_once MP_ROOT_URL . '/includes/module/checkouts/StandardCheckout.php';
         include_once MP_ROOT_URL . '/includes/module/checkouts/CustomCheckout.php';
         include_once MP_ROOT_URL . '/includes/module/checkouts/TicketCheckout.php';
+        include_once MP_ROOT_URL . '/includes/module/checkouts/PixCheckout.php';
     }
 
     /**
@@ -189,6 +192,7 @@ class Mercadopago extends PaymentModule
         $custom = "";
         $ticket = "";
         $standard = "";
+        $pix = "";
         $this->loadSettings();
         new RatingSettings();
 
@@ -221,43 +225,46 @@ class Mercadopago extends PaymentModule
             $standard = new StandardSettings();
             $custom = new CustomSettings();
             $ticket = new TicketSettings();
+            $pix = new PixSettings();
 
             $store = $this->renderForm($store->submit, $store->values, $store->form);
             $standard = $this->renderForm($standard->submit, $standard->values, $standard->form);
             $custom = $this->renderForm($custom->submit, $custom->values, $custom->form);
             $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
+            $pix = $this->renderForm($pix->submit, $pix->values, $pix->form);
         }
 
         $output = $this->context->smarty->assign(
             array(
-            //module requirements
-            'alert' => self::$form_alert,
-            'message' => self::$form_message,
-            'mp_version' => MP_VERSION,
-            'url_base' => __PS_BASE_URI__,
-            'log' => MPLog::getLogUrl(),
-            'country_link' => $country_link,
-            'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
-            'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
-            'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
-            'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
-            'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
-            //credentials
-            'public_key' => $public_key,
-            'access_token' => $access_token,
-            'sandbox_public_key' => $sandbox_public_key,
-            'sandbox_access_token' => $sandbox_access_token,
-            //test flow
-            'count_test' => $count_test,
-            'seller_homolog' => $homologated,
-            //forms
-            'country_form' => $localization,
-            'credentials' => $credentials,
-            'homolog_form' => $homologation,
-            'store_form' => $store,
-            'standard_form' => $standard,
-            'custom_form' => $custom,
-            'ticket_form' => $ticket
+                //module requirements
+                'alert' => self::$form_alert,
+                'message' => self::$form_message,
+                'mp_version' => MP_VERSION,
+                'url_base' => __PS_BASE_URI__,
+                'log' => MPLog::getLogUrl(),
+                'country_link' => $country_link,
+                'application' => Configuration::get('MERCADOPAGO_APPLICATION_ID'),
+                'standard_test' => Configuration::get('MERCADOPAGO_STANDARD'),
+                'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
+                'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
+                'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
+                //credentials
+                'public_key' => $public_key,
+                'access_token' => $access_token,
+                'sandbox_public_key' => $sandbox_public_key,
+                'sandbox_access_token' => $sandbox_access_token,
+                //test flow
+                'count_test' => $count_test,
+                'seller_homolog' => $homologated,
+                //forms
+                'country_form' => $localization,
+                'credentials' => $credentials,
+                'homolog_form' => $homologation,
+                'store_form' => $store,
+                'standard_form' => $standard,
+                'custom_form' => $custom,
+                'ticket_form' => $ticket,
+                'pix_form' => $pix,
             )
         )->fetch($this->local_path . 'views/templates/admin/configure.tpl');
 
@@ -276,6 +283,7 @@ class Mercadopago extends PaymentModule
         include_once MP_ROOT_URL . '/includes/module/settings/StandardSettings.php';
         include_once MP_ROOT_URL . '/includes/module/settings/CustomSettings.php';
         include_once MP_ROOT_URL . '/includes/module/settings/TicketSettings.php';
+        include_once MP_ROOT_URL . '/includes/module/settings/PixSettings.php';
         include_once MP_ROOT_URL . '/includes/module/settings/CredentialsSettings.php';
         include_once MP_ROOT_URL . '/includes/module/settings/LocalizationSettings.php';
         include_once MP_ROOT_URL . '/includes/module/settings/HomologationSettings.php';
@@ -426,6 +434,13 @@ class Mercadopago extends PaymentModule
         return $this->loadPayments($params, self::PRESTA17);
     }
 
+    /**
+     * @param $params
+     * @param $version
+     * @return array|string|void
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function loadPayments($params, $version)
     {
         if (!$this->active) {
@@ -438,19 +453,62 @@ class Mercadopago extends PaymentModule
         $payment_options = array();
 
         $version == self::PRESTA16 ? $this->smarty->assign('module_dir', $this->_path) : null;
+        $country = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
 
-        if (Configuration::get('MERCADOPAGO_STANDARD_CHECKOUT') == true) {
-            $payment_options[] = $this->getStandardCheckout($cart, $version);
-        }
-        if (Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT') == true) {
-            $payment_options[] = $this->getCustomCheckout($cart, $version);
-        }
+        $checkouts = array(
+            'MERCADOPAGO_STANDARD_CHECKOUT' => 'getStandardCheckout',
+            'MERCADOPAGO_CUSTOM_CHECKOUT' => 'getCustomCheckout',
+            'MERCADOPAGO_TICKET_CHECKOUT' => 'getTicketCheckout',
+            'MERCADOPAGO_PIX_CHECKOUT' => 'getPixCheckout',
+        );
 
-        if (Configuration::get('MERCADOPAGO_TICKET_CHECKOUT') == true) {
-            $payment_options[] = $this->getTicketCheckout($cart, $version);
+        foreach ($checkouts as $checkout => $method) {
+            if (
+                $this->isActiveCheckout($checkout)
+                && $this->isAvailableToCountry($checkout, $country)
+            ) {
+                $payment_options[] = $this->{$method}($cart, $version);
+            }
         }
 
         return $version == self::PRESTA16 ? implode('', $payment_options) : $payment_options;
+    }
+
+    /**
+     * @param $checkout
+     * @return bool
+     */
+    public function isActiveCheckout($checkout)
+    {
+        return (Configuration::get($checkout) == true);
+    }
+
+    /**
+     * @param $checkout
+     * @param $country
+     * @return bool
+     */
+    public function isAvailableToCountry($checkout, $country)
+    {
+        if ($checkout !== 'MERCADOPAGO_PIX_CHECKOUT') {
+            return true;
+        }
+
+        if ($country === 'mlb') {
+            return true;
+        }
+
+        $this->disableCheckout($checkout);
+
+        return false;
+    }
+
+    /**
+     * @param $checkout
+     */
+    public function disableCheckout($checkout)
+    {
+        Configuration::updateValue($checkout, false);
     }
 
     /**
@@ -534,6 +592,37 @@ class Mercadopago extends PaymentModule
     }
 
     /**
+     * @param  $cart
+     * @param  $version
+     * @return PaymentOption | string
+     */
+    public function getPixCheckout($cart, $version)
+    {
+        $discount = Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
+
+        if ($version == self::PRESTA16) {
+            $frontInformations = $this->pixCheckout->getPixCheckoutPS16($cart);
+            $frontInformations['discount'] = $discount;
+
+            $this->context->smarty->assign($frontInformations);
+            return $this->display(__FILE__, 'views/templates/hook/six/pix.tpl');
+        } 
+
+        $str_discount = ' (' . $discount . '% OFF) ';
+        $str_discount = ($discount != "") ? $str_discount : '';
+
+        $frontInformations = $this->pixCheckout->getPixCheckoutPS17($cart);
+        $infoTemplate = $this->context->smarty->assign($frontInformations)
+            ->fetch('module:mercadopago/views/templates/hook/seven/pix.tpl');
+        $pixCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
+        $pixCheckout->setForm($infoTemplate)
+            ->setCallToActionText($this->l('Pay with Pix') . $str_discount)
+            ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
+
+        return $pixCheckout;
+    }
+
+    /**
      * Check currency
      *
      * @param  mixed $cart
@@ -572,7 +661,7 @@ class Mercadopago extends PaymentModule
         if ($this->getVersionPs() == self::PRESTA17) {
             $this->context->smarty->assign(
                 array(
-                "ticket_url" => $ticket_url
+                    'ticket_url' => $ticket_url
                 )
             );
             return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
@@ -583,9 +672,9 @@ class Mercadopago extends PaymentModule
 
         $this->context->smarty->assign(
             array(
-            'order' => $order,
-            'order_products' => $products,
-            "ticket_url" => $ticket_url
+                'order' => $order,
+                'order_products' => $products,
+                'ticket_url' => $ticket_url
             )
         );
 
@@ -640,6 +729,10 @@ class Mercadopago extends PaymentModule
         }
     }
 
+    /**
+     * @param $sql_file
+     * @return bool
+     */
     public function loadSQLFile($sql_file)
     {
         // Get install SQL file content
