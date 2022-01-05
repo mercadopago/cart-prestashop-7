@@ -101,10 +101,13 @@ class PixCheckout
      */
     public function getPixTemplateVariables($cart)
     {
+        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+
         $variables = array(
             "logo_pix" => "{$this->payment->path}views/img/logo-pix.png",
-            "site_id" => Configuration::get('MERCADOPAGO_SITE_ID'),
+            "site_id" => $site_id,
             "discount" => Configuration::get('MERCADOPAGO_TICKET_DISCOUNT'),
+            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
         );
 
         return $variables;

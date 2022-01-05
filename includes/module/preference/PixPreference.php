@@ -48,10 +48,9 @@ class PixPreference extends AbstractPreference
     public function createPreference($body)
     {
         $payload = $this->_buildPixPreferencePayload($body);
-        $payloadToJson = Tools::jsonEncode($payload);
-        
         $this->_generateLogs($payload, 'pix');
-
+        
+        $payloadToJson = Tools::jsonEncode($payload);
         $this->_setCartRule($this->cart);
         
         $createPreference = $this->mercadopago->createPayment($payloadToJson);
@@ -165,10 +164,14 @@ class PixPreference extends AbstractPreference
      */
     private function _getAdditionalInfo() 
     {
-        $additional_info['items'] = $this->getCartItems($this->cart);
         $additional_info['shipments'] = $this->getShipmentAddress($this->$cart);
         $additional_info['payer'] = $this->getCustomCustomerData($cart);
-
+        $additional_info['items'] = $this->getCartItems(
+            $cart,
+            true,
+            $this->settings['MERCADOPAGO_TICKET_DISCOUNT']
+        );
+        
         return $internal_metadata;
     }
 

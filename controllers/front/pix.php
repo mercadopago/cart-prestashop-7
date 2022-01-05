@@ -47,10 +47,10 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     {
         $module = Module::getInstanceByName('mercadopago');
         $preference = new PixPreference($this->context->cart);
-        $preference->verifyModuleParameters();
         $totalAmount = $this->_getAmount($this->context->cart);
 
         try {
+            $preference->verifyModuleParameters();
             $paymentBody = array_merge($_POST, ['totalAmount' => $totalAmount]);
             $payment = $preference->createPreference($paymentBody);
 
