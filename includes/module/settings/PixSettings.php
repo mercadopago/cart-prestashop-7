@@ -72,7 +72,7 @@ class PixSettings extends AbstractSettings
                 ),
             ),
             array(
-                'col' => 4,
+                'col' => 2,
                 'type' => 'select',
                 'label' => $this->module->l('Payment due', 'PixSettings'),
                 'name' => 'MERCADOPAGO_PIX_EXPIRATION',
@@ -136,12 +136,12 @@ class PixSettings extends AbstractSettings
     public function getDueDate()
     {
         $due_date = array();
-        $due_date[] = array('id' => '30 minutes', 'name' => '30 ' . $this->module->l('minutes', 'PixSettings'));
-        $due_date[] = array('id' => '1 hour', 'name' => '1 ' . $this->module->l('hour', 'PixSettings'));
-        $due_date[] = array('id' => '6 hours', 'name' => '6 ' . $this->module->l('hours', 'PixSettings'));
-        $due_date[] = array('id' => '12 hours', 'name' => '12 ' . $this->module->l('hours', 'PixSettings'));
-        $due_date[] = array('id' => '1 day', 'name' => '1 ' . $this->module->l('day', 'PixSettings'));
-        $due_date[] = array('id' => '7 days', 'name' => '7 ' . $this->module->l('days', 'PixSettings'));
+        $due_date[] = array('id' => '30', 'name' => '30 ' . $this->module->l('minutes', 'PixSettings'));
+        $due_date[] = array('id' => '60', 'name' => '1 ' . $this->module->l('hour', 'PixSettings'));
+        $due_date[] = array('id' => '360', 'name' => '6 ' . $this->module->l('hours', 'PixSettings'));
+        $due_date[] = array('id' => '720', 'name' => '12 ' . $this->module->l('hours', 'PixSettings'));
+        $due_date[] = array('id' => '1440', 'name' => '1 ' . $this->module->l('day', 'PixSettings'));
+        $due_date[] = array('id' => '10080', 'name' => '7 ' . $this->module->l('days', 'PixSettings'));
 
         return $due_date;
     }
