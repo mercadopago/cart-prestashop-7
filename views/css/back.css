@@ -671,7 +671,8 @@
 
 .mp-input-collapsible,
 .mp-custom-input-collapsible,
-.mp-ticket-input-collapsible {
+.mp-ticket-input-collapsible,
+.mp-pix-input-collapsible {
   display: none;
 }
 
@@ -693,7 +694,8 @@
 }
 
 .mp-custom-input-collapsible,
-.mp-ticket-input-collapsible {
+.mp-ticket-input-collapsible,
+.mp-pix-input-collapsible {
   display: none;
 }
 
