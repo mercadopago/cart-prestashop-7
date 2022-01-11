@@ -78,7 +78,7 @@ class Mercadopago extends PaymentModule
         parent::__construct();
 
         $this->displayName = $this->l('Mercado Pago');
-        $this->description = $this->l('Aceitar pagamentos com Pix no Checkout Transparente.');
+        $this->description = $this->l('Customize the payment experience of your customers in your online store.');
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
@@ -409,6 +409,7 @@ class Mercadopago extends PaymentModule
     public function hookHeader()
     {
         $this->context->controller->addCSS($this->_path . 'views/css/front' . $this->assets_ext_min . '.css');
+        $this->context->controller->addCSS($this->_path . 'views/css/pixFront' . $this->assets_ext_min . '.css');        
         $this->context->controller->addJS($this->_path . 'views/js/front' . $this->assets_ext_min . '.js');
     }
 
@@ -616,7 +617,7 @@ class Mercadopago extends PaymentModule
             ->fetch('module:mercadopago/views/templates/hook/seven/pix.tpl');
         $pixCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
         $pixCheckout->setForm($infoTemplate)
-            ->setCallToActionText($this->l('Pay with Pix') . $str_discount)
+            ->setCallToActionText($this->l('Pix') . $str_discount)
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $pixCheckout;

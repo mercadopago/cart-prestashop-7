@@ -35,6 +35,11 @@ class PixCheckout
     public $payment;
 
     /**
+     * @var MPUseful
+    */
+    public $mpuseful;
+
+    /**
      * Ticket Checkout constructor.
      *
      * @param $payment
@@ -42,6 +47,7 @@ class PixCheckout
     public function __construct($payment)
     {
         $this->payment = $payment;
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -59,9 +65,9 @@ class PixCheckout
 
         $frontInformations = array_merge(
             $pixTemplateVariables,
-            array("module_dir" => $this->payment->path),
+            array('module_dir' => $this->payment->path),
             array(
-                "mp_logo" => _MODULE_DIR_
+                'mp_logo' => _MODULE_DIR_
                 . 'mercadopago/views/img/mpinfo_checkout.png'
             )
         );
@@ -84,7 +90,7 @@ class PixCheckout
 
         $frontInformations = array_merge(
             $pixTemplateVariables,
-            array("module_dir" => $this->payment->path)
+            array('module_dir' => $this->payment->path)
         );
 
         return $frontInformations;
@@ -102,12 +108,14 @@ class PixCheckout
     public function getPixTemplateVariables($cart)
     {
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
-
+       
         $variables = array(
-            "logo_pix" => "{$this->payment->path}views/img/logo-pix.png",
-            "site_id" => $site_id,
-            "discount" => Configuration::get('MERCADOPAGO_TICKET_DISCOUNT'),
-            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
+            'logo_pix' => "{$this->payment->path}views/img/logo_pix.png",
+            'badge_info' => "{$this->payment->path}views/img/badge_info_gray.png",
+            'site_id' => $site_id,
+            'discount' => Configuration::get('MERCADOPAGO_TICKET_DISCOUNT'),
+            'terms_url' => $this->mpuseful->getTermsAndPoliciesLink($site_id),
+            'redirect' => $this->payment->context->link->getModuleLink($this->payment->name, 'pix')
         );
 
         return $variables;
