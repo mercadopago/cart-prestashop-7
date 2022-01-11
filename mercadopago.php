@@ -73,6 +73,7 @@ class Mercadopago extends PaymentModule
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
         $this->version = '4.8.0';
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
         parent::__construct();
 
@@ -80,7 +81,6 @@ class Mercadopago extends PaymentModule
         $this->description = $this->l('Customize the payment experience of your customers in your online store.');
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall the module?');
         $this->module_key = '4380f33bbe84e7899aacb0b7a601376f';
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->ps_version = _PS_VERSION_;
         $this->assets_ext_min = !_PS_MODE_DEV_ ? '.min' : '';
         $this->path = $this->_path;
