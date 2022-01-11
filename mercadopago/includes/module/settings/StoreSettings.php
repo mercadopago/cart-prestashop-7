@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2021 PrestaShop SA
+*  @copyright 2007-2022 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *
@@ -162,7 +162,7 @@ class StoreSettings extends AbstractSettings
         $categories[] = array('id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers');
         $categories[] = array(
             'id' => 'virtual_goods',
-            'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be 
+            'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be
             electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge'
         );
 
