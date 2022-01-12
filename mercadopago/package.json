@@ -1,35 +1,30 @@
 {
+  "main": "scripts.js",
+  "description": "Gateway de pagamento Mercado Pago para PrestaShop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mercadopago/cart-prestashop-7"
+  },
+  "engines": {
+    "node": ">=14.17.3",
+    "npm": ">=6.14.13"
+  },
+  "engineStrict": true,
   "scripts": {
-    "build:assets": "gulp minify-assets"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run build:assets && lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.css": [
-      "stylelint **/*.css --fix"
-    ],
-    "*.js": [
-      "semistandard **/*.js --fix --verbose --env browser | snazzy"
-    ],
-    "*.php": [
-      "bash phpcs-fixer.sh"
-    ]
+    "php:lint": "composer phpcs",
+    "php:fix": "composer phpcbf",
+    "build:js": "node -e 'require(\"./scripts.js\").minifyFiles(\"js\")'",
+    "build:css": "node -e 'require(\"./scripts.js\").minifyFiles(\"css\")'",
+    "lint:js": "jshint ./views/js --exclude **/*.min.js",
+    "lint:css": "stylelint **/*.css --fix",
+    "add-minify": "git add *.min.js && git add *.min.css",
+    "commit:pre": "npm run lint:js && npm run lint:css && npm run php:lint && npm run build:js && npm run build:css && npm run add-minify"
   },
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-cli": "^2.3.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-uglify": "^3.0.2",
-    "husky": "^4.3.0",
-    "lint-staged": "10.4.0",
-    "semistandard": "^14.2.3",
-    "snazzy": "^8.0.0",
-    "stylelint": "^13.7.1",
-    "stylelint-config-recommended": "^3.0.0",
-    "stylelint-config-standard": "^20.0.0"
+    "husky": "^7.0.0",
+    "jshint": "^2.13.1",
+    "minify": "^7.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0"
   }
 }
