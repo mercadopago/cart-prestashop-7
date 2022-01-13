@@ -248,7 +248,7 @@ class Mercadopago extends PaymentModule
                 'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
                 'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
                 'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
-                'pix_enabled' => $pix->checkPixEnabled(),
+                'pix_enabled' => $pixSettings->checkPixEnabled(),
                 //credentials
                 'public_key' => $public_key,
                 'access_token' => $access_token,
