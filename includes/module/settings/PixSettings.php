@@ -48,50 +48,55 @@ class PixSettings extends AbstractSettings
     public function generateForm()
     {
         $title = $this->module->l('Basic Configuration', 'PixSettings');
-        $fields = array(
-            array(
-                'type' => 'switch',
-                'label' => $this->module->l('Pagamentos por Pix', 'PixSettings'),
-                'name' => 'MERCADOPAGO_PIX_CHECKOUT',
-                'desc' => $this->module->l(
-                    'Permita que clientes possam pagar com Pix no checkout da loja.',
-                    'PixSettings'
-                ),
-                'is_bool' => true,
-                'values' => array(
-                    array(
-                        'id' => 'MERCADOPAGO_PIX_CHECKOUT_ON',
-                        'value' => true,
-                        'label' => $this->module->l('Active', 'PixSettings')
+
+        if($this->checkPixEnabled()) {
+            $fields = array(
+                array(
+                    'type' => 'switch',
+                    'label' => $this->module->l('Pagamentos por Pix', 'PixSettings'),
+                    'name' => 'MERCADOPAGO_PIX_CHECKOUT',
+                    'desc' => $this->module->l(
+                        'Permita que clientes possam pagar com Pix no checkout da loja.',
+                        'PixSettings'
                     ),
-                    array(
-                        'id' => 'MERCADOPAGO_PIX_CHECKOUT_OFF',
-                        'value' => false,
-                        'label' => $this->module->l('Inactive', 'PixSettings')
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'id' => 'MERCADOPAGO_PIX_CHECKOUT_ON',
+                            'value' => true,
+                            'label' => $this->module->l('Active', 'PixSettings')
+                        ),
+                        array(
+                            'id' => 'MERCADOPAGO_PIX_CHECKOUT_OFF',
+                            'value' => false,
+                            'label' => $this->module->l('Inactive', 'PixSettings')
+                        )
+                    ),
+                ),
+                array(
+                    'col' => 2,
+                    'type' => 'select',
+                    'label' => $this->module->l('Payment due', 'PixSettings'),
+                    'name' => 'MERCADOPAGO_PIX_EXPIRATION',
+                    'desc' => $this->module->l('Ajuste o prazo que seus clientes terão para fazer a transferência via Pix.', 'PixSettings'),
+                    'options' => array(
+                        'query' => $this->getDueDate(),
+                        'id' => 'id',
+                        'name' => 'name'
                     )
                 ),
-            ),
-            array(
-                'col' => 2,
-                'type' => 'select',
-                'label' => $this->module->l('Payment due', 'PixSettings'),
-                'name' => 'MERCADOPAGO_PIX_EXPIRATION',
-                'desc' => $this->module->l('Ajuste o prazo que seus clientes terão para fazer a transferência via Pix.', 'PixSettings'),
-                'options' => array(
-                    'query' => $this->getDueDate(),
-                    'id' => 'id',
-                    'name' => 'name'
-                )
-            ),
-            array(
-                'col' => 2,
-                'suffix' => '%',
-                'type' => 'text',
-                'name' => 'MERCADOPAGO_PIX_DISCOUNT',
-                'label' => $this->module->l('Desconto por compra com Pix', 'PixSettings'),
-                'desc' => $this->module->l('Insira o percentual do desconto para incentivar seus clientes a pagarem com Pix.', 'PixSettings') ,
-            ),
-        );
+                array(
+                    'col' => 2,
+                    'suffix' => '%',
+                    'type' => 'text',
+                    'name' => 'MERCADOPAGO_PIX_DISCOUNT',
+                    'label' => $this->module->l('Desconto por compra com Pix', 'PixSettings'),
+                    'desc' => $this->module->l('Insira o percentual do desconto para incentivar seus clientes a pagarem com Pix.', 'PixSettings') ,
+                ),
+            );
+        } else {
+            $fields = array();
+        }
 
         return $this->buildForm($title, $fields);
     }
@@ -135,14 +140,32 @@ class PixSettings extends AbstractSettings
      */
     public function getDueDate()
     {
-        $due_date = array();
-        $due_date[] = array('id' => '30', 'name' => '30 ' . $this->module->l('minutes', 'PixSettings'));
-        $due_date[] = array('id' => '60', 'name' => '1 ' . $this->module->l('hour', 'PixSettings'));
-        $due_date[] = array('id' => '360', 'name' => '6 ' . $this->module->l('hours', 'PixSettings'));
-        $due_date[] = array('id' => '720', 'name' => '12 ' . $this->module->l('hours', 'PixSettings'));
-        $due_date[] = array('id' => '1440', 'name' => '1 ' . $this->module->l('day', 'PixSettings'));
-        $due_date[] = array('id' => '10080', 'name' => '7 ' . $this->module->l('days', 'PixSettings'));
+        $due_date = array(
+            array('id' => '30', 'name' => '30 ' . $this->module->l('minutes', 'PixSettings')),
+            array('id' => '60', 'name' => '1 ' . $this->module->l('hour', 'PixSettings')),
+            array('id' => '360', 'name' => '6 ' . $this->module->l('hours', 'PixSettings')),
+            array('id' => '720', 'name' => '12 ' . $this->module->l('hours', 'PixSettings')),
+            array('id' => '1440', 'name' => '1 ' . $this->module->l('day', 'PixSettings')),
+            array('id' => '10080', 'name' => '7 ' . $this->module->l('days', 'PixSettings')),
+        );
 
         return $due_date;
+    }
+
+    /**
+     * Check if pix is enabled
+     *
+     * @return Boolean
+     */
+    public function checkPixEnabled() {
+        $paymentMethods = $this->mercadopago->getPaymentMethods();
+
+        foreach ($paymentMethods as $paymentMethod) {
+            if (Tools::strtolower($paymentMethod['id']) == 'pix') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

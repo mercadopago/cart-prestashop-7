@@ -147,10 +147,8 @@
     <div class="tab-content">
         <div class="tab-pane active" id="standard_checkout">{html_entity_decode($standard_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="custom_checkout">{html_entity_decode($custom_form|escape:'html':'UTF-8')}</div>
-        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div>
-        {if $country_link == 'mlb'}
-            <div class="tab-pane" id="pix_checkout">{html_entity_decode($pix_form|escape:'html':'UTF-8')}</div>
-        {/if}
+        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div> 
+        <div class="tab-pane" id="pix_checkout">{html_entity_decode($pix_form|escape:'html':'UTF-8')}</div>
     </div>
 
     {if $sandbox_status != true}
