@@ -619,7 +619,7 @@ class AbstractPreference
     /**
      * Get standard checkout settings for metadata
      *
-     * @return void
+     * @return Array
      */
     public function getStandardCheckoutSettings()
     {
@@ -638,7 +638,7 @@ class AbstractPreference
     /**
      * Get custom checkout settings for metadata
      *
-     * @return void
+     * @return Array
      */
     public function getCustomCheckoutSettings()
     {
@@ -654,7 +654,7 @@ class AbstractPreference
     /**
      * Get ticket checkout settings for metadata
      *
-     * @return void
+     * @return Array
      */
     public function getTicketCheckoutSettings()
     {
@@ -670,15 +670,15 @@ class AbstractPreference
     /**
      * Get pix checkout settings for metadata
      *
-     * @return void
+     * @return Array
      */
     public function getPixCheckoutSettings()
     {
-        $settings = array();
-
-        $settings['active'] = $this->settings['MERCADOPAGO_PIX_CHECKOUT'] == "" ? false : true;
-        $settings['discount'] = (float) $this->settings['MERCADOPAGO_PIX_DISCOUNT'];
-        $settings['expiration_date_to'] = $this->settings['MERCADOPAGO_PIX_EXPIRATION'];
+        $settings = array(
+            'active' => !($this->settings['MERCADOPAGO_PIX_CHECKOUT'] == ''),
+            'discount' => (float) $this->settings['MERCADOPAGO_PIX_DISCOUNT'],
+            'expiration_date_to' => $this->settings['MERCADOPAGO_PIX_EXPIRATION'],
+        );
 
         return $settings;
     }

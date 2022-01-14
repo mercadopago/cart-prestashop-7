@@ -31,6 +31,8 @@ require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
 
 class PixPreference extends AbstractPreference
 {
+    public $cart;
+
     public function __construct($cart)
     {
         parent::__construct();
@@ -45,16 +47,17 @@ class PixPreference extends AbstractPreference
      *
      * @return Array
      */
-    public function createPreference($body)
+    public function createPreference()
     {
-        $payload = $this->_buildPixPreferencePayload($body);
-        $this->_generateLogs($payload, 'pix');
+        $payload = $this->_buildPixPreferencePayload();
         
+        $this->_setCartRule();
+        $payload['transaction_amount'] = $this->_getAmount();
+
+        $this->generateLogs($payload, 'pix');
         $payloadToJson = Tools::jsonEncode($payload);
-        $this->_setCartRule($this->cart);
         
         $createPreference = $this->mercadopago->createPayment($payloadToJson);
-
         MPLog::generate('Cart ID ' . $this->cart->id . ' - Pix Preference created successfully');
 
         return $createPreference;
@@ -63,18 +66,16 @@ class PixPreference extends AbstractPreference
     /**
      * Set custom discount on CartRule()
      *
-     * @param Object $cart
-     *
      * @return void
      */
-    private function _setCartRule($cart)
+    private function _setCartRule()
     {
         $discount = $this->settings['MERCADOPAGO_PIX_DISCOUNT'];
 
         if ($discount) {
-            parent::setCartRule($cart, $discount);
+            parent::setCartRule($this->cart, $discount);
             MPLog::generate(
-                'Mercado Pago custom discount applied to cart ' . $cart->id
+                'Mercado Pago custom discount applied to cart ' . $this->cart->id
             );
         }
     }
@@ -98,9 +99,49 @@ class PixPreference extends AbstractPreference
      */
     public function deleteCartRule()
     {
-        if ($this->settings['MERCADOPAGO_PIX_DISCOUNT'] != "") {
+        if ($this->settings['MERCADOPAGO_PIX_DISCOUNT'] != '') {
             parent::deleteCartRule();
         }
+    }
+
+    /**
+     * To build payload from Pix payment
+     *
+     * @param Array $body Data returned from POST method in Pix page
+     *
+     * @return Array
+     */
+    private function _buildPixPreferencePayload()
+    {
+        $payload_parent = $this->getCommonPreference($this->cart);
+
+        $payload_additional = [
+            'date_of_expiration' => $this->_getExpirationDate(),
+            'description' => $this->getPreferenceDescription($this->cart),
+            'payment_method_id' => 'pix',
+            'payer' => $this->_getCustomerData(),
+            'metadata' => $this->_getInternalMetadata(),
+            'additional_info' => $this->_getAdditionalInfo(),
+        ];
+
+        return array_merge($payload_parent, $payload_additional);
+    }
+
+    /**
+     * Get expiration_date_to for preference
+     *
+     * @return Array
+     */
+    private function _getExpirationDate()
+    {
+        if ($this->settings['MERCADOPAGO_PIX_EXPIRATION'] != '') {
+            return $this->settings['MERCADOPAGO_PIX_EXPIRATION'] = date(
+                'Y-m-d\TH:i:s.000O',
+                strtotime('+' . $this->settings['MERCADOPAGO_PIX_EXPIRATION'] . ' minutes')
+            );
+        }
+
+        return $this->settings['MERCADOPAGO_PIX_EXPIRATION'];
     }
 
     /**
@@ -137,24 +178,20 @@ class PixPreference extends AbstractPreference
     }
 
     /**
-     * To build payload from Pix payment
-     *
-     * @param Array $body Data returned from POST method in Pix page
+     * Get internal metadata
      *
      * @return Array
      */
-    private function _buildPixPreferencePayload($body)
+    private function _getInternalMetadata()
     {
-        $payload = $this->getCommonPreference($this->cart);
-        $payload['date_of_expiration'] = $this->_getExpirationDate();
-        $payload['description'] = $this->getPreferenceDescription($cart);
-        $payload['payment_method_id'] = $body['payment_method_id'];
-        $payload['payer'] = $this->_getCustomerData($this->cart);
-        $payload['metadata'] = $this->_getInternalMetadata();
-        $payload['transaction_amount'] = intval($body['totalAmount']);
-        $payload['additional_info'] = $this->_getAdditionalInfo();
+        $internal_metadata_parent = parent::getInternalMetadata($this->cart);
 
-        return $payload;
+        $internal_metadata_additional = [
+            'checkout' => 'custom',
+            'checkout_type' => 'pix',
+        ];
+
+        return array_merge($internal_metadata_parent, $internal_metadata_additional);
     }
 
     /**
@@ -164,65 +201,29 @@ class PixPreference extends AbstractPreference
      */
     private function _getAdditionalInfo() 
     {
-        $additional_info['shipments'] = $this->getShipmentAddress($this->$cart);
-        $additional_info['payer'] = $this->getCustomCustomerData($cart);
-        $additional_info['items'] = $this->getCartItems(
-            $cart,
-            true,
-            $this->settings['MERCADOPAGO_TICKET_DISCOUNT']
+        $additional_info = array(
+            'payer' => $this->getCustomCustomerData($this->cart),
+            'shipments' => $this->getShipmentAddress($this->cart),
+            'items' =>  $this->getCartItems(
+                $this->cart,
+                true,
+                $this->settings['MERCADOPAGO_PIX_DISCOUNT']
+            ),
         );
         
-        return $internal_metadata;
+        return $additional_info;
     }
 
     /**
-     * Get expiration_date_to for preference
+     * Get Amount
      *
-     * @return Array
+     * @param Object $cart Purchase details and information
+     *
+     * @return Number
      */
-    private function _getExpirationDate()
+    private function _getAmount()
     {
-        if ($this->settings['MERCADOPAGO_PIX_EXPIRATION'] != "") {
-            return $this->settings['MERCADOPAGO_PIX_EXPIRATION'] = date(
-                'Y-m-d\TH:i:s.000O',
-                strtotime('+' . $this->settings['MERCADOPAGO_PIX_EXPIRATION'] . ' minutes')
-            );
-        }
-
-        return $this->settings['MERCADOPAGO_PIX_EXPIRATION'];
-    }
-
-    /**
-     * Get internal metadata
-     *
-     * @return Array
-     */
-    private function _getInternalMetadata()
-    {
-        $internal_metadata = parent::getInternalMetadata();
-        $internal_metadata['checkout'] = 'custom';
-        $internal_metadata['checkout_type'] = 'pix';
-
-        return $internal_metadata;
-    }
-
-    /**
-     * Generate preference logs
-     *
-     * @param Array $preferencePayload Data about payment
-     *
-     * @return void
-     */
-    private function _generateLogs($preferencePayload)
-    {
-        $logs = [
-            "cart_id" => $preferencePayload['external_reference'],
-            "cart_total" => $this->cart->getOrderTotal(),
-            "cart_items" => $preferencePayload['items'],
-            "metadata" => array_diff_key($preferencePayload['metadata'], array_flip(['collector'])),
-        ];
-
-        $encodedLogs = Tools::jsonEncode($logs);
-        MPLog::generate('Pix Preference Payload logs: ' . $encodedLogs);
+        $total = (float) $cart->getOrderTotal();
+        return $total;
     }
 }

@@ -34,6 +34,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
 {
     public function __construct()
     {
+        MPLog::generate('Exception Message: controller **PIX**');
         parent::__construct();
     }
 
@@ -45,18 +46,18 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
+        MPLog::generate('Exception Message: controller **PIX**');
         $module = Module::getInstanceByName('mercadopago');
         $preference = new PixPreference($this->context->cart);
-        $totalAmount = $this->_getAmount($this->context->cart);
 
         try {
             $preference->verifyModuleParameters();
-            $paymentBody = array_merge($_POST, ['totalAmount' => $totalAmount]);
-            $payment = $preference->createPreference($paymentBody);
+            $payment = $preference->createPreference();
 
+            $transactionDetails = $payment['transaction_details'];
             $preference->saveCreatePreferenceData(
                 $this->context->cart,
-                $payment['notification_url']
+                $transactionDetails['external_resource_url'],
             );
 
             $order = $this->_createOrder(
@@ -75,21 +76,6 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
                 $module->l('An error has occurred. Please try again.', 'mercadopago')
             );
         }
-    }
-
-    /**
-     * Redirect to checkout with error
-     *
-     * @param Preference  $preference    Data about payment
-     * @param String      $errorMessage  Data about payment
-     *
-     * @return void
-     */
-    private function _redirectError($preference, $errorMessage)
-    {
-        $this->context->cookie->__set('redirect_message', $errorMessage);
-        $preference->deleteCartRule();
-        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 
     /**
@@ -125,10 +111,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
      */
     private function _getSucessRedirectLink($order, $payment)
     {
-        $isPresta16 = _PS_VERSION_ < 1.7;
-        $queryString = $isPresta16
-            ? 'order-confirmation.php?'
-            : 'index.php?controller=order-confirmation';
+        $queryString = 'index.php?controller=order-confirmation';
         
         $link = __PS_BASE_URI__ . $queryString;
         $link .= '&id_cart=' . $order->id_cart;
@@ -142,49 +125,17 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * Get Amount
+     * Redirect to checkout with error
      *
-     * @param Object $cart Purchase details and information
+     * @param Preference  $preference    Data about payment
+     * @param String      $errorMessage  Data about payment
      *
-     * @return Number
+     * @return void
      */
-    private function _getAmount($cart)
+    private function _redirectError($preference, $errorMessage)
     {
-        $strDiscount = Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
-        $shipping = (float) $cart->getOrderTotal(true, 5);
-        $products = (float) $cart->getOrderTotal(true, 4);
-        $cartTotal = (float) $cart->getOrderTotal();
-
-        $discount = $products * ((float) $strDiscount / 100);
-        $products = ($discount != 0) ? $products - $discount : $products;
-
-        $subtotal = $products + $shipping;
-        $difference = $cartTotal - $subtotal - $discount;
-        $amount = $subtotal + $difference;
-
-        return $this->_mpRound($amount, 2);
-    }
-
-    /**
-     * Mercado Pago Round
-     *
-     * @param Number|Float $value Value to round
-     * @param Number $precision Precision
-     *
-     * @return Number
-     */
-    private function _mpRound($value, $precision = 0)
-    {
-        $method = intval(Configuration::get('PS_PRICE_ROUND_MODE'));
-
-        if ($method == PS_ROUND_DOWN) {
-            return Tools::floorf($value, $precision);
-        }
-
-        if ($method == PS_ROUND_UP) {
-            return Tools::ceilf($value, $precision);
-        }
-
-        return ceil($value);
+        $this->context->cookie->__set('redirect_message', $errorMessage);
+        $preference->deleteCartRule();
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 }
