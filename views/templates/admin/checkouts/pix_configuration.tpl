@@ -135,7 +135,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
                 <li><span class='mp-text-credenciais'>{l s='Baixe o app do Mercado Pago no seu celular;' mod='mercadopago'}</span></li>\
                 <li><span class='mp-text-credenciais'>{l s='No menu lateral esquerdo, acesse Seu Perfil e vá em [1]Suas chaves Pix[/1];' tags=['<strong>'] mod='mercadopago'}</span></li>\
                 <li><span class='mp-text-credenciais'>{l s='Insira os dados da(s) chave(s) Pix que você deseja cadastrar e finalize o processo;' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='4 - Volte aqui no admin da sua loja PrestaShop, [1]na aba Pix[/1], para seguir com a configuração do meio de pagamento.' tags=['<strong>'] mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='Volte aqui no admin da sua loja PrestaShop, [1]na aba Pix[/1], para seguir com a configuração do meio de pagamento.' tags=['<strong>'] mod='mercadopago'}</span></li>\
             </ol>\
         </div>\
     </div>\
