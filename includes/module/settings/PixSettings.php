@@ -49,7 +49,7 @@ class PixSettings extends AbstractSettings
     {
         $title = $this->module->l('Basic Configuration', 'PixSettings');
 
-        if($this->checkPixEnabled()) {
+        if($this->module->isEnabledPaymentMethod('pix')) {
             $fields = array(
                 array(
                     'type' => 'switch',
@@ -95,7 +95,7 @@ class PixSettings extends AbstractSettings
                 ),
             );
         } else {
-            $fields = array();
+           $fields = array();
         }
 
         return $this->buildForm($title, $fields);
@@ -150,22 +150,5 @@ class PixSettings extends AbstractSettings
         );
 
         return $due_date;
-    }
-
-    /**
-     * Check if pix is enabled
-     *
-     * @return Boolean
-     */
-    public function checkPixEnabled() {
-        $paymentMethods = $this->mercadopago->getPaymentMethods();
-
-        foreach ($paymentMethods as $paymentMethod) {
-            if (Tools::strtolower($paymentMethod['id']) == 'pix') {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

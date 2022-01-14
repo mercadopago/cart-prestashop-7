@@ -212,13 +212,6 @@ class Mercadopago extends PaymentModule
         $sandbox_public_key = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
-        //return checkout forms
-        $storeSettings = new StoreSettings();
-        $standardSettings = new StandardSettings();
-        $customSettings = new CustomSettings();
-        $ticketSettings = new TicketSettings();
-        $pixSettings = new PixSettings();
-
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
             $credentialsWrapper = $this->mercadopago->getCredentialsWrapper($access_token);
@@ -227,11 +220,18 @@ class Mercadopago extends PaymentModule
                 $homologated = Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', true);
             }
 
-            $store = $this->renderForm($storeSettings->submit, $storeSettings->values, $storeSettings->form);
-            $standard = $this->renderForm($standardSettings->submit, $standardSettings->values, $standardSettings->form);
-            $custom = $this->renderForm($customSettings->submit, $customSettings->values, $customSettings->form);
-            $ticket = $this->renderForm($ticketSettings->submit, $ticketSettings->values, $ticketSettings->form);
-            $pix = $this->renderForm($pixSettings->submit, $pixSettings->values, $pixSettings->form);
+            //return checkout forms
+            $store = new StoreSettings();
+            $standard = new StandardSettings();
+            $custom = new CustomSettings();
+            $ticket = new TicketSettings();
+            $pix = new PixSettings();
+
+            $store = $this->renderForm($store->submit, $store->values, $store->form);
+            $standard = $this->renderForm($standard->submit, $standard->values, $standard->form);
+            $custom = $this->renderForm($custom->submit, $custom->values, $custom->form);
+            $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
+            $pix = $this->renderForm($pix->submit, $pix->values, $pix->form);
         }
 
         $output = $this->context->smarty->assign(
@@ -248,7 +248,7 @@ class Mercadopago extends PaymentModule
                 'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
                 'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
                 'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
-                'pix_enabled' => $pixSettings->checkPixEnabled(),
+                'pix_enabled' => $this->isEnabledPaymentMethod('pix'),
                 //credentials
                 'public_key' => $public_key,
                 'access_token' => $access_token,
@@ -496,11 +496,28 @@ class Mercadopago extends PaymentModule
             return true;
         }
 
-        if ($country === 'mlb') {
+        if ($country === 'mlb' && $this->isEnabledPaymentMethod('pix')) {
             return true;
         }
 
         $this->disableCheckout($checkout);
+
+        return false;
+    }
+
+
+    /**
+     * @param $checkout
+     * @return Boolean
+     */
+    public function isEnabledPaymentMethod($checkout) {
+        $paymentMethods = $this->mercadopago->getPaymentMethods();
+
+        foreach ($paymentMethods as $paymentMethod) {
+            if (Tools::strtolower($paymentMethod['id']) == $checkout) {
+                return true;
+            }
+        }
 
         return false;
     }
