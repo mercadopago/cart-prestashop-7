@@ -34,7 +34,6 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
 {
     public function __construct()
     {
-        MPLog::generate('Exception Message: controller **PIX**');
         parent::__construct();
     }
 
@@ -46,7 +45,6 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        MPLog::generate('Exception Message: controller **PIX**');
         $module = Module::getInstanceByName('mercadopago');
         $preference = new PixPreference($this->context->cart);
 
