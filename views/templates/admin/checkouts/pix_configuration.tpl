@@ -37,7 +37,7 @@ form_pix_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
 </ul>";
 form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild);
 
-{if $pix_enabled == true} 
+{if $pix_enabled} 
 
     var form_pix_prepend = document.createElement("div");
     var form_pix = document.querySelector("#module_form_7 .panel .form-wrapper");
@@ -54,7 +54,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
     var form_pix_append = "<div class='row mp-pb-25'>\
         <div class='col-md-12 mp-pt-15'>\
             <p class='mp-text-credenciais'>\
-                <b>{l s='Importante:' mod='mercadopago'}</b> {l s='Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' mod='mercadopago'}\
+                {l s='[1]Importante:[/1] Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' tags=['<strong>'] mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -133,16 +133,16 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
         <div class='col-md-12'>\
             <ol>\
                 <li><span class='mp-text-credenciais'>{l s='Baixe o app do Mercado Pago no seu celular;' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='No menu lateral esquerdo, acesse Seu Perfil e vá em ' mod='mercadopago'}<b>{l s='Suas chaves Pix;' mod='mercadopago'}</b></span></li>\
+                <li><span class='mp-text-credenciais'>{l s='No menu lateral esquerdo, acesse Seu Perfil e vá em [1]Suas chaves Pix[/1];' tags=['<strong>'] mod='mercadopago'}</span></li>\
                 <li><span class='mp-text-credenciais'>{l s='Insira os dados da(s) chave(s) Pix que você deseja cadastrar e finalize o processo;' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='Volte aqui no admin da sua loja PrestaShop, ' mod='mercadopago'}<b>{l s='na aba Pix' mod='mercadopago'}</b>{l s=', para seguir com a configuração do meio de pagamento.' mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='4 - Volte aqui no admin da sua loja PrestaShop, [1]na aba Pix[/1], para seguir com a configuração do meio de pagamento.' tags=['<strong>'] mod='mercadopago'}</span></li>\
             </ol>\
         </div>\
     </div>\
     <div class='row mp-pb-25'>\
         <div class='col-md-12'>\
             <p class='mp-text-credenciais'>\
-                <b>{l s='Importante' mod='mercadopago'}</b>: {l s='Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' mod='mercadopago'}\
+                {l s='[1]Importante:[/1] Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' tags=['<strong>'] mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -152,7 +152,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
             <ul>\
                 <li>\
                     <span class='mp-text-credenciais'>\
-                        {l s='Por enquanto, o Banco Central do Brasil funciona de segunda a sexta-feira, das 9h às 18h.' mod='mercadopago'}<br>\
+                        {l s='Por enquanto, o Banco Central do Brasil funciona de segunda a sexta-feira, das 9h às 18h. [1]' tags=['<br>'] mod='mercadopago'}\
                         {l s='Cadastros feitos fora desse horário serão confirmados no próximo dia útil.' mod='mercadopago'}\
                         <a href='https://www.mercadopago.com.br/pix/' target='_blank'>{l s='Ler mais sobre Pix.' mod='mercadopago'}</a>\
                     </span>\
