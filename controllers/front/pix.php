@@ -55,7 +55,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
             $transactionDetails = $payment['transaction_details'];
             $preference->saveCreatePreferenceData(
                 $this->context->cart,
-                $transactionDetails['external_resource_url'],
+                $transactionDetails['external_resource_url']
             );
 
             $order = $this->_createOrder(
@@ -110,7 +110,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     private function _getSucessRedirectLink($order, $payment)
     {
         $queryString = 'index.php?controller=order-confirmation';
-        
+
         $link = __PS_BASE_URI__ . $queryString;
         $link .= '&id_cart=' . $order->id_cart;
         $link .= '&key=' . $order->secure_key;

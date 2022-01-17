@@ -50,13 +50,13 @@ class PixPreference extends AbstractPreference
     public function createPreference()
     {
         $payload = $this->_buildPixPreferencePayload();
-        
+
         $this->_setCartRule();
         $payload['transaction_amount'] = $this->_getAmount();
 
         $this->generateLogs($payload, 'pix');
         $payloadToJson = Tools::jsonEncode($payload);
-        
+
         $createPreference = $this->mercadopago->createPayment($payloadToJson);
         MPLog::generate('Cart ID ' . $this->cart->id . ' - Pix Preference created successfully');
 
@@ -119,7 +119,7 @@ class PixPreference extends AbstractPreference
             'date_of_expiration' => $this->_getExpirationDate(),
             'description' => $this->getPreferenceDescription($this->cart),
             'payment_method_id' => 'pix',
-            'payer' => $this->_getCustomerData(),
+            'payer' => $this->_getCustomerData($this->cart),
             'metadata' => $this->_getInternalMetadata(),
             'additional_info' => $this->_getAdditionalInfo(),
         ];
@@ -199,7 +199,7 @@ class PixPreference extends AbstractPreference
      *
      * @return Array
      */
-    private function _getAdditionalInfo() 
+    private function _getAdditionalInfo()
     {
         $additional_info = array(
             'payer' => $this->getCustomCustomerData($this->cart),
@@ -210,7 +210,7 @@ class PixPreference extends AbstractPreference
                 $this->settings['MERCADOPAGO_PIX_DISCOUNT']
             ),
         );
-        
+
         return $additional_info;
     }
 
@@ -223,7 +223,7 @@ class PixPreference extends AbstractPreference
      */
     private function _getAmount()
     {
-        $total = (float) $cart->getOrderTotal();
+        $total = (float) $this->cart->getOrderTotal();
         return $total;
     }
 }
