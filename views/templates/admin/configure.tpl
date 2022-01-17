@@ -1,5 +1,5 @@
 {*
-* 2007-2021 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2021 PrestaShop SA
+*  @copyright 2007-2022 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -235,7 +235,7 @@
 
             //standard psj
             var form_standard_psj_append = getPsjButton();
-            
+
             //advanced configuration
             var form_standard_append = "<div class='panel-heading mp-panel-advanced-config'>\
                 <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
@@ -256,7 +256,7 @@
                 else if(i > 3) {
                     form_standard_group[i].classList.add("mp-input-collapsible");
                 }
-          
+
                 form_standard_group[i].querySelector("p").style.width = "400px";
             }
 
@@ -341,7 +341,7 @@
                 }
                 if(i > 0) {
                     form_custom_group[i].classList.add("mp-custom-input-collapsible");
-                }                
+                }
                     form_custom_group[i].querySelector("p").style.width = "400px";
             }
 
