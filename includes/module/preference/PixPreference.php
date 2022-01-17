@@ -36,7 +36,7 @@ class PixPreference extends AbstractPreference
     public function __construct($cart)
     {
         parent::__construct();
-        $this->checkout = 'pix';
+        $this->checkout = 'custom';
         $this->cart = $cart;
     }
 
