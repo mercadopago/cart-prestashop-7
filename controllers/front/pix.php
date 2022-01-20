@@ -52,10 +52,9 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
             $preference->verifyModuleParameters();
             $payment = $preference->createPreference();
 
-            $transactionDetails = $payment['transaction_details'];
             $preference->saveCreatePreferenceData(
                 $this->context->cart,
-                $transactionDetails['external_resource_url']
+                $payment['notification_url']
             );
 
             $order = $this->_createOrder(

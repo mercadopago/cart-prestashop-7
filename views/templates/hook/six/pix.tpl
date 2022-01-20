@@ -45,7 +45,7 @@
                         </label>
                     </div>
                     <div class="mp-pix-container mp-pt-25">
-                        <img class="mp-badge-info" src="{$badge_info|escape:'html':'UTF-8'}"/>
+                        <img class="mp-badge-info" src="{$badge_info_gray|escape:'html':'UTF-8'}"/>
                         <label class="mp-pix-text-info">
                             {l s='O Pix possui limite diário de transferência.[1]Consulte o seu banco para mais informações.' tags=['<br>'] mod='mercadopago'}
                         </label>

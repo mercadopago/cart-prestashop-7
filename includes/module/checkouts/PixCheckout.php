@@ -111,7 +111,7 @@ class PixCheckout
 
         $variables = array(
             'logo_pix' => "{$this->payment->path}views/img/logo_pix.png",
-            'badge_info' => "{$this->payment->path}views/img/badge_info_gray.png",
+            'badge_info_gray' => "{$this->payment->path}views/img/icons/badge_info_gray.png",
             'discount' => Configuration::get('MERCADOPAGO_PIX_DISCOUNT'),
             'terms_url' => $this->mpuseful->getTermsAndPoliciesLink($site_id),
             'redirect' => $this->payment->context->link->getModuleLink($this->payment->name, 'pix'),
