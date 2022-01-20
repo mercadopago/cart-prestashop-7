@@ -54,6 +54,7 @@ class Mercadopago extends PaymentModule
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
+    public $checkout;
     public static $form_alert;
     public static $form_message;
 
@@ -511,10 +512,10 @@ class Mercadopago extends PaymentModule
      * @return Boolean
      */
     public function isEnabledPaymentMethod($checkout) {
-        $paymentMethods = $this->mercadopago->getPaymentMethods();
+        $payment_methods = $this->mercadopago->getPaymentMethods();
 
-        foreach ($paymentMethods as $paymentMethod) {
-            if (Tools::strtolower($paymentMethod['id']) == $checkout) {
+        foreach ($payment_methods as $payment_method) {
+            if (Tools::strtolower($payment_method['id']) == $checkout) {
                 return true;
             }
         }
@@ -675,30 +676,108 @@ class Mercadopago extends PaymentModule
             return;
         }
 
-        $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
+        $payment_id = Tools::getValue('payment_id');
 
-        if ($this->getVersionPs() == self::PRESTA17) {
-            $this->context->smarty->assign(
-                array(
-                    'ticket_url' => $ticket_url
-                )
-            );
-            return $this->display(__FILE__, 'views/templates/hook/seven/ticket_return.tpl');
+        $payment = $this->mercadopago->getPaymentStandard($payment_id);
+
+        $payment_types = array(
+            'ticket' => 'getTicketPaymentReturn',
+            'pix' => 'getPixPaymentReturn', 
+        );
+
+        $this->checkout = $payment['metadata']['checkout_type'];
+        foreach ($payment_types as $payment_type => $method) {
+            if ($this->checkout === $payment_type) {
+                return $this->{$method}($payment, $params);
+            }
         }
+    }
 
-        $order = $params['objOrder'];
-        $products = $order->getProducts();
+    /**s
+     * Get template of pix payment confirmation
+     * 
+     * @param  mixed $payment
+     * @param  mixed $params
+     * @return string
+     */
+    public function getPixPaymentReturn($payment, $params) 
+    {
+        $due_date = array(
+            30 => '30 minutes',
+            60 => '1 hour',
+            360 => '6 hours',
+            720 => '12 hours',
+            1440 => '1 day',
+            10080 => '7 days',
+        );
 
         $this->context->smarty->assign(
             array(
-                'order' => $order,
-                'order_products' => $products,
-                'ticket_url' => $ticket_url
+                'total_paid_amount' => $payment['transaction_details']['total_paid_amount'],
+                'expiration' => $due_date[Configuration::get('MERCADOPAGO_PIX_EXPIRATION')],
+                'qr_code' => $payment['point_of_interaction']['transaction_data']['qr_code'],
+                'qr_code_base64' => $payment['point_of_interaction']['transaction_data']['qr_code_base64'],
+                'badge_info_gray' => "{$this->_path}/views/img/icons/badge_info_gray.png",
+                'badge_info_blue' => "{$this->_path}/views/img/icons/badge_info_blue.png",
             )
         );
 
-        return $this->display(__FILE__, 'views/templates/hook/six/payment_return.tpl');
+        $versions = array(
+            self::PRESTA16 => 'six',
+            self::PRESTA17 => 'seven',
+        );
+
+        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/pix_return.tpl');
     }
+
+    /**
+     * Get template of ticket payment confirmation
+     * 
+     * @param  mixed $payment
+     * @param  mixed $params
+     * @return string
+     */
+    public function getTicketPaymentReturn($payment, $params) 
+    {
+        $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
+        $order = array_key_exists('objOrder', $params) ? $params['objOrder'] : null;
+        $products = !is_null($order) ? $order->getProducts() : null;
+
+        $this->context->smarty->assign(
+            array(
+                'ticket_url' => $ticket_url,
+                'order' => $order,
+                'order_products' => $products,
+            )
+        );
+
+        $versions = array(
+            self::PRESTA16 => 'six',
+            self::PRESTA17 => 'seven',
+        );
+
+        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/ticket_return.tpl');
+    }
+
+    /**
+     * This hook is used to display the text in order confirmation page.
+     *
+     * @param  mixed $params
+     * @return string
+     */
+    public function hookDisplayOrderConfirmation($params) {
+        
+        $order = $params['order'];
+
+        $this->context->smarty->assign(array('checkout' => $this->checkout));
+
+        $versions = array(
+            self::PRESTA16 => 'six',
+            self::PRESTA17 => 'seven',
+        );
+
+        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/order_confirmation.tpl');
+    }   
 
     /**
      * Display payment failure on version 1.6
