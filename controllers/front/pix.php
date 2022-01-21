@@ -117,6 +117,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
         $link .= '&id_module=' . $this->module->id;
         $link .= '&payment_id=' . $payment['id'];
         $link .= '&payment_status=' . $payment['status'];
+        $link .= '&checkout_type=' . $payment['metadata']['checkout_type'];
 
         return $link;
     }

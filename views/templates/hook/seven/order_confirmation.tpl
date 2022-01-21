@@ -22,12 +22,12 @@
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
-{if $checkout == 'pix'}
+{if $checkout_type == 'pix'}
     <div class="form-group">
-        <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col mp-pt-25"> 
+        <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col"> 
             <div class="mp-pt-5">
                 <label class="mp-pix-text-label">
-                    {l s='[1]Pague R$ %d via Pix para garantir a compra.[/1]' tags=['<strong>'] sprintf=[{$total_amount|escape:'htmlall':'UTF-8'}] mod='mercadopago'}
+                    {l s='[1]Pague R$%d via Pix para garantir a compra.[/1]' tags=['<strong>'] sprintf=[{$total_paid_amount|escape:'htmlall':'UTF-8'}] mod='mercadopago'}
                     <a class="mp-link-checkout-custom" href="#pix-order" target="_blank">
                         {l s='[1]Conferir código Pix.[/1]' tags=['<strong>'] mod='mercadopago'}
                     </a>
@@ -35,4 +35,4 @@
             </div>
         </div>
     </div>
-{/if}}
+{/if}

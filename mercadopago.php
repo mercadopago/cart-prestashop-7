@@ -54,7 +54,6 @@ class Mercadopago extends PaymentModule
     public $confirmUninstall;
     public $ps_versions_compliancy;
     public $ps_version;
-    public $checkout;
     public static $form_alert;
     public static $form_message;
 
@@ -155,6 +154,7 @@ class Mercadopago extends PaymentModule
             $this->registerHook('payment') &&
             $this->registerHook('paymentReturn') &&
             $this->registerHook('paymentOptions') &&
+            $this->registerHook('orderConfirmation') &&
             $this->registerHook('displayWrapperTop') &&
             $this->registerHook('displayTopColumn');
     }
@@ -685,9 +685,9 @@ class Mercadopago extends PaymentModule
             'pix' => 'getPixPaymentReturn', 
         );
 
-        $this->checkout = $payment['metadata']['checkout_type'];
+        $checkout_type = $payment['metadata']['checkout_type'];
         foreach ($payment_types as $payment_type => $method) {
-            if ($this->checkout === $payment_type) {
+            if ($checkout_type === $payment_type) {
                 return $this->{$method}($payment, $params);
             }
         }
@@ -760,16 +760,22 @@ class Mercadopago extends PaymentModule
     }
 
     /**
-     * This hook is used to display the text in order confirmation page.
+     * This hook is used to display in order confirmation page.
      *
      * @param  mixed $params
      * @return string
      */
-    public function hookDisplayOrderConfirmation($params) {
-        
+    public function hookDisplayOrderConfirmation($params) 
+    {
         $order = $params['order'];
+        $checkout_type = Tools::getIsset('checkout_type') ? Tools::getValue('checkout_type') : null;
 
-        $this->context->smarty->assign(array('checkout' => $this->checkout));
+        $this->context->smarty->assign(
+            array(
+                'checkout_type' => $checkout_type,
+                'total_paid_amount' => $order->total_paid,
+            )
+        );
 
         $versions = array(
             self::PRESTA16 => 'six',

@@ -101,15 +101,14 @@
 
 .mp-pix-container-mobile {
   display: none;
-} 
+}
 
 /* --- mobile --- */
 
 @media (max-width: 767.98px) {
-  
   .mp-pix-container-mobile {
     display: block;
-  } 
+  }
 
   .mp-pix-container-desktop {
     display: none;
