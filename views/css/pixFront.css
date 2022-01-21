@@ -33,6 +33,7 @@
 .mp-pix-confirmation {
   max-width: 604px;
   border: 2px solid #e6e6e6;
+  background: #ffffff;
   border-radius: 5px;
   padding: 24px;
   margin-bottom: 0.75rem;
@@ -92,4 +93,29 @@
 .mp-pix-qrcode {
   width: 200px;
   height: 200px;
+}
+
+.mp-pix-container-desktop {
+  display: block;
+}
+
+.mp-pix-container-mobile {
+  display: none;
+} 
+
+/* --- mobile --- */
+
+@media (max-width: 767.98px) {
+  
+  .mp-pix-container-mobile {
+    display: block;
+  } 
+
+  .mp-pix-container-desktop {
+    display: none;
+  }
+
+  .btn-primary {
+    width: 100% !important;
+  }
 }
