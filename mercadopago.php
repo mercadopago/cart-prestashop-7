@@ -703,12 +703,12 @@ class Mercadopago extends PaymentModule
     public function getPixPaymentReturn($payment, $params) 
     {
         $due_date = array(
-            30 => '30 minutes',
-            60 => '1 hour',
-            360 => '6 hours',
-            720 => '12 hours',
-            1440 => '1 day',
-            10080 => '7 days',
+            30 => '30 ' . $this->l('minutes'),
+            60 => '1 ' . $this->l('hour'),
+            360 => '6 ' . $this->l('hours'),
+            720 => '12 ' . $this->l('hours'),
+            1440 => '1 ' . $this->l('day'),
+            10080 => '7 ' . $this->l('days'),
         );
 
         $this->context->smarty->assign(

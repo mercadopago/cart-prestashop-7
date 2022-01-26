@@ -32,13 +32,13 @@
                     <div class="mp-pix-container mp-pix-container-column mp-pt-25">
                         <img class="mp-pix-logo" src="{$logo_pix|escape:'html':'UTF-8'}"/>
                         <label class="mp-pix-text-label mp-pt-20">
-                            {l s='[1]Ao confirmar a compra,[/1][2]você verá o código para fazer o pagamento instantâneo.' tags=['<strong>', '<br>'] mod='mercadopago'}
+                            {l s='[1]When you confirm the purchase,[/1][2]you will be able to see the code to make the instant payment.' tags=['<strong>', '<br>'] mod='mercadopago'}
                         </label>
                     </div>
                     <div class="mp-pix-container mp-pt-25">
                         <img class="mp-badge-info" src="{$badge_info_gray|escape:'html':'UTF-8'}"/>
                         <label class="mp-pix-text-info">
-                            {l s='O Pix possui limite diário de transferência.[1]Consulte o seu banco para mais informações.' tags=['<br>'] mod='mercadopago'}
+                            {l s='Pix has a daily transfer limit.[1]Please contact your bank for more information.' tags=['<br>'] mod='mercadopago'}
                         </label>
                     </div>
                 </div>

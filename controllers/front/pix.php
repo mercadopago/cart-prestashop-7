@@ -70,7 +70,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
             MPLog::generate('Exception Message: ' . $err->getMessage());
             $this->_redirectError(
                 $preference,
-                $module->l('An error has occurred. Please try again.', 'mercadopago')
+                Tools::displayError()
             );
         }
     }

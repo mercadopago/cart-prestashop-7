@@ -31,9 +31,9 @@ var form_pix_header = document.querySelector("#module_form_7 .panel .panel-headi
 form_pix_header.style.height = "auto";
 
 form_pix_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-    <li><span>{l s='Ofereça um meio de pagamento instântaneo, disponível 24h por dia.' mod='mercadopago'}</span></li>\
-    <li><span>{l s='Receba o dinheiro das suas vendas em até 10 segundos.' mod='mercadopago'}</span></li>\
-    <li><span>{l s='Tenha à disposição taxas menores que as do boleto e dos cartões.' mod='mercadopago'}</span></li>\
+    <li><span>{l s='Offer an instant payment method available 24 hours.' mod='mercadopago'}</span></li>\
+    <li><span>{l s='Receive the money from your sales within 10 seconds.' mod='mercadopago'}</span></li>\
+    <li><span>{l s='Take advantage of lower fees than those of invoices and cards.' mod='mercadopago'}</span></li>\
 </ul>";
 form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild);
 
@@ -45,7 +45,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
 
     form_pix_prepend.innerHTML = "<div class='row mp-pb-25'>\
         <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body'>{l s='Ative ou desative o Pix na sua loja e defina o prazo para pagamento da compra após envio do código.' mod='mercadopago'}</h4>\
+            <h4 class='mp-title-checkout-body'>{l s='Activate or disable Pix in your store and set the deadline to the purchase payment after the code is sent.' mod='mercadopago'}</h4>\
         </div>\
     </div>";
     form_pix.insertBefore(form_pix_prepend, form_pix.firstChild);
@@ -54,7 +54,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
     var form_pix_append = "<div class='row mp-pb-25'>\
         <div class='col-md-12 mp-pt-15'>\
             <p class='mp-text-credenciais'>\
-                {l s='[1]Importante:[/1] Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' tags=['<strong>'] mod='mercadopago'}\
+                {l s='[1]Important:[/1] Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' tags=['<strong>'] mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -65,7 +65,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
     </div>\
     <div class='row text-pix-advanced'>\
         <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body mp-pix-input-collapsible'>{l s='Ofereça descontos em pagamentos com Pix. A porcentagem definida será descontada do valor total da compra.' mod='mercadopago'}</h4>\
+            <h4 class='mp-title-checkout-body mp-pix-input-collapsible'>{l s='Offer discounts in payments via Pix. The percentage you set will be discounted from purchase total amount.' mod='mercadopago'}</h4>\
         </div>\
     </div>";
 
@@ -125,24 +125,24 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
 
     form_pix_prepend.innerHTML = "<div class='row mp-pb-25'>\
         <div class='col-md-12'>\
-            <h4 class='mp-title-checkout-body'>{l s='Para receber pagamentos via Pix, você precisa ter uma ou mais chaves cadastradas no Mercado Pago.' mod='mercadopago'}</h4>\
-            <h4 class='mp-title-checkout-body'>{l s='Siga os passos abaixo:' mod='mercadopago'}</h4>\
+            <h4 class='mp-title-checkout-body'>{l s='To receive payments via Pix you should have one or more keys registered in Mercado Pago.' mod='mercadopago'}</h4>\
+            <h4 class='mp-title-checkout-body'>{l s='Follow the steps below:' mod='mercadopago'}</h4>\
         </div>\
     </div>\
     <div class='row mp-pb-25'>\
         <div class='col-md-12'>\
             <ol>\
-                <li><span class='mp-text-credenciais'>{l s='Baixe o app do Mercado Pago no seu celular;' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='No menu lateral esquerdo, acesse Seu Perfil e vá em [1]Suas chaves Pix[/1];' tags=['<strong>'] mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='Insira os dados da(s) chave(s) Pix que você deseja cadastrar e finalize o processo;' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='Volte aqui no admin da sua loja PrestaShop, [1]na aba Pix[/1], para seguir com a configuração do meio de pagamento.' tags=['<strong>'] mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='Download the Mercado Pago app in your mobile phone.' mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='On the left side menu, go to [1]Your Profile[/1] and then, to [1]Your Pix Keys[/1].' tags=['<strong>'] mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='Enter the details of the Pix Keys you would like to register and complete the process.' mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='Come back to your PrestaShop store admin and go to the [1]Pix tab[/1] to continue with the payment method configuration.' tags=['<strong>'] mod='mercadopago'}</span></li>\
             </ol>\
         </div>\
     </div>\
     <div class='row mp-pb-25'>\
         <div class='col-md-12'>\
             <p class='mp-text-credenciais'>\
-                {l s='[1]Importante:[/1] Você pode gerenciar a(s) chave(s) Pix que cadastrou na sua conta sempre pelo app do Mercado Pago.' tags=['<strong>'] mod='mercadopago'}\
+                {l s='[1]Important:[/1] Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' tags=['<strong>'] mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -152,9 +152,9 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
             <ul>\
                 <li>\
                     <span class='mp-text-credenciais'>\
-                        {l s='Por enquanto, o Banco Central do Brasil funciona de segunda a sexta-feira, das 9h às 18h. [1]' tags=['<br>'] mod='mercadopago'}\
-                        {l s='Cadastros feitos fora desse horário serão confirmados no próximo dia útil.' mod='mercadopago'}\
-                        <a href='https://www.mercadopago.com.br/pix/' target='_blank'>{l s='Ler mais sobre Pix.' mod='mercadopago'}</a>\
+                        {l s="At the moment, Brazil's Central Bank works from Monday to Friday, from 9 AM to 6 PM. [1]" tags=['<br>'] mod='mercadopago'}\
+                        {l s='Registrations made outside this period will be confirmed in the next business day.' mod='mercadopago'}\
+                        <a href='https://www.mercadopago.com.br/pix/' target='_blank'>{l s='Learn more about Pix.' mod='mercadopago'}</a>\
                     </span>\
                 </li>\
             </ul>\
@@ -165,8 +165,8 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
             <ul>\
                 <li>\
                     <span class='mp-text-credenciais'>\
-                        {l s='Caso já tenha cadastrado chaves no Mercado Pago e não esteja conseguindo ativar o Pix no checkout,' mod='mercadopago'}<br>\
-                        <a href='https://www.mercadopago.com.br/developers/pt/support/center/contact' target='_blank'>{l s='clique aqui.' mod='mercadopago'}</a>\
+                        {l s='If you have already registered keys in Mercado Pago but you are not able to activate Pix in the Checkout,' mod='mercadopago'}<br>\
+                        <a href='https://www.mercadopago.com.br/developers/pt/support/center/contact' target='_blank'>{l s=' click here.' mod='mercadopago'}</a>\
                     </span>\
                 </li>\
             </ul>\

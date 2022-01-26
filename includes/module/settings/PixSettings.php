@@ -53,12 +53,9 @@ class PixSettings extends AbstractSettings
             $fields = array(
                 array(
                     'type' => 'switch',
-                    'label' => $this->module->l('Pagamentos por Pix', 'PixSettings'),
+                    'label' => $this->module->l('Payments via Pix', 'PixSettings'),
                     'name' => 'MERCADOPAGO_PIX_CHECKOUT',
-                    'desc' => $this->module->l(
-                        'Permita que clientes possam pagar com Pix no checkout da loja.',
-                        'PixSettings'
-                    ),
+                    'desc' => $this->module->l('Allow clients to pay via Pix in the store checkout.', 'PixSettings'),
                     'is_bool' => true,
                     'values' => array(
                         array(
@@ -76,9 +73,9 @@ class PixSettings extends AbstractSettings
                 array(
                     'col' => 2,
                     'type' => 'select',
-                    'label' => $this->module->l('Payment due', 'PixSettings'),
+                    'label' => $this->module->l('Expiration', 'PixSettings'),
                     'name' => 'MERCADOPAGO_PIX_EXPIRATION',
-                    'desc' => $this->module->l('Ajuste o prazo que seus clientes terão para fazer a transferência via Pix.', 'PixSettings'),
+                    'desc' => $this->module->l('Adjust the deadline that your clients will have to make the transfer via Pix.', 'PixSettings'),
                     'options' => array(
                         'query' => $this->getDueDate(),
                         'id' => 'id',
@@ -90,8 +87,8 @@ class PixSettings extends AbstractSettings
                     'suffix' => '%',
                     'type' => 'text',
                     'name' => 'MERCADOPAGO_PIX_DISCOUNT',
-                    'label' => $this->module->l('Desconto por compra com Pix', 'PixSettings'),
-                    'desc' => $this->module->l('Insira o percentual do desconto para incentivar seus clientes a pagarem com Pix.', 'PixSettings') ,
+                    'label' => $this->module->l('Discount per purchase via Pix', 'PixSettings'),
+                    'desc' => $this->module->l('Enter the percentage of the discount to encourage your clients to pay via Pix.', 'PixSettings') ,
                 ),
             );
         } else {

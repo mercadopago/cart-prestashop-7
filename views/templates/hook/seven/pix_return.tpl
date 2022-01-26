@@ -28,20 +28,20 @@
         
         <div class="row">
             <div class="col-xs-12 col-md-12 col-12">
-                <h2>Quase lá! Pague via Pix para concluir sua compra</h2>
+                <h2>{l s='Almost there! Pay via Pix to complete your purchase' mod='mercadopago'}</h2>
             </div>
         </div>
 
         <div class="row mp-pt-25">
             <div class="col-xs-6 col-md-6 col-6">
                 <div class="mp-pix-container mp-pix-box mp-pix-container-column">
-                    <span class="mp-pix-box-title">{l s='Valor' mod='mercadopago'}</span>
-                    <span class="mp-pix-box-subtitle mp-pt-5">R${$total_paid_amount|escape:'htmlall':'UTF-8'}</span>
+                    <span class="mp-pix-box-title">{l s='Amount' mod='mercadopago'}</span>
+                    <span class="mp-pix-box-subtitle mp-pt-5">{l s='$' mod='mercadopago'}{$total_paid_amount|escape:'htmlall':'UTF-8'}</span>
                 </div>
             </div>
             <div class="col-xs-6 col-md-6 col-6">
                 <div class="mp-pix-container mp-pix-box mp-pix-container-column">
-                    <span class="mp-pix-box-title">{l s='Vencimento' mod='mercadopago'}</span>
+                    <span class="mp-pix-box-title">{l s='Expiration' mod='mercadopago'}</span>
                     <span class="mp-pix-box-subtitle mp-pt-5">{$expiration|escape:'htmlall':'UTF-8'}</span>
                 </div>
             </div>
@@ -50,10 +50,10 @@
         <div class="mp-pix-container-desktop">
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <span class="mp-pix-text-subtitle">{l s='Escaneie este código QR para pagar' mod='mercadopago'}</span>
+                    <span class="mp-pix-text-subtitle">{l s='Scan this QR code to pay' mod='mercadopago'}</span>
                     <div class="mp-pix-tooltip">
                         <img class="mp-badge-info" src="{$badge_info_blue|escape:'html':'UTF-8'}"/>
-                        <span class="mp-pix-tooltip-text">{l s='Antes de confirmar a compra, você verá o valor a pagar e as informações do vendedor.' mod='mercadopago'}</span>
+                        <span class="mp-pix-tooltip-text">{l s="Before you confirming your purchase, you will see the amount to pay and the seller's information." mod='mercadopago'}</span>
                     </div>
                 </div>
             </div>
@@ -61,9 +61,9 @@
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
                     <ol class="mp-pix-text-subtitle-item">
-                        <li>{l s='Acesse o seu banco ou app de pagamentos' mod='mercadopago'}</li>
-                        <li>{l s='Escolha pagar via Pix com código QR' mod='mercadopago'}</li>
-                        <li>{l s='Escaneie o seguinte código:' mod='mercadopago'}</li>
+                        <li>{l s='Access your bank or payment app' mod='mercadopago'}</li>
+                        <li>{l s='Choose the option to pay via Pix with QR code' mod='mercadopago'}</li>
+                        <li>{l s='Scan the following code:' mod='mercadopago'}</li>
                     </ol>
                 </div>
             </div>
@@ -78,13 +78,13 @@
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <h2>{l s='Ou pague com o código Pix Copia e Cola' mod='mercadopago'}</h2>
+                    <h2>{l s='Or pay with Pix code "Copy and Paste"' mod='mercadopago'}</h2>
                 </div>
             </div>
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <p class="mp-pix-text-subtitle-item">{l s='Acesse o seu banco ou app de pagamentos e escolha pagar via Pix. Depois, cole o seguinte código:' mod='mercadopago'}</p>
+                    <p class="mp-pix-text-subtitle-item">{l s='Access your bank or payment app and choose the option to pay via Pix. Then, paste the following code:' mod='mercadopago'}</p>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                     <input id="mp-pix-input-code" type="text" class="form-control mp-form-control" value="{$qr_code|escape:'html':'UTF-8'}">
                 </div>
                 <div class="col-md-4 col-xs-4 col-4">
-                    <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copiar código' mod='mercadopago'}</button>
+                    <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
                 </div>
             </div>
         </div>
@@ -101,16 +101,16 @@
         <div class="mp-pix-container-mobile">
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <h2>{l s='Use o código Pix Copia e Cola para pagar' mod='mercadopago'}</h2>
+                    <h2>{l s='Use Pix Copy and Paste to pay' mod='mercadopago'}</h2>
                 </div>
             </div>
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
                     <ol class="mp-pix-text-subtitle-item">
-                        <li>{l s='Acesse o seu banco ou app de pagamentos' mod='mercadopago'}</li>
-                        <li>{l s='Escolha pagar via Pix' mod='mercadopago'}</li>
-                        <li>{l s='Cole o seguinte código:' mod='mercadopago'}</li>
+                        <li>{l s='Access your bank or payments app' mod='mercadopago'}</li>
+                        <li>{l s='Choose to pay via Pix' mod='mercadopago'}</li>
+                        <li>{l s='Paste the following code:' mod='mercadopago'}</li>
                     </ol>
                 </div>
             </div>
@@ -123,7 +123,7 @@
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copiar código' mod='mercadopago'}</button>
+                    <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
                 </div>
             </div>
 
@@ -131,13 +131,13 @@
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <h2>{l s='Ou pague usando o código QR' mod='mercadopago'}</h2>
+                    <h2>{l s='Or pay using QR Code' mod='mercadopago'}</h2>
                 </div>
             </div>
 
             <div class="row mp-pt-25">
                 <div class="col-xs-12 col-md-12 col-12">
-                    <p class="mp-pix-text-subtitle-item">{l s='Acesse o seu banco ou app de pagamentos e escolha pagar via Pix com código QR. Depois, escaneie o seguinte código:' mod='mercadopago'}</p>
+                    <p class="mp-pix-text-subtitle-item">{l s='Access your bank or payments app and choose to pay via Pix with QR Code. Then, scan the following code:' mod='mercadopago'}</p>
                 </div>
             </div>
 
@@ -152,7 +152,7 @@
             <div class="col-xs-12 col-md-12 col-12">
                 <img class="mp-badge-info" src="{$badge_info_gray|escape:'html':'UTF-8'}"/>
                 <span class="mp-pix-text-info">
-                    {l s='O Pix possui limite diário de transferência. Consulte o seu banco para mais informações.' mod='mercadopago'}
+                    {l s='Pix has a daily transfer limit. Please contact your bank for more information.' mod='mercadopago'}
                 </span>
             </div>
         </div>
