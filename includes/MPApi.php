@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2022 PrestaShop
+ * 2007-2021 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2022 PrestaShop SA
+ *  @copyright 2007-2021 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
@@ -131,6 +131,22 @@ class MPApi
                 continue;
             }
 
+          // PayCash
+            if ($value['id'] == 'paycash') {
+                if (!isset($value['payment_places'])) {
+                    $payments[] = array(
+                    'payment_places' => $this->getPaymentPlaces($value['id']),
+                    'id' => Tools::strtoupper($value['id']),
+                    'name' => $value['name'],
+                    'type' => $value['payment_type_id'],
+                    'image' => $value['secure_thumbnail'],
+                    'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+                    'financial_institutions' => $value['financial_institutions'],
+                    );
+                    continue;
+                }
+            }
+
             $payments[] = array(
                 'id' => Tools::strtoupper($value['id']),
                 'name' => $value['name'],
@@ -140,7 +156,7 @@ class MPApi
                 'financial_institutions' => $value['financial_institutions'],
             );
         }
-
+//   var_dump($payments); // OK
         return $payments;
     }
 
@@ -322,5 +338,49 @@ class MPApi
             default:
                 return null;
         }
+    }
+
+  /**
+   * @param string|null $message
+   * @return string|null
+   */
+    public static function getPaymentPlaces($paymentId)
+    {
+        $payment_places = [
+            'paycash' => [
+                [
+                    "payment_option_id" => "7eleven",
+                    "name"              => "7 Eleven",
+                    "status"            => "active",
+                    "thumbnail"         => "https://http2.mlstatic.com/storage/logos-api-admin/417ddb90-34ab-11e9-b8b8-15cad73057aa-s.png"
+                ],
+                [
+                    "payment_option_id" => "circlek",
+                    "name"              => "Circle K",
+                    "status"            => "active",
+                    "thumbnail"         => "https://http2.mlstatic.com/storage/logos-api-admin/6f952c90-34ab-11e9-8357-f13e9b392369-s.png"
+                ],
+                [
+                    "payment_option_id" => "soriana",
+                    "name"              => "Soriana",
+                    "status"            => "active",
+                    "thumbnail"         => "https://http2.mlstatic.com/storage/logos-api-admin/dac0bf10-01eb-11ec-ad92-052532916206-s.png"
+                ],
+                [
+                    "payment_option_id" => "extra",
+                    "name"              => "Extra",
+                    "status"            => "active",
+                    "thumbnail"         => "https://http2.mlstatic.com/storage/logos-api-admin/9c8f26b0-34ab-11e9-b8b8-15cad73057aa-s.png"
+                ],
+                [
+                    "payment_option_id" => "calimax",
+                    "name"              => "Calimax",
+                    "status"            => "active",
+                    "thumbnail"         => "https://http2.mlstatic.com/storage/logos-api-admin/52efa730-01ec-11ec-ba6b-c5f27048193b-s.png"
+                ]
+            ],
+        ];
+
+        return $payment_places[$paymentId];
     }
 }

@@ -19,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2022 PrestaShop SA
+ *  @copyright 2007-2021 PrestaShop SA
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
@@ -29,6 +29,9 @@
 
 class MPUseful
 {
+
+    const SEPARATOR = '|';
+
     public function __construct()
     {
     }
@@ -219,5 +222,43 @@ class MPUseful
         );
 
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
+    }
+
+   /**
+     * Set the terms and policies link
+     *
+     * @param  string $country
+     * @return string
+     */
+    private function parse($compositeId)
+    {
+        $exploded = explode(self::SEPARATOR, $compositeId);
+
+        return [
+            'payment_method_id' => $exploded[0],
+            'payment_place_id' => isset($exploded[1]) ? $exploded[1] : null,
+        ];
+    }
+
+   /**
+     * Set the terms and policies link
+     *
+     * @param  string $country
+     * @return string
+     */
+    public function getPaymentMethodId($compositeId)
+    {
+        return $this->parse($compositeId)['payment_method_id'];
+    }
+
+   /**
+     * Set the terms and policies link
+     *
+     * @param  string $country
+     * @return string
+     */
+    public function getPaymentPlaceId($compositeId)
+    {
+        return $this->parse($compositeId)['payment_place_id'];
     }
 }
