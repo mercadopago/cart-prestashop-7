@@ -256,8 +256,8 @@ class StandardSettings extends AbstractSettings
                 $this->offlineExcludedPaymentMethodsCheck($payment_method)
             ) {
                 $payment_places = [];
-                if( isset($payment_method['payment_places']) && is_array($payment_method['payment_places']) ){
-                    foreach($payment_method['payment_places'] as $payment_place){
+                if (isset($payment_method['payment_places']) && is_array($payment_method['payment_places'])) {
+                    foreach ($payment_method['payment_places'] as $payment_place) {
                         $payment_places[]= $payment_place['name'];
                     }
                     $payment_places = implode(", ", $payment_places);
