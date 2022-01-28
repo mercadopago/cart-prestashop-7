@@ -154,7 +154,6 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
                     <span class='mp-text-credenciais'>\
                         {l s="At the moment, Brazil's Central Bank works from Monday to Friday, from 9 AM to 6 PM. [1]" tags=['<br>'] mod='mercadopago'}\
                         {l s='Registrations made outside this period will be confirmed in the next business day.' mod='mercadopago'}\
-                        <a href='https://www.mercadopago.com.br/pix/' target='_blank'>{l s='Learn more about Pix.' mod='mercadopago'}</a>\
                     </span>\
                 </li>\
             </ul>\

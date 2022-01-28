@@ -411,7 +411,7 @@ class Mercadopago extends PaymentModule
     public function hookHeader()
     {
         $this->context->controller->addCSS($this->_path . 'views/css/front' . $this->assets_ext_min . '.css');
-        $this->context->controller->addCSS($this->_path . 'views/css/pixFront' . $this->assets_ext_min . '.css');        
+        $this->context->controller->addCSS($this->_path . 'views/css/pixFront' . $this->assets_ext_min . '.css');
         $this->context->controller->addJS($this->_path . 'views/js/front' . $this->assets_ext_min . '.js');
     }
 
@@ -466,10 +466,7 @@ class Mercadopago extends PaymentModule
         );
 
         foreach ($checkouts as $checkout => $method) {
-            if (
-                $this->isActiveCheckout($checkout)
-                && $this->isAvailableToCountry($checkout, $country)
-            ) {
+            if ($this->isActiveCheckout($checkout) && $this->isAvailableToCountry($checkout, $country)) {
                 $payment_options[] = $this->{$method}($cart, $version);
             }
         }
@@ -511,7 +508,8 @@ class Mercadopago extends PaymentModule
      * @param $checkout
      * @return Boolean
      */
-    public function isEnabledPaymentMethod($checkout) {
+    public function isEnabledPaymentMethod($checkout)
+    {
         $payment_methods = $this->mercadopago->getPaymentMethods();
 
         foreach ($payment_methods as $payment_method) {
@@ -626,7 +624,7 @@ class Mercadopago extends PaymentModule
 
             $this->context->smarty->assign($frontInformations);
             return $this->display(__FILE__, 'views/templates/hook/six/pix.tpl');
-        } 
+        }
 
         $str_discount = ' (' . $discount . '% OFF) ';
         $str_discount = ($discount != "") ? $str_discount : '';
@@ -680,29 +678,47 @@ class Mercadopago extends PaymentModule
 
         $payment = $this->mercadopago->getPaymentStandard($payment_id);
 
-        $payment_types = array(
-            'ticket' => 'getTicketPaymentReturn',
-            'pix' => 'getPixPaymentReturn', 
-        );
-
-        $checkout_type = $payment['metadata']['checkout_type'];
-        foreach ($payment_types as $payment_type => $method) {
-            if ($checkout_type === $payment_type) {
-                return $this->{$method}($payment, $params);
-            }
-        }
+        return $this->getPaymentReturn($payment, $params);
     }
 
-    /**s
-     * Get template of pix payment confirmation
-     * 
+    /**
+     * Get template of payment confirmation
+     *
      * @param  mixed $payment
      * @param  mixed $params
      * @return string
      */
-    public function getPixPaymentReturn($payment, $params) 
+    public function getPaymentReturn($payment, $params)
     {
-        $due_date = array(
+        $order = array_key_exists('objOrder', $params) ? $params['objOrder'] : null;
+        $products = !is_null($order) ? $order->getProducts() : null;
+
+        $this->context->smarty->assign(
+            array(
+                'order' => $order,
+                'payment' => $payment,
+                'order_products' => $products,
+                'pix_expiration' => $this->getPixExpiration(),
+            )
+        );
+
+        $versions = array(
+            self::PRESTA16 => 'six',
+            self::PRESTA17 => 'seven',
+        );
+        
+        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/payment_return.tpl');
+    }
+
+    /**
+     * Get pix expiration
+     *
+     * @return string
+     */
+    public function getPixExpiration()
+    {
+
+        $expiration = array(
             30 => '30 ' . $this->l('minutes'),
             60 => '1 ' . $this->l('hour'),
             360 => '6 ' . $this->l('hours'),
@@ -711,52 +727,7 @@ class Mercadopago extends PaymentModule
             10080 => '7 ' . $this->l('days'),
         );
 
-        $this->context->smarty->assign(
-            array(
-                'total_paid_amount' => $payment['transaction_details']['total_paid_amount'],
-                'expiration' => $due_date[Configuration::get('MERCADOPAGO_PIX_EXPIRATION')],
-                'qr_code' => $payment['point_of_interaction']['transaction_data']['qr_code'],
-                'qr_code_base64' => $payment['point_of_interaction']['transaction_data']['qr_code_base64'],
-                'badge_info_gray' => "{$this->_path}/views/img/icons/badge_info_gray.png",
-                'badge_info_blue' => "{$this->_path}/views/img/icons/badge_info_blue.png",
-            )
-        );
-
-        $versions = array(
-            self::PRESTA16 => 'six',
-            self::PRESTA17 => 'seven',
-        );
-
-        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/pix_return.tpl');
-    }
-
-    /**
-     * Get template of ticket payment confirmation
-     * 
-     * @param  mixed $payment
-     * @param  mixed $params
-     * @return string
-     */
-    public function getTicketPaymentReturn($payment, $params) 
-    {
-        $ticket_url = Tools::getIsset('payment_ticket') ? Tools::getValue('payment_ticket') : null;
-        $order = array_key_exists('objOrder', $params) ? $params['objOrder'] : null;
-        $products = !is_null($order) ? $order->getProducts() : null;
-
-        $this->context->smarty->assign(
-            array(
-                'ticket_url' => $ticket_url,
-                'order' => $order,
-                'order_products' => $products,
-            )
-        );
-
-        $versions = array(
-            self::PRESTA16 => 'six',
-            self::PRESTA17 => 'seven',
-        );
-
-        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/ticket_return.tpl');
+        return $expiration[Configuration::get('MERCADOPAGO_PIX_EXPIRATION')];
     }
 
     /**
@@ -765,7 +736,7 @@ class Mercadopago extends PaymentModule
      * @param  mixed $params
      * @return string
      */
-    public function hookDisplayOrderConfirmation($params) 
+    public function hookDisplayOrderConfirmation($params)
     {
         $order = $params['order'];
         $checkout_type = Tools::getIsset('checkout_type') ? Tools::getValue('checkout_type') : null;
@@ -777,13 +748,8 @@ class Mercadopago extends PaymentModule
             )
         );
 
-        $versions = array(
-            self::PRESTA16 => 'six',
-            self::PRESTA17 => 'seven',
-        );
-
-        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/order_confirmation.tpl');
-    }   
+        return $this->display(__FILE__, 'views/templates/hook/seven/order_confirmation.tpl');
+    }
 
     /**
      * Display payment failure on version 1.6

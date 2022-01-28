@@ -49,7 +49,7 @@ class PixSettings extends AbstractSettings
     {
         $title = $this->module->l('Basic Configuration', 'PixSettings');
 
-        if($this->module->isEnabledPaymentMethod('pix')) {
+        if ($this->module->isEnabledPaymentMethod('pix')) {
             $fields = array(
                 array(
                     'type' => 'switch',
@@ -92,7 +92,7 @@ class PixSettings extends AbstractSettings
                 ),
             );
         } else {
-           $fields = array();
+            $fields = array();
         }
 
         return $this->buildForm($title, $fields);
