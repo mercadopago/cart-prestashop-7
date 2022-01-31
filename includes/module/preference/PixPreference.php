@@ -171,6 +171,8 @@ class PixPreference extends AbstractPreference
                     $addressInvoice->city . ' - ' .
                     $addressInvoice->country,
                 'street_number' => '',
+                'city' => $addressInvoice->city,
+                'federal_unit' => '',
             )
         );
 
