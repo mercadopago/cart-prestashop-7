@@ -166,11 +166,11 @@ class PixPreference extends AbstractPreference
             ),
             'address' => array(
                 'zip_code' => $addressInvoice->postcode,
-                'street_name' => $addressInvoice->address1 . ' - ' . $addressInvoice->address2,
+                'street_name' => $addressInvoice->address1 . ' - ' .
+                    $addressInvoice->address2 . ' - ' .
+                    $addressInvoice->city . ' - ' .
+                    $addressInvoice->country,
                 'street_number' => '',
-                'neighborhood' => $addressInvoice->city,
-                'city' => $addressInvoice->city,
-                'federal_unit' => $addressInvoice->state,
             )
         );
 

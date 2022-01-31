@@ -52,26 +52,31 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
             $preference->verifyModuleParameters();
             $payment = $preference->createPreference();
 
-            $preference->saveCreatePreferenceData(
-                $this->context->cart,
-                $payment['notification_url']
-            );
+            if (is_array($payment)) {
+                $preference->saveCreatePreferenceData(
+                    $this->context->cart,
+                    $payment['notification_url']
+                );
 
-            $order = $this->_createOrder(
-                $payment,
-                $this->context->cart,
-                $preference
-            );
+                $order = $this->_createOrder(
+                    $payment,
+                    $this->context->cart,
+                    $preference
+                );
 
-            $link = $this->_getSucessRedirectLink($order, $payment);
+                $link = $this->_getSucessRedirectLink($order, $payment);
 
-            Tools::redirect($link);
+                Tools::redirect($link);
+            }
+            if (is_string($payment)) {
+                $message = MPApi::validateMessageApi($payment);
+                if (!empty($message)) {
+                    $this->_redirectError($preference, Tools::displayError($message));
+                }
+            }
         } catch (Exception $err) {
             MPLog::generate('Exception Message: ' . $err->getMessage());
-            $this->_redirectError(
-                $preference,
-                Tools::displayError()
-            );
+            $this->_redirectError($preference, Tools::displayError());
         }
     }
 
