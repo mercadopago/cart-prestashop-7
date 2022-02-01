@@ -71,7 +71,7 @@
                         <div class="col-xs-6 col-md-6 col-6">
                             <div class="mp-pix-container mp-pix-box mp-pix-container-column">
                                 <span class="mp-pix-box-title">{l s='Amount' mod='mercadopago'}</span>
-                                <span class="mp-pix-box-subtitle mp-pt-5">{l s='$' mod='mercadopago'}{$payment['transaction_details']['total_paid_amount']|escape:'htmlall':'UTF-8'}</span>
+                                <span class="mp-pix-box-subtitle mp-pt-5">{Tools::displayPrice($payment['transaction_details']['total_paid_amount']|escape:'htmlall':'UTF-8')}</span>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6 col-6">

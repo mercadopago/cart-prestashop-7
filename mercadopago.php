@@ -717,7 +717,6 @@ class Mercadopago extends PaymentModule
      */
     public function getPixExpiration()
     {
-
         $expiration = array(
             30 => '30 ' . $this->l('minutes'),
             60 => '1 ' . $this->l('hour'),
