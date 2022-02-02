@@ -305,9 +305,9 @@
             form_custom_header.style.height = "auto";
 
             form_custom_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-                <li><span>{l s='Offers payments with debit and credit cards.' mod='mercadopago'}</span></li>\
-                <li><span>{l s='Payment experience within your store.' mod='mercadopago'}</span></li>\
-                <li><span>{l s='Your customers pay as guests without leaving your store.' mod='mercadopago'}</span></li>\
+                <li><span>{l s='Offer payments with credit cards and Mercado Pago balance.' mod='mercadopago'}</span></li>\
+                <li><span>{l s='Payment experience in your store.' mod='mercadopago'}</span></li>\
+                <li><span>{l s='Your clients pay as visitors without leaving your store.' mod='mercadopago'}</span></li>\
             </ul>";
             form_custom_header.insertBefore(form_custom_header_prepend, form_custom_header.firstChild);
 
@@ -317,7 +317,7 @@
 
             form_custom_prepend.innerHTML = "<div class='row mp-pb-25'>\
                 <div class='col-md-12'>\
-                    <h4 class='mp-title-checkout-body'>{l s='Have your customers finish their purchase with these basic settings:' mod='mercadopago'}</h4>\
+                    <h4 class='mp-title-checkout-body'>{l s='With these options, your clients pay quickly, easily, and securely:' mod='mercadopago'}</h4>\
                 </div>\
             </div>";
             form_custom.insertBefore(form_custom_prepend, form_custom.firstChild);
@@ -335,11 +335,11 @@
             </div>";
 
              for (i=0; i < form_custom_group.length; i++) {
-               if(i == 0){
+               if(i == 1){
                     form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append);
                     form_custom_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
                 }
-                if(i > 0) {
+                if(i > 1) {
                     form_custom_group[i].classList.add("mp-custom-input-collapsible");
                 }
                     form_custom_group[i].querySelector("p").style.width = "400px";

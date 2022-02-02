@@ -53,10 +53,7 @@ class CustomSettings extends AbstractSettings
                 'type' => 'switch',
                 'label' => $this->module->l('Activate checkout', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_CHECKOUT',
-                'desc' => $this->module->l(
-                    'Activate the Mercado Pago experience at the checkout of your store.',
-                    'CustomSettings'
-                ),
+                'desc' => $this->module->l('Activate the Mercado Pago experience at the checkout of your store.', 'CustomSettings'),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -73,17 +70,30 @@ class CustomSettings extends AbstractSettings
             ),
             array(
                 'type' => 'switch',
+                'label' => $this->module->l('Activate payments with cards saved in Mercado Pago', 'CustomSettings'),
+                'name' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON',
+                'desc' => $this->module->l('With this feature, clients pay faster and you increase your sales.', 'CustomSettings'),
+                'is_bool' => true,
+                'values' => array(
+                    array(
+                        'id' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON_ON',
+                        'value' => true,
+                        'label' => $this->module->l('Active', 'CustomSettings')
+                    ),
+                    array(
+                        'id' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON_OFF',
+                        'value' => false,
+                        'label' => $this->module->l('Inactive', 'CustomSettings')
+                    )
+                ),
+            ),
+            array(
+                'type' => 'switch',
                 'label' => $this->module->l('Binary Mode', 'CustomSettings'),
                 'name' => 'MERCADOPAGO_CUSTOM_BINARY_MODE',
                 'is_bool' => true,
-                'desc' => $this->module->l(
-                    'Approve or reject payments instantly and automatically, ',
-                    'CustomSettings'
-                ).
-                $this->module->l(
-                    'without pending or under review status. Do you want us to activate it?',
-                    'CustomSettings'
-                ),
+                'desc' => $this->module->l('Approve or reject payments instantly and automatically, ', 'CustomSettings').
+                    $this->module->l('without pending or under review status. Do you want us to activate it?', 'CustomSettings'),
                 'hint' => $this->module->l('Activating it can affect fraud prevention. ', 'CustomSettings') .
                     $this->module->l('Leave it inactive so we can take ', 'CustomSettings') .
                     $this->module->l('care of your charges', 'CustomSettings'),
@@ -139,6 +149,7 @@ class CustomSettings extends AbstractSettings
     {
         return array(
             'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
+            'MERCADOPAGO_CUSTOM_WALLETBUTTON' => Configuration::get('MERCADOPAGO_CUSTOM_WALLETBUTTON'),
             'MERCADOPAGO_CUSTOM_DISCOUNT' => Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'),
             'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),
         );

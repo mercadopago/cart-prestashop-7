@@ -94,6 +94,7 @@ Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
 Configuration::updateValue('MERCADOPAGO_STANDARD', false);
 Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
 Configuration::updateValue('MERCADOPAGO_STANDARD_MODAL', true);
+Configuration::updateValue('MERCADOPAGO_CUSTOM_WALLETBUTTON', true);
 
 //Remove Mercado Envios
 Configuration::updateValue('MERCADOENVIOS_ACTIVATE', false);
