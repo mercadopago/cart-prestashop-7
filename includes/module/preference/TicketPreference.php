@@ -33,6 +33,7 @@ class TicketPreference extends AbstractPreference
 {
     public $methods;
     public $financial_institutions = array();
+    public $ticket_info;
 
     public function __construct()
     {
@@ -49,12 +50,13 @@ class TicketPreference extends AbstractPreference
      */
     public function createPreference($cart, $ticket_info)
     {
+        $this->ticket_info = $ticket_info;
         $preference = $this->getCommonPreference($cart);
         $preference['date_of_expiration'] = $this->getExpirationDate();
         $preference['description'] = $this->getPreferenceDescription($cart);
-        $preference['payment_method_id'] = $ticket_info['paymentMethodId'];
+        $preference['payment_method_id'] = $this->mpuseful->getPaymentMethodId($ticket_info['paymentMethodId']);
         $preference['payer']['email'] = $this->getCustomerEmail();
-        $preference['metadata'] = $this->getInternalMetadata($cart);
+        $preference['metadata'] = $this->getInternalMetadata($cart, $ticket_info);
 
         if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLB') {
             $preference['payer']['first_name'] = $ticket_info['firstname'];
@@ -193,6 +195,7 @@ class TicketPreference extends AbstractPreference
         $internal_metadata = parent::getInternalMetadata($cart);
         $internal_metadata['checkout'] ='custom';
         $internal_metadata['checkout_type'] ='ticket';
+        $internal_metadata['payment_option_id'] = $this->mpuseful->getPaymentPlaceId($this->ticket_info['paymentMethodId']);
 
         return $internal_metadata;
     }
