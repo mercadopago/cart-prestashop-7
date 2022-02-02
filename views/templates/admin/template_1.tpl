@@ -138,13 +138,17 @@
         <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Checkout Pro' mod='mercadopago'}</a></li>
         <li><a href="#custom_checkout" role="tab" data-toggle="tab">{l s='Custom Checkout' mod='mercadopago'}</a></li>
         <li><a href="#ticket_checkout" role="tab" data-toggle="tab">{l s='Ticket checkout' mod='mercadopago'}</a></li>
+        {if $country_link == 'mlb'}
+            <li><a href="#pix_checkout" role="tab" data-toggle="tab">{l s='Pix' mod='mercadopago'}</a></li>
+        {/if}
     </ul>
 
     <!-- Tab panes checkouts -->
     <div class="tab-content">
         <div class="tab-pane active" id="standard_checkout">{html_entity_decode($standard_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="custom_checkout">{html_entity_decode($custom_form|escape:'html':'UTF-8')}</div>
-        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div>
+        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div> 
+        <div class="tab-pane" id="pix_checkout">{html_entity_decode($pix_form|escape:'html':'UTF-8')}</div>
     </div>
 
     {if $sandbox_status != true}
