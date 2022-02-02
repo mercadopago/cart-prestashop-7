@@ -372,6 +372,7 @@ body#checkout section.checkout-step .payment-options label {
 
 .mp-form-check {
   margin-bottom: 0 !important;
+  height: 40px;
 }
 
 .mp-text-ticket-tarjeta {
@@ -513,6 +514,10 @@ body#checkout section.checkout-step .payment-options label {
 .mp-mx-0 {
   margin-left: 0 !important;
   margin-right: 0 !important;
+}
+
+.mp-img-size {
+  width: 36px;
 }
 
 /* --- mobile --- */

@@ -1,5 +1,5 @@
 {*
-* 2007-2022 PrestaShop
+* 2007-2022  PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2022 PrestaShop SA
+* @copyright 2007-2022  PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -198,17 +198,35 @@
             <div class="form-group">
                 {if count($ticket) != 0}
                     {foreach $ticket as $key => $value}
+                      {if strtolower($value['id']) == 'paycash' && isset($value['payment_places'])}
+                             {foreach $value['payment_places'] as $payment => $result }
+                               <div class="col-md-6 col-6 col-xs-12 mp-px-0 mp-m-col mp-pt-15">
+                                <div class="form-check mp-form-check">
+                                    <input name="mercadopago_ticket[paymentMethodId]" id="{Tools::strtolower($value['id'])|escape:'html':'UTF-8'}|{$result['payment_option_id']|escape:'html':'UTF-8'}"
+                                           class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id'])|escape:'html':'UTF-8'}|{$result['payment_option_id']|escape:'html':'UTF-8'}"
+                                           type="radio" {if $key == 0} checked {/if}>
+                                    <label class="form-check-label" for="{Tools::strtolower($value['id'])|escape:'html':'UTF-8'}|{$result['payment_option_id']|escape:'html':'UTF-8'}">
+                                        <img class="mp-img-size" src="{$result['thumbnail']|escape:'html':'UTF-8'}" alt="{$result['name']|escape:'html':'UTF-8'}"/>
+                                        <span class="mp-text-ticket-tarjeta">{$result['name']|escape:'html':'UTF-8'}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                             {/foreach}
+                    {else}
                         <div class="col-md-6 col-6 col-xs-12 mp-px-0 mp-m-col mp-pt-15">
                             <div class="form-check mp-form-check">
                                 <input name="mercadopago_ticket[paymentMethodId]" id="{$value['id']|escape:'html':'UTF-8'}"
                                        class="form-check-input mp-checkbox" value="{Tools::strtolower($value['id']|escape:'html':'UTF-8')}"
                                        type="radio" {if $key == 0} checked {/if}>
                                 <label class="form-check-label" for="{$value['id']|escape:'html':'UTF-8'}">
-                                    <img src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
+                                    <img class="mp-img-size" src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
                                     <span class="mp-text-ticket-tarjeta">{$value['name']|escape:'html':'UTF-8'}</span>
                                 </label>
                             </div>
                         </div>
+                         {/if}
+
                     {/foreach}
                 {/if}
             </div>
