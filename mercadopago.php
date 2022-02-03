@@ -250,6 +250,7 @@ class Mercadopago extends PaymentModule
                 'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
                 'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
                 'pix_enabled' => $this->isEnabledPaymentMethod('pix'),
+                'country_id' => $this->getSiteIdByCredentials($access_token),
                 //credentials
                 'public_key' => $public_key,
                 'access_token' => $access_token,
@@ -522,6 +523,16 @@ class Mercadopago extends PaymentModule
     }
 
     /**
+     * @return String
+     */
+    public function getSiteIdByCredentials($access_token)
+    {
+        $response = $this->mercadopago->isValidAccessToken($access_token);
+
+        return $response ? strtolower($response['site_id']) : null;
+    }
+
+    /**
      * @param $checkout
      */
     public function disableCheckout($checkout)
@@ -737,7 +748,7 @@ class Mercadopago extends PaymentModule
      */
     public function hookDisplayOrderConfirmation($params)
     {
-        $order = $params['order'];
+        $order = isset($params['order']) ? $params['order'] : $params['objOrder'];
         $checkout_type = Tools::getIsset('checkout_type') ? Tools::getValue('checkout_type') : null;
 
         $this->context->smarty->assign(
@@ -747,7 +758,12 @@ class Mercadopago extends PaymentModule
             )
         );
 
-        return $this->display(__FILE__, 'views/templates/hook/seven/order_confirmation.tpl');
+        $versions = array(
+            self::PRESTA16 => 'six',
+            self::PRESTA17 => 'seven',
+        );
+
+        return $this->display(__FILE__, 'views/templates/hook/' . $versions[$this->getVersionPs()] . '/order_confirmation.tpl');
     }
 
     /**
