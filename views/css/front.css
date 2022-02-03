@@ -515,6 +515,14 @@ body#checkout section.checkout-step .payment-options label {
   margin-right: 0 !important;
 }
 
+.mp-img-size {
+  width: 36px;
+}
+
+.mp-form-item {
+  height: 40px;
+}
+
 /* --- mobile --- */
 
 @media (max-width: 767.98px) {

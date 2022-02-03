@@ -178,12 +178,20 @@ class TicketSettings extends AbstractSettings
             ) {
                 $pm_id = $payment_method['id'];
                 $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $pm_id;
+                $payment_places = [];
+
+                if (isset($payment_method['payment_places']) && is_array($payment_method['payment_places'])) {
+                    foreach ($payment_method['payment_places'] as $payment_place) {
+                        $payment_places[]= $payment_place['name'];
+                    }
+                    $payment_places = implode(", ", $payment_places);
+                }
 
                 $this->ticket_payments[] = array(
                     'id' => $pm_id,
-                    'name' => $payment_method['name'],
+                    'name' => $payment_places? $payment_method['name'].' ( '.$payment_places.' )': $payment_method['name'] ,
                 );
-
+                
                 $form_values[$pm_name] = Configuration::get($pm_name);
             }
         }

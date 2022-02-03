@@ -671,7 +671,8 @@
 
 .mp-input-collapsible,
 .mp-custom-input-collapsible,
-.mp-ticket-input-collapsible {
+.mp-ticket-input-collapsible,
+.mp-pix-input-collapsible {
   display: none;
 }
 
@@ -693,7 +694,8 @@
 }
 
 .mp-custom-input-collapsible,
-.mp-ticket-input-collapsible {
+.mp-ticket-input-collapsible,
+.mp-pix-input-collapsible {
   display: none;
 }
 
@@ -711,6 +713,18 @@
   font-size: 16px;
   font-weight: 800;
   text-transform: lowercase;
+}
+
+ol > li {
+  margin-bottom: 30px;
+}
+
+ol > li:last-child {
+  margin-bottom: 0;
+}
+
+ol > li::marker {
+  font-weight: bold;
 }
 
 @media (max-width: 768px) {
