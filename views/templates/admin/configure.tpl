@@ -31,6 +31,19 @@
     </div>
     {/if}
 
+    <div class='mp-webpay-banner mp-mb-15'>
+        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp-saved-cards.png" alt="Saved Cards" class="mp-img-saved-cards"/>
+        <div class="mp-left-details">
+            <div class="mp-webpay-banner-text">
+                <p class='mp-webpay-banner-title'>{l s='Cliente com Mercado Pago agora pode pagar com cartões salvos' mod='mercadopago'}</p>
+                <p class='mp-webpay-banner-description'>{l s='Está habilitada a funcionalidade [1]Pagamento com cartão salvo ou saldo no Mercado Pago[/1]. Você pode controlar esta opção nas configurações.' tags=['<i>'] mod='mercadopago'}</p>
+            </div>
+        </div>
+        <div class="mp-right-details">
+            <button type='button' class="btn btn-primary mp-btn-webpay-banner" onclick="checkoutTabAnchor('tab-custom', 'custom_checkout')">Ir para configurações</button>
+        </div>
+    </div>
+
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
@@ -296,92 +309,8 @@
                 }
             }
 
-
             // ----- custom configuration form ------ //
-            //custom form header
-            document.querySelector("#module_form_5 .panel").style.borderTopLeftRadius = 0;
-            var form_custom_header_prepend = document.createElement("div");
-            var form_custom_header = document.querySelector("#module_form_5 .panel .panel-heading");
-            form_custom_header.style.height = "auto";
-
-            form_custom_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
-                <li><span>{l s='Offer payments with credit cards and Mercado Pago balance.' mod='mercadopago'}</span></li>\
-                <li><span>{l s='Payment experience in your store.' mod='mercadopago'}</span></li>\
-                <li><span>{l s='Your clients pay as visitors without leaving your store.' mod='mercadopago'}</span></li>\
-            </ul>";
-            form_custom_header.insertBefore(form_custom_header_prepend, form_custom_header.firstChild);
-
-            var form_custom_prepend = document.createElement("div");
-            var form_custom = document.querySelector("#module_form_5 .panel .form-wrapper");
-            var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
-
-            form_custom_prepend.innerHTML = "<div class='row mp-pb-25'>\
-                <div class='col-md-12'>\
-                    <h4 class='mp-title-checkout-body'>{l s='With these options, your clients pay quickly, easily, and securely:' mod='mercadopago'}</h4>\
-                </div>\
-            </div>";
-            form_custom.insertBefore(form_custom_prepend, form_custom.firstChild);
-
-            //advanced configuration
-            var form_custom_append = "<div class='panel-heading mp-panel-advanced-config'>\
-                <i class='icon-cogs'></i> {l s='Advanced Configuration' mod='mercadopago'}\
-                <span class='mp-btn-collapsible' id='header_plus_custom' style='display:block'>+</span>\
-                <span class='mp-btn-collapsible' id='header_less_custom' style='display:none'>-</span>\
-            </div>\
-            <div class='row text-custom-advanced'>\
-                <div class='col-md-12'>\
-                    <h4 class='mp-title-checkout-body mp-custom-input-collapsible'>{l s='Activate other tools in our module ready to use.' mod='mercadopago'}</h4>\
-                </div>\
-            </div>";
-
-             for (i=0; i < form_custom_group.length; i++) {
-               if(i == 1){
-                    form_custom_group[i].insertAdjacentHTML('afterend', form_custom_append);
-                    form_custom_group[i].insertAdjacentHTML('afterend', form_standard_psj_append);
-                }
-                if(i > 1) {
-                    form_custom_group[i].classList.add("mp-custom-input-collapsible");
-                }
-                    form_custom_group[i].querySelector("p").style.width = "400px";
-            }
-
-            var style_collapsible_custom = false;
-            var header_plus_custom = document.querySelector("#header_plus_custom");
-            var header_less_custom = document.querySelector("#header_less_custom");
-            var form_custom_collapsible = document.querySelector("#module_form_5 .panel .mp-panel-advanced-config");
-            var form_custom_collapsible_body = document.querySelectorAll(".mp-custom-input-collapsible");
-            var form_custom_collapsible_footer = document.querySelector("#module_form_5 .panel .panel-footer");
-            var form_custom_group = document.querySelectorAll("#module_form_5 .panel .form-wrapper .form-group");
-
-            form_custom_collapsible_footer.style.marginTop = "-2px";
-
-            form_custom_collapsible.onclick = function(){
-                if(style_collapsible_custom == false){
-                    style_collapsible_custom = true;
-                    header_less_custom.style.display = "block";
-                    header_plus_custom.style.display = "none";
-                    form_custom_collapsible_footer.style.marginTop = "15px";
-                    document.querySelector(".text-custom-advanced").style.paddingTop = "20px";
-                    document.querySelector(".text-custom-advanced").style.paddingBottom = "25px";
-
-                    for(i=0; i<form_custom_collapsible_body.length; i++){
-                        form_custom_collapsible_body[i].style.display = "block";
-                    }
-                }
-                else{
-                    style_collapsible_custom = false;
-                    header_less_custom.style.display = "none";
-                    header_plus_custom.style.display = "block";
-                    form_custom_collapsible_footer.style.marginTop = "-2px";
-                    document.querySelector(".text-custom-advanced").style.paddingTop = "0px";
-                    document.querySelector(".text-custom-advanced").style.paddingBottom = "0px";
-
-                    for(i=0; i<form_custom_collapsible_body.length; i++){
-                        form_custom_collapsible_body[i].style.display = "none";
-                    }
-                }
-            }
-
+            {include file='./checkouts/custom_configuration.tpl'}
 
             // ----- ticket configuration form ------ //
             //ticket form header
@@ -555,5 +484,11 @@
                         <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
                     </div>\
                 </div>";
+        }
+
+        //Banner button
+        function checkoutTabAnchor(tab, checkout) {
+            document.getElementById(tab).click();
+            document.getElementById(checkout).scrollIntoView();
         }
     </script>

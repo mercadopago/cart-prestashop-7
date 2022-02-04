@@ -727,6 +727,50 @@ ol > li::marker {
   font-weight: bold;
 }
 
+.mp-webpay-banner{
+  width: 100%;
+  background: #449ddd;
+  border-radius: 5px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row !important;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.mp-webpay-banner-text {
+  color: #ffffff !important;
+  font-family: sans-serif !important;
+  font-weight: normal;
+  line-height: 16px !important;
+  margin-left: 30px;
+  max-width: 502px;
+}
+
+.mp-webpay-banner-title {
+  font-weight: bold !important;
+  font-size: 15px !important;
+}
+
+.mp-webpay-banner-description {
+  font-size: 14px !important;
+  margin: 0 !important;
+}
+
+.mp-btn-webpay-banner {
+  background: #ffffff !important;
+  border-radius: 5px !important;
+  color: #449ddd !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  padding: 8px 15px !important;
+  text-transform: none !important;
+}
+
+.mp-btn-webpay-banner:hover {
+  color: #008abd !important;
+}
+
 @media (max-width: 768px) {
   .mp-pl-30 {
     padding-left: 0 !important;
