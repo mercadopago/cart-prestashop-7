@@ -45,7 +45,6 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $module = Module::getInstanceByName('mercadopago');
         $preference = new PixPreference($this->context->cart);
 
         try {

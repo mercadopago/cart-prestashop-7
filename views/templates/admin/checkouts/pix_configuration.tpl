@@ -37,7 +37,7 @@ form_pix_header_prepend.innerHTML = "<ul class='mp-checkout-list'>\
 </ul>";
 form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild);
 
-{if $pix_enabled} 
+{if $pix_enabled}
 
     var form_pix_prepend = document.createElement("div");
     var form_pix = document.querySelector("#module_form_7 .panel .form-wrapper");
@@ -152,7 +152,7 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
             <ul>\
                 <li>\
                     <span class='mp-text-credenciais'>\
-                        {l s="At the moment, Brazil's Central Bank works from Monday to Friday, from 9 AM to 6 PM. [1]" tags=['<br>'] mod='mercadopago'}\
+                        {l s='At the moment, Brazil's Central Bank works from Monday to Friday, from 9 AM to 6 PM. [1]' tags=['<br>'] mod='mercadopago'}\
                         {l s='Registrations made outside this period will be confirmed in the next business day.' mod='mercadopago'}\
                     </span>\
                 </li>\
