@@ -29,6 +29,9 @@
 
 class MPUseful
 {
+
+    const SEPARATOR = '|';
+
     public function __construct()
     {
     }
@@ -219,5 +222,43 @@ class MPUseful
         );
 
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
+    }
+
+   /**
+     * Separate payment id from payment place
+     *
+     * @param  string $compositeId
+     * @return array
+     */
+    private function parse($compositeId)
+    {
+        $exploded = explode(self::SEPARATOR, $compositeId);
+
+        return [
+            'payment_method_id' => $exploded[0],
+            'payment_place_id' => isset($exploded[1]) ? $exploded[1] : null,
+        ];
+    }
+
+   /**
+     * Returns payment method id
+     *
+     * @param  string $compositeId
+     * @return string
+     */
+    public function getPaymentMethodId($compositeId)
+    {
+        return $this->parse($compositeId)['payment_method_id'];
+    }
+
+   /**
+     * Returns payment place id
+     *
+     * @param  string $compositeId
+     * @return string
+     */
+    public function getPaymentPlaceId($compositeId)
+    {
+        return $this->parse($compositeId)['payment_place_id'];
     }
 }

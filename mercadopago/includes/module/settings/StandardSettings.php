@@ -255,10 +255,18 @@ class StandardSettings extends AbstractSettings
             if (!$this->onlinePaymentMethodsCheck($payment_method) &&
                 $this->offlineExcludedPaymentMethodsCheck($payment_method)
             ) {
+                $payment_places = [];
+                if (isset($payment_method['payment_places']) && is_array($payment_method['payment_places'])) {
+                    foreach ($payment_method['payment_places'] as $payment_place) {
+                        $payment_places[]= $payment_place['name'];
+                    }
+                    $payment_places = implode(", ", $payment_places);
+                }
+
                 $this->offline_payments[] = array(
-                'id' => $pm_id,
-                'name' => $payment_method['name'],
-                );
+                    'id' => $pm_id,
+                    'name' => $payment_places? $payment_method['name'].' ( '.$payment_places.' )': $payment_method['name'] ,
+                    );
             }
 
             $form_values[$pm_name] = Configuration::get($pm_name);
