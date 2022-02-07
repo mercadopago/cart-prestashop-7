@@ -489,6 +489,8 @@
                 }
             }
 
+            // ----- pix configuration form ------ //
+            {include file='./checkouts/pix_configuration.tpl'}
         }
 
         //Online payments
