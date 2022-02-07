@@ -110,7 +110,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2021-03-25T17:01:18+00:00"
+            "time": "2022-03-25T17:01:18+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -176,7 +176,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2021-02-21T21:00:45+00:00"
+            "time": "2022-02-21T21:00:45+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -424,7 +424,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2022-03-05T17:36:06+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -517,7 +517,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2021-05-03T11:20:27+00:00"
+            "time": "2022-05-03T11:20:27+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -648,7 +648,7 @@
                 "console",
                 "terminal"
             ],
-            "time": "2021-04-19T14:07:32+00:00"
+            "time": "2022-04-19T14:07:32+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -698,7 +698,7 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
-            "time": "2021-03-23T23:28:01+00:00"
+            "time": "2022-03-23T23:28:01+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -766,7 +766,7 @@
             ],
             "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
             "homepage": "https://symfony.com",
-            "time": "2021-02-18T17:12:37+00:00"
+            "time": "2022-02-18T17:12:37+00:00"
         },
         {
             "name": "symfony/event-dispatcher-contracts",
@@ -828,7 +828,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2021-03-23T23:28:01+00:00"
+            "time": "2022-03-23T23:28:01+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -873,7 +873,7 @@
             ],
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
-            "time": "2021-04-01T10:42:13+00:00"
+            "time": "2022-04-01T10:42:13+00:00"
         },
         {
             "name": "symfony/finder",
@@ -917,7 +917,7 @@
             ],
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https://symfony.com",
-            "time": "2021-02-15T18:55:04+00:00"
+            "time": "2022-02-15T18:55:04+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -969,7 +969,7 @@
                 "configuration",
                 "options"
             ],
-            "time": "2021-01-27T12:56:27+00:00"
+            "time": "2022-01-27T12:56:27+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1031,7 +1031,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2022-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
@@ -1095,7 +1095,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-22T09:19:47+00:00"
+            "time": "2022-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
@@ -1162,7 +1162,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-22T09:19:47+00:00"
+            "time": "2022-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1225,7 +1225,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-22T09:19:47+00:00"
+            "time": "2022-01-22T09:19:47+00:00"
         },
         {
             "name": "symfony/polyfill-php70",
@@ -1335,7 +1335,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2022-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
@@ -1397,7 +1397,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2022-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/polyfill-php80",
@@ -1463,7 +1463,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2021-01-07T16:49:33+00:00"
+            "time": "2022-01-07T16:49:33+00:00"
         },
         {
             "name": "symfony/process",
@@ -1508,7 +1508,7 @@
             ],
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
-            "time": "2021-04-08T10:27:02+00:00"
+            "time": "2022-04-08T10:27:02+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -1570,7 +1570,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2021-04-01T10:43:52+00:00"
+            "time": "2022-04-01T10:43:52+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -1615,7 +1615,7 @@
             ],
             "description": "Provides a way to profile code",
             "homepage": "https://symfony.com",
-            "time": "2021-03-29T15:28:41+00:00"
+            "time": "2022-03-29T15:28:41+00:00"
         },
         {
             "name": "symfony/string",
@@ -1681,7 +1681,7 @@
                 "utf-8",
                 "utf8"
             ],
-            "time": "2021-03-17T17:12:15+00:00"
+            "time": "2022-03-17T17:12:15+00:00"
         }
     ],
     "packages-dev": [],
