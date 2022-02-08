@@ -57,7 +57,6 @@
 {if $payment['metadata']['checkout_type'] == 'pix'}
     <div id="pix-order" class="mp-pix-container">
         <div class="mp-pix-confirmation">
-            
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-12">
                     <h2>{l s='Almost there! Pay via Pix to complete your purchase' mod='mercadopago'}</h2>
@@ -85,7 +84,7 @@
                         <span class="mp-pix-text-subtitle">{l s='Scan this QR code to pay' mod='mercadopago'}</span>
                         <div class="mp-pix-tooltip">
                             <img class="mp-badge-info" src="{$module_dir|escape:'html':'UTF-8'}views/img/icons/badge_info_blue.png"/>
-                            <span class="mp-pix-tooltip-text">{l s="Before you confirming your purchase, you will see the amount to pay and the seller's information." mod='mercadopago'}</span>
+                            <span class="mp-pix-tooltip-text">{l s='Before you confirming your purchase, you will see the amount to pay and the seller\'s information.' mod='mercadopago'}</span>
                         </div>
                     </div>
                 </div>
@@ -159,7 +158,7 @@
                     </div>
                 </div>
 
-                <hr>    
+                <hr>
 
                 <div class="row mp-pt-25">
                     <div class="col-xs-12 col-md-12 col-12">
