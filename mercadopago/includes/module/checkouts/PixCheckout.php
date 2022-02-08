@@ -53,15 +53,14 @@ class PixCheckout
     /**
      * Get Pix Checkout PS 16
      *
-     * @param Object $cart Purchase details and information
      *
      * @return Array
      *
      * @throws PrestaShopException
      */
-    public function getPixCheckoutPS16($cart)
+    public function getPixCheckoutPS16()
     {
-        $pixTemplateVariables = $this->getPixTemplateVariables($cart);
+        $pixTemplateVariables = $this->getPixTemplateVariables();
 
         $frontInformations = array_merge(
             $pixTemplateVariables,
@@ -78,15 +77,14 @@ class PixCheckout
     /**
      * Get Pix Checkout PS 17
      *
-     * @param Object $cart Purchase details and information
      *
      * @return Array
      *
      * @throws PrestaShopException
      */
-    public function getPixCheckoutPS17($cart)
+    public function getPixCheckoutPS17()
     {
-        $pixTemplateVariables = $this->getPixTemplateVariables($cart);
+        $pixTemplateVariables = $this->getPixTemplateVariables();
 
         $frontInformations = array_merge(
             $pixTemplateVariables,
@@ -99,13 +97,11 @@ class PixCheckout
     /**
      * Get Pix Template Variables
      *
-     * @param Object $cart Purchase details and information
-     *
      * @return Array
      *
      * @throws PrestaShopException
      */
-    public function getPixTemplateVariables($cart)
+    public function getPixTemplateVariables()
     {
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
 
