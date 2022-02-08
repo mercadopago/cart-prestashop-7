@@ -85,7 +85,7 @@
                         <span class="mp-pix-text-subtitle">{l s='Scan this QR code to pay' mod='mercadopago'}</span>
                         <div class="mp-pix-tooltip">
                             <img class="mp-badge-info" src="{$module_dir|escape:'html':'UTF-8'}views/img/icons/badge_info_blue.png"/>
-                            <span class="mp-pix-tooltip-text">{l s='Before you confirming your purchase, you will see the amount to pay and the seller's information.' mod='mercadopago'}</span>
+                            <span class="mp-pix-tooltip-text">{l s='Before you confirming your purchase, you will see the amount to pay and the seller\'s information.' mod='mercadopago'}</span>
                         </div>
                     </div>
                 </div>
