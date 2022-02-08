@@ -57,7 +57,6 @@
 {if $payment['metadata']['checkout_type'] == 'pix'}
     <div id="pix-order" class="mp-pix-container">
         <div class="mp-pix-confirmation">
-
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-12">
                     <h2>{l s='Almost there! Pay via Pix to complete your purchase' mod='mercadopago'}</h2>
