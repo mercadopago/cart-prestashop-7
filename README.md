@@ -1,1 +1,1 @@
-# Prestashop 1.6.x & 1.7.x - Mercado Pago Module (v4.9.0)
+# Prestashop 1.6.x & 1.7.x - Mercado Pago Module (v4.9.1)
