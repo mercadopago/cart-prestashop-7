@@ -24,8 +24,29 @@
 *}
 
 <form id="mp_custom_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
-
     <div class="row mp-frame-checkout-custom-seven">
+    
+        {if $wallet_button == true}
+            <div class="col-xs-12 col-md-12 col-12">
+                <div class='mp-wallet-button-container'>
+                    <div class='mp-wallet-button-title'>
+                        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_logo.png">
+                        <span>{l s='Use your saved cards' mod='mercadopago'}</span>
+                    </div>
+
+                    <div class='mp-wallet-button-description'>
+                        {l s='Those who already use Mercado Livre or Mercado Pago can pay without entering any details.' mod='mercadopago'}
+                    </div>
+
+                    <div class='mp-wallet-button-button'>
+                        <button>
+                            {l s='Pay with saved card' mod='mercadopago'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {/if}
+
         <div class="col-xs-12 col-md-12 col-12">
             <a class="mp-link-checkout-custom" id="button-show-payments">
                 {l s='With what cards can I pay' mod='mercadopago'} ⌵

@@ -95,6 +95,7 @@ class CustomCheckout
 
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $wallet_button = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
 
@@ -114,6 +115,7 @@ class CustomCheckout
             "credit" => $credit,
             "amount" => $amount,
             "site_id" => $site_id,
+            "wallet_button" => $wallet_button,
             "version" => MP_VERSION,
             "redirect" => $redirect,
             "discount" => $strDiscount,
