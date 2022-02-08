@@ -31,17 +31,14 @@
     </div>
     {/if}
 
-    <div class='mp-webpay-banner mp-mb-15'>
-        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp-saved-cards.png" alt="Saved Cards" class="mp-img-saved-cards"/>
-        <div class="mp-left-details">
-            <div class="mp-webpay-banner-text">
-                <p class='mp-webpay-banner-title'>{l s='Cliente com Mercado Pago agora pode pagar com cartões salvos' mod='mercadopago'}</p>
-                <p class='mp-webpay-banner-description'>{l s='Está habilitada a funcionalidade [1]Pagamento com cartão salvo ou saldo no Mercado Pago[/1]. Você pode controlar esta opção nas configurações.' tags=['<i>'] mod='mercadopago'}</p>
-            </div>
+    <div class='mp-wallet-button-banner mp-mb-15'>
+        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards" class="mp-img-wallet-button"/>
+        <div class="mp-wallet-button-banner-text">
+            <p class='mp-wallet-button-banner-title'>{l s='Mercado Pago clients can now pay with saved cards' mod='mercadopago'}</p>
+            <p class='mp-wallet-button-banner-description'>{l s='[1]Payment with saved card or Balance in Mercado Pago[/1] features are enabled. You can manage this option in the settings.' tags=['<i>'] mod='mercadopago'}</p>
         </div>
-        <div class="mp-right-details">
-            <button type='button' class="btn btn-primary mp-btn-webpay-banner" onclick="checkoutTabAnchor('tab-custom', 'custom_checkout')">Ir para configurações</button>
-        </div>
+        <span class="mp-separator-wallet-button"></span>
+        <button type='button' class="btn btn-primary mp-btn-wallet-button-banner" onclick="checkoutTabAnchor('tab-custom', 'custom_checkout')">Go to settings</button>
     </div>
 
     <!-- Nav tabs -->

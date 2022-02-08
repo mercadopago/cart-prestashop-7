@@ -68,8 +68,8 @@ for (i=0; i < form_custom_group.length; i++) {
     if(i > 1) {
         form_custom_group[i].classList.add("mp-custom-input-collapsible");
     }
-        form_custom_group[i].querySelector("p").style.width = "400px";
-    }
+    form_custom_group[i].querySelector("p").style.width = "400px";
+}
 
 var style_collapsible_custom = false;
 var header_plus_custom = document.querySelector("#header_plus_custom");
