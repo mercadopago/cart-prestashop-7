@@ -71,17 +71,17 @@ class CustomSettings extends AbstractSettings
             array(
                 'type' => 'switch',
                 'label' => $this->module->l('Activate payments with cards saved in Mercado Pago', 'CustomSettings'),
-                'name' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON',
+                'name' => 'MERCADOPAGO_CUSTOM_WALLET_BUTTON',
                 'desc' => $this->module->l('With this feature, clients pay faster and you increase your sales.', 'CustomSettings'),
                 'is_bool' => true,
                 'values' => array(
                     array(
-                        'id' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON_ON',
+                        'id' => 'MERCADOPAGO_CUSTOM_WALLET_BUTTON_ON',
                         'value' => true,
                         'label' => $this->module->l('Active', 'CustomSettings')
                     ),
                     array(
-                        'id' => 'MERCADOPAGO_CUSTOM_WALLETBUTTON_OFF',
+                        'id' => 'MERCADOPAGO_CUSTOM_WALLET_BUTTON_OFF',
                         'value' => false,
                         'label' => $this->module->l('Inactive', 'CustomSettings')
                     )
@@ -149,7 +149,7 @@ class CustomSettings extends AbstractSettings
     {
         return array(
             'MERCADOPAGO_CUSTOM_CHECKOUT' => Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT'),
-            'MERCADOPAGO_CUSTOM_WALLETBUTTON' => Configuration::get('MERCADOPAGO_CUSTOM_WALLETBUTTON'),
+            'MERCADOPAGO_CUSTOM_WALLET_BUTTON' => Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON'),
             'MERCADOPAGO_CUSTOM_DISCOUNT' => Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'),
             'MERCADOPAGO_CUSTOM_BINARY_MODE' => Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE'),
         );
