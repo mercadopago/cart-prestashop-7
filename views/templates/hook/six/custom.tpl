@@ -34,11 +34,11 @@
             </p>
         </div>
 
-        {if $wallet_button == true}
-            <div class="col-xs-12 col-md-12 col-12 mp-pt-25">
+        {if $wallet_button}
+            <div class='col-xs-12 col-md-12 col-12 mp-pt-25 mp-m-px-0'>
                 <div class='mp-wallet-button-container'>
                     <div class='mp-wallet-button-title'>
-                        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_logo.png">
+                        <img src='{$module_dir|escape:'html':'UTF-8'}views/img/mp_logo.png'>
                         <span>{l s='Use your saved cards' mod='mercadopago'}</span>
                     </div>
 
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class='mp-wallet-button-button'>
-                        <button>
+                        <button id='mp-wallet-button-btn'>
                             {l s='Pay with saved card' mod='mercadopago'}
                         </button>
                     </div>
@@ -241,6 +241,8 @@
     </div>
 </form>
 
+<div id="mp-custom-button"/>
+
 {if $public_key != ''}
     <script type="text/javascript">
         // Set params to custom-card
@@ -273,6 +275,34 @@
                 frame_payments.style.display = 'block';
             }
         };
+    </script>
+{/if}
+
+{if $wallet_button && $preference != ''}
+    <script>
+        window.addEventListener('load', (event) => {
+            var modal_script = document.createElement('script');
+            var modal_form = document.querySelector('head');
+
+            modal_script.src = 'https://sdk.mercadopago.com/js/v2';
+            modal_script.async = true;
+
+            modal_script.onload = function () {
+				var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
+				mp.checkout({$mp_button|@json_encode nofilter});
+                    
+                var mercadopago_button = document.querySelector('#mp-custom-button .mercadopago-button');
+                var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
+                mercadopago_button.style.display = 'none';
+
+                wallet_button_button.onclick = function (e) {
+                    e.preventDefault();
+                    mercadopago_button.click();
+                    return false;
+                }
+            };  
+            modal_form.appendChild(modal_script);
+        });
     </script>
 {/if}
 

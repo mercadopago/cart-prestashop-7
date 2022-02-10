@@ -95,7 +95,8 @@ class CustomCheckout
 
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
-        $wallet_button = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
+        $walletButton = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
+        $preferenceId = $this->getWalletButtonPreference($cart, $walletButton);
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
 
@@ -110,12 +111,23 @@ class CustomCheckout
         $difference = $cartTotal - $subtotal - $discount;
         $amount = $subtotal + $difference;
 
+        $mpButton = array(
+            'preference' => [
+                'id' => $preferenceId,
+            ],
+            'render' => [
+                'container' => '#mp-custom-button'
+            ]
+        );
+
         $checkoutInfo = array(
             "debit" => $debit,
             "credit" => $credit,
             "amount" => $amount,
             "site_id" => $site_id,
-            "wallet_button" => $wallet_button,
+            "wallet_button" => $walletButton,
+            "preference" => $preferenceId,
+            "mp_button" => $mpButton,
             "version" => MP_VERSION,
             "redirect" => $redirect,
             "discount" => $strDiscount,
@@ -125,6 +137,27 @@ class CustomCheckout
         );
 
         return $checkoutInfo;
+    }
+
+    /**
+     * @param  $cart
+     * @param  $wallet_button
+     * @return string
+     */
+    public function getWalletButtonPreference($cart, $walletButton)
+    {
+        if ($walletButton) {
+            $preferenceId = '';
+            $preference = new WalletButtonPreference($cart);
+            $createPreference = $preference->createPreference();
+ 
+            if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
+                $preferenceId = $createPreference['id'];
+                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
+            }
+
+            return $preferenceId;
+        }
     }
 
     /**
