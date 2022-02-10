@@ -104,6 +104,7 @@ class Mercadopago extends PaymentModule
         include_once MP_ROOT_URL . '/includes/MPUseful.php';
         include_once MP_ROOT_URL . '/includes/MPRestCli.php';
         include_once MP_ROOT_URL . '/includes/module/preference/StandardPreference.php';
+        include_once MP_ROOT_URL . '/includes/module/preference/WalletButtonPreference.php';
         include_once MP_ROOT_URL . '/includes/module/model/MPModule.php';
         include_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
         include_once MP_ROOT_URL . '/includes/module/model/MPTransaction.php';
