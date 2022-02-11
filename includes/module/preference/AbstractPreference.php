@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class AbstractPreference
+abstract class AbstractPreference
 {
     public $module;
     public $checkout;

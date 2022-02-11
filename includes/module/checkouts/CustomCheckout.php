@@ -112,12 +112,12 @@ class CustomCheckout
         $amount = $subtotal + $difference;
 
         $mpButton = array(
-            'preference' => [
+            'preference' => array (
                 'id' => $preferenceId,
-            ],
-            'render' => [
-                'container' => '#mp-custom-button'
-            ]
+            ),
+            'render' => array (
+                'container' => '#mp-custom-button',
+            )
         );
 
         $checkoutInfo = array(
@@ -148,8 +148,8 @@ class CustomCheckout
     {
         if ($walletButton) {
             $preferenceId = '';
-            $preference = new WalletButtonPreference($cart);
-            $createPreference = $preference->createPreference();
+            $preference = new WalletButtonPreference();
+            $createPreference = $preference->createPreference($cart);
  
             if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
                 $preferenceId = $createPreference['id'];

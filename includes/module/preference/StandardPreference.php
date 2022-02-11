@@ -27,9 +27,9 @@
  * to avoid any conflicts with others containers.
  */
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
+require_once MP_ROOT_URL . '/includes/module/preference/AbstractStandardPreference.php';
 
-class StandardPreference extends AbstractPreference
+class StandardPreference extends AbstractStandardPreference
 {
     public function __construct()
     {
@@ -38,234 +38,76 @@ class StandardPreference extends AbstractPreference
     }
 
     /**
+     * Create standard preference
+     *
      * @param $cart
-     * @return bool
-     * @throws Exception
+     * @return mixed
      */
     public function createPreference($cart)
     {
-        $preference = $this->getCommonPreference($cart);
-        $preference['items'] = $this->getCartItems($cart);
-        $preference['payer'] = $this->getCustomerData($cart);
-        $preference['shipments'] = $this->getShipment($cart);
-        $preference['back_urls'] = $this->getBackUrls($cart);
-        $preference['payment_methods'] = $this->getPaymentOptions();
-        $preference['auto_return'] = $this->getAutoReturn();
-        $preference['binary_mode'] = $this->getBinaryMode();
-        $preference['expires'] = $this->getExpirationStatus();
-        $preference['expiration_date_to'] = $this->getExpirationDate();
-        $preference['metadata'] = $this->getInternalMetadata($cart);
+        $payload = $this->buildPreferencePayload($cart);
 
-        //Generate preference
-        $this->generateLogs($preference, $cart);
-        $preferenceEncoded = Tools::jsonEncode($preference);
+        $this->generateLogs($payload, $cart);
+        $payloadToJson = Tools::jsonEncode($payload);
 
-        //Create preference
-        $createPreference = $this->mercadopago->createPreference($preferenceEncoded);
+        $createPreference = $this->mercadopago->createPreference($payloadToJson);
         MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
 
         return $createPreference;
     }
 
     /**
-     * Get customer data
+     * To build payload from standard payment
      *
+     * @param $cart
      * @return array
      */
-    public function getCustomerData($cart)
+    public function buildPreferencePayload($cart)
     {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
+        $payloadParent = parent::buildPreferencePayload($cart);
 
-        $customer_data = array(
-            'name' => $customer_fields['firstname'],
-            'surname' => $customer_fields['lastname'],
-            'email' => $customer_fields['email'],
-            'phone' => array(
-                'area_code' => '',
-                'number' => $address_invoice->phone,
-            ),
-            'identification' => array(
-                'type' => '',
-                'number' => '',
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $address_invoice->address1 . ' - ' .
-                    $address_invoice->address2 . ' - ' .
-                    $address_invoice->city . ' - ' .
-                    $address_invoice->country,
-                'street_number' => '',
-            ),
-            'date_created' => date("c", strtotime($customer_fields['date_add'])),
+        $payloadAdditional = array(
+            'metadata' => $this->getInternalMetadata($cart),
         );
 
-        return $customer_data;
-    }
-
-    /**
-     * Get Mercado Pago payments options
-     *
-     * @return array
-     */
-    public function getPaymentOptions()
-    {
-        $excluded_payment_methods = array();
-        $payment_methods = $this->mercadopago->getPaymentMethods();
-
-        Configuration::updateValue('MERCADOPAGO_PAYMENT_ACCOUNT_MONEY', 'on');
-
-        foreach ($payment_methods as $payment_method) {
-            $pm_variable_name = 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($payment_method['id']);
-            $value = Configuration::get($pm_variable_name);
-
-            if ($value != "on") {
-                $excluded_payment_methods[] = array(
-                    'id' => Tools::strtolower($payment_method['id']),
-                );
-            }
-        }
-
-        $payment_options = array(
-            'installments' => (integer) $this->settings['MERCADOPAGO_INSTALLMENTS'],
-            'excluded_payment_types' => array(),
-            'excluded_payment_methods' => $excluded_payment_methods,
-        );
-
-        return $payment_options;
-    }
-
-    /**
-     * Get store shipment
-     *
-     * @return array
-     */
-    public function getShipment($cart)
-    {
-        $address_shipment = new Address((int) $cart->id_address_delivery);
-
-        $shipment = array(
-            'receiver_address' => array(
-                'zip_code' => $address_shipment->postcode,
-                'street_name' => $address_shipment->address1 . ' - ' .
-                    $address_shipment->address2 . ' - ' .
-                    $address_shipment->city . ' - ' .
-                    $address_shipment->country,
-                'street_number' => '-',
-                'apartment' => '-',
-                'floor' => '-',
-                'city_name' => $address_shipment->city,
-            ),
-        );
-
-        return $shipment;
-    }
-
-    /**
-     * Get back urls for preference callback
-     *
-     * @param mixed $cart
-     * @return array
-     */
-    public function getBackUrls($cart)
-    {
-        return array(
-            'success' => $this->getReturnUrl($cart, 'success'),
-            'failure' => $this->getReturnUrl($cart, 'failure'),
-            'pending' => $this->getReturnUrl($cart, 'pending'),
-        );
-    }
-
-    /**
-     * Get auto_return for preference
-     *
-     * @return mixed
-     */
-    public function getAutoReturn()
-    {
-        if ($this->settings['MERCADOPAGO_AUTO_RETURN'] == 1) {
-            return $this->settings['MERCADOPAGO_AUTO_RETURN'] = 'approved';
-        }
-    }
-
-    /**
-     * Get binary_mode for preference
-     *
-     * @return mixed
-     */
-    public function getBinaryMode()
-    {
-        if ($this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] == 1) {
-            return $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] = true;
-        }
-
-        return $this->settings['MERCADOPAGO_STANDARD_BINARY_MODE'] = false;
-    }
-
-    /**
-     * Define if expiration preference status
-     *
-     * @return mixed
-     */
-    public function getExpirationStatus()
-    {
-        if ($this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] != "") {
-            return $this->settings['MERCADOPAGO_EXPIRATION'] = true;
-        }
-
-        return $this->settings['MERCADOPAGO_EXPIRATION'] = false;
-    }
-
-    /**
-     * Get expiration_date_to for preference
-     *
-     * @return mixed
-     */
-    public function getExpirationDate()
-    {
-        if ($this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] != "") {
-            return $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] = date(
-                'Y-m-d\TH:i:s.000O',
-                strtotime('+' . $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'] . ' hours')
-            );
-        }
-
-        return $this->settings['MERCADOPAGO_EXPIRATION_DATE_TO'];
-    }
+        return array_merge($payloadParent, $payloadAdditional);
+    }  
 
     /**
      * Get internal metadata
      *
+     * @param $cart
      * @return array
      */
     public function getInternalMetadata($cart)
     {
-        $internal_metadata = parent::getInternalMetadata($cart);
-        $internal_metadata['checkout'] = 'smart';
-        $internal_metadata['checkout_type'] = 'redirect';
+        $internalMetadataParent = parent::getInternalMetadata($cart);
+        
+        $checkoutType = $this->settings['MERCADOPAGO_STANDARD_MODAL'] ? 'modal' : 'redirect';
 
-        if ($this->settings['MERCADOPAGO_STANDARD_MODAL'] == true) {
-            $internal_metadata["checkout_type"] = "modal";
-        }
+        $internalMetadataAdditional = array(
+            'checkout' => 'pro',
+            'checkout_type' => $checkoutType,
+        );
 
-        return $internal_metadata;
+        return array_merge($internalMetadataParent, $internalMetadataAdditional);
     }
 
     /**
      * Generate preference logs
      *
-     * @param array $preference
-     * @param mixed $cart
+     * @param $preference
+     * @param $cart
      * @return void
      */
     public function generateLogs($preference, $cart)
     {
-        $logs = [
+        $logs = array(
             "cart_id" => $preference['external_reference'],
             "cart_total" => $cart->getOrderTotal(),
             "cart_items" => $preference['items'],
             "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
-        ];
+        );
 
         $encodedLogs = Tools::jsonEncode($logs);
         MPLog::generate('standard preference logs: ' . $encodedLogs);
