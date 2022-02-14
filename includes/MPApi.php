@@ -32,7 +32,7 @@ class MPApi
     public function __construct()
     {
     }
-asdasd
+
     /**
      * Instance the class
      *

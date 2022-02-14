@@ -59,6 +59,6 @@ if ($errorCount === 0) {
 }
 
 $errors = $stdResponse['Errors'];
-print_r(json_encode($errors));
+print_r(' -> ' . json_encode($errors));
 
 throw new Exception('-> ZIP Validation contains errors.');
