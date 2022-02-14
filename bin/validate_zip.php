@@ -20,7 +20,15 @@ $multipart = [
     [
         'name'     => 'key',
         'contents' => $apiKey
-    ]
+    ],
+    [
+        'name'     => 'compatibility_1_7', // validate for PrestaShop 1.7
+        'contents' => 'on'
+    ],
+    [
+        'name'     => 'compatibility', // validate for PrestaShop 1.4
+        'contents' => 'on'
+    ],
 ];
 
 // Calling the Validator API
