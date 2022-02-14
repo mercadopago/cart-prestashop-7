@@ -39,7 +39,6 @@ try {
 		'multipart' => $multipart
 	]);
 
-
 } catch (\Throwable $th) {
     // Maybe the Validator is not online, and we can't hold the pipeline
     print_r('Couldn\'t reach the Prestashop Validator API');
@@ -59,4 +58,7 @@ if ($errorCount === 0) {
     return;
 }
 
-print_r(' -> ZIP Validation contains errors.');
+$errors = $stdResponse['Errors'];
+print_r(json_encode($errors));
+
+throw new Exception('-> ZIP Validation contains errors.');

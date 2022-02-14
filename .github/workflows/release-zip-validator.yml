@@ -20,7 +20,7 @@ jobs:
       - name: Verify PHP Installation
         run: php -v
 
-      - uses: "ramsey/composer-install@v1" # Change to v1 when testing through act
+      - uses: "ramsey/composer-install@v1"
 
       - name: Create Release ZIP
         id: create-release
