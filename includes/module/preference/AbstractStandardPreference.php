@@ -244,5 +244,4 @@ abstract class AbstractStandardPreference extends AbstractPreference
     {
         return parent::getInternalMetadata($cart);
     }
-    
 }

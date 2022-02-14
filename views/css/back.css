@@ -26,6 +26,10 @@
 * to avoid any conflicts with others containers.
 */
 
+html {
+  scroll-behavior: smooth;
+}
+
 .mp-pl-2 {
   padding-left: 2px !important;
 }
@@ -729,18 +733,24 @@ ol > li::marker {
 
 .mp-wallet-button-banner {
   width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
   background: #449ddd;
   border-radius: 5px;
   padding: 10px 20px;
-  display: flex;
-  flex-direction: row !important;
-  flex-wrap: wrap;
+  min-width: 290px;
+}
+
+.mp-wallet-button-info {
+  display: inline-flex;
   align-items: center;
 }
 
 .mp-img-wallet-button {
   margin-right: 30px;
 }
+
 .mp-wallet-button-banner-text {
   color: #ffffff !important;
   font-family: sans-serif !important;
@@ -771,6 +781,7 @@ ol > li::marker {
   font-weight: bold !important;
   padding: 8px 15px !important;
   text-transform: none !important;
+  margin-left: auto;
 }
 
 .mp-btn-wallet-button-banner:hover {
@@ -784,5 +795,11 @@ ol > li::marker {
 
   .mp-pr-50 {
     padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 823px) {
+  .mp-btn-wallet-button-banner {
+    margin-top: 10px;
   }
 }

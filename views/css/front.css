@@ -374,7 +374,7 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-wallet-button-container .mp-wallet-button-title {
-  font-family: Helvetica;
+  font-family: sans-serif !important;
   font-style: normal;
   font-weight: bold;
   font-size: 14px;
@@ -397,7 +397,7 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-wallet-button-container .mp-wallet-button-description {
-  font-family: Helvetica;
+  font-family: sans-serif !important;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -416,20 +416,20 @@ body#checkout section.checkout-step .payment-options label {
   padding: 8px 12px;
   background: #009ee3;
   border-radius: 4px;
-  font-family: Helvetica;
+  font-family: sans-serif !important;
   font-style: normal;
   font-weight: bold;
   font-size: 14px;
   line-height: 16px;
   text-align: center;
-  color: #fff;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   transition: all 0.3ms ease-in-out;
 }
 
 .mp-wallet-button-container .mp-wallet-button-button button:hover {
-  color: #fff;
+  color: #ffffff;
   background-color: #007eb5;
   transition: all 0.3ms ease-in-out;
 }

@@ -71,7 +71,7 @@ class StandardPreference extends AbstractStandardPreference
         );
 
         return array_merge($payloadParent, $payloadAdditional);
-    }  
+    }
 
     /**
      * Get internal metadata
