@@ -31,15 +31,21 @@
     </div>
 {/if}
 
-<div class="mp-wallet-button-banner mp-mb-15">
-    <div class="mp-wallet-button-info">
-        <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards" class="mp-img-wallet-button"/>
-        <div class="mp-wallet-button-banner-text">
-            <p class='mp-wallet-button-banner-title'>{l s='Mercado Pago clients can now pay with saved cards' mod='mercadopago'}</p>
-            <p class='mp-wallet-button-banner-description'>{l s='[1]Payment with saved card or Balance in Mercado Pago[/1] features are enabled. You can manage this option in the settings.' tags=['<i>'] mod='mercadopago'}</p>
+<div class="mp-wallet-button-notice mp-mb-15">
+    <div class="mp-left-wallet-button">
+        <div>
+            <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards"/>
+        </div>
+        <div class="mp-wallet-button-notice-text">
+            <p class='mp-wallet-button-notice-title'>
+                {l s='Mercado Pago clients can now pay with saved cards' mod='mercadopago'}
+            </p>
+            <p class='mp-wallet-button-notice-subtitle'>
+                {l s='[1]Payment with saved card or Balance in Mercado Pago[/1] features are enabled. You can manage this option in the settings.' tags=['<i>'] mod='mercadopago'}
+            </p>
         </div>
     </div>
-    <button type="button" class="btn btn-primary mp-btn-wallet-button-banner" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
+    <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
 </div>
 
 <!-- Nav tabs -->
