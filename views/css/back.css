@@ -781,7 +781,8 @@ ol > li::marker {
 }
 
 .mp-wallet-button-notice button:hover {
-  color: #008abd !important;
+  background-color: #007eb5 !important;
+  color: #ffffff !important;
 }
 
 @media (max-width: 768px) {
