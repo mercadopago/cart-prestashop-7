@@ -286,6 +286,9 @@
                             return console.warn('paymentMethods handling error: ', error)
                         }
                         console.log('Payment Methods available: ', paymentMethods)
+
+                        setImageCard (paymentMethods[0]['thumbnail']);
+                        loadAdditionalInfo (paymentMethods[0]['additional_info_needed']);
                     },
                     onIssuersReceived: (error, issuers) => {
                         if (error) return console.warn('issuers handling error: ', error)
@@ -328,6 +331,47 @@
          */
         function getAmount() {
             return document.getElementById('amount').value;
+        }
+
+         /**
+         * Set Imagem card on element
+         *
+         * @param string secureThumbnail
+         */
+         function setImageCard (secureThumbnail) {
+            var mpCardNumber = document.getElementById('id-card-number');
+            mpCardNumber.style.background = 'url(' + secureThumbnail + ') 98% 50% no-repeat #fff';
+            mpCardNumber.style.backgroundSize = 'auto 24px';
+        }
+
+        /**
+         *
+         * Load Additional Info to use for build payment form
+         *
+         * @param array sdkAdditionalInfoNeeded
+         */
+         function loadAdditionalInfo (sdkAdditionalInfoNeeded) {
+            additionalInfoNeeded = {
+            issuer: false,
+            cardholder_name: false,
+            cardholder_identification_type: false,
+            cardholder_identification_number: false
+        };
+
+            for (var i = 0; i < sdkAdditionalInfoNeeded.length; i++) {
+                if (sdkAdditionalInfoNeeded[i] === 'issuer_id') {
+                    additionalInfoNeeded.issuer = true;
+                }
+                if (sdkAdditionalInfoNeeded[i] === 'cardholder_name') {
+                    additionalInfoNeeded.cardholder_name = true;
+                }
+                if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_type') {
+                    additionalInfoNeeded.cardholder_identification_type = true;
+                }
+                if (sdkAdditionalInfoNeeded[i] === 'cardholder_identification_number') {
+                    additionalInfoNeeded.cardholder_identification_number = true;
+                }
+            }
         }
         
     </script>
