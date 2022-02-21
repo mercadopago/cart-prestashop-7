@@ -248,9 +248,15 @@
             }
         };
 
+        var additionalInfoNeeded = {};
+        var mp = null;
+        var mpCardForm = null;
+        var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
+        var psVersion = 'seven';
 
         loadCustom();
         setChangeEventOnExpirationDate();
+        setChangeEventOnCardNumber();
 
         function loadCustom() {
             mp = new MercadoPago('{$public_key|escape:"javascript":"UTF-8"}');
@@ -301,6 +307,8 @@
 
                         if (error) return console.warn('installments handling error: ', error)
                         console.log('Installments available: ', installments);
+
+                        setChangeEventOnInstallments(site_id, installments['payer_costs']);
                     },
                     onCardTokenReceived: (error, token) => {
                         // console.log('token received');
@@ -466,7 +474,7 @@
             }
         }
 
-        /** 
+        /**
         * Validate fixed Inputs is empty
         *
         * @return bool
@@ -484,10 +492,10 @@
 
             for (var x = 0; x < formInputs.length; x++) {
                 var element = formInputs[x];
-                
+
                 // Check is a input to create token.
                 if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
-                    
+
                     if (element.value === -1 || element.value === '') {
                         var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
                         console.log('Span: ', span);
@@ -501,6 +509,61 @@
                 }
             }
             return emptyInputs;
+        }
+
+
+        /**
+        * Show governmental taxes in MLA
+        *
+        * @params any payer_costs
+        */
+        function setChangeEventOnInstallments(siteId, payer_costs) {
+            if (siteId === 'MLA') {
+                clearTax();
+                document.querySelector('#id-installments').addEventListener('change', function (e) {
+                    showTaxes(payer_costs);
+                });
+            }
+        }
+
+        /**
+        * Show governmental taxes in MLA
+        *
+        * @params any payer_costs
+        */
+        function showTaxes(payer_costs) {
+            console.log('dentro de show taxes:', payer_costs);
+            var installmentsSelect = document.querySelector('#id-installments');
+
+            for (var i = 0; i < payer_costs.length; i++) {
+                console.log('estamos dentro do for');
+                if (payer_costs[i].installments === installmentsSelect.value) {
+                    console.log('estamos dentro do if');
+                    var taxes_split = payer_costs[i].labels[0].split('|');
+                    var cft = taxes_split[0].replace('_', ' ');
+                    var tea = taxes_split[1].replace('_', ' ');
+
+                    if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
+                        cft = '';
+                        tea = '';
+                    }
+                    document.querySelector('#mp-tax-cft-text').innerHTML = cft;
+                    document.querySelector('#mp-tax-tea-text').innerHTML = tea;
+                }
+            }
+        }
+
+        /**
+        * Clears card number input on keyup when there's less than 4 digits
+        *
+        * @params any payer_costs
+        */
+        function setChangeEventOnCardNumber() {
+            document.getElementById('id-card-number').addEventListener('keyup', function (e) {
+                if (e.target.value.length <= 4) {
+                    clearInputs();
+                }
+            });
         }
 
     </script>
