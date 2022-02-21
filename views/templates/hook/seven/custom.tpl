@@ -313,7 +313,7 @@
                     onCardTokenReceived: (error, token) => {
                         // console.log('token received');
                         if (error) {
-
+                            showErrors(error);
                             return console.warn('Token handling error: ', error)
                         }
                         console.log('Token available: ', token);
@@ -556,7 +556,6 @@
         /**
         * Clears card number input on keyup when there's less than 4 digits
         *
-        * @params any payer_costs
         */
         function setChangeEventOnCardNumber() {
             document.getElementById('id-card-number').addEventListener('keyup', function (e) {
@@ -564,6 +563,39 @@
                     clearInputs();
                 }
             });
+        }
+
+        /**
+         * Function ShowError
+         * @param  obje  error
+         */
+        function showErrors(error) {
+
+            var form = getFormCustom();
+            var serializedError = error.cause || error;
+            var scValue = document.getElementById('id-security-code').value;
+            var chnValue = document.getElementById('id-card-holder-name').value;
+
+            for (var x = 0; x < serializedError.length; x++) {
+                var code = serializedError[x].code;
+                var span = undefined;
+
+                if (code === '208' || code === '209' || code === '325' || code === '326') {
+                    span = form.querySelector('#mp-error-208');
+                    console.log("ShowErrors:", code);
+                } else {
+                    console.log("ShowErrors:", code);
+                    span = form.querySelector('#mp-error-' + code);
+                    // span = form.querySelector('#mp-error-224');
+                }
+
+                if (span !== undefined) {
+                    span.style.display = 'block';
+                    form.querySelector(span.getAttribute('data-main')).classList.add('mp-form-control-error');
+                }
+            }
+
+            getConditionTerms();
         }
 
     </script>
