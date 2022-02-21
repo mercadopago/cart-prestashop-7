@@ -287,8 +287,11 @@
                         }
                         console.log('Payment Methods available: ', paymentMethods)
 
+                        validateFixedInputs();
+                        clearInputs();
                         setImageCard(paymentMethods[0]['thumbnail']);
                         loadAdditionalInfo(paymentMethods[0]['additional_info_needed']);
+                        additionalInfoHandler();
                     },
                     onIssuersReceived: (error, issuers) => {
                         if (error) return console.warn('issuers handling error: ', error)
@@ -436,6 +439,68 @@
         function clearTax() {
             document.querySelector('.mp-text-cft').innerHTML = '';
             document.querySelector('.mp-text-tea').innerHTML = '';
+        }
+
+        /**
+         * Clear Inputs
+         */
+        function clearInputs() {
+            hideErrors();
+            document.getElementById('id-card-number').style.background = 'no-repeat #fff';
+            document.getElementById('id-card-expiration').value = '';
+            document.getElementById('id-doc-number').value = '';
+            document.getElementById('id-security-code').value = '';
+            document.getElementById('id-card-holder-name').value = '';
+        }
+
+        /**
+        * Disable select for debit cards
+        *
+        * @param string payment_type_id
+        */
+        function handleInstallments(payment_type_id) {
+            if (payment_type_id === 'debit_card') {
+                document.getElementById('id-installments').setAttribute("disabled", "disabled");
+            } else {
+                document.getElementById('id-installments').removeAttribute("disabled");
+            }
+        }
+
+        /** 
+        * Validate fixed Inputs is empty
+        *
+        * @return bool
+        */
+        function validateFixedInputs() {
+            var emptyInputs = false;
+            var form = getFormCustom();
+            var formInputs = form.querySelectorAll('[data-checkout]');
+            var fixedInputs = [
+                'cardNumber',
+                'cardExpiration',
+                'securityCode',
+                'installments'
+            ];
+
+            for (var x = 0; x < formInputs.length; x++) {
+                var element = formInputs[x];
+                
+                // Check is a input to create token.
+                if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
+                    
+                    if (element.value === -1 || element.value === '') {
+                        var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
+                        console.log('Span: ', span);
+
+                        if (span.length > 0) {
+                            span[0].style.display = 'block';
+                        }
+                        element.classList.add('mp-form-control-error');
+                        emptyInputs = true;
+                    }
+                }
+            }
+            return emptyInputs;
         }
 
     </script>
