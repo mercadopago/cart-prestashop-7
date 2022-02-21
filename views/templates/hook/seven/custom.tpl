@@ -287,8 +287,8 @@
                         }
                         console.log('Payment Methods available: ', paymentMethods)
 
-                        setImageCard (paymentMethods[0]['thumbnail']);
-                        loadAdditionalInfo (paymentMethods[0]['additional_info_needed']);
+                        setImageCard(paymentMethods[0]['thumbnail']);
+                        loadAdditionalInfo(paymentMethods[0]['additional_info_needed']);
                     },
                     onIssuersReceived: (error, issuers) => {
                         if (error) return console.warn('issuers handling error: ', error)
@@ -315,15 +315,15 @@
          * Split the date into month and year
          */
         function setChangeEventOnExpirationDate() {
-        document
-            .getElementById('id-card-expiration')
-            .addEventListener("change", function (event) {
-                var cardExpirationDate = document.getElementById('id-card-expiration').value;
-                var cardExpirationMonth = cardExpirationDate.split('/')[0] | " ";
-                var cardExpirationYear = cardExpirationDate.split('/')[1] | " ";
-                document.getElementById('id-card-expiration-month').value = ('0' + cardExpirationMonth).slice(-2);
-                document.getElementById('id-card-expiration-year').value = cardExpirationYear;
-            });
+            document
+                .getElementById('id-card-expiration')
+                .addEventListener("change", function (event) {
+                    var cardExpirationDate = document.getElementById('id-card-expiration').value;
+                    var cardExpirationMonth = cardExpirationDate.split('/')[0] | " ";
+                    var cardExpirationYear = cardExpirationDate.split('/')[1] | " ";
+                    document.getElementById('id-card-expiration-month').value = ('0' + cardExpirationMonth).slice(-2);
+                    document.getElementById('id-card-expiration-year').value = cardExpirationYear;
+                });
         }
 
         /**
@@ -333,12 +333,12 @@
             return document.getElementById('amount').value;
         }
 
-         /**
-         * Set Imagem card on element
-         *
-         * @param string secureThumbnail
-         */
-         function setImageCard (secureThumbnail) {
+        /**
+        * Set Imagem card on element
+        *
+        * @param string secureThumbnail
+        */
+        function setImageCard(secureThumbnail) {
             var mpCardNumber = document.getElementById('id-card-number');
             mpCardNumber.style.background = 'url(' + secureThumbnail + ') 98% 50% no-repeat #fff';
             mpCardNumber.style.backgroundSize = 'auto 24px';
@@ -350,13 +350,13 @@
          *
          * @param array sdkAdditionalInfoNeeded
          */
-         function loadAdditionalInfo (sdkAdditionalInfoNeeded) {
+        function loadAdditionalInfo(sdkAdditionalInfoNeeded) {
             additionalInfoNeeded = {
-            issuer: false,
-            cardholder_name: false,
-            cardholder_identification_type: false,
-            cardholder_identification_number: false
-        };
+                issuer: false,
+                cardholder_name: false,
+                cardholder_identification_type: false,
+                cardholder_identification_number: false
+            };
 
             for (var i = 0; i < sdkAdditionalInfoNeeded.length; i++) {
                 if (sdkAdditionalInfoNeeded[i] === 'issuer_id') {
@@ -373,6 +373,70 @@
                 }
             }
         }
-        
+
+        /**
+       * Check what information is necessary to pay and show inputs
+       */
+        function additionalInfoHandler() {
+            if (additionalInfoNeeded.cardholder_name) {
+                document.getElementById('mp-card-holder-div').style.display = 'block';
+            } else {
+                document.getElementById('mp-card-holder-div').style.display = 'none';
+            }
+
+            if (additionalInfoNeeded.issuer) {
+                document.getElementById('container-issuers').style.display = 'block';
+                document.getElementById('container-installments').classList.remove('col-md-12');
+                document.getElementById('container-installments').classList.add('col-md-8');
+                //   Mercadopago.getIssuers(objPaymentMethod.id, getBin(), issuersHandler);
+                //   mp.getIssuers(getBin());// revalidar
+            }
+            else {
+                clearIssuer();
+                clearTax();
+            }
+            if (additionalInfoNeeded.cardholder_identification_type) {
+                document.getElementById('mp-doc-div-title').style.display = 'block';
+                document.getElementById('mp-doc-div').style.display = 'block';
+                document.getElementById('mp-doc-type-div').style.display = 'block';
+                mp.getIdentificationTypes();
+            } else {
+                document.getElementById('mp-doc-type-div').style.display = 'none';
+            }
+
+            if (additionalInfoNeeded.cardholder_identification_number) {
+                document.getElementById('mp-doc-div-title').style.display = 'block';
+                document.getElementById('mp-doc-div').style.display = 'block';
+                document.getElementById('mp-doc-number-div').style.display = 'block';
+            } else {
+                document.getElementById('mp-doc-number-div').style.display = 'none';
+            }
+
+            if (!additionalInfoNeeded.cardholder_identification_type &&
+                !additionalInfoNeeded.cardholder_identification_number) {
+                document.getElementById('mp-doc-div-title').style.display = 'none';
+                document.getElementById('mp-doc-div').style.display = 'none';
+            }
+        }
+
+
+        /**
+       * Clear input select and change to default layout
+       */
+        function clearIssuer() {
+            document.getElementById('container-issuers').style.display = 'none';
+            document.getElementById('container-installments').classList.remove('col-md-8');
+            document.getElementById('container-installments').classList.add('mp-md-12');
+            document.getElementById('id-issuers-options').innerHTML = '';
+        }
+
+        /**
+         * Clear Tax
+         */
+        function clearTax() {
+            document.querySelector('.mp-text-cft').innerHTML = '';
+            document.querySelector('.mp-text-tea').innerHTML = '';
+        }
+
     </script>
     {/if}
