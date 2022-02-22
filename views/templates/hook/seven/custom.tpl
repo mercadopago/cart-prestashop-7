@@ -451,6 +451,56 @@
             }
         }
 
+        /**
+         * Get Bin from Card Number
+         */
+        function getBin() {
+            var cardnumber = $('#id-card-number').val().replace(/ /g, '').replace(/-/g, '').replace(/\./g, '');
+            return cardnumber.substr(0, 6);
+        }
+
+        /**
+         * Remove background image from imput
+         */
+        function resetBackgroundCard() {
+            document.getElementById('id-card-number').style.background = 'no-repeat #fff';
+        }
+
+        /*
+        * Execute before event focusout on input Card Number
+        *
+        * @param object event
+        */
+        function guessingPaymentMethod(event) {
+            loadCustom();
+            var bin = getBin();
+
+            if (bin.length < 6) {
+                resetBackgroundCard();
+                clearDoc();
+                clearIssuer();
+
+                clearTax();
+                clearInputs();
+
+                return;
+            }
+        }
+
+        /**
+         * Clear input select and change to default layout
+         */
+        function clearDoc() {
+            console.log('ClearDoc OK!');
+            document.getElementById('mp-doc-div-title').style.display = 'none';
+            document.getElementById('mp-doc-div').style.display = 'none';
+            document.getElementById('mp-doc-type-div').style.display = 'none';
+            document.getElementById('mp-doc-number-div').style.display = 'none';
+            // document.getElementById('id-docType').innerHTML = ''; // não limpar o campo Tipo de Documento.
+            document.getElementById('id-doc-number').value = '';
+            mp
+        }
+
 
         /**
        * Clear input select and change to default layout
