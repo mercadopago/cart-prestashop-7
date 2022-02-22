@@ -704,6 +704,46 @@
         }
 
         /**
+         * Validate Additional Inputs
+         *
+         * @return bool
+         */
+        function validateAdditionalInputs() {
+            var emptyInputs = false;
+
+            if (additionalInfoNeeded.issuer) {
+                var inputMpIssuer = document.getElementById('id-issuers-options');
+                if (inputMpIssuer.value === -1 || inputMpIssuer.value === '') {
+                    inputMpIssuer.classList.add('mp-form-control-error');
+                    emptyInputs = true;
+                }
+            }
+            if (additionalInfoNeeded.cardholder_name) {
+                var inputCardholderName = document.getElementById('id-card-holder-name');
+                if (inputCardholderName.value === -1 || inputCardholderName.value === '') {
+                    inputCardholderName.classList.add('mp-form-control-error');
+                    emptyInputs = true;
+                }
+            }
+            if (additionalInfoNeeded.cardholder_identification_type) {
+                var inputDocType = document.getElementById('id-docType');
+                if (inputDocType.value === -1 || inputDocType.value === '') {
+                    inputDocType.classList.add('mp-form-control-error');
+                    emptyInputs = true;
+                }
+            }
+            if (additionalInfoNeeded.cardholder_identification_number) {
+                var docNumber = document.getElementById('id-doc-number');
+                if (docNumber.value === -1 || docNumber.value === '') {
+                    docNumber.classList.add('mp-form-control-error');
+                    document.getElementById('mp-error-324').style.display = 'inline-block';
+                    emptyInputs = true;
+                }
+            }
+            return emptyInputs;
+        }
+
+        /**
         * Handler Response of mp.createToken
         *
         * @param number error
