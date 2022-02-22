@@ -800,11 +800,11 @@
 
                     if (validateInputs()) {
                         disableFinishOrderButton(psVersion);
-                        mpCardForm.createCardToken();
-                        return false;
+                        return;
                     }
 
                     getConditionTerms();
+                    mpCardForm.createCardToken();
                     return false;
                 };
             }
