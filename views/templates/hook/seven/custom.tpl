@@ -666,6 +666,7 @@
                 }
             }
 
+            focusInputError();
             getConditionTerms();
         }
 
