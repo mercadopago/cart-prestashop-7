@@ -670,6 +670,40 @@
         }
 
         /**
+        * Disable error spans
+        */
+        function hideErrors() {
+            // console.log('HideErrors OK');
+            for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
+                var field = document.querySelectorAll('[data-checkout]')[x];
+                field.classList.remove('mp-form-control-error');
+            }
+
+            for (var y = 0; y < document.querySelectorAll('.mp-erro-form').length; y++) {
+                var small = document.querySelectorAll('.mp-erro-form')[y]; // mp-erro-form
+                small.style.display = 'none';
+            }
+        }
+
+        /**
+        * Get condition terms input on PS17
+        */
+        function getConditionTerms() {
+            var terms = document.getElementById('conditions_to_approve[terms-and-conditions]');
+            if (typeof terms === 'object' && terms !== null) {
+                terms.checked = false;
+                return terms.checked;
+            }
+        }
+
+        /**
+        * Get form
+        */
+        function getFormCustom() {
+            return document.querySelector('#mp_custom_checkout');
+        }
+
+        /**
         * Handler Response of mp.createToken
         *
         * @param number error
