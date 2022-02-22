@@ -235,7 +235,7 @@
 
     {if $public_key != ''}
     <script type="text/javascript">
-        //to do review
+
         // Collapsible payments cards acepteds
         var show_payments = document.querySelector('#button-show-payments');
         var frame_payments = document.querySelector('#mp-frame-payments');
@@ -258,6 +258,25 @@
         setChangeEventOnExpirationDate();
         setChangeEventOnCardNumber();
 
+        /**
+        * Disable finish order button
+        *
+        * @param string psVersion
+        */
+        function disableFinishOrderButton(psVersion) {
+            if (psVersion === 'six') {
+                var sixButton = document.getElementById('mp-custom-finish-order');
+                sixButton.setAttribute('disabled', 'disabled');
+            } else if (psVersion === 'seven') {
+                var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+                sevenButton.setAttribute('disabled', 'disabled');
+            }
+        }
+
+        /**
+        *Create instance of Mercado Pago sdk v2 and mount form
+        *
+        */
         function loadCustom() {
             mp = new MercadoPago('{$public_key|escape:"javascript":"UTF-8"}');
 
@@ -317,14 +336,16 @@
                             return console.warn('Token handling error: ', error)
                         }
                         console.log('Token available: ', token);
+
+                        sdkResponseHandler(error, token['token']);
                     },
                 }
             });
         }
 
         /**
-         * Split the date into month and year
-         */
+        * Split the date into month and year
+        */
         function setChangeEventOnExpirationDate() {
             document
                 .getElementById('id-card-expiration')
@@ -338,8 +359,8 @@
         }
 
         /**
-         * Get Amount end calculate discount for hide inputs
-         */
+        * Get Amount end calculate discount for hide inputs
+        */
         function getAmount() {
             return document.getElementById('amount').value;
         }
@@ -356,11 +377,11 @@
         }
 
         /**
-         *
-         * Load Additional Info to use for build payment form
-         *
-         * @param array sdkAdditionalInfoNeeded
-         */
+        *
+        * Load Additional Info to use for build payment form
+        *
+        * @param array sdkAdditionalInfoNeeded
+        */
         function loadAdditionalInfo(sdkAdditionalInfoNeeded) {
             additionalInfoNeeded = {
                 issuer: false,
@@ -386,8 +407,8 @@
         }
 
         /**
-       * Check what information is necessary to pay and show inputs
-       */
+        * Check what information is necessary to pay and show inputs
+        */
         function additionalInfoHandler() {
             if (additionalInfoNeeded.cardholder_name) {
                 document.getElementById('mp-card-holder-div').style.display = 'block';
@@ -597,6 +618,73 @@
 
             getConditionTerms();
         }
+
+        /**
+        * Handler Response of mp.createToken
+        *
+        * @param number error
+        * @param object token
+        */
+        function sdkResponseHandler(error, token) {
+
+            if (error) {
+                showErrors(error);
+            } else {
+                var responseToken = document.querySelector('#card_token_id');
+                responseToken.value = token;
+                // document.forms.mp_custom_checkout.submit(); // habilitar depois
+            }
+        }
+
+        /**
+        * Validate inputs
+        *
+        */
+        function validateInputs() {
+            hideErrors();
+            var fixedInputs = validateFixedInputs();
+            var additionalInputs = validateAdditionalInputs();
+
+            if (fixedInputs || additionalInputs) {
+                console.log('Entra do IF')
+                focusInputError();
+                return false;
+            }
+            return true;
+        }
+
+        /**
+        * Focus input with error
+        *
+        * @return bool
+        */
+        function focusInputError() {
+            if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
+                var formInputs = document.querySelectorAll('.mp-form-control-error');
+                formInputs[0].focus();
+
+                console.log('focus input:', formInputs[0]); //limpar depois
+            }
+        }
+
+        jQuery(function () {
+            $('input[data-checkout="cardNumber"]').on('focusout', guessingPaymentMethod);
+
+            if (document.forms.mp_custom_checkout !== undefined) {
+
+                document.forms.mp_custom_checkout.onsubmit = function () {
+
+                    if (validateInputs()) {
+                        disableFinishOrderButton(psVersion);
+                        mpCardForm.createCardToken();
+                        return false;
+                    }
+
+                    getConditionTerms();
+                    return false;
+                };
+            }
+        })
 
     </script>
     {/if}
