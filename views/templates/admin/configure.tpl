@@ -48,6 +48,29 @@
     <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
 </div>
 
+{if (version_compare(_PS_VERSION_, '1.7.0.0', '<'))}
+<div class="mp-wallet-button-notice mp-mb-15">
+    <div class="mp-left-wallet-button">
+        <div>
+            <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards"/>
+        </div>
+        <div class="mp-wallet-button-notice-text">
+            <p class='mp-wallet-button-notice-title'>
+                {l s='Atenção! O checkout Mercado Pago para versão 1.6 da Prestashop será desativado.' mod='mercadopago'}
+            </p>
+            <p class='mp-wallet-button-notice-subtitle'>
+                {l s='A partir da próxima atualização (4.10.0+), não haverá checkout Mercado Pago para a versão 1.6 da plataforma Prestashop.
+                        Siga as instruções no manual e atualize sua versão da Prestashop para não deixar de vender.' mod='mercadopago'}
+            </p>
+        </div>
+    </div>
+    <div class="mp-margin-left-auto">
+    <a href="https://devdocs.prestashop.com/1.7/basics/keeping-up-to-date/" target='_blank'>
+    <button type="button" class="btn btn-primary">{l s='Passo a passo para atualizar' mod='mercadopago'}</button></a>
+    </div>
+</div>
+{/if}
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
@@ -176,7 +199,7 @@
         }
 
         // ----- standard configuration form ------ //
-        {include file='./checkouts/standard_configuration.tpl'}           
+        {include file='./checkouts/standard_configuration.tpl'}
 
         // ----- custom configuration form ------ //
         {include file='./checkouts/custom_configuration.tpl'}
