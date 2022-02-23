@@ -312,10 +312,16 @@
                         }
                         console.log('Payment Methods available: ', paymentMethods)
 
+                        var paymentTypeId = paymentMethods[0].payment_type_id;
+
+                        var inputPaymentTypeId = document.querySelector('#payment_type_id');
+                        inputPaymentTypeId.value = paymentTypeId;
+
                         validateFixedInputs();
                         clearInputs();
                         setImageCard(paymentMethods[0]['thumbnail']);
                         loadAdditionalInfo(paymentMethods[0]['additional_info_needed']);
+                        handleInstallments(paymentTypeId);
                         additionalInfoHandler();
                     },
                     onIssuersReceived: (error, issuers) => {
@@ -420,8 +426,6 @@
                 document.getElementById('container-issuers').style.display = 'block';
                 document.getElementById('container-installments').classList.remove('col-md-12');
                 document.getElementById('container-installments').classList.add('col-md-8');
-                //   Mercadopago.getIssuers(objPaymentMethod.id, getBin(), issuersHandler);
-                //   mp.getIssuers(getBin());// revalidar
             }
             else {
                 clearIssuer();
@@ -496,7 +500,6 @@
             document.getElementById('mp-doc-div').style.display = 'none';
             document.getElementById('mp-doc-type-div').style.display = 'none';
             document.getElementById('mp-doc-number-div').style.display = 'none';
-            // document.getElementById('id-docType').innerHTML = ''; // não limpar o campo Tipo de Documento.
             document.getElementById('id-doc-number').value = '';
             mp
         }
@@ -657,7 +660,6 @@
                 } else {
                     console.log("ShowErrors:", code);
                     span = form.querySelector('#mp-error-' + code);
-                    // span = form.querySelector('#mp-error-224');
                 }
 
                 if (span !== undefined) {
@@ -674,7 +676,6 @@
         * Disable error spans
         */
         function hideErrors() {
-            // console.log('HideErrors OK');
             for (var x = 0; x < document.querySelectorAll('[data-checkout]').length; x++) {
                 var field = document.querySelectorAll('[data-checkout]')[x];
                 field.classList.remove('mp-form-control-error');
@@ -755,9 +756,15 @@
             if (error) {
                 showErrors(error);
             } else {
+                var formData = mpCardForm.getCardFormData(); 2
+
+                var payment_method_id = document.querySelector('#payment_method_id');
+                payment_method_id.value = formData.paymentMethodId;
+
                 var responseToken = document.querySelector('#card_token_id');
                 responseToken.value = token;
-                // document.forms.mp_custom_checkout.submit(); // habilitar depois
+
+                document.forms.mp_custom_checkout.submit();
             }
         }
 
