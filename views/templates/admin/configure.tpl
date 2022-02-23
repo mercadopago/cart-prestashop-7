@@ -48,27 +48,19 @@
     <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
 </div>
 
-{if (version_compare(_PS_VERSION_, '1.7.0.0', '<'))}
-<div class="mp-wallet-button-notice mp-mb-15">
-    <div class="mp-left-wallet-button">
-        <div>
-            <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards"/>
-        </div>
-        <div class="mp-wallet-button-notice-text">
-            <p class='mp-wallet-button-notice-title'>
-                {l s='Atenção! O checkout Mercado Pago para versão 1.6 da Prestashop será desativado.' mod='mercadopago'}
-            </p>
-            <p class='mp-wallet-button-notice-subtitle'>
-                {l s='A partir da próxima atualização (4.10.0+), não haverá checkout Mercado Pago para a versão 1.6 da plataforma Prestashop.
-                        Siga as instruções no manual e atualize sua versão da Prestashop para não deixar de vender.' mod='mercadopago'}
-            </p>
-        </div>
+{if (version_compare(_PS_VERSION_, '1.7', '<'))}
+    <div class="mp-card-info">
+	    <div class="mp-card-color-alert"></div>
+	    <div class="mp-card-body">
+		    <div class="mp-card-badge-warning"></div>
+	    <div>
+		    <span class="mp-card-title"><b>{l s='Atenção! O checkout Mercado Pago para versão 1.6 da Prestashop será desativado.' mod='mercadopago'}</b></span>
+		    <span class="mp-card-subtitle">{l s='A partir da próxima atualização (4.10.0+), não haverá checkout Mercado Pago para a versão 1.6 da plataforma Prestashop.' mod='mercadopago'}</span>
+            <span class="mp-card-subtitle">{l s='Siga as instruções no manual e atualize sua versão da Prestashop para não deixar de vender.' mod='mercadopago'}</span>
+		    <a class="mp-card-button-a" target="_blank" href="https://devdocs.prestashop.com/1.7/basics/keeping-up-to-date/"><button type="button" class="mp-card-button"><b>{l s='Passo a passo para atualizar' mod='mercadopago'}</b></button></a>
+	    </div>
+	    </div>
     </div>
-    <div class="mp-margin-left-auto">
-    <a href="https://devdocs.prestashop.com/1.7/basics/keeping-up-to-date/" target='_blank'>
-    <button type="button" class="btn btn-primary">{l s='Passo a passo para atualizar' mod='mercadopago'}</button></a>
-    </div>
-</div>
 {/if}
 
 <!-- Nav tabs -->
