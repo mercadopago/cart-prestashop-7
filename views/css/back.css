@@ -293,7 +293,7 @@ html {
 }
 
 .mp-title-banner::before {
-  content: "";
+  content: '';
   width: 7px;
   height: 80px;
   display: block;
@@ -386,11 +386,12 @@ html {
   align-items: center;
   justify-content: center;
   padding: 120px 0;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(0, 158, 227, 0.04665616246498594) 100%
-  );
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(0, 158, 227, 0.04665616246498594) 100%
+    );
 }
 
 .mp-title-beneficios {
@@ -480,7 +481,7 @@ html {
 }
 
 .mp-number-recibopagos-after::after {
-  content: "";
+  content: '';
   width: 115px;
   height: 1px;
   display: block;
@@ -490,7 +491,7 @@ html {
 }
 
 .mp-number-recibopagos-before::before {
-  content: "";
+  content: '';
   width: 115px;
   height: 1px;
   display: block;
@@ -501,7 +502,7 @@ html {
 }
 
 .mp-number-recibopagos-before-green::before {
-  content: "";
+  content: '';
   width: 115px;
   height: 1px;
   display: block;
@@ -568,7 +569,7 @@ html {
 
 /* rating modal */
 .mp-rating-modal::before {
-  content: "";
+  content: '';
   display: inline-block;
   height: 100%;
   vertical-align: middle;
@@ -640,7 +641,7 @@ html {
 
 .label-mp-rating-modal::before {
   margin: 0 8px 5px 0;
-  content: "\f005";
+  content: '\f005';
   font-family: FontAwesome;
   display: inline-block;
   font-size: 2em;
