@@ -483,7 +483,6 @@
                 resetBackgroundCard();
                 clearDoc();
                 clearIssuer();
-
                 clearTax();
                 clearInputs();
 
@@ -559,6 +558,7 @@
             var formInputs = form.querySelectorAll('[data-checkout]');
             var fixedInputs = [
                 'cardNumber',
+                'cardholderName',
                 'cardExpiration',
                 'securityCode',
                 'installments'
@@ -572,7 +572,6 @@
 
                     if (element.value === -1 || element.value === '') {
                         var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
-                        console.log('Span: ', span);
 
                         if (span.length > 0) {
                             span[0].style.display = 'block';
@@ -647,8 +646,6 @@
 
             var form = getFormCustom();
             var serializedError = error.cause || error;
-            var scValue = document.getElementById('id-security-code').value;
-            var chnValue = document.getElementById('id-card-holder-name').value;
 
             for (var x = 0; x < serializedError.length; x++) {
                 var code = serializedError[x].code;
@@ -656,9 +653,7 @@
 
                 if (code === '208' || code === '209' || code === '325' || code === '326') {
                     span = form.querySelector('#mp-error-208');
-                    console.log("ShowErrors:", code);
                 } else {
-                    console.log("ShowErrors:", code);
                     span = form.querySelector('#mp-error-' + code);
                 }
 
@@ -667,7 +662,6 @@
                     form.querySelector(span.getAttribute('data-main')).classList.add('mp-form-control-error');
                 }
             }
-
             focusInputError();
             getConditionTerms();
         }
@@ -682,7 +676,7 @@
             }
 
             for (var y = 0; y < document.querySelectorAll('.mp-erro-form').length; y++) {
-                var small = document.querySelectorAll('.mp-erro-form')[y]; // mp-erro-form
+                var small = document.querySelectorAll('.mp-erro-form')[y];
                 small.style.display = 'none';
             }
         }
@@ -794,8 +788,6 @@
             if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
                 var formInputs = document.querySelectorAll('.mp-form-control-error');
                 formInputs[0].focus();
-
-                console.log('focus input:', formInputs[0]); //limpar depois
             }
         }
 
