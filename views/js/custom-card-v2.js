@@ -42,10 +42,10 @@
   var mp = null;
   var mpCardForm = null;
 
-  /*
+  /**
    * Initialise vars to use on JS custom-card.js
    *
-   * @param object customVars
+   * @param {object} mpCustom
    */
   window.initializeCustom = function (mpCustom) {
     sellerCustom.site_id = mpCustom.site_id;
@@ -59,7 +59,7 @@
   setChangeEventOnCardNumber();
 
   /**
-   *Create instance of Mercado Pago sdk v2 and mount form
+   * Create instance of Mercado Pago sdk v2 and mount form
    */
   function loadCardForm() {
     mp = new MercadoPago(sellerCustom.public_key);
@@ -370,7 +370,8 @@
   }
 
   /**
-   * Function ShowError
+   * Show errors
+   *
    * @param  {object}  error
    */
   function showErrors(error) {
@@ -392,6 +393,7 @@
         form.querySelector(span.getAttribute('data-main')).classList.add('mp-form-control-error');
       }
     }
+
     focusInputError();
     getConditionTerms();
   }
@@ -495,7 +497,6 @@
 
   /**
    * Validate inputs
-   *
    */
   function validateInputs() {
     hideErrors();
@@ -538,6 +539,9 @@
     }
   }
 
+  /**
+   * Handle submit from form
+   */
   jQuery(function () {
     if (document.forms.mp_custom_checkout !== undefined) {
       document.forms.mp_custom_checkout.onsubmit = function () {

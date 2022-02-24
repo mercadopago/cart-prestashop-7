@@ -27,61 +27,63 @@
     <div class="row mp-frame-checkout-seven">
 
         {if count($credit) != 0}
-        <div class="col-xs-12 col-md-12 col-12">
-            <div class="frame-tarjetas">
-                <p class="mp-subtitle-standard-checkout">
-                    {l s='Credit card' mod='mercadopago'}
-                    <span class="mp-badge-checkout">
-                        {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
-                    </span>
-                </p>
+            <div class="col-xs-12 col-md-12 col-12">
+                <div class="frame-tarjetas">
+                    <p class="mp-subtitle-standard-checkout">
+                        {l s='Credit card' mod='mercadopago'}
+                        <span class="mp-badge-checkout">
+                            {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
+                        </span>
+                    </p>
 
-                {foreach $credit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    {foreach $credit as $tarjeta}
+                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
+                    {/foreach}
+                </div>
             </div>
-        </div>
         {/if}
 
         {if count($debit) != 0}
-        <div class="col-xs-12 col-lg-6 col-md-6 col-12">
-            <div class="frame-tarjetas">
-                <p class="mp-subtitle-standard-checkout">{l s='Debit card' mod='mercadopago'}</p>
+            <div class="col-xs-12 col-lg-6 col-md-6 col-12">
+                <div class="frame-tarjetas">
+                    <p class="mp-subtitle-standard-checkout">{l s='Debit card' mod='mercadopago'}</p>
 
-                {foreach $debit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    {foreach $debit as $tarjeta}
+                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
+                    {/foreach}
+                </div>
             </div>
-        </div>
         {/if}
 
         {if count($ticket) != 0}
-        <div class="col-xs-12 col-lg-6 col-md-6 col-12">
-            <div class="frame-tarjetas">
-                <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
+            <div class="col-xs-12 col-lg-6 col-md-6 col-12">
+                <div class="frame-tarjetas">
+                    <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
 
-                {foreach $ticket as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    {foreach $ticket as $tarjeta}
+                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
+                    {/foreach}
+                </div>
             </div>
-        </div>
         {/if}
 
         {if $modal != true && $preference == ""}
-        <div class="col-md-12 mp-pt-20">
-            <div class="mp-redirect-frame">
-                <img src="{$module_dir|escape:'html':'UTF-8'}views/img/redirect_checkout.png" class="img-fluid" />
-                <p>{l s='We take you to our site to complete the payment' mod='mercadopago'}</p>
+            <div class="col-md-12 mp-pt-20">
+                <div class="mp-redirect-frame">
+                    <img src="{$module_dir|escape:'html':'UTF-8'}views/img/redirect_checkout.png" class="img-fluid" />
+                    <p>{l s='We take you to our site to complete the payment' mod='mercadopago'}</p>
+                </div>
             </div>
-        </div>
         {/if}
 
         <div class="col-xs-12 col-md-12 col-12 mp-pt-15">
             <label class="mp-pb-5">
                 {l s='By continuing, you agree to our ' mod='mercadopago'}
-                <u><a class="mp-link-checkout-custom" href={$terms_url|escape:"html":"UTF-8"} target="_blank">
-                    {l s='Terms and Conditions' mod='mercadopago'}
-                </a></u>
+                <u>
+                    <a class="mp-link-checkout-custom" href={$terms_url|escape:"html":"UTF-8"} target="_blank">
+                        {l s='Terms and Conditions' mod='mercadopago'}
+                    </a>
+                </u>
             </label>
         </div>
     </div>
@@ -100,12 +102,12 @@
 {/if}
 
 {if $modal == true && $preference != ""}
-<script>
-    var mercadopago_button = document.querySelector('.mercadopago-button');
-    mercadopago_button.style.display = 'none';
-    document.forms['mp_standard_checkout'].onsubmit = function () {
-        mercadopago_button.click();
-        return false;
-    }
-</script>
+    <script>
+        var mercadopago_button = document.querySelector('.mercadopago-button');
+        mercadopago_button.style.display = 'none';
+        document.forms['mp_standard_checkout'].onsubmit = function () {
+            mercadopago_button.click();
+            return false;
+        }
+    </script>
 {/if}
