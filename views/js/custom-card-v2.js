@@ -81,17 +81,17 @@
         issuer: { id: 'id-issuers-options' },
       },
       callbacks: {
-        onFormMounted: (error) => {
+        onFormMounted: function (error) {
           if (error) {
             return console.warn('Form Mounted handling error: ', error);
           }
         },
-        onIdentificationTypesReceived: (error, identificationTypes) => {
+        onIdentificationTypesReceived: function (error, identificationTypes) {
           if (error) {
             return console.warn('identificationTypes handling error: ', error);
           }
         },
-        onPaymentMethodsReceived: (error, paymentMethods) => {
+        onPaymentMethodsReceived: function (error, paymentMethods) {
           if (error) {
             return console.warn('paymentMethods handling error: ', error);
           }
@@ -99,25 +99,25 @@
           var paymentTypeId = paymentMethods[0].payment_type_id;
 
           clearInputs();
-          setImageCard(paymentMethods[0]['thumbnail']);
+          setImageCard(paymentMethods[0].thumbnail);
           setPaymentTypeId(paymentTypeId);
           handleInstallments(paymentTypeId);
-          loadAdditionalInfo(paymentMethods[0]['additional_info_needed']);
+          loadAdditionalInfo(paymentMethods[0].additional_info_needed);
           additionalInfoHandler();
         },
-        onIssuersReceived: (error, issuers) => {
+        onIssuersReceived: function (error, issuers) {
           if (error) {
             return console.warn('issuers handling error: ', error);
           }
         },
-        onInstallmentsReceived: (error, installments) => {
+        onInstallmentsReceived: function (error, installments) {
           if (error) {
             return console.warn('installments handling error: ', error);
           }
 
-          setChangeEventOnInstallments(sellerCustom.site_id, installments['payer_costs']);
+          setChangeEventOnInstallments(sellerCustom.site_id, installments.payer_costs);
         },
-        onCardTokenReceived: (error, token) => {
+        onCardTokenReceived: function (error, token) {
           if (error) {
             showErrors(error);
             return console.warn('Token handling error: ', error);
