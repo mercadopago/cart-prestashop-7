@@ -254,7 +254,10 @@
 
     //Banner button
     function getCheckoutAnchor(tab, checkout) {
-        document.getElementById(tab).click();
-        document.getElementById(checkout).scrollIntoView();
+        var containerTab = document.getElementById(tab);
+        if (containerTab) {
+            containerTab.click();
+            document.getElementById(checkout).scrollIntoView();
+        }
     }
 </script>

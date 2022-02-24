@@ -90,7 +90,7 @@ $_MODULE['<{mercadopago}prestashop>customsettings_d8bf0bd06048ac8cb87266046772cd
 $_MODULE['<{mercadopago}prestashop>customsettings_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Ativar';
 $_MODULE['<{mercadopago}prestashop>customsettings_3cab03c00dbd11bc3569afa0748013f0'] = 'Desativar';
 $_MODULE['<{mercadopago}prestashop>customsettings_ad12d5b12691248ef58271f2f8a3c132'] = 'Ativar pagamentos com cartões salvos ou saldo no Mercado Pago';
-$_MODULE['<{mercadopago}prestashop>customsettings_c3ad713f77220b2180febe8f7d5debe1'] = 'Clientes pagam mais rápido e você aumenta a conversão usando esta funcionalidade';
+$_MODULE['<{mercadopago}prestashop>customsettings_c3ad713f77220b2180febe8f7d5debe1'] = 'Clientes pagam mais rápido e você aumenta a conversão usando esta funcionalidade.';
 $_MODULE['<{mercadopago}prestashop>customsettings_deb43872e3df204974c85e5b07ad8576'] = 'Modo binário';
 $_MODULE['<{mercadopago}prestashop>customsettings_880bb5685c2e7ef3c65fe0aad31a4dae'] = 'Aprovar ou rejeitar pagamentos de forma instantânea e automática, ';
 $_MODULE['<{mercadopago}prestashop>customsettings_4c0985e3f8194a2415269103fa9a104d'] = 'sem status de pendente ou revisão. Deseja ativar esta função?';
@@ -273,7 +273,7 @@ $_MODULE['<{mercadopago}prestashop>ticket_configuration_9816529bd797ea2cf8c0dfe7
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_24e9fd6116bb8c7c0f060273672067e2'] = 'Selecione pagamentos presenciais';
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_c70ec5b31b31ecef0efd3ea40e33909f'] = 'Configuração Avançada';
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_18b934da2943766913dc95ae10cd11d9'] = 'Ative outras ferramentas do nosso módulo, prontas para uso.';
-$_MODULE['<{mercadopago}prestashop>custom_configuration_b44b3200fb607c3c6b21e4661e62d38d'] = 'Ofereça pagamentos com cartão de crédito e saldo no Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>custom_configuration_b44b3200fb607c3c6b21e4661e62d38d'] = 'Ofereça pagamentos com cartão de crédito, débito e saldo no Mercado Pago.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_fdee837fba2654bf2119c11685cbfbbc'] = 'Experiência de pagamento na sua loja.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_0f63d8dc08aaf301a46e12a9bd1991cb'] = 'Seus clientes pagam como visitantes sem sair da sua loja.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_c4b894f2ea98da7d889a3379e1d7c411'] = 'Seu cliente paga de forma rápida, fácil e segura com estas opções:';

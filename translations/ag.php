@@ -273,7 +273,7 @@ $_MODULE['<{mercadopago}prestashop>ticket_configuration_9816529bd797ea2cf8c0dfe7
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_24e9fd6116bb8c7c0f060273672067e2'] = 'Selecciona pagos personales';
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_c70ec5b31b31ecef0efd3ea40e33909f'] = 'Configuración avanzada';
 $_MODULE['<{mercadopago}prestashop>ticket_configuration_18b934da2943766913dc95ae10cd11d9'] = 'Activa otras herramientas de nuestro módulo listas para usar.';
-$_MODULE['<{mercadopago}prestashop>custom_configuration_b44b3200fb607c3c6b21e4661e62d38d'] = 'Oferecé pagos con tarjeta de crédito y dinero en Mercado Pago.';
+$_MODULE['<{mercadopago}prestashop>custom_configuration_b44b3200fb607c3c6b21e4661e62d38d'] = 'Oferecé pagos con tarjeta de crédito, débito y dinero en Mercado Pago.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_fdee837fba2654bf2119c11685cbfbbc'] = 'Experiencia de pago en tu tienda.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_0f63d8dc08aaf301a46e12a9bd1991cb'] = 'Tus clientes pagan como invitados sin salir de tu tienda.';
 $_MODULE['<{mercadopago}prestashop>custom_configuration_c4b894f2ea98da7d889a3379e1d7c411'] = 'Tu cliente paga de forma rápida, fácil y segura con estas opciones:';

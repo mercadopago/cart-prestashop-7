@@ -739,7 +739,7 @@ ol > li::marker {
   background: #449ddd;
   border-radius: 5px;
   padding: 10px 20px;
-  min-width: 290px;
+  min-width: 315px;
 }
 
 .mp-left-wallet-button {

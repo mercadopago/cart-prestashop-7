@@ -293,8 +293,11 @@
 
             modal_script.onload = function () {
 				var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
-				mp.checkout({$mp_button|@json_encode nofilter});
                     
+				mp.checkout(
+                    {literal}JSON.parse(`{/literal}{json_encode($mp_button)|escape:'javascript':'UTF-8'}{literal}`.replaceAll('&quot;', '"')){/literal}
+                );
+                
                 var mercadopago_button = document.querySelector('#mp-custom-button .mercadopago-button');
                 var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
                 mercadopago_button.style.display = 'none';
