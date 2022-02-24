@@ -53,10 +53,7 @@ class PixCheckout
     /**
      * Get Pix Checkout PS 16
      *
-     *
-     * @return Array
-     *
-     * @throws PrestaShopException
+     * @return array
      */
     public function getPixCheckoutPS16()
     {
@@ -77,10 +74,7 @@ class PixCheckout
     /**
      * Get Pix Checkout PS 17
      *
-     *
-     * @return Array
-     *
-     * @throws PrestaShopException
+     * @return array
      */
     public function getPixCheckoutPS17()
     {
@@ -97,19 +91,17 @@ class PixCheckout
     /**
      * Get Pix Template Variables
      *
-     * @return Array
-     *
-     * @throws PrestaShopException
+     * @return array
      */
     public function getPixTemplateVariables()
     {
-        $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
+        $siteId = Configuration::get('MERCADOPAGO_SITE_ID');
 
         $variables = array(
-            'logo_pix' => "{$this->payment->path}views/img/logo_pix.png",
-            'badge_info_gray' => "{$this->payment->path}views/img/icons/badge_info_gray.png",
+            'site_id' => $siteId,
+            'module_dir' => $this->payment->path,
             'discount' => Configuration::get('MERCADOPAGO_PIX_DISCOUNT'),
-            'terms_url' => $this->mpuseful->getTermsAndPoliciesLink($site_id),
+            'terms_url' => $this->mpuseful->getTermsAndPoliciesLink($siteId),
             'redirect' => $this->payment->context->link->getModuleLink($this->payment->name, 'pix'),
         );
 

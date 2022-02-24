@@ -214,6 +214,9 @@ class Mercadopago extends PaymentModule
         $sandbox_public_key = Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
         $sandbox_access_token = Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
+        $pix_enabled = null;
+        $country_id = null;
+
         if ($access_token != '' && $sandbox_access_token != '') {
             //verify if seller is homologated
             $credentialsWrapper = $this->mercadopago->getCredentialsWrapper($access_token);
@@ -234,6 +237,9 @@ class Mercadopago extends PaymentModule
             $custom = $this->renderForm($custom->submit, $custom->values, $custom->form);
             $ticket = $this->renderForm($ticket->submit, $ticket->values, $ticket->form);
             $pix = $this->renderForm($pix->submit, $pix->values, $pix->form);
+
+            $pix_enabled = $this->isEnabledPaymentMethod('pix');
+            $country_id = $this->getSiteIdByCredentials($access_token);
         }
 
         $output = $this->context->smarty->assign(
@@ -250,8 +256,8 @@ class Mercadopago extends PaymentModule
                 'sandbox_status' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
                 'seller_protect_link' => $this->mpuseful->setSellerProtectLink($country_link),
                 'psjLink' => $this->mpuseful->getCountryPsjLink($country_link),
-                'pix_enabled' => $this->isEnabledPaymentMethod('pix'),
-                'country_id' => $this->getSiteIdByCredentials($access_token),
+                'pix_enabled' => $pix_enabled,
+                'country_id' => $country_id,
                 //credentials
                 'public_key' => $public_key,
                 'access_token' => $access_token,
@@ -455,7 +461,7 @@ class Mercadopago extends PaymentModule
             return;
         }
         $cart = $this->context->cart;
-        $payment_options = array();
+        $paymentOptions = array();
 
         $version == self::PRESTA16 ? $this->smarty->assign('module_dir', $this->_path) : null;
         $country = Configuration::get('MERCADOPAGO_COUNTRY_LINK');
@@ -469,11 +475,11 @@ class Mercadopago extends PaymentModule
 
         foreach ($checkouts as $checkout => $method) {
             if ($this->isActiveCheckout($checkout) && $this->isAvailableToCountry($checkout, $country)) {
-                $payment_options[] = $this->{$method}($cart, $version);
+                $paymentOptions[] = $this->{$method}($cart, $version);
             }
         }
 
-        return $version == self::PRESTA16 ? implode('', $payment_options) : $payment_options;
+        return $version == self::PRESTA16 ? implode('', $paymentOptions) : $paymentOptions;
     }
 
     /**
@@ -508,15 +514,16 @@ class Mercadopago extends PaymentModule
 
     /**
      * @param $checkout
-     * @return Boolean
+     * @return bool
      */
     public function isEnabledPaymentMethod($checkout)
     {
-        $payment_methods = $this->mercadopago->getPaymentMethods();
-
-        foreach ($payment_methods as $payment_method) {
-            if (Tools::strtolower($payment_method['id']) == $checkout) {
-                return true;
+        $paymentMethods = $this->mercadopago->getPaymentMethods();
+        if (is_array($paymentMethods)) {
+            foreach ($paymentMethods as $paymentMethod) {
+                if (Tools::strtolower($paymentMethod['id']) == $checkout) {
+                    return true;
+                }
             }
         }
 
@@ -524,17 +531,19 @@ class Mercadopago extends PaymentModule
     }
 
     /**
-     * @return String
+     * @param $accessToken
+     * @return string
      */
-    public function getSiteIdByCredentials($access_token)
+    public function getSiteIdByCredentials($accessToken)
     {
-        $response = $this->mercadopago->isValidAccessToken($access_token);
+        $response = $this->mercadopago->isValidAccessToken($accessToken);
 
         return $response ? Tools::strtolower($response['site_id']) : null;
     }
 
     /**
      * @param $checkout
+     * @return void
      */
     public function disableCheckout($checkout)
     {
@@ -631,22 +640,22 @@ class Mercadopago extends PaymentModule
         $discount = Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
 
         if ($version == self::PRESTA16) {
-            $frontInformations = $this->pixCheckout->getPixCheckoutPS16($cart);
+            $frontInformations = $this->pixCheckout->getPixCheckoutPS16();
             $frontInformations['discount'] = $discount;
 
             $this->context->smarty->assign($frontInformations);
             return $this->display(__FILE__, 'views/templates/hook/six/pix.tpl');
         }
 
-        $str_discount = ' (' . $discount . '% OFF) ';
-        $str_discount = ($discount != "") ? $str_discount : '';
+        $strDiscount = ' (' . $discount . '% OFF) ';
+        $strDiscount = ($discount != "") ? $strDiscount : '';
 
-        $frontInformations = $this->pixCheckout->getPixCheckoutPS17($cart);
+        $frontInformations = $this->pixCheckout->getPixCheckoutPS17();
         $infoTemplate = $this->context->smarty->assign($frontInformations)
             ->fetch('module:mercadopago/views/templates/hook/seven/pix.tpl');
         $pixCheckout = new PrestaShop\PrestaShop\Core\Payment\PaymentOption();
         $pixCheckout->setForm($infoTemplate)
-            ->setCallToActionText($this->l('Pix') . $str_discount)
+            ->setCallToActionText($this->l('Pix') . $strDiscount)
             ->setLogo(_MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png');
 
         return $pixCheckout;
@@ -686,9 +695,8 @@ class Mercadopago extends PaymentModule
             return;
         }
 
-        $payment_id = Tools::getValue('payment_id');
-
-        $payment = $this->mercadopago->getPaymentStandard($payment_id);
+        $paymentId = Tools::getValue('payment_id');
+        $payment = is_string($paymentId) ? $this->mercadopago->getPaymentStandard($paymentId) : null;
 
         return $this->getPaymentReturn($payment, $params);
     }
@@ -729,16 +737,17 @@ class Mercadopago extends PaymentModule
      */
     public function getPixExpiration()
     {
+        $pixExpiration = Configuration::get('MERCADOPAGO_PIX_EXPIRATION');
         $expiration = array(
-            30 => '30 ' . $this->l('minutes'),
-            60 => '1 ' . $this->l('hour'),
-            360 => '6 ' . $this->l('hours'),
-            720 => '12 ' . $this->l('hours'),
-            1440 => '1 ' . $this->l('day'),
-            10080 => '7 ' . $this->l('days'),
+            '30' => '30 ' . $this->l('minutes'),
+            '60' => '1 ' . $this->l('hour'),
+            '360' => '6 ' . $this->l('hours'),
+            '720' => '12 ' . $this->l('hours'),
+            '1440' => '1 ' . $this->l('day'),
+            '10080' => '7 ' . $this->l('days'),
         );
 
-        return $expiration[Configuration::get('MERCADOPAGO_PIX_EXPIRATION')];
+        return is_string($pixExpiration) ? $expiration[$pixExpiration] : $expiration['30'];
     }
 
     /**
