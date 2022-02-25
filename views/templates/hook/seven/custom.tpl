@@ -42,16 +42,24 @@
             <div class="mp-frame-payments" id="mp-frame-payments">
                 {if count($credit) != 0}
                     <p class="mp-subtitle-payments">{l s='Credit card' mod='mercadopago'}</p>
-                    {foreach $credit as $tarjeta}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                    {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $credit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
                 {/if}
 
                 {if count($debit) != 0}
                     <p class="mp-subtitle-payments mp-pt-10">{l s='Debit card' mod='mercadopago'}</p>
-                    {foreach $debit as $tarjeta}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                    {/foreach}
+                        <div class="mp-payment-methods-container">
+                        {foreach $debit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
                 {/if}
             </div>
         </div>

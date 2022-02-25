@@ -523,6 +523,44 @@ body#checkout section.checkout-step .payment-options label {
   height: 40px;
 }
 
+.mp-payment-methods-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  margin-left: -8px;
+}
+
+.mp-payment-methods-container > div {
+  margin: 0 0 8px 8px;
+}
+
+.mp-payment-method-logo-container {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.mp-payment-method-logo-image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100% !important;
+  position: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* --- mobile --- */
 
 @media (max-width: 767.98px) {
