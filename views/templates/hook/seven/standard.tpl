@@ -25,7 +25,6 @@
 
 <form id="mp_standard_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'html':'UTF-8'}">
     <div class="row mp-frame-checkout-seven">
-
         {if count($credit) != 0}
             <div class="col-xs-12 col-md-12 col-12">
                 <div class="frame-tarjetas">
@@ -36,9 +35,13 @@
                         </span>
                     </p>
 
-                    {foreach $credit as $tarjeta}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                    {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $credit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
                 </div>
             </div>
         {/if}
@@ -47,10 +50,13 @@
             <div class="col-xs-12 col-lg-6 col-md-6 col-12">
                 <div class="frame-tarjetas">
                     <p class="mp-subtitle-standard-checkout">{l s='Debit card' mod='mercadopago'}</p>
-
-                    {foreach $debit as $tarjeta}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                    {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $debit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
                 </div>
             </div>
         {/if}
@@ -58,11 +64,14 @@
         {if count($ticket) != 0}
             <div class="col-xs-12 col-lg-6 col-md-6 col-12">
                 <div class="frame-tarjetas">
-                    <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
-
-                    {foreach $ticket as $tarjeta}
-                        <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="img-fluid mp-img-tarjetas" />
-                    {/foreach}
+                    <p class="mp-subtitle-standard-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
+                    <div class="mp-payment-methods-container">
+                        {foreach $ticket as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
                 </div>
             </div>
         {/if}
