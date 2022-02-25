@@ -282,7 +282,7 @@
             {/if}
 
             <div class="col-md-12 col-12 mp-frame-title mp-m-dib">
-                <h3 class="mp-title-custom-checkout">{l s='Please, select the issuer of face payments with which you want to make the purchase:' mod='mercadopago'}</h3>
+                <h3 class="mp-title-ticket-checkout">{l s='Please, select the issuer of face payments with which you want to make the purchase:' mod='mercadopago'}</h3>
             </div>
 
             <div class="form-group">
@@ -299,8 +299,10 @@
                                             type="radio"
                                             {if $key == 0} checked {/if}
                                         >
-                                        <label class="form-check-label" for="{Tools::strtolower($value['id'])|escape:'html':'UTF-8'}|{$result['payment_option_id']|escape:'html':'UTF-8'}">
-                                            <img class="mp-img-size" src="{$result['thumbnail']|escape:'html':'UTF-8'}" alt="{$result['name']|escape:'html':'UTF-8'}"/>
+                                        <label class="mp-ticket-option-label" for="{Tools::strtolower($value['id'])|escape:'html':'UTF-8'}|{$result['payment_option_id']|escape:'html':'UTF-8'}">
+                                            <div class="mp-payment-method-logo-container">
+                                                <img class="mp-payment-method-logo-image" src="{$result['thumbnail']|escape:'html':'UTF-8'}" alt="{$result['name']|escape:'html':'UTF-8'}"/>
+                                            </div>
                                             <span class="mp-text-ticket-tarjeta">{$result['name']|escape:'html':'UTF-8'}</span>
                                         </label>
                                     </div>
@@ -317,8 +319,10 @@
                                         type="radio"
                                         {if $key == 0} checked {/if}
                                     >
-                                    <label class="form-check-label" for="{$value['id']|escape:'html':'UTF-8'}">
-                                        <img class="mp-img-size" src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
+                                    <label class="mp-ticket-option-label" for="{$value['id']|escape:'html':'UTF-8'}">
+                                        <div class="mp-payment-method-logo-container">
+                                            <img class="mp-payment-method-logo-image" src="{$value['image']|escape:'html':'UTF-8'}" alt="{$value['name']|escape:'html':'UTF-8'}"/>
+                                        </div>
                                         <span class="mp-text-ticket-tarjeta">{$value['name']|escape:'html':'UTF-8'}</span>
                                     </label>
                                 </div>

@@ -300,6 +300,7 @@ body#checkout section.checkout-step .payment-options label {
   margin-top: 0.15rem !important;
   margin-left: 0 !important;
   float: left;
+  cursor: pointer;
 }
 
 .mp-select {
@@ -520,7 +521,9 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-form-item {
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .mp-payment-methods-container {
@@ -559,6 +562,19 @@ body#checkout section.checkout-step .payment-options label {
   font-size: 10px;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.mp-ticket-option-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.mp-title-ticket-checkout{
+  padding: 0;
 }
 
 /* --- mobile --- */
