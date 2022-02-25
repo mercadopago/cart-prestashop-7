@@ -313,7 +313,7 @@
 
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
 
 {if $public_key != ''}
 <script>

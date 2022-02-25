@@ -32,7 +32,7 @@
 (function () {
   var additionalInfoNeeded = {};
 
-  var sellerCustom = {
+  var seller = {
     site_id: '',
     public_key: '',
   };
@@ -41,6 +41,7 @@
 
   var mp = null;
   var mpCardForm = null;
+  var cvvLength = null;
 
   /**
    * Initialise vars to use on JS custom-card.js
@@ -48,8 +49,8 @@
    * @param {object} mpCustom
    */
   window.initializeCustom = function (mpCustom) {
-    sellerCustom.site_id = mpCustom.site_id;
-    sellerCustom.public_key = mpCustom.public_key;
+    seller.site_id = mpCustom.site_id;
+    seller.public_key = mpCustom.public_key;
     psVersion = mpCustom.ps_version;
 
     loadCardForm();
@@ -62,7 +63,7 @@
    * Create instance of Mercado Pago sdk v2 and mount form
    */
   function loadCardForm() {
-    mp = new MercadoPago(sellerCustom.public_key);
+    mp = new MercadoPago(seller.public_key);
 
     mpCardForm = mp.cardForm({
       amount: getAmount(),
@@ -100,6 +101,7 @@
 
           clearInputs();
           setImageCard(paymentMethods[0].thumbnail);
+          setCvvLength(paymentMethods[0].settings[0].security_code.length);
           setPaymentTypeId(paymentTypeId);
           handleInstallments(paymentTypeId);
           loadAdditionalInfo(paymentMethods[0].additional_info_needed);
@@ -115,7 +117,7 @@
             return console.warn('installments handling error: ', error);
           }
 
-          setChangeEventOnInstallments(sellerCustom.site_id, installments.payer_costs);
+          setChangeEventOnInstallments(seller.site_id, installments.payer_costs);
         },
         onCardTokenReceived: function (error, token) {
           if (error) {
@@ -149,6 +151,15 @@
    */
   function setPaymentTypeId(paymentTypeId) {
     document.querySelector('#payment_type_id').value = paymentTypeId;
+  }
+
+  /**
+   * Set cvv length
+   *
+   * @param {number} length
+   */
+  function setCvvLength(length) {
+    cvvLength = length;
   }
 
   /**
@@ -288,37 +299,6 @@
   }
 
   /**
-   * Validate fixed Inputs is empty
-   *
-   * @return bool
-   */
-  function validateFixedInputs() {
-    var emptyInputs = false;
-    var form = getFormCustom();
-    var formInputs = form.querySelectorAll('[data-checkout]');
-    var fixedInputs = ['cardNumber', 'cardholderName', 'cardExpiration', 'securityCode', 'installments'];
-
-    for (var x = 0; x < formInputs.length; x++) {
-      var element = formInputs[x];
-
-      // Check is a input to create token.
-      if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
-        if (element.value === -1 || element.value === '') {
-          var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
-
-          if (span.length > 0) {
-            span[0].style.display = 'block';
-          }
-          element.classList.add('mp-form-control-error');
-          emptyInputs = true;
-        }
-      }
-    }
-
-    return emptyInputs;
-  }
-
-  /**
    * Show governmental taxes in MLA
    *
    * @params any payer_costs
@@ -399,6 +379,18 @@
   }
 
   /**
+   * Focus input with error
+   *
+   * @return bool
+   */
+  function focusInputError() {
+    if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
+      var formInputs = document.querySelectorAll('.mp-form-control-error');
+      formInputs[0].focus();
+    }
+  }
+
+  /**
    * Disable error spans
    */
   function hideErrors() {
@@ -429,6 +421,78 @@
    */
   function getFormCustom() {
     return document.querySelector('#mp_custom_checkout');
+  }
+
+  /**
+   * Validate inputs
+   */
+  function validateInputs() {
+    hideErrors();
+
+    var fixedInputs = validateFixedInputs();
+    var additionalInputs = validateAdditionalInputs();
+
+    if (fixedInputs || additionalInputs) {
+      focusInputError();
+      return false;
+    }
+
+    if (!validateCvv()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Validate CVV length
+   *
+   * @returns {boolean}
+   */
+  function validateCvv() {
+    var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
+    var cvvInput = document.getElementById('id-security-code');
+    var cvvValidation = cvvLength === cvvInput.value.length;
+
+    if (!cvvValidation) {
+      span[0].style.display = 'block';
+      cvvInput.classList.add('mp-form-control-error');
+      cvvInput.focus();
+    }
+
+    return cvvValidation;
+  }
+
+  /**
+   * Validate fixed Inputs is empty
+   *
+   * @return bool
+   */
+  function validateFixedInputs() {
+    var emptyInputs = false;
+    var form = getFormCustom();
+    var formInputs = form.querySelectorAll('[data-checkout]');
+    var fixedInputs = ['cardNumber', 'cardholderName', 'cardExpiration', 'securityCode', 'installments'];
+
+    for (var x = 0; x < formInputs.length; x++) {
+      var element = formInputs[x];
+
+      // Check is a input to create token.
+      if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
+        if (element.value === -1 || element.value === '') {
+          var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
+
+          if (span.length > 0) {
+            span[0].style.display = 'block';
+          }
+
+          element.classList.add('mp-form-control-error');
+          emptyInputs = true;
+        }
+      }
+    }
+
+    return emptyInputs;
   }
 
   /**
@@ -476,6 +540,21 @@
   }
 
   /**
+   * Disable finish order button
+   *
+   * @param string psVersion
+   */
+  function disableFinishOrderButton(psVersion) {
+    if (psVersion === 'six') {
+      var sixButton = document.getElementById('mp-custom-finish-order');
+      sixButton.setAttribute('disabled', 'disabled');
+    } else if (psVersion === 'seven') {
+      var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+      sevenButton.setAttribute('disabled', 'disabled');
+    }
+  }
+
+  /**
    * Handler Response of mp.createToken
    *
    * @param number error
@@ -492,50 +571,6 @@
       document.querySelector('#payment_method_id').value = formData.paymentMethodId;
 
       document.forms.mp_custom_checkout.submit();
-    }
-  }
-
-  /**
-   * Validate inputs
-   */
-  function validateInputs() {
-    hideErrors();
-
-    var fixedInputs = validateFixedInputs();
-    var additionalInputs = validateAdditionalInputs();
-
-    if (fixedInputs || additionalInputs) {
-      focusInputError();
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Focus input with error
-   *
-   * @return bool
-   */
-  function focusInputError() {
-    if (document.querySelectorAll('.mp-form-control-error') !== undefined) {
-      var formInputs = document.querySelectorAll('.mp-form-control-error');
-      formInputs[0].focus();
-    }
-  }
-
-  /**
-   * Disable finish order button
-   *
-   * @param string psVersion
-   */
-  function disableFinishOrderButton(psVersion) {
-    if (psVersion === 'six') {
-      var sixButton = document.getElementById('mp-custom-finish-order');
-      sixButton.setAttribute('disabled', 'disabled');
-    } else if (psVersion === 'seven') {
-      var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
-      sevenButton.setAttribute('disabled', 'disabled');
     }
   }
 
