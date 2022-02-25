@@ -428,6 +428,25 @@ body#checkout section.checkout-step .payment-options label {
   transition: all 0.3ms ease-in-out;
 }
 
+.mp-wallet-button-container .mp-wallet-button-button-disabled button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #7a7a7a;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3ms ease-in-out;
+}
+
 .mp-wallet-button-container .mp-wallet-button-button button:hover {
   color: #ffffff;
   background-color: #007eb5;

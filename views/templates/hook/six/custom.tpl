@@ -46,11 +46,19 @@
                         {l s='Those who already use Mercado Livre or Mercado Pago can pay without entering any details.' mod='mercadopago'}
                     </div>
 
-                    <div class='mp-wallet-button-button'>
-                        <button id='mp-wallet-button-btn'>
-                            {l s='Pay with saved card' mod='mercadopago'}
-                        </button>
-                    </div>
+                    {if $preference != ''}
+                        <div class='mp-wallet-button-button'>
+                            <button type='button' id='mp-wallet-button-btn'>
+                                {l s='Pay with saved card' mod='mercadopago'}
+                            </button>
+                        </div>
+                    {else}
+                        <div class='mp-wallet-button-button-disabled'>
+                            <button type='button' id='mp-wallet-button-btn' disabled>
+                                {l s='Payment unavailable' mod='mercadopago'}
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             </div>
         {/if}

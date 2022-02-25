@@ -286,6 +286,7 @@ $_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] = '
 $_MODULE['<{mercadopago}prestashop>custom_8705ccdee4a8a284b7b302dd3472d25b'] = 'Use seus cartões salvos';
 $_MODULE['<{mercadopago}prestashop>custom_7ec136430b60bf0a205b3d9f0b5f9858'] = 'Quem já usa Mercado Livre ou Mercado Pago pode pagar sem preencher dados.';
 $_MODULE['<{mercadopago}prestashop>custom_6bfa46d4c99b563fbbc6573a24b7ab06'] = 'Pagar com cartão salvo';
+$_MODULE['<{mercadopago}prestashop>custom_a53659067ab210505b82eb1b6b9bb08b'] = 'Pagamento indisponível';
 $_MODULE['<{mercadopago}prestashop>custom_b2fd5a4f417785d2c8d5a3674a1b3e83'] = 'Com quais cartões posso pagar?';
 $_MODULE['<{mercadopago}prestashop>custom_dc4554b3840d99f5489a30a49f9477b4'] = 'Promoções vigentes';
 $_MODULE['<{mercadopago}prestashop>custom_e7f9e382dc50889098cbe56f2554c77b'] = 'Cartão de crédito';

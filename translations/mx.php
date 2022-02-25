@@ -286,6 +286,7 @@ $_MODULE['<{mercadopago}prestashop>custom_bbfe522e4f1486075b15c60e603fee6d'] = '
 $_MODULE['<{mercadopago}prestashop>custom_8705ccdee4a8a284b7b302dd3472d25b'] = 'Usa tus tarjetas guardadas';
 $_MODULE['<{mercadopago}prestashop>custom_7ec136430b60bf0a205b3d9f0b5f9858'] = 'Quienes ya usan Mercado Libre o Mercado Pago pueden pagar sin completar datos.';
 $_MODULE['<{mercadopago}prestashop>custom_6bfa46d4c99b563fbbc6573a24b7ab06'] = 'Pagar con tarjeta guardada';
+$_MODULE['<{mercadopago}prestashop>custom_a53659067ab210505b82eb1b6b9bb08b'] = 'Pago no disponible';
 $_MODULE['<{mercadopago}prestashop>custom_b2fd5a4f417785d2c8d5a3674a1b3e83'] = '¿Con qué tarjetas puedo pagar?';
 $_MODULE['<{mercadopago}prestashop>custom_dc4554b3840d99f5489a30a49f9477b4'] = 'Ver promociones vigentes';
 $_MODULE['<{mercadopago}prestashop>custom_e7f9e382dc50889098cbe56f2554c77b'] = 'Tarjeta de crédito';
