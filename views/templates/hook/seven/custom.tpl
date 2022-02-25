@@ -138,6 +138,12 @@
                     <small id="mp-error-326" class="mp-erro-form" data-main="#id-card-expiration">
                         {l s='Invalid card expiration date' mod='mercadopago'}
                     </small>
+                    <small id="mp-error-E205" class="mp-erro-form" data-main="#id-card-expiration">
+                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    </small>
+                    <small id="mp-error-301" class="mp-erro-form" data-main="#id-card-expiration">
+                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    </small>
                 </div>
 
                 <!-- Input Security Code -->
@@ -299,7 +305,7 @@
 
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card-v2.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
 
 {if $public_key != ''}
 <script>
