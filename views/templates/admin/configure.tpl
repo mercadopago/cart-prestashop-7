@@ -48,6 +48,21 @@
     <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
 </div>
 
+{if (version_compare(_PS_VERSION_, '1.7', '<'))}
+    <div class="mp-card-info">
+	    <div class="mp-card-color-alert"></div>
+	    <div class="mp-card-body">
+		    <div class="mp-card-badge-warning"></div>
+	    <div>
+		    <span class="mp-card-title"><b>{l s='Attention! Mercado Pago checkout for PrestaShop version 1.6 will be disabled.' mod='mercadopago'}</b></span>
+		    <span class="mp-card-subtitle">{l s='As of the next update (4.10.0+), there will be no Mercado Pago checkout for PrestaShop version 1.6.' mod='mercadopago'}</span>
+            <span class="mp-card-subtitle">{l s='Follow the instructions and upgrade so you don\'t stop selling.' mod='mercadopago'}</span>
+		    <a class="mp-card-button-a" target="_blank" href="https://devdocs.prestashop.com/1.7/basics/keeping-up-to-date/"><button type="button" class="mp-card-button"><b>{l s='SEE HOW TO UPGRADE' mod='mercadopago'}</b></button></a>
+	    </div>
+	    </div>
+    </div>
+{/if}
+
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
@@ -176,7 +191,7 @@
         }
 
         // ----- standard configuration form ------ //
-        {include file='./checkouts/standard_configuration.tpl'}           
+        {include file='./checkouts/standard_configuration.tpl'}
 
         // ----- custom configuration form ------ //
         {include file='./checkouts/custom_configuration.tpl'}

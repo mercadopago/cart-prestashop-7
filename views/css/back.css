@@ -386,7 +386,12 @@ html {
   align-items: center;
   justify-content: center;
   padding: 120px 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(0, 158, 227, 0.04665616246498594) 100%);
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(0, 158, 227, 0.04665616246498594) 100%
+    );
 }
 
 .mp-title-beneficios {
@@ -783,6 +788,108 @@ ol > li::marker {
 .mp-wallet-button-notice button:hover {
   background-color: #007eb5 !important;
   color: #ffffff !important;
+}
+
+/* Card info */
+.mp-card-info {
+  display: flex;
+  margin: 32px 0 32px 0;
+}
+
+.mp-card-color-alert {
+  width: 6px;
+  background: #ff7733;
+  border-radius: 6px 0 0 6px;
+}
+
+.mp-card-body {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 16px 0 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 0 6px 6px 0;
+}
+
+.mp-card-badge-warning {
+  background: url(../img/icons/icon-warning.png) 98% 50% no-repeat transparent;
+  margin: 5px 16px 16px 12px;
+  width: 28px;
+  height: 20px;
+  padding-left: 10px;
+}
+
+.mp-card-title {
+  font-family:
+    'Proxima Nova',
+    -apple-system,
+    'Helvetica Neue',
+    Helvetica,
+    'Roboto',
+    Arial,
+    sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 4px 0;
+}
+
+.mp-card-subtitle {
+  font-family:
+    'Proxima Nova',
+    -apple-system,
+    'Helvetica Neue',
+    Helvetica,
+    'Roboto',
+    Arial,
+    sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 4px 0;
+}
+
+.mp-card-button {
+  font-size: 14px;
+  line-height: 16px;
+  color: #ffffff;
+  border: none;
+  padding: 9px 12px 7px;
+  background: #009ee3;
+  border-radius: 5px;
+  margin: 15px 0 15px 0;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease-out, background-color 0.2s ease-out;
+  box-shadow: 0 0 0 0 #ffffff;
+}
+
+.mp-card-button-a {
+  text-decoration: none;
+}
+
+.mp-card-button:hover {
+  border-color: transparent;
+  background-color: #007eb5;
+  color: #ffffff;
+  -webkit-transition: background-color 0.2s ease-in;
+  transition: background-color 0.2s ease-in;
+}
+
+.mp-card-button:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.1875em rgb(27 135 201 / 30%);
+  -webkit-transition: box-shadow 0.25s ease-in;
+  transition: box-shadow 0.25s ease-in;
+}
+
+.mp-card-button:active {
+  border-color: transparent;
+  background-color: #005e88;
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {
