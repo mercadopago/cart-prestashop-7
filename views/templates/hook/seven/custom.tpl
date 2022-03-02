@@ -175,10 +175,10 @@
                         {l s='last 3 numbers on the back of your card' mod='mercadopago'}
                     </small>
                     <small id="mp-error-224" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
-                        {l s='Invalid card holder name' mod='mercadopago'}
+                        {l s='Invalid Security code' mod='mercadopago'}
                     </small>
                     <small id="mp-error-E302" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
-                        {l s='Invalid card holder name' mod='mercadopago'}
+                        {l s='Invalid Security code' mod='mercadopago'}
                     </small>
                 </div>
             </div>
