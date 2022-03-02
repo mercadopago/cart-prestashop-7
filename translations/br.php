@@ -94,9 +94,7 @@ $_MODULE['<{mercadopago}prestashop>standardsettings_e158df26c6c5fa5329868a48ab2e
 $_MODULE['<{mercadopago}prestashop>standardsettings_f4baa4850222eacc72d4f217fd03e252'] = 'Cancela as preferências de pagamento após';
 $_MODULE['<{mercadopago}prestashop>standardsettings_941254e31637b81ac1008e6eb1861c93'] = 'Durante este tempo, vamos salvar as preferências de pagamento ';
 $_MODULE['<{mercadopago}prestashop>standardsettings_4476880111ab525b0ef3cfe9173c40ba'] = 'para não ter que pedir os dados do seu cliente novamente. ';
-<<<<<<< HEAD
 $_MODULE['<{mercadopago}prestashop>homologationsettings_2488dda96f94d5e5d7f227690ed5fabc'] = 'Homologação';
-=======
 $_MODULE['<{mercadopago}prestashop>localizationsettings_369686331c93d55e587441143ccdf427'] = 'Localização';
 $_MODULE['<{mercadopago}prestashop>localizationsettings_f64be5eef68442a8f50cf535b92ad3e4'] = 'País:';
 $_MODULE['<{mercadopago}prestashop>localizationsettings_8b144ffc87beff564884b1c190275539'] = 'Selecione o  país';
@@ -124,7 +122,6 @@ $_MODULE['<{mercadopago}prestashop>customsettings_1a9640e57cd90969114812b5bf0c27
 $_MODULE['<{mercadopago}prestashop>customsettings_5143ec2136ffd545e7aafcc9c0ce50f5'] = 'Desconto por compra';
 $_MODULE['<{mercadopago}prestashop>customsettings_f2a22ca66322e56b52de81d06834c1e4'] = 'Ofereça um desconto especial para motivar seus ';
 $_MODULE['<{mercadopago}prestashop>customsettings_474aceb7275c706995d816dc90bdf45d'] = 'clientes a fazerem a compra com Mercado Pago.';
->>>>>>> ad37ceddf43008950e66a287a71cc432a27b1f01
 $_MODULE['<{mercadopago}prestashop>storesettings_80a11d2a54a677f6fadd9c041c0d6b98'] = 'Informações sobre sua loja';
 $_MODULE['<{mercadopago}prestashop>storesettings_49ee3087348e8d44e1feda1917443987'] = 'Nome';
 $_MODULE['<{mercadopago}prestashop>storesettings_3adbdb3ac060038aa0e6e6c138ef9873'] = ' Categoria';
