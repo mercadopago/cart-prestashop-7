@@ -30,13 +30,13 @@
             <div class="form-group">
                 <div class="col-xs-12 col-md-12 col-12 mp-m-col">  
                     <div class="mp-pix-container mp-pix-container-column mp-pt-25">
-                        <img class="mp-pix-logo" src="{$logo_pix|escape:'html':'UTF-8'}"/>
+                        <img class="mp-pix-logo" src="{$module_dir|escape:'html':'UTF-8'}views/img/logo_pix.png"/>
                         <label class="mp-pix-text-label mp-pt-20">
                             {l s='[1]When you confirm the purchase,[/1][2]you will be able to see the code to make the instant payment.' tags=['<strong>', '<br>'] mod='mercadopago'}
                         </label>
                     </div>
                     <div class="mp-pix-container mp-pt-25">
-                        <img class="mp-badge-info" src="{$badge_info_gray|escape:'html':'UTF-8'}"/>
+                        <img class="mp-badge-info" src="{$module_dir|escape:'html':'UTF-8'}views/img/icons/badge_info_gray.png"/>
                         <label class="mp-pix-text-info">
                             {l s='Pix has a daily transfer limit.[1]Please contact your bank for more information.' tags=['<br>'] mod='mercadopago'}
                         </label>

@@ -33,24 +33,22 @@ $multipart = [
 
 // Calling the Validator API
 try {
-
     $multipart[] = [
         'name'     => 'archive',
         'contents' => fopen($inputFile, 'r'),
     ];
 
-	$client = new \GuzzleHttp\Client([
-		'base_uri' => VALIDATOR_URL
-	]);
+    $client = new \GuzzleHttp\Client([
+        'base_uri' => VALIDATOR_URL
+    ]);
 
-	$response = $client->post('/api/modules', [
-		'multipart' => $multipart
-	]);
-
+    $response = $client->post('/api/modules', [
+        'multipart' => $multipart
+    ]);
 } catch (\Throwable $th) {
     // Maybe the Validator is not online, and we can't hold the pipeline
     print_r('Couldn\'t reach the Prestashop Validator API');
-	print_r($th->getTraceAsString());
+    print_r($th->getTraceAsString());
     return;
 }
 

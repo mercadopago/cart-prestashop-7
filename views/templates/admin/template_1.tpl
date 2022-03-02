@@ -136,7 +136,7 @@
     <!-- Nav tabs checkouts -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Checkout Pro' mod='mercadopago'}</a></li>
-        <li><a href="#custom_checkout" role="tab" data-toggle="tab">{l s='Custom Checkout' mod='mercadopago'}</a></li>
+        <li><a href="#custom_checkout" role="tab" data-toggle="tab" id="tab-custom">{l s='Custom Checkout' mod='mercadopago'}</a></li>
         <li><a href="#ticket_checkout" role="tab" data-toggle="tab">{l s='Ticket checkout' mod='mercadopago'}</a></li>
         {if $country_link == 'mlb' && $country_id == 'mlb'}
             <li><a href="#pix_checkout" role="tab" data-toggle="tab">{l s='Pix' mod='mercadopago'}</a></li>

@@ -29,7 +29,7 @@
 
 require_once MP_ROOT_URL . '/includes/module/preference/AbstractStandardPreference.php';
 
-class StandardPreference extends AbstractStandardPreference
+class WalletButtonPreference extends AbstractStandardPreference
 {
     public function __construct()
     {
@@ -38,7 +38,7 @@ class StandardPreference extends AbstractStandardPreference
     }
 
     /**
-     * Create standard preference
+     * Create Wallet Button preference
      *
      * @param $cart
      * @return mixed
@@ -51,13 +51,13 @@ class StandardPreference extends AbstractStandardPreference
         $payloadToJson = Tools::jsonEncode($payload);
 
         $createPreference = $this->mercadopago->createPreference($payloadToJson);
-        MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
+        MPLog::generate('Cart id ' . $cart->id . ' - Wallet Button Preference created successfully');
 
         return $createPreference;
     }
 
     /**
-     * To build payload from standard payment
+     * To build payload from Wallet Button payment
      *
      * @param $cart
      * @return array
@@ -68,11 +68,13 @@ class StandardPreference extends AbstractStandardPreference
 
         $payloadAdditional = array(
             'metadata' => $this->getInternalMetadata($cart),
+            'purpose' => 'wallet_purchase',
         );
 
         return array_merge($payloadParent, $payloadAdditional);
     }
 
+    
     /**
      * Get internal metadata
      *
@@ -82,12 +84,10 @@ class StandardPreference extends AbstractStandardPreference
     public function getInternalMetadata($cart)
     {
         $internalMetadataParent = parent::getInternalMetadata($cart);
-        
-        $checkoutType = $this->settings['MERCADOPAGO_STANDARD_MODAL'] ? 'modal' : 'redirect';
 
         $internalMetadataAdditional = array(
             'checkout' => 'pro',
-            'checkout_type' => $checkoutType,
+            'checkout_type' => 'wallet_button',
         );
 
         return array_merge($internalMetadataParent, $internalMetadataAdditional);
@@ -110,6 +110,6 @@ class StandardPreference extends AbstractStandardPreference
         );
 
         $encodedLogs = Tools::jsonEncode($logs);
-        MPLog::generate('standard preference logs: ' . $encodedLogs);
+        MPLog::generate('wallet button preference logs: ' . $encodedLogs);
     }
 }

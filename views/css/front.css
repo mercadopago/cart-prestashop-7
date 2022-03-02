@@ -25,6 +25,9 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+html {
+  scroll-behavior: smooth;
+}
 
 .mp-pd-0 {
   padding: 0 !important;
@@ -362,6 +365,92 @@ body#checkout section.checkout-step .payment-options label {
   line-height: 1.25;
   letter-spacing: normal;
   color: #868686;
+}
+
+.mp-wallet-button-container {
+  flex-direction: column;
+  padding: 24px 16px;
+  height: auto;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  color: rgb(0 0 0 / 90%);
+}
+
+.mp-wallet-button-container .mp-wallet-button-title img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  position: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+}
+
+.mp-wallet-button-container .mp-wallet-button-title span {
+  padding-left: 8px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: rgb(0 0 0 / 55%);
+  margin: 8px 0 16px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #009ee3;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3ms ease-in-out;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button-disabled button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #7a7a7a;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3ms ease-in-out;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button button:hover {
+  color: #ffffff;
+  background-color: #007eb5;
+  transition: all 0.3ms ease-in-out;
 }
 
 /* ticket checkout */
