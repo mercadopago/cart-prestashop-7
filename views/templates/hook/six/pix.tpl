@@ -25,7 +25,6 @@
 
 <form id="mp_pix_checkout" class="mp-custom-checkout-six" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
     <div class="row mp-frame-checkout-six">
-        
         <div class="mp-title-checkout-six">
             <img class="img-fluid" src="{$mp_logo|escape:'html':'UTF-8'}" />
             <p class="mp-m-pt-10">
@@ -35,7 +34,6 @@
         </div>
 
         <div id="mercadopago-form" class="col-xs-12 col-md-12 col-12">
-
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-12 mp-m-col">
                     <div class="mp-pix-container mp-pix-container-column mp-pt-25">
@@ -56,9 +54,11 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12 col-12 mp-pt-25">
                     <label> {l s='By continuing, you agree to our ' mod='mercadopago'}
-                        <u><a class="mp-link-checkout-terms" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
-                            {l s='Terms and Conditions' mod='mercadopago'}
-                        </a></u>
+                        <u>
+                            <a class="mp-link-checkout-terms" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
+                                {l s='Terms and Conditions' mod='mercadopago'}
+                            </a>
+                        </u>
                     </label>
                 </div>
             </div>
