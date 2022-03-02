@@ -18,31 +18,31 @@ With the official module of Mercado Pago you will have an integration, hundreds 
 
 For a better experience, you will be redirected to our site by clicking on the links below:
 
-- [Introduction](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/introduction/)
-- [Installation](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/instalation/)
-- [Integration](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/integration/)
-- [Payments preferences](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/preferences/)
-- [Test and receive payments](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/receive-payments/)
+* [Introduction](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/introduction/)
+* [Installation](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/instalation/)
+* [Integration](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/integration/)
+* [Payments preferences](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/preferences/)
+* [Test and receive payments](https://www.mercadopago.com/developers/en/plugins_sdks/plugins/prestashop/receive-payments/)
 
 ## Documentación en Español
 
 Para una mejor experiencia, será redirigido a nuestro sitio haciendo clic en los links a abajo:
 
-- [Introducción](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/introduction/)
-- [Instalación](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/instalation/)
-- [Integración](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/integration/)
-- [Preferencias de pago](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/preferences/)
-- [Prueba y recibe pagos](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/receive-payments/)
+* [Introducción](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/introduction/)
+* [Instalación](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/instalation/)
+* [Integración](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/integration/)
+* [Preferencias de pago](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/preferences/)
+* [Prueba y recibe pagos](https://www.mercadopago.com.ar/developers/es/plugins_sdks/plugins/prestashop/receive-payments/)
 
 ## Documentação em Português
 
 Para uma melhor experiência, você será redirecionado para o nosso site, clicando nos links abaixo:
 
-- [Introdução](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/introduction/)
-- [Instalação](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/instalation/)
-- [Integração](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/integration/)
-- [Preferências de pagamento](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/preferences/)
-- [Teste e receba pagamentos](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/receive-payments/)
+* [Introdução](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/introduction/)
+* [Instalação](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/instalation/)
+* [Integração](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/integration/)
+* [Preferências de pagamento](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/preferences/)
+* [Teste e receba pagamentos](https://www.mercadopago.com.br/developers/pt/plugins_sdks/plugins/prestashop/receive-payments/)
 
 ## Support
 
