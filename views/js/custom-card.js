@@ -54,10 +54,10 @@
     psVersion = mpCustom.ps_version;
 
     loadCardForm();
-  };
 
-  setChangeEventOnExpirationDate();
-  setChangeEventOnCardNumber();
+    setChangeEventOnExpirationDate();
+    setChangeEventOnCardNumber();
+  };
 
   /**
    * Create instance of Mercado Pago sdk v2 and mount form

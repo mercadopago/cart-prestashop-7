@@ -140,6 +140,10 @@
                         data-checkout="cardExpiration"
                         onkeyup="maskInput(this, mdate);"
                     />
+
+                    <input id="id-card-expiration-month" type="hidden" />
+                    <input id="id-card-expiration-year" type="hidden" />
+
                     <small id="mp-error-208" class="mp-erro-form" data-main="#id-card-expiration">
                         {l s='Invalid card expiration date' mod='mercadopago'}
                     </small>
@@ -150,6 +154,12 @@
                         {l s='Invalid card expiration date' mod='mercadopago'}
                     </small>
                     <small id="mp-error-326" class="mp-erro-form" data-main="#id-card-expiration">
+                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    </small>
+                    <small id="mp-error-E205" class="mp-erro-form" data-main="#id-card-expiration">
+                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    </small>
+                    <small id="mp-error-301" class="mp-erro-form" data-main="#id-card-expiration">
                         {l s='Invalid card expiration date' mod='mercadopago'}
                     </small>
                 </div>
@@ -209,7 +219,6 @@
                     <select
                         id="id-installments"
                         class="form-control mp-form-control mp-pointer not_uniform noUniform"
-                        name="mercadopago_custom[installments]"
                         type="text"
                         data-no-uniform="true"
                         data-checkout="installments"
@@ -282,7 +291,10 @@
                 <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
                 <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
                 <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
+                <input type="hidden" id="mp_installments" name="mercadopago_custom[installments]" />
                 <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
+                <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]" />
+                <input type="hidden" id="couponAmountCustom" name="mercadopago_custom[coupon_amount]" />
             </div>
 
             <div class="row">
@@ -295,6 +307,7 @@
 </form>
 
 {if $public_key != ''}
+    <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
     <script type="text/javascript">
         // Collapsible payments cards acepteds
         var show_payments = document.querySelector('#button-show-payments');
@@ -310,21 +323,15 @@
 
         // Set params to custom-card
         window.onload = loadCustom();
+
         function loadCustom() {
             var mp_custom = {
                 site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-                select_choose: '{l s='Choose' mod='mercadopago'}...',
+                public_key: '{$public_key|escape:"javascript":"UTF-8"}',
                 ps_version: 'six',
-            };
-            initializeCustom(mp_custom);
-        }
+            }
 
-        // Set mercadopago public_key
-        if (window.Mercadopago === undefined) {
-            $.getScript('https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js').done(function (script, textStatus) {
-                // Set Public_key
-                Mercadopago.setPublishableKey('{$public_key|escape:"javascript":"UTF-8"}');
-            });
+            initializeCustom(mp_custom);
         }
     </script>
 {/if}

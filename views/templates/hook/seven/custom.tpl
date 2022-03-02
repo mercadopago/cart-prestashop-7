@@ -170,10 +170,10 @@
                         data-checkout="securityCode"
                         onkeyup="maskInput(this, minteger);"
                     />
-
                     <small class="mp-small mp-pt-5">
                         {l s='last 3 numbers on the back of your card' mod='mercadopago'}
                     </small>
+
                     <small id="mp-error-224" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
                         {l s='Invalid card holder name' mod='mercadopago'}
                     </small>
@@ -316,29 +316,29 @@
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
 
 {if $public_key != ''}
-<script>
-    // Collapsible payments cards accepted
-    var show_payments = document.querySelector('#button-show-payments');
-    var frame_payments = document.querySelector('#mp-frame-payments');
+    <script>
+        // Collapsible payments cards accepted
+        var show_payments = document.querySelector('#button-show-payments');
+        var frame_payments = document.querySelector('#mp-frame-payments');
 
-    show_payments.onclick = function () {
-        if (frame_payments.style.display === 'block') {
-            frame_payments.style.display = 'none';
-        } else {
-            frame_payments.style.display = 'block';
+        show_payments.onclick = function () {
+            if (frame_payments.style.display === 'block') {
+                frame_payments.style.display = 'none';
+            } else {
+                frame_payments.style.display = 'block';
+            }
+        };
+
+        window.onload = loadCustom();
+
+        function loadCustom() {
+            var mp_custom = {
+                site_id: '{$site_id|escape:"javascript":"UTF-8"}',
+                public_key: '{$public_key|escape:"javascript":"UTF-8"}',
+                ps_version: 'seven',
+            }
+
+            initializeCustom(mp_custom);
         }
-    };
-
-    window.onload = loadCustom();
-
-    function loadCustom() {
-        var mp_custom = {
-            site_id: '{$site_id|escape:"javascript":"UTF-8"}',
-            public_key: '{$public_key|escape:"javascript":"UTF-8"}',
-            ps_version: 'seven',
-        }
-
-        initializeCustom(mp_custom);
-    }
-</script>
+    </script>
 {/if}
