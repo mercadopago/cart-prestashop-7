@@ -25,6 +25,9 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+html {
+  scroll-behavior: smooth;
+}
 
 .mp-pd-0 {
   padding: 0 !important;
@@ -374,7 +377,6 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-wallet-button-container .mp-wallet-button-title {
-  font-family: sans-serif !important;
   font-style: normal;
   font-weight: bold;
   font-size: 14px;
@@ -397,7 +399,6 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-wallet-button-container .mp-wallet-button-description {
-  font-family: sans-serif !important;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -416,7 +417,25 @@ body#checkout section.checkout-step .payment-options label {
   padding: 8px 12px;
   background: #009ee3;
   border-radius: 4px;
-  font-family: sans-serif !important;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3ms ease-in-out;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button-disabled button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #7a7a7a;
+  border-radius: 4px;
   font-style: normal;
   font-weight: bold;
   font-size: 14px;

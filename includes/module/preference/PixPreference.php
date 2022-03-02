@@ -43,16 +43,14 @@ class PixPreference extends AbstractPreference
     /**
      * Create Pix preference
      *
-     * @param Array $body Data returned from POST method in Pix page
-     *
-     * @return Array
+     * @return array
      */
     public function createPreference()
     {
-        $payload = $this->_buildPixPreferencePayload();
+        $payload = $this->buildPixPreferencePayload();
 
-        $this->_setCartRule();
-        $payload['transaction_amount'] = $this->_getAmount();
+        $this->setCartRule($this->cart, $this->settings['MERCADOPAGO_PIX_DISCOUNT']);
+        $payload['transaction_amount'] = $this->getAmount();
 
         $this->generateLogs($payload, 'pix');
         $payloadToJson = Tools::jsonEncode($payload);
@@ -68,14 +66,12 @@ class PixPreference extends AbstractPreference
      *
      * @return void
      */
-    private function _setCartRule()
+    public function setCartRule($cart, $discount)
     {
-        $discount = $this->settings['MERCADOPAGO_PIX_DISCOUNT'];
-
         if ($discount) {
-            parent::setCartRule($this->cart, $discount);
+            parent::setCartRule($cart, $discount);
             MPLog::generate(
-                'Mercado Pago custom discount applied to cart ' . $this->cart->id
+                'Mercado Pago custom discount applied to cart ' . $cart->id
             );
         }
     }
@@ -107,32 +103,30 @@ class PixPreference extends AbstractPreference
     /**
      * To build payload from Pix payment
      *
-     * @param Array $body Data returned from POST method in Pix page
-     *
-     * @return Array
+     * @return array
      */
-    private function _buildPixPreferencePayload()
+    public function buildPixPreferencePayload()
     {
-        $payload_parent = $this->getCommonPreference($this->cart);
+        $payloadParent = $this->getCommonPreference($this->cart);
 
-        $payload_additional = [
-            'date_of_expiration' => $this->_getExpirationDate(),
+        $payloadAdditional = [
+            'date_of_expiration' => $this->getExpirationDate(),
             'description' => $this->getPreferenceDescription($this->cart),
             'payment_method_id' => 'pix',
-            'payer' => $this->_getCustomerData($this->cart),
-            'metadata' => $this->_getInternalMetadata(),
-            'additional_info' => $this->_getAdditionalInfo(),
+            'payer' => $this->getCustomerData(),
+            'metadata' => $this->getInternalMetadata($this->cart),
+            'additional_info' => $this->getAdditionalInfo(),
         ];
 
-        return array_merge($payload_parent, $payload_additional);
+        return array_merge($payloadParent, $payloadAdditional);
     }
 
     /**
      * Get expiration_date_to for preference
      *
-     * @return Array
+     * @return mixed
      */
-    private function _getExpirationDate()
+    public function getExpirationDate()
     {
         if ($this->settings['MERCADOPAGO_PIX_EXPIRATION'] != '') {
             return $this->settings['MERCADOPAGO_PIX_EXPIRATION'] = date(
@@ -147,16 +141,14 @@ class PixPreference extends AbstractPreference
     /**
      * Get customer data
      *
-     * @param Array $cart Shopping cart data
-     *
-     * @return Array
+     * @return array
      */
-    private function _getCustomerData($cart)
+    public function getCustomerData()
     {
         $customerFields = Context::getContext()->customer->getFields();
-        $addressInvoice = new Address((int) $cart->id_address_invoice);
+        $addressInvoice = new Address((int) $this->cart->id_address_invoice);
 
-        $customer_data = array(
+        $customerData = array(
             'email' => $customerFields['email'],
             'first_name' => $customerFields['firstname'],
             'last_name' => $customerFields['lastname'],
@@ -176,34 +168,34 @@ class PixPreference extends AbstractPreference
             )
         );
 
-        return $customer_data;
+        return $customerData;
     }
 
     /**
      * Get internal metadata
      *
-     * @return Array
+     * @return array
      */
-    private function _getInternalMetadata()
+    public function getInternalMetadata($cart)
     {
-        $internal_metadata_parent = parent::getInternalMetadata($this->cart);
+        $internalMetadataParent = parent::getInternalMetadata($cart);
 
-        $internal_metadata_additional = [
+        $internalMetadataAdditional = [
             'checkout' => 'custom',
             'checkout_type' => 'pix',
         ];
 
-        return array_merge($internal_metadata_parent, $internal_metadata_additional);
+        return array_merge($internalMetadataParent, $internalMetadataAdditional);
     }
 
     /**
      * Get additional info
      *
-     * @return Array
+     * @return array
      */
-    private function _getAdditionalInfo()
+    public function getAdditionalInfo()
     {
-        $additional_info = array(
+        $additionalInfo = array(
             'payer' => $this->getCustomCustomerData($this->cart),
             'shipments' => $this->getShipmentAddress($this->cart),
             'items' =>  $this->getCartItems(
@@ -213,17 +205,15 @@ class PixPreference extends AbstractPreference
             ),
         );
 
-        return $additional_info;
+        return $additionalInfo;
     }
 
     /**
      * Get Amount
      *
-     * @param Object $cart Purchase details and information
-     *
-     * @return Number
+     * @return float
      */
-    private function _getAmount()
+    public function getAmount()
     {
         $total = (float) $this->cart->getOrderTotal();
         return $total;
