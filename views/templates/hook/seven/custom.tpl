@@ -140,6 +140,9 @@
                     <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
                         {l s='Invalid card holder name' mod='mercadopago'}
                     </small>
+                    <small id="mp-error-316" class="mp-erro-form" data-main="#id-card-holder-name">
+                        {l s='Invalid card holder name' mod='mercadopago'}
+                    </small>
                 </div>
             </div>
 
