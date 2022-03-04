@@ -45,7 +45,7 @@
             </p>
         </div>
     </div>
-    <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
+    <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'a_template_1','custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
 </div>
 
 {if (version_compare(_PS_VERSION_, '1.7', '<'))}
@@ -65,7 +65,7 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#template_1" role="tab" data-toggle="tab">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
+    <li class="active"><a href="#template_1" role="tab" data-toggle="tab" id="a_template_1">{l s='Set Up Mercado Pago' mod='mercadopago'}</a></li>
     <li><a href="#template_2" role="tab" data-toggle="tab">{l s='About Mercado Pago' mod='mercadopago'}</a></li>
     <li><a href="#template_3" role="tab" data-toggle="tab">{l s='Plugin Log' mod='mercadopago'}</a></li>
     <li class="mp-plugin-version"><a>{l s='Current version:' mod='mercadopago'} <span>v{$mp_version|escape:'html':'UTF-8'}</span></a></li>
@@ -268,8 +268,11 @@
     }
 
     //Banner button
-    function getCheckoutAnchor(tab, checkout) {
+    function getCheckoutAnchor(tab, template, checkout) {
         var containerTab = document.getElementById(tab);
+        var templateTab = document.getElementById(template);
+        templateTab.click();
+
         if (containerTab) {
             containerTab.click();
             document.getElementById(checkout).scrollIntoView();
