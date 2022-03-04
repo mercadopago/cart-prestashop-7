@@ -278,6 +278,7 @@
    */
   function clearInputs() {
     hideErrors();
+    clearTax();
     document.getElementById('id-card-number').style.background = 'no-repeat #fff';
     document.getElementById('id-card-expiration').value = '';
     document.getElementById('id-doc-number').value = '';
