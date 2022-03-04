@@ -62,7 +62,7 @@
                 </div>
             </div>
         {/if}
-        
+
         <!-- Cards Type -->
         <div class="col-xs-12 col-md-12 col-12 mp-pt-25 mp-m-px-0">
             <a class="mp-link-checkout-custom" id="button-show-payments">
@@ -235,8 +235,8 @@
                     <label for="id-issuers-options" class="issuers-options mp-pb-5 mp-pt-10">{l s='issuing bank' mod='mercadopago'}</label>
                     <select
                         id="id-issuers-options"
-                        name="mercadopago_custom[issuer]" type="text"
                         class="issuers-options form-control mp-form-control mp-select mp-pointer noUniform"
+                        type="text"
                         data-checkout="issuer"
                     >
                     </select>
@@ -323,6 +323,7 @@
                 <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
                 <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
                 <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
+                <input type="hidden" id="mp_issuer" name="mercadopago_custom[issuer]" />
                 <input type="hidden" id="mp_installments" name="mercadopago_custom[installments]" />
                 <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
                 <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]" />
@@ -381,11 +382,11 @@
 
             modal_script.onload = function () {
 				var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
-                    
+
 				mp.checkout(
                     {literal}JSON.parse(`{/literal}{json_encode($mp_button)|escape:'javascript':'UTF-8'}{literal}`.replaceAll('&quot;', '"')){/literal}
                 );
-                   
+
                 var mercadopago_button = document.querySelector('#mp-custom-button .mercadopago-button');
                 var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
                 mercadopago_button.style.display = 'none';
@@ -395,7 +396,7 @@
                     mercadopago_button.click();
                     return false;
                 }
-            };  
+            };
             modal_form.appendChild(modal_script);
         });
     </script>

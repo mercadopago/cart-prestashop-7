@@ -25,7 +25,7 @@
 
 <form id="mp_custom_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
     <div class="row mp-frame-checkout-custom-seven">
-    
+
         {if $wallet_button}
             <div class='col-xs-12 col-md-12 col-12'>
                 <div class='mp-wallet-button-container'>
@@ -232,9 +232,8 @@
                     <select
                         id="id-issuers-options"
                         class="issuers-options form-control mp-form-control mp-select mp-pointer"
-                        data-checkout="issuer"
-                        name="mercadopago_custom[issuer]"
                         type="text"
+                        data-checkout="issuer"
                     >
                     </select>
                     <small id="id-issuer-status" class="mp-erro-form"></small>
@@ -335,6 +334,7 @@
             <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
             <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
             <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
+            <input type="hidden" id="mp_issuer" name="mercadopago_custom[issuer]" />
             <input type="hidden" id="mp_installments" name="mercadopago_custom[installments]" />
             <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
             <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]" />
@@ -347,7 +347,7 @@
 
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
 
 {if $public_key != ''}
     <script>
@@ -388,11 +388,11 @@
 
             modal_script.onload = function () {
 				var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
-                    
+
 				mp.checkout(
                     {literal}JSON.parse(`{/literal}{json_encode($mp_button)|escape:'javascript':'UTF-8'}{literal}`.replaceAll('&quot;', '"')){/literal}
                 );
-                
+
                 var mercadopago_button = document.querySelector('#mp-custom-button .mercadopago-button');
                 var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
                 mercadopago_button.style.display = 'none';
@@ -402,7 +402,7 @@
                     mercadopago_button.click();
                     return false;
                 }
-            };  
+            };
             modal_form.appendChild(modal_script);
         });
     </script>

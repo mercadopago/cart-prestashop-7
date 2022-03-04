@@ -567,6 +567,7 @@
       var formData = mpCardForm.getCardFormData();
 
       document.querySelector('#card_token_id').value = formData.token;
+      document.querySelector('#mp_issuer').value = formData.issuerId;
       document.querySelector('#mp_installments').value = formData.installments;
       document.querySelector('#payment_method_id').value = formData.paymentMethodId;
 
