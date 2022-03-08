@@ -55,10 +55,7 @@ class TicketSettings extends AbstractSettings
                 'type' => 'switch',
                 'label' => $this->module->l('Activate Checkout of face to face payments', 'TicketSettings'),
                 'name' => 'MERCADOPAGO_TICKET_CHECKOUT',
-                'desc' => $this->module->l(
-                    'Activate the option of face to face payments in your store.',
-                    'TicketSettings'
-                ),
+                'desc' => $this->module->l('Activate the option of face to face payments in your store.', 'TicketSettings'),
                 'is_bool' => true,
                 'values' => array(
                     array(
@@ -191,7 +188,7 @@ class TicketSettings extends AbstractSettings
                     'id' => $pm_id,
                     'name' => $payment_places? $payment_method['name'].' ( '.$payment_places.' )': $payment_method['name'] ,
                 );
-                
+
                 $form_values[$pm_name] = Configuration::get($pm_name);
             }
         }

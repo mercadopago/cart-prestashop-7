@@ -157,10 +157,7 @@ class CredentialsSettings extends AbstractSettings
                 }
             }
 
-            Mercadopago::$form_message = $this->module->l(
-                'Settings saved successfully. Now you can configure the module.',
-                'CredentialsSettings'
-            );
+            Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.', 'CredentialsSettings');
 
             Configuration::updateValue('MERCADOPAGO_CHECK_CREDENTIALS', true);
             MPLog::generate('Credentials saved successfully');
