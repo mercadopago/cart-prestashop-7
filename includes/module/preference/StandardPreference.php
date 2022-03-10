@@ -62,7 +62,7 @@ class StandardPreference extends AbstractStandardPreference
      * @param $cart
      * @return array
      */
-    public function buildPreferencePayload($cart)
+    public function buildPreferencePayload($cart, $discount = 0)
     {
         $payloadParent = parent::buildPreferencePayload($cart);
 

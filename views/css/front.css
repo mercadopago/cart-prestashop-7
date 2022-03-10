@@ -433,25 +433,6 @@ body#checkout section.checkout-step .payment-options label {
   transition: all 0.3ms ease-in-out;
 }
 
-.mp-wallet-button-container .mp-wallet-button-button-disabled button {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 12px;
-  background: #7a7a7a;
-  border-radius: 4px;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 16px;
-  text-align: center;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3ms ease-in-out;
-}
-
 .mp-wallet-button-container .mp-wallet-button-button button:hover {
   color: #ffffff;
   background-color: #007eb5;
@@ -637,7 +618,7 @@ body#checkout section.checkout-step .payment-options label {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #e5e5e5;
   box-sizing: border-box;
   border-radius: 4px;
@@ -666,7 +647,7 @@ body#checkout section.checkout-step .payment-options label {
   cursor: pointer;
 }
 
-.mp-title-ticket-checkout{
+.mp-title-ticket-checkout {
   padding: 0;
 }
 

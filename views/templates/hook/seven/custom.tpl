@@ -30,7 +30,7 @@
             <div class='col-xs-12 col-md-12 col-12'>
                 <div class='mp-wallet-button-container'>
                     <div class='mp-wallet-button-title'>
-                        <img src='{$module_dir|escape:'html':'UTF-8'}views/img/mp_logo.png'>
+                        <img src='{$module_dir|escape:"html":"UTF-8"}views/img/mp_logo.png'>
                         <span>{l s='Use your saved cards' mod='mercadopago'}</span>
                     </div>
 
@@ -38,19 +38,11 @@
                         {l s='Those who already use Mercado Livre or Mercado Pago can pay without entering any details.' mod='mercadopago'}
                     </div>
 
-                    {if $preference != ''}
-                        <div class='mp-wallet-button-button'>
-                            <button type='button' id='mp-wallet-button-btn'>
-                                {l s='Pay with saved card' mod='mercadopago'}
-                            </button>
-                        </div>
-                    {else}
-                        <div class='mp-wallet-button-button-disabled'>
-                            <button type='button' id='mp-wallet-button-btn' disabled>
-                                {l s='Payment unavailable' mod='mercadopago'}
-                            </button>
-                        </div>
-                    {/if}
+                    <div class='mp-wallet-button-button'>
+                        <button type='button' id='mp-wallet-button-btn'>
+                            {l s='Pay with saved card' mod='mercadopago'}
+                        </button>
+                    </div>
                 </div>
             </div>
         {/if}
@@ -343,8 +335,6 @@
     </div>
 </form>
 
-<div id="mp-custom-button"/>
-
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
@@ -377,33 +367,34 @@
     </script>
 {/if}
 
-{if $wallet_button && $preference != ''}
+{if $wallet_button}
     <script>
         window.addEventListener('load', (event) => {
-            var modal_script = document.createElement('script');
-            var modal_form = document.querySelector('head');
+            var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
+            var mp_button = {};
 
-            modal_script.src = 'https://sdk.mercadopago.com/js/v2';
-            modal_script.async = true;
+            wallet_button_button.onclick = function (e) {
+                e.preventDefault();
 
-            modal_script.onload = function () {
-				var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
+                fetch('index.php?fc=module&module=mercadopago&controller=walletbutton')
+                .then(response => response.json())
+                .then(function(response) {
+                    if (response.preference) {
+                        mp_button = {
+                            'preference': {
+                                'id': response.preference['id'],
+                            },
+                            'autoOpen': true,
+                        };
 
-				mp.checkout(
-                    {literal}JSON.parse(`{/literal}{json_encode($mp_button)|escape:'javascript':'UTF-8'}{literal}`.replaceAll('&quot;', '"')){/literal}
-                );
+                        var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
+                        mp.checkout(mp_button);
 
-                var mercadopago_button = document.querySelector('#mp-custom-button .mercadopago-button');
-                var wallet_button_button = document.querySelector('#mp-wallet-button-btn');
-                mercadopago_button.style.display = 'none';
-
-                wallet_button_button.onclick = function (e) {
-                    e.preventDefault();
-                    mercadopago_button.click();
-                    return false;
-                }
+                        return false;
+                    }
+                    window.location.href = 'index.php?controller=order&step=3&typeReturn=failure';
+                });
             };
-            modal_form.appendChild(modal_script);
         });
     </script>
 {/if}

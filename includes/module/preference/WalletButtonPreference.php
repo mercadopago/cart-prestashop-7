@@ -45,7 +45,7 @@ class WalletButtonPreference extends AbstractStandardPreference
      */
     public function createPreference($cart)
     {
-        $payload = $this->buildPreferencePayload($cart);
+        $payload = $this->buildPreferencePayload($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
 
         $this->generateLogs($payload, $cart);
         $payloadToJson = Tools::jsonEncode($payload);
@@ -62,9 +62,9 @@ class WalletButtonPreference extends AbstractStandardPreference
      * @param $cart
      * @return array
      */
-    public function buildPreferencePayload($cart)
+    public function buildPreferencePayload($cart, $discount = 0)
     {
-        $payloadParent = parent::buildPreferencePayload($cart);
+        $payloadParent = parent::buildPreferencePayload($cart, $discount);
 
         $payloadAdditional = array(
             'metadata' => $this->getInternalMetadata($cart),
@@ -74,7 +74,44 @@ class WalletButtonPreference extends AbstractStandardPreference
         return array_merge($payloadParent, $payloadAdditional);
     }
 
-    
+    /**
+     * Set custom discount on CartRule()
+     *
+     * @param mixed $cart
+     * @return void
+     */
+    public function setCartRule($cart, $discount)
+    {
+        if ($discount != '') {
+            parent::setCartRule($cart, $discount);
+            MPLog::generate('Mercado Pago wallet button discount applied to cart ' . $cart->id);
+        }
+    }
+
+    /**
+     * Disable cart rule when buyer completes purchase
+     *
+     * @return void
+     */
+    public function disableCartRule()
+    {
+        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != '') {
+            parent::disableCartRule();
+        }
+    }
+
+    /**
+     * Delete cart rule if an error occurs
+     *
+     * @return void
+     */
+    public function deleteCartRule()
+    {
+        if ($this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] != '') {
+            parent::deleteCartRule();
+        }
+    }
+
     /**
      * Get internal metadata
      *
