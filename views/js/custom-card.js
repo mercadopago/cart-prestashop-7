@@ -562,6 +562,9 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
+    if(!validateInputs()){
+      return;
+    }
     if (error) {
       showErrors(error);
     } else {
@@ -573,6 +576,7 @@
       document.querySelector('#payment_method_id').value = formData.paymentMethodId;
 
       document.forms.mp_custom_checkout.submit();
+      disableFinishOrderButton(psVersion);
     }
   }
 
@@ -583,7 +587,6 @@
     if (document.forms.mp_custom_checkout !== undefined) {
       document.forms.mp_custom_checkout.onsubmit = function () {
         if (validateInputs()) {
-          disableFinishOrderButton(psVersion);
           mpCardForm.createCardToken();
           return false;
         }

@@ -51,7 +51,7 @@ $_MODULE['<{mercadopago}prestashop>abstractsettings_c9cc8cce247e49bae79f15173ce9
 $_MODULE['<{mercadopago}prestashop>abstractsettings_4d9ac946f92f7211e40671513c72fd09'] = 'Configurações salvas com sucesso';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_81495f3842f92cd64795702e235405e6'] = 'deve ser um número inteiro.';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_cbfa2a7c18db32aca0f634532701ee11'] = 'Por favor, preencha suas credenciais para habilitar o módulo.';
-$_MODULE['<{mercadopago}prestashop>abstractsettings_93027262f5c97f5faccac9eb7ef7df6d'] = 'As credenciais não podem estar vazias e devem ser válidas.';
+$_MODULE['<{mercadopago}prestashop>abstractsettings_93027262f5c97f5faccac9eb7ef7df6d'] = 'As credenciais não podem estar vazias e devem ser válidas. ';
 $_MODULE['<{mercadopago}prestashop>pixsettings_263485bdc392a068c22db476bfb5d0f2'] = 'Configuração básica';
 $_MODULE['<{mercadopago}prestashop>pixsettings_3d378a1de44cc70f1482b7e8f20728f3'] = 'Pagamentos por Pix';
 $_MODULE['<{mercadopago}prestashop>pixsettings_b458deb1f76f22e3fbfe30f27cb3c485'] = 'Permita que clientes possam pagar com Pix no checkout da loja.';
