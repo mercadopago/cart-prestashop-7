@@ -116,11 +116,7 @@ abstract class AbstractPreference
         $products = $cart->getProducts();
 
         //verify country for round
-        $round = false;
-        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
-        if ($localization == 'MCO' || $localization == 'MLC') {
-            $round = true;
-        }
+        $round = $this->mpuseful->getRound();
 
         //Products
         foreach ($products as $product) {
