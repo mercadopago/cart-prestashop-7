@@ -47,6 +47,7 @@ $_MODULE['<{mercadopago}prestashop>credentialssettings_cd00f38c17c8d33b4ee0141ca
 $_MODULE['<{mercadopago}prestashop>credentialssettings_22cea83454a1f571a8935118c4d423f6'] = 'Buscar minhas credenciais';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_37c5b6e7c4291021b6100a6754ae7ffe'] = 'Public Key';
 $_MODULE['<{mercadopago}prestashop>credentialssettings_5bc7ab301074148dc708229c5ad54fc6'] = 'Access token';
+$_MODULE['<{mercadopago}prestashop>credentialssettings_f9465576c2b33512983a54a95bad3210'] = 'Configurações salvas com sucesso. Agora você pode configurar o módulo.';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_c9cc8cce247e49bae79f15173ce97354'] = 'Salvar';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_4d9ac946f92f7211e40671513c72fd09'] = 'Configurações salvas com sucesso';
 $_MODULE['<{mercadopago}prestashop>abstractsettings_81495f3842f92cd64795702e235405e6'] = 'deve ser um número inteiro.';
