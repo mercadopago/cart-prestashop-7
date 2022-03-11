@@ -31,12 +31,15 @@ require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
 
 abstract class AbstractStandardPreference extends AbstractPreference
 {
+    public $mpuseful;
+
     /**
      * AbstractStandardPreference constructor.
      */
     public function __construct()
     {
         parent::__construct();
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -45,12 +48,25 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * @param $cart
      * @return array
      */
-    public function buildPreferencePayload($cart)
+    public function buildPreferencePayload($cart, $discount = 0)
     {
         $payloadParent = $this->getCommonPreference($cart);
+        $amount = $this->mpuseful->getTheTotalDiscounted($cart, $discount);
+        $items = $this->getCartItems($cart);
+
+        $dicountPerItem = array(
+            'id' => 'discount',
+            'title' => 'Discount',
+            'quantity' => 1,
+            'unit_price' =>  $this->mpuseful->getRound() ? Tools::ps_round(-$amount) : -$amount,
+            'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
+            'description' => 'Discount provided by store',
+        );
+
+        array_push($items, $dicountPerItem);
 
         $payloadAdditional = array(
-            'items' => $this->getCartItems($cart),
+            'items' => $items,
             'payer' => $this->getCustomerData($cart),
             'shipments' => $this->getShipment($cart),
             'back_urls' => $this->getBackUrls($cart),

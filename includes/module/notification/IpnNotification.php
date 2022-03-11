@@ -78,6 +78,12 @@ class IpnNotification extends AbstractNotification
      */
     public function createStandardOrder($cart)
     {
+        $preference = $this->getWalletButtonPreference();
+
+        if ($preference) {
+            $preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
+        }
+
         $this->getOrderId($cart);
         $this->total = $this->getTotal($cart);
         $this->status = 'pending';
@@ -87,6 +93,24 @@ class IpnNotification extends AbstractNotification
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
+        
+        if ($preference) {
+            $preference->disableCartRule();
+        }
+    }
+
+    /**
+     * Get Wallet Button Preference
+     *
+     * @return mixed
+     */
+    public function getWalletButtonPreference()
+    {
+        $preferenceCheckout = $this->mercadopago->getPreference($this->merchant_order['preference_id']);
+        $checkout_type = isset($preferenceCheckout['metadata']['checkout_type']) ? $preferenceCheckout['metadata']['checkout_type'] : null;
+        $preference = new WalletButtonPreference();
+
+        return $checkout_type == 'wallet_button' ? $preference : false;
     }
 
     /**
