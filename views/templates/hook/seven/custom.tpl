@@ -289,7 +289,7 @@
                 <label class="mp-pb-20">
                     {l s='By continuing, you agree to our ' mod='mercadopago'}
                     <u>
-                        <a class="mp-link-checkout-custom" href="{$terms_url}" target="_blank">
+                        <a class="mp-link-checkout-custom" href="{$terms_url|escape:'html':'UTF-8'}" target="_blank">
                             {l s='Terms and Conditions' mod='mercadopago'}
                         </a>
                     </u>
@@ -298,7 +298,7 @@
         </div>
 
         <div id="mercadopago-utilities">
-            <input type="hidden" id="amount" value="{$amount}" />
+            <input type="hidden" id="amount" value="{$amount|escape:'htmlall':'UTF-8'}" />
             <input type="hidden" id="card_token_id" name="mercadopago_custom[card_token_id]" />
             <input type="hidden" id="payment_type_id" name="mercadopago_custom[payment_type_id]" />
             <input type="hidden" id="payment_method_id" name="mercadopago_custom[payment_method_id]" />
@@ -312,8 +312,8 @@
 </form>
 
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
-<script type="text/javascript" src="{$module_dir}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir}views/js/custom-card.js?v={$version}"></script>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
 
 {if $public_key != ''}
     <script>
