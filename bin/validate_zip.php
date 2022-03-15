@@ -80,7 +80,7 @@ foreach ($stdResponse as $category => $reports) {
                             foreach ($rule as $errors) {
                                 foreach ($errors['content'] as $error) {
                                     if ($error['type'] === 'error') {
-                                        print(' -> ' . $category . ': ' . $error['file'].':'.$error['line'].':'.$error['column'] . ' found error: ' . $error['message'] . '\n');
+                                        print(" -> $category: $error[file]:$error[line]: $error[column] found error: $error[message]\n");
                                         $isValid = false;
                                     }
                                 }
