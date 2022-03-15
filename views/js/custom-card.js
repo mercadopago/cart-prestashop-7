@@ -438,10 +438,6 @@
       return false;
     }
 
-    if (!validateCvv()) {
-      return false;
-    }
-
     return true;
   }
 
@@ -450,19 +446,20 @@
    *
    * @returns {boolean}
    */
-  function validateCvv() {
-    var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
-    var cvvInput = document.getElementById('id-security-code');
-    var cvvValidation = cvvLength === cvvInput.value.length;
+     function validateCvv() {
+      var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
+      var cvvInput = document.getElementById('id-security-code');
+      var cvvValidation = cvvLength === cvvInput.value.length;
 
-    if (!cvvValidation) {
-      span[0].style.display = 'block';
-      cvvInput.classList.add('mp-form-control-error');
-      cvvInput.focus();
+      if (!cvvValidation) {
+        span[0].style.display = 'block';
+        cvvInput.classList.add('mp-form-control-error');
+        cvvInput.focus();
+        getConditionTerms();
+      }
+
+      return cvvValidation;
     }
-
-    return cvvValidation;
-  }
 
   /**
    * Validate fixed Inputs is empty
@@ -562,9 +559,10 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
-    if(!validateInputs()){
+   if(!validateCvv()){
       return;
     }
+
     if (error) {
       showErrors(error);
     } else {
