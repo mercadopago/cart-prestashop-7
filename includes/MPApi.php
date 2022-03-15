@@ -66,7 +66,7 @@ class MPApi
      *
      * @return string
      */
-
+    public function getPublicKey()
     {
         if (Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
             return Configuration::get('MERCADOPAGO_PUBLIC_KEY');
