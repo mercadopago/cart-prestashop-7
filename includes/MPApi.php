@@ -58,7 +58,7 @@ class MPApi
             return Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
         }
 
-        return Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        return Configration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
     }
 
     /**

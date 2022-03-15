@@ -69,6 +69,6 @@ class MPLog
         $object_id = str_replace('.', '', MP_VERSION);
         $object_type = 'Mercadopago';
 
-        PrestaShopLogger::addLog($message, $severity_log, null, $object_type, $object_id, true, null);
+        PrestaShopLoger::addLog($message, $severity_log, null, $object_type, $object_id, true, null);
     }
 }

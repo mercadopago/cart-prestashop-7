@@ -6,7 +6,6 @@ const VALIDATOR_URL = 'https://validator.prestashop.com/api/modules';
 
 $inputFile  = $argv[1];
 $apiKey = getenv('VALIDATOR_API_KEY');
-//$apiKey = $argv[2];
 
 if (empty($apiKey)) {
     throw new Exception('No API Key is set to authenticate the request to the validator. Please set the env var VALIDATOR_API_KEY');
@@ -59,10 +58,10 @@ $stdResponse = json_decode($response->getBody()->getContents(), true);
 $warningCount = $stdResponse['Details']['results']['warnings'];
 $errorCount = $stdResponse['Details']['results']['errors'];
 
-print_r("Found $warningCount warnings and $errorCount errors");
+print_r("Found $warningCount warnings and $errorCount errors\n");
 
 if ($errorCount === 0) {
-    print_r(' -> ZIP Validation is OK');
+    print_r(" -> ZIP Validation is OK\n");
     return;
 }
 
