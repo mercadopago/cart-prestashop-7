@@ -42,6 +42,7 @@
   var mp = null;
   var mpCardForm = null;
   var cvvLength = null;
+  var submitted = false;
 
   /**
    * Initialise vars to use on JS custom-card.js
@@ -167,6 +168,13 @@
    */
   function getAmount() {
     return document.getElementById('amount').value;
+  }
+
+  /**
+   * Set if the form has been submitted
+   */
+     function setFormSubmit() {
+      submitted = true;
   }
 
   /**
@@ -559,23 +567,26 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
-   if(!validateCvv()){
-      return;
-    }
-
+    
     if (error) {
       showErrors(error);
-    } else {
-      var formData = mpCardForm.getCardFormData();
+      return;
+    } 
 
-      document.querySelector('#card_token_id').value = formData.token;
-      document.querySelector('#mp_issuer').value = formData.issuerId;
-      document.querySelector('#mp_installments').value = formData.installments;
-      document.querySelector('#payment_method_id').value = formData.paymentMethodId;
-
-      document.forms.mp_custom_checkout.submit();
-      disableFinishOrderButton(psVersion);
+    if (submitted) {
+      return;
     }
+    
+    var formData = mpCardForm.getCardFormData();
+
+    document.querySelector('#card_token_id').value = formData.token;
+    document.querySelector('#mp_issuer').value = formData.issuerId;
+    document.querySelector('#mp_installments').value = formData.installments;
+    document.querySelector('#payment_method_id').value = formData.paymentMethodId;
+
+    setFormSubmit();
+    disableFinishOrderButton(psVersion);
+    document.forms.mp_custom_checkout.submit();
   }
 
   /**
