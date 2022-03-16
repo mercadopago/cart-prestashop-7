@@ -567,20 +567,19 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
-
     if(!validateCvv()){
       return;
     }
-    
+
     if (error) {
       showErrors(error);
       return;
-    } 
+    }
 
     if (submitted) {
       return;
     }
-    
+
     var formData = mpCardForm.getCardFormData();
 
     document.querySelector('#card_token_id').value = formData.token;
