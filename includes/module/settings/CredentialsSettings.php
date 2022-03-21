@@ -62,12 +62,12 @@ class CredentialsSettings extends AbstractSettings
                     array(
                         'id' => 'MERCADOPAGO_PROD_STATUS_ON',
                         'value' => true,
-                        'label' => $this->module->l('Active', 'CredentialsSettings')
+                        'label' => $this->module->l('Yes', 'CredentialsSettings')
                     ),
                     array(
                         'id' => 'MERCADOPAGO_PROD_STATUS_OFF',
                         'value' => false,
-                        'label' => $this->module->l('Inactive', 'CredentialsSettings')
+                        'label' => $this->module->l('No', 'CredentialsSettings')
                     )
                 ),
             ),
@@ -157,10 +157,7 @@ class CredentialsSettings extends AbstractSettings
                 }
             }
 
-            Mercadopago::$form_message = $this->module->l(
-                'Settings saved successfully. Now you can configure the module.',
-                'CredentialsSettings'
-            );
+            Mercadopago::$form_message = $this->module->l('Settings saved successfully. Now you can configure the module.', 'CredentialsSettings');
 
             Configuration::updateValue('MERCADOPAGO_CHECK_CREDENTIALS', true);
             MPLog::generate('Credentials saved successfully');

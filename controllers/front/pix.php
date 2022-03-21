@@ -57,38 +57,38 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
                     $payment['notification_url']
                 );
 
-                $order = $this->_createOrder(
+                $order = $this->createOrder(
                     $payment,
                     $this->context->cart,
                     $preference
                 );
 
-                $link = $this->_getSucessRedirectLink($order, $payment);
+                $link = $this->getSucessRedirectLink($order, $payment);
 
                 Tools::redirect($link);
             }
             if (is_string($payment)) {
                 $message = MPApi::validateMessageApi($payment);
                 if (!empty($message)) {
-                    $this->_redirectError($preference, Tools::displayError($message));
+                    $this->redirectError($preference, Tools::displayError($message));
                 }
             }
         } catch (Exception $err) {
             MPLog::generate('Exception Message: ' . $err->getMessage());
-            $this->_redirectError($preference, Tools::displayError());
+            $this->redirectError($preference, Tools::displayError());
         }
     }
 
     /**
      * Create order
      *
-     * @param Array      $payment       Data about payment
-     * @param Object     $cart          Shopping cart data
-     * @param Preference $preference    Pix preference
+     * @param array      $payment
+     * @param object     $cart
+     * @param Preference $preference
      *
-     * @return Array
+     * @return object
      */
-    private function _createOrder($payment, $cart, $preference)
+    public function createOrder($payment, $cart, $preference)
     {
         $transactionId = $payment['id'];
         $notification = new WebhookNotification($transactionId, $payment);
@@ -105,12 +105,12 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     /**
      * Get Success Redirect Link
      *
-     * @param Order $order   Data about order
-     * @param Array $payment Data about payment
+     * @param Order $order
+     * @param array $payment
      *
-     * @return void
+     * @return string
      */
-    private function _getSucessRedirectLink($order, $payment)
+    public function getSucessRedirectLink($order, $payment)
     {
         $queryString = 'index.php?controller=order-confirmation';
 
@@ -129,12 +129,12 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     /**
      * Redirect to checkout with error
      *
-     * @param Preference  $preference    Data about payment
-     * @param String      $errorMessage  Data about payment
+     * @param Preference  $preference
+     * @param string      $errorMessage
      *
      * @return void
      */
-    private function _redirectError($preference, $errorMessage)
+    public function redirectError($preference, $errorMessage)
     {
         $this->context->cookie->__set('redirect_message', $errorMessage);
         $preference->deleteCartRule();

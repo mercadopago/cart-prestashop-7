@@ -56,7 +56,7 @@ class CustomPreference extends AbstractPreference
         $preference['installments'] = (int) $custom_info['installments'];
         $preference['payment_method_id'] = $custom_info['payment_method_id'];
 
-        if (isset($custom_info['issuer'])) {
+        if (!empty($custom_info['issuer'])) {
             $preference['issuer_id'] = (int) $custom_info['issuer'];
         }
 

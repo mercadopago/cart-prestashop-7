@@ -27,7 +27,7 @@
  * to avoid any conflicts with others containers.
  */
 
-class AbstractPreference
+abstract class AbstractPreference
 {
     public $module;
     public $checkout;
@@ -116,11 +116,7 @@ class AbstractPreference
         $products = $cart->getProducts();
 
         //verify country for round
-        $round = false;
-        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
-        if ($localization == 'MCO' || $localization == 'MLC') {
-            $round = true;
-        }
+        $round = $this->mpuseful->getRound();
 
         //Products
         foreach ($products as $product) {
@@ -600,6 +596,7 @@ class AbstractPreference
 
         //custom checkout
         $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] = Configuration::get('MERCADOPAGO_CUSTOM_CHECKOUT');
+        $this->settings['MERCADOPAGO_CUSTOM_WALLET_BUTTON'] = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
         $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'] = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
         $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] = Configuration::get('MERCADOPAGO_CUSTOM_BINARY_MODE');
 
@@ -645,6 +642,7 @@ class AbstractPreference
         $settings = array();
 
         $settings['active'] = $this->settings['MERCADOPAGO_CUSTOM_CHECKOUT'] == "" ? false : true;
+        $settings['wallet_button'] = $this->settings['MERCADOPAGO_CUSTOM_WALLET_BUTTON'] == "" ? false : true;
         $settings['discount'] = (float) $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT'];
         $settings['binary_mode'] = $this->settings['MERCADOPAGO_CUSTOM_BINARY_MODE'] == "" ? false : true;
 

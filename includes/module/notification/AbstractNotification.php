@@ -538,6 +538,7 @@ class AbstractNotification
     {
         $total = (float) $cart->getOrderTotal();
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
         if ($localization == 'MCO' || $localization == 'MLC') {
             return Tools::ps_round($total, 2);
         }
