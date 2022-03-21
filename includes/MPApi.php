@@ -207,6 +207,29 @@ class MPApi
     }
 
     /**
+     * Get preferences
+     *
+     * @param integer $id
+     * @return mixed
+     * @throws Exception
+     */
+    public function getPreference($id)
+    {
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/checkout/preferences/' . $id, ["Authorization: Bearer " . $access_token]);
+
+        //in case of failures
+        if ($response['status'] > 202) {
+            MPLog::generate('API get_checkout_preferences error: ' . $response['response']['message'], 'error');
+            return false;
+        }
+
+        //response treatment
+        $result = $response['response'];
+        return $result;
+    }
+    
+    /**
      * @param $preference
      * @return bool
      * @throws Exception

@@ -136,7 +136,7 @@
     <!-- Nav tabs checkouts -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#standard_checkout" role="tab" data-toggle="tab">{l s='Checkout Pro' mod='mercadopago'}</a></li>
-        <li><a href="#custom_checkout" role="tab" data-toggle="tab">{l s='Custom Checkout' mod='mercadopago'}</a></li>
+        <li><a href="#custom_checkout" role="tab" data-toggle="tab" id="tab-custom">{l s='Custom Checkout' mod='mercadopago'}</a></li>
         <li><a href="#ticket_checkout" role="tab" data-toggle="tab">{l s='Ticket checkout' mod='mercadopago'}</a></li>
         {if $country_link == 'mlb' && $country_id == 'mlb'}
             <li><a href="#pix_checkout" role="tab" data-toggle="tab">{l s='Pix' mod='mercadopago'}</a></li>
@@ -147,7 +147,7 @@
     <div class="tab-content">
         <div class="tab-pane active" id="standard_checkout">{html_entity_decode($standard_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="custom_checkout">{html_entity_decode($custom_form|escape:'html':'UTF-8')}</div>
-        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div> 
+        <div class="tab-pane" id="ticket_checkout">{html_entity_decode($ticket_form|escape:'html':'UTF-8')}</div>
         <div class="tab-pane" id="pix_checkout">{html_entity_decode($pix_form|escape:'html':'UTF-8')}</div>
     </div>
 
@@ -215,7 +215,7 @@
         {if $country_link == 'mlb'}
           <a href="https://www.mercadopago.com.br/developers/pt/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
         {else}
-          <a href="https://www.mercadopago.com.br/developers/es/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
+          <a href="https://www.mercadopago.com.ar/developers/es/support" target="_blank">{l s='Get in touch with our support.' mod='mercadopago'}</a>
         {/if}
     </div>
 </div>

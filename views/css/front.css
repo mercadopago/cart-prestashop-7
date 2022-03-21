@@ -25,6 +25,9 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+html {
+  scroll-behavior: smooth;
+}
 
 .mp-pd-0 {
   padding: 0 !important;
@@ -118,6 +121,10 @@
 
 .mp-small {
   padding-left: 2px;
+}
+
+.mp-margin-0 {
+  margin: 0 !important;
 }
 
 body#checkout section.checkout-step .payment-options label {
@@ -300,6 +307,7 @@ body#checkout section.checkout-step .payment-options label {
   margin-top: 0.15rem !important;
   margin-left: 0 !important;
   float: left;
+  cursor: pointer;
 }
 
 .mp-select {
@@ -362,6 +370,73 @@ body#checkout section.checkout-step .payment-options label {
   line-height: 1.25;
   letter-spacing: normal;
   color: #868686;
+}
+
+.mp-wallet-button-container {
+  flex-direction: column;
+  padding: 24px 16px;
+  height: auto;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  color: rgb(0 0 0 / 90%);
+}
+
+.mp-wallet-button-container .mp-wallet-button-title img {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  position: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+}
+
+.mp-wallet-button-container .mp-wallet-button-title span {
+  padding-left: 8px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-description {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: rgb(0 0 0 / 55%);
+  margin: 8px 0 16px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  background: #009ee3;
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3ms ease-in-out;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button button:hover {
+  color: #ffffff;
+  background-color: #007eb5;
+  transition: all 0.3ms ease-in-out;
 }
 
 /* ticket checkout */
@@ -520,7 +595,60 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-form-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mp-payment-methods-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  margin-left: -8px;
+}
+
+.mp-payment-methods-container > div {
+  margin: 0 0 8px 8px;
+}
+
+.mp-payment-method-logo-container {
+  width: 60px;
   height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.mp-payment-method-logo-image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100% !important;
+  position: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.mp-ticket-option-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.mp-title-ticket-checkout {
+  padding: 0;
 }
 
 /* --- mobile --- */

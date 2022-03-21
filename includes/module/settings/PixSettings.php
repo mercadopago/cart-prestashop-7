@@ -43,7 +43,7 @@ class PixSettings extends AbstractSettings
     /**
      * Generate inputs form
      *
-     * @return void
+     * @return array
      */
     public function generateForm()
     {
@@ -121,13 +121,13 @@ class PixSettings extends AbstractSettings
      */
     public function getFormValues()
     {
-        $form_values = array(
+        $formValues = array(
             'MERCADOPAGO_PIX_CHECKOUT' => Configuration::get('MERCADOPAGO_PIX_CHECKOUT'),
             'MERCADOPAGO_PIX_DISCOUNT' => Configuration::get('MERCADOPAGO_PIX_DISCOUNT'),
             'MERCADOPAGO_PIX_EXPIRATION' => Configuration::get('MERCADOPAGO_PIX_EXPIRATION'),
         );
 
-        return $form_values;
+        return $formValues;
     }
 
     /**
@@ -137,7 +137,7 @@ class PixSettings extends AbstractSettings
      */
     public function getDueDate()
     {
-        $due_date = array(
+        $dueDate = array(
             array('id' => '30', 'name' => '30 ' . $this->module->l('minutes', 'PixSettings')),
             array('id' => '60', 'name' => '1 ' . $this->module->l('hour', 'PixSettings')),
             array('id' => '360', 'name' => '6 ' . $this->module->l('hours', 'PixSettings')),
@@ -146,6 +146,6 @@ class PixSettings extends AbstractSettings
             array('id' => '10080', 'name' => '7 ' . $this->module->l('days', 'PixSettings')),
         );
 
-        return $due_date;
+        return $dueDate;
     }
 }

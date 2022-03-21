@@ -33,44 +33,56 @@
         <p class="submp-title-smart-checkout-six mp-m-px-0">{l s='Use the payment method you prefer.' mod='mercadopago'}</p>
 
         {if count($credit) != 0}
-        <div class="col-xs-12 col-md-4">
-            <div class="frame-tarjetas">
-                <p class="submp-title-checkout">
-                    {l s='Credit card' mod='mercadopago'}
-                    <span class="mp-badge-checkout">
-                        {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
-                    </span>
-                </p>
+            <div class="col-xs-12 col-md-4">
+                <div class="frame-tarjetas">
+                    <p class="submp-title-checkout">
+                        {l s='Credit card' mod='mercadopago'}
+                        <span class="mp-badge-checkout">
+                            {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
+                        </span>
+                    </p>
 
-                {foreach $credit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $credit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
+                </div>
             </div>
-        </div>
         {/if}
 
         {if count($debit) != 0}
-        <div class="col-xs-12 col-md-4">
-            <div class="frame-tarjetas">
-                <p class="submp-title-checkout">{l s='Debit card' mod='mercadopago'}</p>
+            <div class="col-xs-12 col-md-4">
+                <div class="frame-tarjetas">
+                    <p class="submp-title-checkout mp-pb-10">{l s='Debit card' mod='mercadopago'}</p>
 
-                {foreach $debit as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $debit as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
+                </div>
             </div>
-        </div>
         {/if}
 
         {if count($ticket) != 0}
-        <div class="col-xs-12 col-md-4">
-            <div class="frame-tarjetas">
-                <p class="submp-title-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
+            <div class="col-xs-12 col-md-4">
+                <div class="frame-tarjetas">
+                    <p class="submp-title-checkout mp-pb-10">{l s='Wire transfer' mod='mercadopago'}</p>
 
-                {foreach $ticket as $tarjeta}
-                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}"class="img-fluid mp-img-tarjetas" />
-                {/foreach}
+                    <div class="mp-payment-methods-container">
+                        {foreach $ticket as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
+                    </div>
+                </div>
             </div>
-        </div>
         {/if}
     </div>
 
@@ -80,29 +92,29 @@
 </a>
 
 {if $modal == true && $preference != ""}
-<script>
-    window.addEventListener('load', (event) => {
-        var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
-        mercadopago_redirect.setAttribute('href', '#');
+    <script>
+        window.addEventListener('load', (event) => {
+            var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+            mercadopago_redirect.setAttribute('href', '#');
 
-        var modal_script = document.createElement("script");
-        var modal_form = document.getElementById("mp_standard_checkout");
-        modal_form.appendChild(modal_script);
+            var modal_script = document.createElement("script");
+            var modal_form = document.getElementById("mp_standard_checkout");
+            modal_form.appendChild(modal_script);
 
-        modal_script.src = '{$modal_link|escape:"html":"UTF-8"}';
-        modal_script.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
-        modal_script.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
-        modal_script.setAttribute('data-open', 'false');
-        modal_script.async = true;
-        modal_script.onload = function () {
-            var mercadopago_button = document.querySelector('.mercadopago-button');
-            mercadopago_button.style.display = 'none';
+            modal_script.src = '{$modal_link|escape:"html":"UTF-8"}';
+            modal_script.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
+            modal_script.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
+            modal_script.setAttribute('data-open', 'false');
+            modal_script.async = true;
+            modal_script.onload = function () {
+                var mercadopago_button = document.querySelector('.mercadopago-button');
+                mercadopago_button.style.display = 'none';
 
-            mercadopago_redirect.onclick = function () {
-                mercadopago_button.click();
-                return false;
-            }
-        };
-    });
-  </script>
+                mercadopago_redirect.onclick = function () {
+                    mercadopago_button.click();
+                    return false;
+                }
+            };
+        });
+    </script>
 {/if}

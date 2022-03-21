@@ -251,7 +251,7 @@ class MPUseful
         return $this->parse($compositeId)['payment_method_id'];
     }
 
-   /**
+    /**
      * Returns payment place id
      *
      * @param  string $compositeId
@@ -260,5 +260,36 @@ class MPUseful
     public function getPaymentPlaceId($compositeId)
     {
         return $this->parse($compositeId)['payment_place_id'];
+    }
+
+    /**
+     * Calculate the discounted total
+     *
+     * @param  mixed $cart
+     * @param  string $strDiscount
+     * @return float
+     */
+    public function getTheTotalDiscounted($cart, $strDiscount)
+    {
+        $products = (float) $cart->getOrderTotal(true, 4);
+        $discount = $products * ((float) $strDiscount / 100);
+
+        return $discount;
+    }
+
+    /**
+     * Get round
+     *
+     * @return bool
+     */
+    public function getRound()
+    {
+        $round = false;
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            $round = true;
+        }
+
+        return $round;
     }
 }
