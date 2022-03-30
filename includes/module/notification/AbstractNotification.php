@@ -44,6 +44,7 @@ class AbstractNotification
     public $ps_order_state;
     public $order_state_lang;
     public $customer_secure_key;
+    public $mpuseful;
 
     public function __construct($transaction_id)
     {
@@ -53,6 +54,7 @@ class AbstractNotification
         $this->ps_order_state = new PSOrderState();
         $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
+        $this->mpuseful = MPUseful::getInstance();
 
         $this->amount = 0;
         $this->pending = 0;
@@ -125,7 +127,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->total,
+                $cart->getOrderTotal(),
                 "Mercado Pago",
                 null,
                 array(),
@@ -536,14 +538,14 @@ class AbstractNotification
      */
     public function getTotal($cart)
     {
-        $total = (float) $cart->getOrderTotal();
-        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+            $correctedTotal = $this->mpuseful->getCorrectedTotal($cart);
+            $localization = Configuration::get('MERCADOPAGO_SITE_ID');
 
-        if ($localization == 'MCO' || $localization == 'MLC') {
-            return Tools::ps_round($total, 2);
-        }
+            if ($localization == 'MCO' || $localization == 'MLC') {
+                return Tools::ps_round($correctedTotal['amount'], 0);
+            }
 
-        return $total;
+            return Tools::ps_round($correctedTotal['amount'], 2);
     }
 
     /**

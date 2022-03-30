@@ -292,4 +292,32 @@ class MPUseful
 
         return $round;
     }
+
+    
+     /**
+     * Get corrected total amount
+     *
+     * @return bool
+     */
+    public function getCorrectedTotal($cart)
+    {
+        $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+
+        $shipping = (float) $cart->getOrderTotal(true, 5);
+        $products = (float) $cart->getOrderTotal(true, 4);
+        $cartTotal = (float) $cart->getOrderTotal();
+
+        $discount = $products * ((float) $strDiscount / 100);
+        $products = ($discount != 0) ? $products - $discount : $products;
+
+
+        $subtotal = $products + $shipping;
+        $difference = $cartTotal - $subtotal - $discount;
+        $amount = $subtotal + $difference;
+
+        return [
+            "amount" => $amount,
+            "discount" => $strDiscount
+        ];
+    }
 }
