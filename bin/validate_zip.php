@@ -6,7 +6,6 @@ const VALIDATOR_URL = 'https://validator.prestashop.com/api/modules';
 
 $inputFile  = $argv[1];
 $apiKey = getenv('VALIDATOR_API_KEY');
-//$apiKey = $argv[2];
 
 if (empty($apiKey)) {
     throw new Exception('No API Key is set to authenticate the request to the validator. Please set the env var VALIDATOR_API_KEY');
@@ -57,14 +56,39 @@ $stdResponse = json_decode($response->getBody()->getContents(), true);
 $warningCount = $stdResponse['Details']['results']['warnings'];
 $errorCount = $stdResponse['Details']['results']['errors'];
 
-print_r("Found $warningCount warnings and $errorCount errors");
+print_r("Found $warningCount warnings and $errorCount errors\n");
 
 if ($errorCount === 0) {
-    print_r(' -> ZIP Validation is OK');
+    print_r(" -> ZIP Validation is OK\n");
     return;
 }
 
-$errors = $stdResponse['Errors'];
-print_r(' -> ' . json_encode($errors));
+foreach ($stdResponse as $category => $reports) {
+    switch ($category) {
+        case 'Details':
+        case 'Structure':
+            // do nothing
+        break;
+      
+        default:
+            if (is_array($reports)) {
+                foreach ($reports as $key => $item) {
+                    foreach ($item as $rule) {
+                        if (is_array($rule)) {
+                            foreach ($rule as $errors) {
+                                foreach ($errors['content'] as $error) {
+                                    if ($error['type'] === 'error') {
+                                        print(" -> $category: $error[file]:$error[line]: $error[column] found error: $error[message]\n");
+                                        $isValid = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        break;
+    }
+}
 
 throw new Exception('-> ZIP Validation contains errors.');
