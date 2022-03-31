@@ -541,9 +541,9 @@ class AbstractNotification
             $correctedTotal = $this->mpuseful->getCorrectedTotal($cart);
             $localization = Configuration::get('MERCADOPAGO_SITE_ID');
 
-            if ($localization == 'MCO' || $localization == 'MLC') {
-                return Tools::ps_round($correctedTotal['amount'], 0);
-            }
+        if ($localization == 'MCO' || $localization == 'MLC') {
+            return Tools::ps_round($correctedTotal['amount'], 0);
+        }
 
             return Tools::ps_round($correctedTotal['amount'], 2);
     }
