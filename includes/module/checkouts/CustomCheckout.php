@@ -93,8 +93,7 @@ class CustomCheckout
             }
         }
 
-        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart);
-
+        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, 'credit_card');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $walletButton = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');

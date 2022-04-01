@@ -48,7 +48,7 @@ class WebhookNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->verifyWebhook($cart);
-        $this->total = $this->getTotal($cart);
+        $this->total = $this->getTotal($cart, $this->payment['metadata']['checkout_type']);
         $orderId = Order::getOrderByCartId($cart->id);
 
         if ($orderId != 0) {
@@ -74,7 +74,7 @@ class WebhookNotification extends AbstractNotification
      */
     public function createCustomOrder($cart)
     {
-        $this->total = $this->getTotal($cart);
+        $this->total = $this->getTotal($cart, $this->payment['metadata']['checkout_type']);
         $this->verifyCustomPayment();
         $this->validateOrderState();
 

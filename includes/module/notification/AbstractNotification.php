@@ -534,11 +534,11 @@ class AbstractNotification
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getTotal($cart)
+    public function getTotal($cart, $checkout)
     {
-            $correctedTotal = $this->mpuseful->getCorrectedTotal($cart);
+            $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, $checkout);
             $localization = Configuration::get('MERCADOPAGO_SITE_ID');
 
         if ($localization == 'MCO' || $localization == 'MLC') {

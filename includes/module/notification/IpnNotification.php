@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -48,7 +49,16 @@ class IpnNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->verifyWebhook($cart);
-        $this->total = $this->getTotal($cart);
+
+        $preference = $this->getWalletButtonPreference();
+        $checkout = 'pro';
+
+        if ($preference) {
+            $checkout = 'wallet_button';
+        }
+
+
+        $this->total = $this->getTotal($cart, $checkout);
         $orderId = $this->getOrderId($cart);
 
         if ($orderId != 0) {
@@ -79,13 +89,15 @@ class IpnNotification extends AbstractNotification
     public function createStandardOrder($cart)
     {
         $preference = $this->getWalletButtonPreference();
+        $checkout = 'pro';
 
         if ($preference) {
+            $checkout = 'wallet_button';
             $preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
         $this->getOrderId($cart);
-        $this->total = $this->getTotal($cart);
+        $this->total = $this->getTotal($cart, $checkout);
         $this->status = 'pending';
         $this->pending += $this->total;
         $this->validateOrderState();
@@ -93,7 +105,7 @@ class IpnNotification extends AbstractNotification
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
-        
+
         if ($preference) {
             $preference->disableCartRule();
         }
@@ -155,7 +167,7 @@ class IpnNotification extends AbstractNotification
                 $total_paid = $payment_info['transaction_details']['total_paid_amount'];
                 $coupon_amount = $payment_info['coupon_amount'];
 
-                if ($coupon_amount > 0 && $coupon_amount!==null) {
+                if ($coupon_amount > 0 && $coupon_amount !== null) {
                     $total_paid += $coupon_amount;
                 }
 

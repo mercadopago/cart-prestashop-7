@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -224,7 +225,7 @@ class MPUseful
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
     }
 
-   /**
+    /**
      * Separate payment id from payment place
      *
      * @param  string $compositeId
@@ -240,7 +241,7 @@ class MPUseful
         ];
     }
 
-   /**
+    /**
      * Returns payment method id
      *
      * @param  string $compositeId
@@ -293,15 +294,16 @@ class MPUseful
         return $round;
     }
 
-    
-     /**
+
+    /**
      * Get corrected total amount
      *
-     * @return bool
+     * @return array
      */
-    public function getCorrectedTotal($cart)
+    public function getCorrectedTotal($cart, $checkout)
     {
-        $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+        $strDiscount = $this->getDiscountByCheckoutType($checkout);
+
 
         $shipping = (float) $cart->getOrderTotal(true, 5);
         $products = (float) $cart->getOrderTotal(true, 4);
@@ -319,5 +321,30 @@ class MPUseful
             "amount" => $amount,
             "discount" => $strDiscount
         ];
+    }
+
+
+    /**
+     * Get discount based on checkout type
+     *
+     * @return int
+     */
+    private function getDiscountByCheckoutType($checkout)
+    {
+
+        switch ($checkout) {
+            case 'credit_card':
+            case 'wallet_button':
+                return Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+
+            case 'ticket':
+                return Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+
+            case 'pix':
+                return Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
+
+            default:
+                return (int) 0;
+        }
     }
 }
