@@ -34,14 +34,16 @@ class IpnNotification extends AbstractNotification
 {
     public $merchant_order;
     public $preference;
+    public $isWalletButton;
 
-    public function __construct($transaction_id, $merchant_order = null)
+    public function __construct($transaction_id, $merchant_order)
     {
         parent::__construct($transaction_id);
 
         $this->merchant_order = $merchant_order;
-        $this->preference = $this->getPreference();
         $this->checkout = $this->getCheckoutType();
+        $this->isWalletButton = $this->checkout === 'wallet_button';
+        $this->preference = $this->getCheckoutPreference();
     }
 
     /**
@@ -84,9 +86,7 @@ class IpnNotification extends AbstractNotification
      */
     public function createStandardOrder($cart)
     {
-        $isWalletButton = (bool) $this->checkout === 'wallet_button';
-
-        if ($isWalletButton) {
+        if ($this->isWalletButton) {
             $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
@@ -100,19 +100,23 @@ class IpnNotification extends AbstractNotification
             $this->createOrder($cart, true);
         }
 
-        if ($isWalletButton) {
+        if ($this->isWalletButton) {
             $this->preference->disableCartRule();
         }
     }
 
     /**
-     * Get Preference
+     * Get Checkout Preference
      *
      * @return mixed
      */
-    public function getPreference()
+    public function getCheckoutPreference()
     {
-        return $this->mercadopago->getPreference($this->merchant_order['preference_id']);
+        if ($this->isWalletButton) {
+            return new WalletButtonPreference();
+        }
+
+        return new StandardPreference();
     }
 
     /**
@@ -122,8 +126,10 @@ class IpnNotification extends AbstractNotification
      */
     public function getCheckoutType()
     {
+        $preference = $this->mercadopago->getPreference($this->merchant_order['preference_id']);
+
         $checkout = 'pro';
-        $checkoutType = isset($this->preference['metadata']['checkout_type']) ? $this->preference['metadata']['checkout_type'] : false;
+        $checkoutType = isset($preference['metadata']['checkout_type']) ? $preference['metadata']['checkout_type'] : false;
 
         if ($checkoutType && $checkoutType === 'wallet_button') {
             $checkout = 'wallet_button';
