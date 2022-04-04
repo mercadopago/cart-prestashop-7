@@ -303,14 +303,12 @@ class MPUseful
     {
         $strDiscount = $this->getDiscountByCheckoutType($checkout);
 
-
         $shipping = (float) $cart->getOrderTotal(true, 5);
         $products = (float) $cart->getOrderTotal(true, 4);
         $cartTotal = (float) $cart->getOrderTotal();
 
         $discount = $products * ((float) $strDiscount / 100);
         $products = ($discount != 0) ? $products - $discount : $products;
-
 
         $subtotal = $products + $shipping;
         $difference = $cartTotal - $subtotal - $discount;
@@ -330,7 +328,6 @@ class MPUseful
      */
     private function getDiscountByCheckoutType($checkout)
     {
-
         switch ($checkout) {
             case 'credit_card':
             case 'wallet_button':

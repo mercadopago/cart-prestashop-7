@@ -45,6 +45,7 @@ class AbstractNotification
     public $order_state_lang;
     public $customer_secure_key;
     public $mpuseful;
+    public $checkout;
 
     public function __construct($transaction_id)
     {
@@ -534,21 +535,25 @@ class AbstractNotification
     }
 
     /**
+     * Get order total
+     *
      * @return float
      */
     public function getTotal($cart, $checkout)
     {
-            $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, $checkout);
-            $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, $checkout);
+        $localization = Configuration::get('MERCADOPAGO_SITE_ID');
 
         if ($localization == 'MCO' || $localization == 'MLC') {
             return Tools::ps_round($correctedTotal['amount'], 0);
         }
 
-            return Tools::ps_round($correctedTotal['amount'], 2);
+        return Tools::ps_round($correctedTotal['amount'], 2);
     }
 
     /**
+     * Generate notification logs
+     *
      * @param  string $method
      * @return void
      */
