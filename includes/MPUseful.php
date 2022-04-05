@@ -286,6 +286,7 @@ class MPUseful
     {
         $round = false;
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
         if ($localization == 'MCO' || $localization == 'MLC') {
             $round = true;
         }
@@ -319,7 +320,6 @@ class MPUseful
             "discount" => $strDiscount
         ];
     }
-
 
     /**
      * Get discount based on checkout type
