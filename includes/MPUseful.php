@@ -326,7 +326,7 @@ class MPUseful
      *
      * @return int
      */
-    private function getDiscountByCheckoutType($checkout)
+    public function getDiscountByCheckoutType($checkout)
     {
         switch ($checkout) {
             case 'credit_card':
