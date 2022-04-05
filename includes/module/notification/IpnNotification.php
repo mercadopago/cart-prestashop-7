@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -32,11 +33,17 @@ require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.p
 class IpnNotification extends AbstractNotification
 {
     public $merchant_order;
+    public $preference;
+    public $isWalletButton;
 
-    public function __construct($transaction_id, $merchant_order = null)
+    public function __construct($transaction_id, $merchant_order)
     {
         parent::__construct($transaction_id);
+
         $this->merchant_order = $merchant_order;
+        $this->checkout = $this->getCheckoutType();
+        $this->isWalletButton = $this->checkout === 'wallet_button';
+        $this->preference = $this->getCheckoutPreference();
     }
 
     /**
@@ -48,7 +55,8 @@ class IpnNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->verifyWebhook($cart);
-        $this->total = $this->getTotal($cart);
+
+        $this->total = $this->getTotal($cart, $this->checkout);
         $orderId = $this->getOrderId($cart);
 
         if ($orderId != 0) {
@@ -78,14 +86,12 @@ class IpnNotification extends AbstractNotification
      */
     public function createStandardOrder($cart)
     {
-        $preference = $this->getWalletButtonPreference();
-
-        if ($preference) {
-            $preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
+        if ($this->isWalletButton) {
+            $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
         $this->getOrderId($cart);
-        $this->total = $this->getTotal($cart);
+        $this->total = $this->getTotal($cart, $this->checkout);
         $this->status = 'pending';
         $this->pending += $this->total;
         $this->validateOrderState();
@@ -93,24 +99,43 @@ class IpnNotification extends AbstractNotification
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
             $this->createOrder($cart, true);
         }
-        
-        if ($preference) {
-            $preference->disableCartRule();
+
+        if ($this->isWalletButton) {
+            $this->preference->disableCartRule();
         }
     }
 
     /**
-     * Get Wallet Button Preference
+     * Get Checkout Preference
      *
      * @return mixed
      */
-    public function getWalletButtonPreference()
+    public function getCheckoutPreference()
     {
-        $preferenceCheckout = $this->mercadopago->getPreference($this->merchant_order['preference_id']);
-        $checkout_type = isset($preferenceCheckout['metadata']['checkout_type']) ? $preferenceCheckout['metadata']['checkout_type'] : null;
-        $preference = new WalletButtonPreference();
+        if ($this->isWalletButton) {
+            return new WalletButtonPreference();
+        }
 
-        return $checkout_type == 'wallet_button' ? $preference : false;
+        return new StandardPreference();
+    }
+
+    /**
+     * Get Preference
+     *
+     * @return mixed
+     */
+    public function getCheckoutType()
+    {
+        $preference = $this->mercadopago->getPreference($this->merchant_order['preference_id']);
+
+        $checkout = 'pro';
+        $checkoutType = isset($preference['metadata']['checkout_type']) ? $preference['metadata']['checkout_type'] : false;
+
+        if ($checkoutType && $checkoutType === 'wallet_button') {
+            $checkout = 'wallet_button';
+        }
+
+        return $checkout;
     }
 
     /**
@@ -152,7 +177,14 @@ class IpnNotification extends AbstractNotification
             $this->payments_data['payments_status'][] = $this->status;
 
             if ($this->status == 'approved') {
-                $this->approved += $payment_info['transaction_amount'];
+                $total_paid = $payment_info['transaction_details']['total_paid_amount'];
+                $coupon_amount = $payment_info['coupon_amount'];
+
+                if ($coupon_amount > 0 && $coupon_amount !== null) {
+                    $total_paid += $coupon_amount;
+                }
+
+                $this->approved += $total_paid;
             } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
                 $this->pending += $payment_info['transaction_amount'];
             }

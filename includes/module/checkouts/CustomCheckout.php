@@ -93,32 +93,21 @@ class CustomCheckout
             }
         }
 
+        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, 'credit_card');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
-        $strDiscount = Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
         $walletButton = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
 
-        $shipping = (float) $cart->getOrderTotal(true, 5);
-        $products = (float) $cart->getOrderTotal(true, 4);
-        $cartTotal = (float) $cart->getOrderTotal();
-
-        $discount = $products * ((float) $strDiscount / 100);
-        $products = ($discount != 0) ? $products - $discount : $products;
-
-        $subtotal = $products + $shipping;
-        $difference = $cartTotal - $subtotal - $discount;
-        $amount = $subtotal + $difference;
-
         $checkoutInfo = array(
             "debit" => $debit,
             "credit" => $credit,
-            "amount" => $amount,
+            "amount" => $correctedTotal['amount'],
             "site_id" => $site_id,
             "wallet_button" => $walletButton,
             "version" => MP_VERSION,
             "redirect" => $redirect,
-            "discount" => $strDiscount,
+            "discount" => $correctedTotal['discount'],
             "public_key" => $public_key,
             "assets_ext_min" => $this->assets_ext_min,
             "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),

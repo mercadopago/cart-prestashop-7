@@ -224,7 +224,7 @@ class MPUseful
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
     }
 
-   /**
+    /**
      * Separate payment id from payment place
      *
      * @param  string $compositeId
@@ -240,7 +240,7 @@ class MPUseful
         ];
     }
 
-   /**
+    /**
      * Returns payment method id
      *
      * @param  string $compositeId
@@ -286,10 +286,61 @@ class MPUseful
     {
         $round = false;
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
         if ($localization == 'MCO' || $localization == 'MLC') {
             $round = true;
         }
 
         return $round;
+    }
+
+
+    /**
+     * Get corrected total amount
+     *
+     * @return array
+     */
+    public function getCorrectedTotal($cart, $checkout)
+    {
+        $strDiscount = $this->getDiscountByCheckoutType($checkout);
+
+        $shipping = (float) $cart->getOrderTotal(true, 5);
+        $products = (float) $cart->getOrderTotal(true, 4);
+        $cartTotal = (float) $cart->getOrderTotal();
+
+        $discount = $products * ((float) $strDiscount / 100);
+        $products = ($discount != 0) ? $products - $discount : $products;
+
+        $subtotal = $products + $shipping;
+        $difference = $cartTotal - $subtotal - $discount;
+        $amount = $subtotal + $difference;
+
+        return [
+            "amount" => $amount,
+            "discount" => $strDiscount
+        ];
+    }
+
+    /**
+     * Get discount based on checkout type
+     *
+     * @return int
+     */
+    public function getDiscountByCheckoutType($checkout)
+    {
+        switch ($checkout) {
+            case 'credit_card':
+            case 'wallet_button':
+                return Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+
+            case 'ticket':
+                return Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+
+            case 'pix':
+                return Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
+
+            default:
+                return (int) 0;
+        }
     }
 }

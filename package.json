@@ -11,6 +11,7 @@
   },
   "engineStrict": true,
   "scripts": {
+    "php": "npm run php:lint && npm run php:fix",
     "php:lint": "composer phpcs",
     "php:fix": "composer phpcbf",
     "build:js": "node -e 'require(\"./scripts.js\").minifyFiles(\"js\")'",
@@ -22,7 +23,7 @@
   },
   "devDependencies": {
     "husky": "^7.0.0",
-    "jshint": "^2.13.1",
+    "jshint": "^2.13.4",
     "minify": "^7.0.2",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0"
