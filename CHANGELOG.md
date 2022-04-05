@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed validateOrder on createOrder method using cart total instead of payments total sum
-- Fixed Wallet Button discount value to avoid fraud status
 - Fixed round to MLC and MCO on notification getTotal method
 
 ## [4.10.0] - 2022-03-21
