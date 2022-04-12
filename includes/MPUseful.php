@@ -340,7 +340,7 @@ class MPUseful
                 return Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
 
             default:
-                return (int) 0;
+                return 0.00;
         }
     }
 }

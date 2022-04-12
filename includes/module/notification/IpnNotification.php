@@ -177,10 +177,8 @@ class IpnNotification extends AbstractNotification
             $this->payments_data['payments_status'][] = $this->status;
 
             if ($this->status == 'approved') {
-                $total_paid = $payment_info['transaction_details']['total_paid_amount'];
-                $coupon_amount = isset($payment_info['coupon_amount']) ? $payment_info['coupon_amount'] : (int) 0;
-                $total_paid += $coupon_amount;
-                $this->approved += $total_paid;
+                $coupon_amount = isset($payment_info['coupon_amount']) ? $payment_info['coupon_amount'] : 0.00;
+                $this->approved += $payment_info['transaction_details']['total_paid_amount'] + $coupon_amount;
             } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
                 $this->pending += $payment_info['transaction_amount'];
             }
