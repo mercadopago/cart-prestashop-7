@@ -294,7 +294,6 @@ class MPUseful
         return $round;
     }
 
-
     /**
      * Get corrected total amount
      *
@@ -315,9 +314,15 @@ class MPUseful
         $difference = $cartTotal - $subtotal - $discount;
         $amount = $subtotal + $difference;
 
+        $amountWithRound = Tools::ps_round($amount, 2);
+        $amountDifference = $amountWithRound - $amount;
+
         return [
             "amount" => $amount,
-            "discount" => $strDiscount
+            "discount" =>  $discount,
+            "str_discount" => $strDiscount,
+            "amount_with_round" => $amountWithRound,
+            "amount_difference" => $amountDifference,
         ];
     }
 

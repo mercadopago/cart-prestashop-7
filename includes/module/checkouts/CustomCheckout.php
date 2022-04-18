@@ -80,9 +80,11 @@ class CustomCheckout
     public function getCustomCheckout($cart)
     {
         $this->loadJsCustom();
+
         $debit = array();
         $credit = array();
         $tarjetas = $this->payment->mercadopago->getPaymentMethods();
+
         foreach ($tarjetas as $tarjeta) {
             if (Configuration::get($tarjeta['config']) != "") {
                 if ($tarjeta['type'] == 'credit_card') {
@@ -93,11 +95,13 @@ class CustomCheckout
             }
         }
 
-        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, 'credit_card');
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $walletButton = Configuration::get('MERCADOPAGO_CUSTOM_WALLET_BUTTON');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'custom');
         $public_key = $this->payment->mercadopago->getPublicKey();
+
+        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, 'credit_card');
+        MPLog::generate('CUSTOM Total info ' . json_encode($correctedTotal));
 
         $checkoutInfo = array(
             "debit" => $debit,
@@ -107,7 +111,7 @@ class CustomCheckout
             "wallet_button" => $walletButton,
             "version" => MP_VERSION,
             "redirect" => $redirect,
-            "discount" => $correctedTotal['discount'],
+            "discount" => $correctedTotal['str_discount'],
             "public_key" => $public_key,
             "assets_ext_min" => $this->assets_ext_min,
             "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
