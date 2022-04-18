@@ -60,7 +60,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
             'id' => 'discount',
             'title' => 'Discount',
             'quantity' => 1,
-            'unit_price' =>  $this->mpuseful->getRound() ? Tools::ps_round(-$totalInfo['discount']) : Tools::ps_round(-$totalInfo['discount'], 2),
+            'unit_price' =>  -$totalInfo['discount'],
             'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
             'description' => 'Discount provided by store',
         );
@@ -70,7 +70,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
             'id' => 'difference',
             'title' => 'Difference',
             'quantity' => 1,
-            'unit_price' =>  $this->mpuseful->getRound() ? Tools::ps_round($totalInfo['amount_difference']) : Tools::ps_round($totalInfo['amount_difference'], 2),
+            'unit_price' =>  $totalInfo['amount_difference'],
             'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
             'description' => 'Difference provided by store',
         );

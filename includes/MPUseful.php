@@ -301,28 +301,29 @@ class MPUseful
      */
     public function getCorrectedTotal($cart, $checkout)
     {
+        $round       = $this->getRound();
         $strDiscount = $this->getDiscountByCheckoutType($checkout);
 
-        $shipping = (float) $cart->getOrderTotal(true, 5);
-        $products = (float) $cart->getOrderTotal(true, 4);
+        $shipping  = (float) $cart->getOrderTotal(true, 5);
+        $products  = (float) $cart->getOrderTotal(true, 4);
         $cartTotal = (float) $cart->getOrderTotal();
 
         $discount = $products * ((float) $strDiscount / 100);
         $products = ($discount != 0) ? $products - $discount : $products;
 
-        $subtotal = $products + $shipping;
+        $subtotal   = $products + $shipping;
         $difference = $cartTotal - $subtotal - $discount;
-        $amount = $subtotal + $difference;
+        $amount     = $subtotal + $difference;
 
-        $amountWithRound = Tools::ps_round($amount, 2);
+        $amountWithRound  = Tools::ps_round($amount, 2);
         $amountDifference = $amountWithRound - $amount;
 
         return [
-            "amount" => $amount,
-            "discount" =>  $discount,
-            "str_discount" => $strDiscount,
+            "amount"            => $amount,
+            "discount"          => $round ? Tools::ps_round($discount) : Tools::ps_round($discount, 2),
+            "str_discount"      => $strDiscount,
             "amount_with_round" => $amountWithRound,
-            "amount_difference" => $amountDifference,
+            "amount_difference" => $round ? Tools::ps_round($amountDifference) : Tools::ps_round($amountDifference, 2),
         ];
     }
 
