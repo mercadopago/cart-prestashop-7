@@ -57,20 +57,20 @@ abstract class AbstractStandardPreference extends AbstractPreference
         MPLog::generate('Total info ' . json_encode($totalInfo));
 
         $discountPerItem = array(
-            'id' => 'discount',
-            'title' => 'Discount',
-            'quantity' => 1,
-            'unit_price' =>  -$totalInfo['discount'],
+            'id'          => 'discount',
+            'title'       => 'Discount',
+            'quantity'    => 1,
+            'unit_price'  => -$totalInfo['discount'],
             'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
             'description' => 'Discount provided by store',
         );
         array_push($items, $discountPerItem);
 
         $amountDifferenceItem = array(
-            'id' => 'difference',
-            'title' => 'Difference',
-            'quantity' => 1,
-            'unit_price' =>  $totalInfo['amount_difference'],
+            'id'          => 'difference',
+            'title'       => 'Difference',
+            'quantity'    => 1,
+            'unit_price'  => $totalInfo['amount_difference'],
             'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
             'description' => 'Difference provided by store',
         );
