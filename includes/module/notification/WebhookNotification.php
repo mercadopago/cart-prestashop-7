@@ -101,7 +101,7 @@ class WebhookNotification extends AbstractNotification
         $this->payments_data['payments_status'] = $this->status;
 
         if ($this->status == 'approved') {
-            $this->approved += $this->payment['transaction_amount'];
+            $this->approved += $this->payment['transaction_details']['total_paid_amount'];
         } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
             $this->pending += $this->payment['transaction_amount'];
         }
