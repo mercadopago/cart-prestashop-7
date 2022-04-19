@@ -50,41 +50,42 @@ abstract class AbstractStandardPreference extends AbstractPreference
      */
     public function buildPreferencePayload($cart, $discount = 0)
     {
-        $items = $this->getCartItems($cart);
+        $items         = $this->getCartItems($cart);
         $payloadParent = $this->getCommonPreference($cart);
-        $totalInfo = $this->mpuseful->getCorrectedTotal($cart, 'wallet_button');
 
-        MPLog::generate('Total info ' . json_encode($totalInfo));
+        if ($discount != 0) {
+            $totalInfo = $this->mpuseful->getCorrectedTotal($cart, 'wallet_button');
 
-        $discountPerItem = array(
-            'id'          => 'discount',
-            'title'       => 'Discount',
-            'quantity'    => 1,
-            'unit_price'  => -$totalInfo['discount'],
-            'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-            'description' => 'Discount provided by store',
-        );
-        array_push($items, $discountPerItem);
+            $discountPerItem = array(
+                'id'          => 'discount',
+                'title'       => 'Discount',
+                'quantity'    => 1,
+                'unit_price'  => -$totalInfo['discount'],
+                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
+                'description' => 'Discount provided by store',
+            );
+            array_push($items, $discountPerItem);
 
-        $amountDifferenceItem = array(
-            'id'          => 'difference',
-            'title'       => 'Difference',
-            'quantity'    => 1,
-            'unit_price'  => $totalInfo['amount_difference'],
-            'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-            'description' => 'Difference provided by store',
-        );
-        array_push($items, $amountDifferenceItem);
+            $amountDifferenceItem = array(
+                'id'          => 'difference',
+                'title'       => 'Difference',
+                'quantity'    => 1,
+                'unit_price'  => $totalInfo['amount_difference'],
+                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
+                'description' => 'Difference provided by store',
+            );
+            array_push($items, $amountDifferenceItem);
+        }
 
         $payloadAdditional = array(
-            'items' => $items,
-            'payer' => $this->getCustomerData($cart),
-            'shipments' => $this->getShipment($cart),
-            'back_urls' => $this->getBackUrls($cart),
-            'payment_methods' => $this->getPaymentOptions(),
-            'auto_return' => $this->getAutoReturn(),
-            'binary_mode' => $this->getBinaryMode(),
-            'expires' => $this->getExpirationStatus(),
+            'items'              => $items,
+            'payer'              => $this->getCustomerData($cart),
+            'shipments'          => $this->getShipment($cart),
+            'back_urls'          => $this->getBackUrls($cart),
+            'payment_methods'    => $this->getPaymentOptions(),
+            'auto_return'        => $this->getAutoReturn(),
+            'binary_mode'        => $this->getBinaryMode(),
+            'expires'            => $this->getExpirationStatus(),
             'expiration_date_to' => $this->getExpirationDate(),
         );
 
