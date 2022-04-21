@@ -66,11 +66,19 @@ abstract class AbstractStandardPreference extends AbstractPreference
             );
             array_push($items, $discountPerItem);
 
+            $itemsAmount = array_reduce(
+                $items,
+                function ($accumulator, $item) {
+                    $accumulator += $item['unit_price'] * $item['quantity'];
+                    return $accumulator;
+                }
+            );
+
             $amountDifferenceItem = array(
                 'id'          => 'difference',
                 'title'       => 'Difference',
                 'quantity'    => 1,
-                'unit_price'  => $totalInfo['amount_difference'],
+                'unit_price'  => $totalInfo['amount_with_round'] - $itemsAmount,
                 'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
                 'description' => 'Difference provided by store',
             );

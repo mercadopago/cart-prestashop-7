@@ -29,12 +29,7 @@
 
 class MPUseful
 {
-
     const SEPARATOR = '|';
-
-    public function __construct()
-    {
-    }
 
     /**
      * Instance the class
@@ -53,7 +48,7 @@ class MPUseful
     /**
      * Get default sponsor_id
      *
-     * @param [string] $country
+     * @param string $country
      * @return void
      */
     public function getCountryConfigs($country)
@@ -159,7 +154,7 @@ class MPUseful
     /**
      * Get seller protect link
      *
-     * @param [string] $country
+     * @param string $country
      * @return string
      */
     public function setSellerProtectLink($country)
@@ -315,7 +310,7 @@ class MPUseful
         $difference = $cartTotal - $subtotal - $discount;
         $amount     = $subtotal + $difference;
 
-        $amountWithRound  = Tools::ps_round($amount, 2);
+        $amountWithRound  = $round ? Tools::ps_round($amount) : Tools::ps_round($amount, 2);
         $amountDifference = $amountWithRound - $amount;
 
         return [
