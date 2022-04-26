@@ -68,7 +68,7 @@ foreach ($stdResponse as $category => $reports) {
         case 'Details':
         case 'Structure':
             // do nothing
-        break;
+            break;
       
         default:
             if (is_array($reports)) {
@@ -87,7 +87,7 @@ foreach ($stdResponse as $category => $reports) {
                     }
                 }
             }
-        break;
+            break;
     }
 }
 

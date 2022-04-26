@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2022 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2022 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -44,6 +44,8 @@ class AbstractNotification
     public $ps_order_state;
     public $order_state_lang;
     public $customer_secure_key;
+    public $mpuseful;
+    public $checkout;
 
     public function __construct($transaction_id)
     {
@@ -53,6 +55,7 @@ class AbstractNotification
         $this->ps_order_state = new PSOrderState();
         $this->ps_order_state_lang = new PSOrderStateLang();
         $this->transaction_id = $transaction_id;
+        $this->mpuseful = MPUseful::getInstance();
 
         $this->amount = 0;
         $this->pending = 0;
@@ -125,7 +128,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->total,
+                $cart->getOrderTotal(),
                 "Mercado Pago",
                 null,
                 array(),
@@ -532,21 +535,25 @@ class AbstractNotification
     }
 
     /**
-     * @return mixed
+     * Get order total
+     *
+     * @return float
      */
-    public function getTotal($cart)
+    public function getTotal($cart, $checkout)
     {
-        $total = (float) $cart->getOrderTotal();
+        $correctedTotal = $this->mpuseful->getCorrectedTotal($cart, $checkout);
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
 
         if ($localization == 'MCO' || $localization == 'MLC') {
-            return Tools::ps_round($total, 2);
+            return Tools::ps_round($correctedTotal['amount'], 0);
         }
 
-        return $total;
+        return Tools::ps_round($correctedTotal['amount'], 2);
     }
 
     /**
+     * Generate notification logs
+     *
      * @param  string $method
      * @return void
      */
