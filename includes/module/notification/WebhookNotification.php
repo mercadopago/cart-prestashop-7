@@ -18,9 +18,9 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to http://www.prestashop.com for more information.
  *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2022 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2022 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
  * Don't forget to prefix your containers with your own identifier
@@ -36,7 +36,9 @@ class WebhookNotification extends AbstractNotification
     public function __construct($transaction_id, $payment)
     {
         parent::__construct($transaction_id);
+
         $this->payment = $payment;
+        $this->checkout = $payment['metadata']['checkout_type'];
     }
 
     /**
@@ -48,7 +50,8 @@ class WebhookNotification extends AbstractNotification
     public function receiveNotification($cart)
     {
         $this->verifyWebhook($cart);
-        $this->total = $this->getTotal($cart);
+
+        $this->total = $this->getTotal($cart, $this->checkout);
         $orderId = Order::getOrderByCartId($cart->id);
 
         if ($orderId != 0) {
@@ -74,7 +77,7 @@ class WebhookNotification extends AbstractNotification
      */
     public function createCustomOrder($cart)
     {
-        $this->total = $this->getTotal($cart);
+        $this->total = $this->getTotal($cart, $this->checkout);
         $this->verifyCustomPayment();
         $this->validateOrderState();
 
@@ -98,7 +101,7 @@ class WebhookNotification extends AbstractNotification
         $this->payments_data['payments_status'] = $this->status;
 
         if ($this->status == 'approved') {
-            $this->approved += $this->payment['transaction_amount'];
+            $this->approved += $this->payment['transaction_details']['total_paid_amount'];
         } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
             $this->pending += $this->payment['transaction_amount'];
         }

@@ -29,12 +29,7 @@
 
 class MPUseful
 {
-
     const SEPARATOR = '|';
-
-    public function __construct()
-    {
-    }
 
     /**
      * Instance the class
@@ -53,7 +48,7 @@ class MPUseful
     /**
      * Get default sponsor_id
      *
-     * @param [string] $country
+     * @param string $country
      * @return void
      */
     public function getCountryConfigs($country)
@@ -159,7 +154,7 @@ class MPUseful
     /**
      * Get seller protect link
      *
-     * @param [string] $country
+     * @param string $country
      * @return string
      */
     public function setSellerProtectLink($country)
@@ -224,7 +219,7 @@ class MPUseful
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
     }
 
-   /**
+    /**
      * Separate payment id from payment place
      *
      * @param  string $compositeId
@@ -240,7 +235,7 @@ class MPUseful
         ];
     }
 
-   /**
+    /**
      * Returns payment method id
      *
      * @param  string $compositeId
@@ -286,10 +281,67 @@ class MPUseful
     {
         $round = false;
         $localization = Configuration::get('MERCADOPAGO_SITE_ID');
+
         if ($localization == 'MCO' || $localization == 'MLC') {
             $round = true;
         }
 
         return $round;
+    }
+
+    /**
+     * Get corrected total amount
+     *
+     * @return array
+     */
+    public function getCorrectedTotal($cart, $checkout)
+    {
+        $round       = $this->getRound();
+        $strDiscount = $this->getDiscountByCheckoutType($checkout);
+
+        $shipping  = (float) $cart->getOrderTotal(true, 5);
+        $products  = (float) $cart->getOrderTotal(true, 4);
+        $cartTotal = (float) $cart->getOrderTotal();
+
+        $discount = $products * ((float) $strDiscount / 100);
+        $products = ($discount != 0) ? $products - $discount : $products;
+
+        $subtotal   = $products + $shipping;
+        $difference = $cartTotal - $subtotal - $discount;
+        $amount     = $subtotal + $difference;
+
+        $amountWithRound  = $round ? Tools::ps_round($amount) : Tools::ps_round($amount, 2);
+        $amountDifference = $amountWithRound - $amount;
+
+        return [
+            "amount"            => $amount,
+            "discount"          => $round ? Tools::ps_round($discount) : Tools::ps_round($discount, 2),
+            "str_discount"      => $strDiscount,
+            "amount_with_round" => $amountWithRound,
+            "amount_difference" => $round ? Tools::ps_round($amountDifference) : Tools::ps_round($amountDifference, 2),
+        ];
+    }
+
+    /**
+     * Get discount based on checkout type
+     *
+     * @return int
+     */
+    public function getDiscountByCheckoutType($checkout)
+    {
+        switch ($checkout) {
+            case 'credit_card':
+            case 'wallet_button':
+                return Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT');
+
+            case 'ticket':
+                return Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
+
+            case 'pix':
+                return Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
+
+            default:
+                return 0.00;
+        }
     }
 }

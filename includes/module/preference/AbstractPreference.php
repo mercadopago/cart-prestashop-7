@@ -115,10 +115,10 @@ abstract class AbstractPreference
         $items = array();
         $products = $cart->getProducts();
 
-        //verify country for round
+        // Verify country for round
         $round = $this->mpuseful->getRound();
 
-        //Products
+        // Products
         foreach ($products as $product) {
             $image = Image::getCover($product['id_product']);
             $image_product = new Product($product['id_product'], false, Context::getContext()->language->id);
@@ -148,7 +148,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Wrapping cost
+        // Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
             if ($custom != true) {
@@ -166,7 +166,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Discounts
+        // Discounts
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
         if ($discounts > 0) {
             if ($custom != true) {
@@ -184,7 +184,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Shipping cost
+        // Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
             if ($custom != true) {
@@ -211,6 +211,7 @@ abstract class AbstractPreference
                 return $accumulator;
             }
         );
+
         $itemsTotal = $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
         $priceDiff = $cartTotal - $itemsTotal;
 

@@ -375,8 +375,8 @@
     window.onload = loadTicket();
     function loadTicket() {
         var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
-        mpValidateSiteId(site_id);
+        mpValidateSellerInfo(site_id, 'six');
         validateDocumentInputs();
-        mercadoPagoFormHandlerTicket('six');
+        mercadoPagoFormHandlerTicket();
     }
 </script>
