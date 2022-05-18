@@ -113,7 +113,7 @@
                             name="mercadopago_ticket[firstname]"
                             type="text"
                             class="form-control mp-form-control"
-                            value="{$customer['firstname']|escape:'html':'UTF-8'}"
+                            value="{$context->customer->firstname|escape:'html':'UTF-8'}"
                             autocomplete="off"
                             data-checkout="mp_firstname"
                         />
@@ -131,7 +131,7 @@
                             name="mercadopago_ticket[lastname]"
                             type="text"
                             class="form-control mp-form-control"
-                            value="{$customer['lastname']|escape:'html':'UTF-8'}"
+                            value="{$context->customer->lastname|escape:'html':'UTF-8'}"
                             autocomplete="off"
                             data-checkout="mp_lastname"
                         />

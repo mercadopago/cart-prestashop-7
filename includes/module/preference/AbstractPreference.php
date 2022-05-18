@@ -315,22 +315,25 @@ abstract class AbstractPreference
      */
     public function getCustomCustomerData($cart)
     {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer;
+        if ( !(empty($customer->firstname) && empty($customer->lastname)) )  {
+            $customer_fields = $customer->getFields();
+            $address_invoice = new Address((int) $cart->id_address_invoice);
 
-        $customer_data = array(
-            'first_name' => $customer_fields['firstname'],
-            'last_name' => $customer_fields['lastname'],
-            'phone' => array(
-                'area_code' => '-',
-                'number' => $address_invoice->phone,
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $this->buildStreetName($address_invoice),
-                'street_number' => '-',
-            ),
-        );
+            $customer_data = array(
+                'first_name' => $customer_fields['firstname'],
+                'last_name' => $customer_fields['lastname'],
+                'phone' => array(
+                    'area_code' => '-',
+                    'number' => $address_invoice->phone,
+                ),
+                'address' => array(
+                    'zip_code' => $address_invoice->postcode,
+                    'street_name' => $this->buildStreetName($address_invoice),
+                    'street_number' => '-',
+                ),
+            );
+        }
 
         return $customer_data;
     }
