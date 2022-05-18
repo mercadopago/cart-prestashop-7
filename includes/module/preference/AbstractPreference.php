@@ -333,9 +333,8 @@ abstract class AbstractPreference
                     'street_number' => '-',
                 ),
             );
+            return $customer_data;
         }
-
-        return $customer_data;
     }
 
     /**

@@ -137,9 +137,8 @@ abstract class AbstractStandardPreference extends AbstractPreference
                 ),
                 'date_created' => date('c', strtotime($customerFields['date_add'])),
             );
+            return $customerData;
         }
-
-        return $customerData;
     }
 
     /**
