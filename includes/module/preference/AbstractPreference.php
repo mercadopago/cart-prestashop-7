@@ -316,7 +316,7 @@ abstract class AbstractPreference
     public function getCustomCustomerData($cart)
     {
         $customer = Context::getContext()->customer;
-        if ( !(empty($customer->firstname) && empty($customer->lastname)) )  {
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
             $customer_fields = $customer->getFields();
             $address_invoice = new Address((int) $cart->id_address_invoice);
 

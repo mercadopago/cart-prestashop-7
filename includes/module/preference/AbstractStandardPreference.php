@@ -109,7 +109,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
     public function getCustomerData($cart)
     {
         $customer = Context::getContext()->customer;
-        if ( !(empty($customer->firstname) && empty($customer->lastname)) )  {
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
             $customerFields = $customer->getFields();
             $addressInvoice = new Address((int) $cart->id_address_invoice);
 

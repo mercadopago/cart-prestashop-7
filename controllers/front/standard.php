@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -52,13 +53,13 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
             if ($createPreference && $checkoutType) {
                 if ($checkoutType == 'modal') {
                     $this->getResponse($createPreference, 200);
+                    $this->standardModalCheckout($preference);
                 }
 
                 Tools::redirectLink($createPreference['init_point']);
             }
 
             $this->redirectError($preference, Tools::displayError());
-
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
             $this->redirectError($preference, Tools::displayError());
@@ -72,7 +73,8 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
      *
      * @return mixed
      */
-    public function getCheckoutType($preference) {
+    public function getCheckoutType($preference)
+    {
         $checkoutType = isset($preference['metadata']['checkout_type']) ? $preference['metadata']['checkout_type'] : false;
 
         if ($checkoutType) {
@@ -90,7 +92,8 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
      *
      * @return mixed
      */
-    public function createPreference($preference, $cart) {
+    public function createPreference($preference, $cart)
+    {
         $createPreference = $preference->createPreference($cart);
 
         if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
@@ -103,6 +106,19 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
         }
 
         return false;
+    }
+
+    /**
+     * @param StandardPreference $preference
+     */
+    public function standardModalCheckout($preference)
+    {
+        $backUrl = Tools::getValue('back_url');
+        if (isset($backUrl)) {
+            Tools::redirectLink($backUrl);
+        }
+
+        $preference->redirectError();
     }
 
     /**

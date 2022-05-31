@@ -91,12 +91,16 @@
     {/if}
 </a>
 
+<script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
+
 {if $modal == true}
     <script>
         window.addEventListener('load', (event) => {
             var mp_button = {};
+            var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
+            mercadopago_redirect.setAttribute('href', '#');
 
-            document.forms['mp_standard_checkout'].onsubmit = function (e) {
+            mercadopago_redirect.onclick = function (e) {
                 e.preventDefault();
 
                 fetch('index.php?fc=module&module=mercadopago&controller=standard')
