@@ -113,7 +113,7 @@
                             name="mercadopago_ticket[firstname]"
                             type="text"
                             class="form-control mp-form-control"
-                            value="{$customer['firstname']|escape:'html':'UTF-8'}"
+                            value="{$context->customer->firstname|escape:'html':'UTF-8'}"
                             autocomplete="off"
                             data-checkout="mp_firstname"
                         />
@@ -131,7 +131,7 @@
                             name="mercadopago_ticket[lastname]"
                             type="text"
                             class="form-control mp-form-control"
-                            value="{$customer['lastname']|escape:'html':'UTF-8'}"
+                            value="{$context->customer->lastname|escape:'html':'UTF-8'}"
                             autocomplete="off"
                             data-checkout="mp_lastname"
                         />
@@ -353,8 +353,8 @@
     window.onload = loadTicket();
     function loadTicket() {
         var site_id = '{$site_id|escape:"javascript":"UTF-8"}';
-        mpValidateSiteId(site_id);
+        mpValidateSellerInfo(site_id, 'seven');
         validateDocumentInputs();
-        mercadoPagoFormHandlerTicket('seven');
+        mercadoPagoFormHandlerTicket();
     }
 </script>

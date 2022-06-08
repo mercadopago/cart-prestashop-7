@@ -50,30 +50,50 @@ abstract class AbstractStandardPreference extends AbstractPreference
      */
     public function buildPreferencePayload($cart, $discount = 0)
     {
+        $items         = $this->getCartItems($cart);
         $payloadParent = $this->getCommonPreference($cart);
-        $amount = $this->mpuseful->getTheTotalDiscounted($cart, $discount);
-        $items = $this->getCartItems($cart);
 
-        $dicountPerItem = array(
-            'id' => 'discount',
-            'title' => 'Discount',
-            'quantity' => 1,
-            'unit_price' =>  $this->mpuseful->getRound() ? Tools::ps_round(-$amount) : -$amount,
-            'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-            'description' => 'Discount provided by store',
-        );
+        if ($discount != 0) {
+            $totalInfo = $this->mpuseful->getCorrectedTotal($cart, 'wallet_button');
 
-        array_push($items, $dicountPerItem);
+            $discountPerItem = array(
+                'id'          => 'discount',
+                'title'       => 'Discount',
+                'quantity'    => 1,
+                'unit_price'  => -$totalInfo['discount'],
+                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
+                'description' => 'Discount provided by store',
+            );
+            array_push($items, $discountPerItem);
+
+            $itemsAmount = array_reduce(
+                $items,
+                function ($accumulator, $item) {
+                    $accumulator += $item['unit_price'] * $item['quantity'];
+                    return $accumulator;
+                }
+            );
+
+            $amountDifferenceItem = array(
+                'id'          => 'difference',
+                'title'       => 'Difference',
+                'quantity'    => 1,
+                'unit_price'  => $totalInfo['amount_with_round'] - $itemsAmount,
+                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
+                'description' => 'Difference provided by store',
+            );
+            array_push($items, $amountDifferenceItem);
+        }
 
         $payloadAdditional = array(
-            'items' => $items,
-            'payer' => $this->getCustomerData($cart),
-            'shipments' => $this->getShipment($cart),
-            'back_urls' => $this->getBackUrls($cart),
-            'payment_methods' => $this->getPaymentOptions(),
-            'auto_return' => $this->getAutoReturn(),
-            'binary_mode' => $this->getBinaryMode(),
-            'expires' => $this->getExpirationStatus(),
+            'items'              => $items,
+            'payer'              => $this->getCustomerData($cart),
+            'shipments'          => $this->getShipment($cart),
+            'back_urls'          => $this->getBackUrls($cart),
+            'payment_methods'    => $this->getPaymentOptions(),
+            'auto_return'        => $this->getAutoReturn(),
+            'binary_mode'        => $this->getBinaryMode(),
+            'expires'            => $this->getExpirationStatus(),
             'expiration_date_to' => $this->getExpirationDate(),
         );
 
@@ -88,35 +108,37 @@ abstract class AbstractStandardPreference extends AbstractPreference
      */
     public function getCustomerData($cart)
     {
-        $customerFields = Context::getContext()->customer->getFields();
-        $addressInvoice = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer;
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
+            $customerFields = $customer->getFields();
+            $addressInvoice = new Address((int) $cart->id_address_invoice);
 
-        $customerData = array(
-            'email' => $customerFields['email'],
-            'first_name' => $customerFields['firstname'],
-            'last_name' => $customerFields['lastname'],
-            'phone' => array(
-                'area_code' => '',
-                'number' => $addressInvoice->phone,
-            ),
-            'identification' => array(
-                'type' => '',
-                'number' => '',
-            ),
-            'address' => array(
-                'zip_code' => $addressInvoice->postcode,
-                'street_name' => $addressInvoice->address1 . ' - ' .
-                    $addressInvoice->address2 . ' - ' .
-                    $addressInvoice->city . ' - ' .
-                    $addressInvoice->country,
-                'street_number' => '',
-                'city' => $addressInvoice->city,
-                'federal_unit' => '',
-            ),
-            'date_created' => date('c', strtotime($customerFields['date_add'])),
-        );
-
-        return $customerData;
+            $customerData = array(
+                'email' => $customerFields['email'],
+                'first_name' => $customerFields['firstname'],
+                'last_name' => $customerFields['lastname'],
+                'phone' => array(
+                    'area_code' => '',
+                    'number' => $addressInvoice->phone,
+                ),
+                'identification' => array(
+                    'type' => '',
+                    'number' => '',
+                ),
+                'address' => array(
+                    'zip_code' => $addressInvoice->postcode,
+                    'street_name' => $addressInvoice->address1 . ' - ' .
+                        $addressInvoice->address2 . ' - ' .
+                        $addressInvoice->city . ' - ' .
+                        $addressInvoice->country,
+                    'street_number' => '',
+                    'city' => $addressInvoice->city,
+                    'federal_unit' => '',
+                ),
+                'date_created' => date('c', strtotime($customerFields['date_add'])),
+            );
+            return $customerData;
+        }
     }
 
     /**

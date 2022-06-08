@@ -115,10 +115,10 @@ abstract class AbstractPreference
         $items = array();
         $products = $cart->getProducts();
 
-        //verify country for round
+        // Verify country for round
         $round = $this->mpuseful->getRound();
 
-        //Products
+        // Products
         foreach ($products as $product) {
             $image = Image::getCover($product['id_product']);
             $image_product = new Product($product['id_product'], false, Context::getContext()->language->id);
@@ -148,7 +148,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Wrapping cost
+        // Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
             if ($custom != true) {
@@ -166,7 +166,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Discounts
+        // Discounts
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
         if ($discounts > 0) {
             if ($custom != true) {
@@ -184,7 +184,7 @@ abstract class AbstractPreference
             $items[] = $item;
         }
 
-        //Shipping cost
+        // Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
             if ($custom != true) {
@@ -211,6 +211,7 @@ abstract class AbstractPreference
                 return $accumulator;
             }
         );
+
         $itemsTotal = $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
         $priceDiff = $cartTotal - $itemsTotal;
 
@@ -314,24 +315,26 @@ abstract class AbstractPreference
      */
     public function getCustomCustomerData($cart)
     {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer;
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
+            $customer_fields = $customer->getFields();
+            $address_invoice = new Address((int) $cart->id_address_invoice);
 
-        $customer_data = array(
-            'first_name' => $customer_fields['firstname'],
-            'last_name' => $customer_fields['lastname'],
-            'phone' => array(
-                'area_code' => '-',
-                'number' => $address_invoice->phone,
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $this->buildStreetName($address_invoice),
-                'street_number' => '-',
-            ),
-        );
-
-        return $customer_data;
+            $customer_data = array(
+                'first_name' => $customer_fields['firstname'],
+                'last_name' => $customer_fields['lastname'],
+                'phone' => array(
+                    'area_code' => '-',
+                    'number' => $address_invoice->phone,
+                ),
+                'address' => array(
+                    'zip_code' => $address_invoice->postcode,
+                    'street_name' => $this->buildStreetName($address_invoice),
+                    'street_number' => '-',
+                ),
+            );
+            return $customer_data;
+        }
     }
 
     /**

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.10.1] - 2022-04-25
+
+### Added
+- Added compatibility with Mercado Pago discounts
+
+### Updated
+- Updated npm packages
+- Updated composer packages
+
+### Fixed
+- Fixed validateOrder on createOrder method using cart total instead of payments total sum
+- Fixed Wallet Button discount value to avoid fraud status
+- Fixed round to MLC (Chile) and MCO (Colombia) on notification getTotal method
+- Fixed checkout ticket validation to MLU (Uruguay)
+
 ## [4.10.0] - 2022-03-21
 
 ### Added
