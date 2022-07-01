@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -41,51 +42,116 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
      *
      * @return void
      */
-    public function postProcess()
+    public function initContent()
     {
         $preference = new StandardPreference();
         try {
             $preference->verifyModuleParameters();
+            $createPreference = $this->createPreference($preference, $this->context->cart);
+            $checkoutType = $this->getCheckoutType($createPreference);
 
-            //modal checkout
-            if ($preference->settings['MERCADOPAGO_STANDARD_MODAL'] != "") {
-                $this->standardModalCheckout($preference);
-                return;
+            if ($createPreference && $checkoutType) {
+                if ($checkoutType == 'modal') {
+                    $this->getResponse($createPreference, 200);
+                    $this->standardModalCheckout($preference);
+                }
+
+                Tools::redirectLink($createPreference['init_point']);
             }
 
-            //redirect checkout
-            $this->standardRedirectCheckout($this->context->cart, $preference);
+            $this->redirectError($preference, Tools::displayError());
         } catch (Exception $e) {
             MPLog::generate('Exception Message: ' . $e->getMessage());
+            $this->redirectError($preference, Tools::displayError());
         }
     }
 
     /**
-     * @param $cart
+     * Get checkout type
+     *
      * @param StandardPreference $preference
-     * @throws Exception
+     *
+     * @return mixed
      */
-    public function standardRedirectCheckout($cart, StandardPreference $preference)
+    public function getCheckoutType($preference)
+    {
+        $checkoutType = isset($preference['metadata']['checkout_type']) ? $preference['metadata']['checkout_type'] : false;
+
+        if ($checkoutType) {
+            return $checkoutType === 'modal' ? 'modal' : 'redirect';
+        }
+
+        return false;
+    }
+
+    /**
+     * Create a Standard Preference
+     *
+     * @param StandardPreference $preference
+     * @param Cart $cart
+     *
+     * @return mixed
+     */
+    public function createPreference($preference, $cart)
     {
         $createPreference = $preference->createPreference($cart);
+
         if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
-            $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
-            Tools::redirectLink($createPreference['init_point']);
+            $preference->saveCreatePreferenceData(
+                $cart,
+                $createPreference['notification_url']
+            );
+
+            return $createPreference;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param StandardPreference $preference
+     */
+    public function standardModalCheckout($preference)
+    {
+        $backUrl = Tools::getValue('back_url');
+        if (isset($backUrl)) {
+            Tools::redirectLink($backUrl);
         }
 
         $preference->redirectError();
     }
 
     /**
+     * Get response with preference
+     *
      * @param StandardPreference $preference
+     * @param integer $code
      */
-    public function standardModalCheckout(StandardPreference $preference)
+    public function getResponse($preference, $code)
     {
-        $back_url = Tools::getValue('back_url');
-        if (isset($back_url)) {
-            Tools::redirectLink($back_url);
-        }
+        header('Content-type: application/json');
+        $response = array(
+            'code' => $code,
+            'preference' => $preference,
+        );
 
-        $preference->redirectError();
+        echo Tools::jsonEncode($response);
+        http_response_code($code);
+        exit();
+    }
+
+    /**
+     * Redirect to checkout with error
+     *
+     * @param StandardPreference $preference
+     * @param string $errorMessage
+     *
+     * @return void
+     */
+    public function redirectError($preference, $errorMessage)
+    {
+        $this->context->cookie->__set('redirect_message', $errorMessage);
+        $preference->deleteCartRule();
+        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
     }
 }

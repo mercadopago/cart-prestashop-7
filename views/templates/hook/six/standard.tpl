@@ -86,34 +86,41 @@
         {/if}
     </div>
 
-    {if $modal == true && $preference != ""}
+    {if $modal == true}
         <form id="mp_standard_checkout" method="post" action="{$redirect|escape:'html':'UTF-8'}"></form>
     {/if}
 </a>
 
-{if $modal == true && $preference != ""}
+<script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
+
+{if $modal == true}
     <script>
         window.addEventListener('load', (event) => {
+            var mp_button = {};
             var mercadopago_redirect = document.querySelector('.mp-redirect-checkout-six');
             mercadopago_redirect.setAttribute('href', '#');
 
-            var modal_script = document.createElement("script");
-            var modal_form = document.getElementById("mp_standard_checkout");
-            modal_form.appendChild(modal_script);
+            mercadopago_redirect.onclick = function (e) {
+                e.preventDefault();
 
-            modal_script.src = '{$modal_link|escape:"javascript":"UTF-8"}';
-            modal_script.setAttribute('data-public-key', '{$public_key|escape:"javascript":"UTF-8"}');
-            modal_script.setAttribute('data-preference-id', '{$preference|escape:"javascript":"UTF-8"}');
-            modal_script.setAttribute('data-open', 'false');
-            modal_script.async = true;
-            modal_script.onload = function () {
-                var mercadopago_button = document.querySelector('.mercadopago-button');
-                mercadopago_button.style.display = 'none';
+                fetch('index.php?fc=module&module=mercadopago&controller=standard')
+                .then(response => response.json())
+                .then(function(response) {
+                    if (response.preference) {
+                        mp_button = {
+                            'preference': {
+                                'id': response.preference['id'],
+                            },
+                            'autoOpen': true,
+                        };
 
-                mercadopago_redirect.onclick = function () {
-                    mercadopago_button.click();
-                    return false;
-                }
+                        var mp = new MercadoPago('{$public_key|escape:"javascripts":"UTF-8"}');
+                        mp.checkout(mp_button);
+
+                        return false;
+                    }
+                    window.location.href = 'index.php?controller=order&step=3&typeReturn=failure';
+                });
             };
         });
     </script>

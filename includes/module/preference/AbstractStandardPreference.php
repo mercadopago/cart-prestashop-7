@@ -108,35 +108,37 @@ abstract class AbstractStandardPreference extends AbstractPreference
      */
     public function getCustomerData($cart)
     {
-        $customerFields = Context::getContext()->customer->getFields();
-        $addressInvoice = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer;
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
+            $customerFields = $customer->getFields();
+            $addressInvoice = new Address((int) $cart->id_address_invoice);
 
-        $customerData = array(
-            'email' => $customerFields['email'],
-            'first_name' => $customerFields['firstname'],
-            'last_name' => $customerFields['lastname'],
-            'phone' => array(
-                'area_code' => '',
-                'number' => $addressInvoice->phone,
-            ),
-            'identification' => array(
-                'type' => '',
-                'number' => '',
-            ),
-            'address' => array(
-                'zip_code' => $addressInvoice->postcode,
-                'street_name' => $addressInvoice->address1 . ' - ' .
-                    $addressInvoice->address2 . ' - ' .
-                    $addressInvoice->city . ' - ' .
-                    $addressInvoice->country,
-                'street_number' => '',
-                'city' => $addressInvoice->city,
-                'federal_unit' => '',
-            ),
-            'date_created' => date('c', strtotime($customerFields['date_add'])),
-        );
-
-        return $customerData;
+            $customerData = array(
+                'email' => $customerFields['email'],
+                'first_name' => $customerFields['firstname'],
+                'last_name' => $customerFields['lastname'],
+                'phone' => array(
+                    'area_code' => '',
+                    'number' => $addressInvoice->phone,
+                ),
+                'identification' => array(
+                    'type' => '',
+                    'number' => '',
+                ),
+                'address' => array(
+                    'zip_code' => $addressInvoice->postcode,
+                    'street_name' => $addressInvoice->address1 . ' - ' .
+                        $addressInvoice->address2 . ' - ' .
+                        $addressInvoice->city . ' - ' .
+                        $addressInvoice->country,
+                    'street_number' => '',
+                    'city' => $addressInvoice->city,
+                    'federal_unit' => '',
+                ),
+                'date_created' => date('c', strtotime($customerFields['date_add'])),
+            );
+            return $customerData;
+        }
     }
 
     /**

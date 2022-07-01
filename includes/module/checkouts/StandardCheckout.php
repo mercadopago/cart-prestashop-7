@@ -105,19 +105,6 @@ class StandardCheckout
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'standard');
-        $preference_id = "";
-        $modal_link = "";
-
-        if ($modal != "") {
-            $preference = new StandardPreference();
-            $createPreference = $preference->createPreference($cart);
-
-            if (is_array($createPreference) && array_key_exists('init_point', $createPreference)) {
-                $preference_id = $createPreference['id'];
-                $preference->saveCreatePreferenceData($cart, $createPreference['notification_url']);
-                $modal_link = $this->payment->mpuseful->getModalLink(Configuration::get('MERCADOPAGO_SITE_ID'));
-            }
-        }
 
         $informations = array(
             "count" => $count,
@@ -126,8 +113,6 @@ class StandardCheckout
             "ticket" => $ticket,
             "modal" => $modal,
             "redirect" => $redirect,
-            "modal_link" => $modal_link,
-            "preference" => $preference_id,
             "public_key" => $this->payment->mercadopago->getPublicKey(),
             "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
             "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
