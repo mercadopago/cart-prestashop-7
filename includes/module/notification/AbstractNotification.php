@@ -46,6 +46,7 @@ class AbstractNotification
     public $customer_secure_key;
     public $mpuseful;
     public $checkout;
+    public $mp_transaction_amount;
 
     public function __construct($transaction_id)
     {
@@ -128,7 +129,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $this->total,
+                $this->mp_transaction_amount,
                 "Mercado Pago",
                 null,
                 array(),

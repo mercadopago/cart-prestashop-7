@@ -39,6 +39,7 @@ class WebhookNotification extends AbstractNotification
 
         $this->payment = $payment;
         $this->checkout = $payment['metadata']['checkout_type'];
+        $this->mp_transaction_amount = $payment['transaction_amount'];
     }
 
     /**

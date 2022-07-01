@@ -695,7 +695,7 @@ class Mercadopago extends PaymentModule
         }
 
         $paymentId = Tools::getValue('payment_id');
-        $payment = is_string($paymentId) ? $this->mercadopago->getPaymentStandard($paymentId) : null;
+        $payment = is_string($paymentId) ? $this->mercadopago->getPaymentStandard($paymentId) : [];
 
         return $this->getPaymentReturn($payment, $params);
     }
