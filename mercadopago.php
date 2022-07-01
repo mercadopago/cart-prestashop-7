@@ -395,10 +395,9 @@ class Mercadopago extends PaymentModule
      */
     public static function orderStateAvailable($id_order_state)
     {
-        $result = Db::getInstance()->getRow(
-            "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
-            WHERE id_order_state = '" . $id_order_state . "'"
-        );
+        $query = "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
+            WHERE id_order_state = '" . pSQL($id_order_state) . "'";
+        $result = Db::getInstance()->getRow($query);
         return $result['count_state'];
     }
 

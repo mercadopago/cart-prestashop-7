@@ -101,9 +101,9 @@
             var modal_form = document.getElementById("mp_standard_checkout");
             modal_form.appendChild(modal_script);
 
-            modal_script.src = '{$modal_link|escape:"html":"UTF-8"}';
-            modal_script.setAttribute('data-public-key', '{$public_key|escape:"html":"UTF-8"}');
-            modal_script.setAttribute('data-preference-id', '{$preference|escape:"html":"UTF-8"}');
+            modal_script.src = '{$modal_link|escape:"javascript":"UTF-8"}';
+            modal_script.setAttribute('data-public-key', '{$public_key|escape:"javascript":"UTF-8"}');
+            modal_script.setAttribute('data-preference-id', '{$preference|escape:"javascript":"UTF-8"}');
             modal_script.setAttribute('data-open', 'false');
             modal_script.async = true;
             modal_script.onload = function () {
