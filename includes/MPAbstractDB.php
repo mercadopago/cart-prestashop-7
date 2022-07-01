@@ -163,7 +163,7 @@ abstract class MPAbstractDB
      */
     public function orderBy($column, $operator = 'desc')
     {
-        if (!in_array(strtolower($operator), ['desc', 'asc'])) {
+        if (!in_array(Tools::strtolower($operator), ['desc', 'asc'])) {
             $operator = 'desc';
         }
         $this->orderBy = 'ORDER BY ' . bqSQL($column) . ' ' . $operator;
