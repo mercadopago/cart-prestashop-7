@@ -44,6 +44,7 @@ class IpnNotification extends AbstractNotification
         $this->checkout = $this->getCheckoutType();
         $this->isWalletButton = $this->checkout === 'wallet_button';
         $this->preference = $this->getCheckoutPreference();
+        $this->mp_transaction_amount = $merchant_order['total_amount'];
     }
 
     /**
