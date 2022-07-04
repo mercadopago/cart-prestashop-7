@@ -464,19 +464,17 @@ abstract class AbstractPreference
      */
     public function getOrUpdateMpModule()
     {
-        $mp_module = new MPModule();
-
-        $count = $mp_module->where('version', '=', MP_VERSION)->count();
+        $count = (new MPModule())->where('version', '=', MP_VERSION)->count();
         if ($count) {
-            return $mp_module->where('version', '=', MP_VERSION)->get();
+            return (new MPModule())->where('version', '=', MP_VERSION)->get();
         }
 
-        $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
-        $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
+        $old_mp = (new MPModule())->orderBy('id_mp_module', 'desc')->get();
+        $old_mp = (new MPModule())->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
 
-        $mp_module->create(["version" => MP_VERSION]);
+        (new MPModule())->create(["version" => MP_VERSION]);
 
-        return $mp_module->where('version', '=', MP_VERSION)->get();
+        return (new MPModule())->where('version', '=', MP_VERSION)->get();
     }
 
     /**
