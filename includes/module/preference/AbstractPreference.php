@@ -315,24 +315,26 @@ abstract class AbstractPreference
      */
     public function getCustomCustomerData($cart)
     {
-        $customer_fields = Context::getContext()->customer->getFields();
-        $address_invoice = new Address((int) $cart->id_address_invoice);
+        $customer = Context::getContext()->customer;
+        if (!(empty($customer->firstname) && empty($customer->lastname))) {
+            $customer_fields = $customer->getFields();
+            $address_invoice = new Address((int) $cart->id_address_invoice);
 
-        $customer_data = array(
-            'first_name' => $customer_fields['firstname'],
-            'last_name' => $customer_fields['lastname'],
-            'phone' => array(
-                'area_code' => '-',
-                'number' => $address_invoice->phone,
-            ),
-            'address' => array(
-                'zip_code' => $address_invoice->postcode,
-                'street_name' => $this->buildStreetName($address_invoice),
-                'street_number' => '-',
-            ),
-        );
-
-        return $customer_data;
+            $customer_data = array(
+                'first_name' => $customer_fields['firstname'],
+                'last_name' => $customer_fields['lastname'],
+                'phone' => array(
+                    'area_code' => '-',
+                    'number' => $address_invoice->phone,
+                ),
+                'address' => array(
+                    'zip_code' => $address_invoice->postcode,
+                    'street_name' => $this->buildStreetName($address_invoice),
+                    'street_number' => '-',
+                ),
+            );
+            return $customer_data;
+        }
     }
 
     /**
@@ -462,19 +464,17 @@ abstract class AbstractPreference
      */
     public function getOrUpdateMpModule()
     {
-        $mp_module = new MPModule();
-
-        $count = $mp_module->where('version', '=', MP_VERSION)->count();
+        $count = (new MPModule())->where('version', '=', MP_VERSION)->count();
         if ($count) {
-            return $mp_module->where('version', '=', MP_VERSION)->get();
+            return (new MPModule())->where('version', '=', MP_VERSION)->get();
         }
 
-        $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
-        $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
+        $old_mp = (new MPModule())->orderBy('id_mp_module', 'desc')->get();
+        $old_mp = (new MPModule())->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
 
-        $mp_module->create(["version" => MP_VERSION]);
+        (new MPModule())->create(["version" => MP_VERSION]);
 
-        return $mp_module->where('version', '=', MP_VERSION)->get();
+        return (new MPModule())->where('version', '=', MP_VERSION)->get();
     }
 
     /**

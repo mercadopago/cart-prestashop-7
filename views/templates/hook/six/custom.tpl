@@ -381,7 +381,7 @@
                             'autoOpen': true,
                         };
 
-                        var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
+                        var mp = new MercadoPago('{$public_key|escape:"javascript":"UTF-8"}');
                         mp.checkout(mp_button);
 
                         return false;

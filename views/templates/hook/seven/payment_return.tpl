@@ -22,7 +22,7 @@
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
-{if $payment['metadata']['checkout_type'] == 'ticket'}
+{if isset($payment['metadata']['checkout_type']) && $payment['metadata']['checkout_type'] == 'ticket'}
     <div class="row">
         <div class="col-md-12">
             <div class="mp-ticket-return">
@@ -55,7 +55,7 @@
         </div>
     </div>
 {/if}
-{if $payment['metadata']['checkout_type'] == 'pix'}
+{if isset($payment['metadata']['checkout_type']) && $payment['metadata']['checkout_type'] == 'pix'}
     <div class="row">
         <div class="col-md-12">
             <div id="pix-order" class="mp-pix-container">

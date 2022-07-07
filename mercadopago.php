@@ -24,7 +24,7 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.10.1');
+define('MP_VERSION', '4.11.0');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
@@ -73,7 +73,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.10.1';
+        $this->version = '4.11.0';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
         parent::__construct();
@@ -395,10 +395,9 @@ class Mercadopago extends PaymentModule
      */
     public static function orderStateAvailable($id_order_state)
     {
-        $result = Db::getInstance()->getRow(
-            "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
-            WHERE id_order_state = '" . $id_order_state . "'"
-        );
+        $query = "SELECT COUNT(*) AS count_state FROM " . _DB_PREFIX_ . "order_state
+            WHERE id_order_state = '" . pSQL($id_order_state) . "'";
+        $result = Db::getInstance()->getRow($query);
         return $result['count_state'];
     }
 
@@ -696,7 +695,7 @@ class Mercadopago extends PaymentModule
         }
 
         $paymentId = Tools::getValue('payment_id');
-        $payment = is_string($paymentId) ? $this->mercadopago->getPaymentStandard($paymentId) : null;
+        $payment = is_string($paymentId) ? $this->mercadopago->getPaymentStandard($paymentId) : [];
 
         return $this->getPaymentReturn($payment, $params);
     }
