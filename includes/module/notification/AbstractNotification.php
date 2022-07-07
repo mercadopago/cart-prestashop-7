@@ -48,6 +48,7 @@ class AbstractNotification
     public $checkout;
     public $mp_transaction_amount;
 
+
     public function __construct($transaction_id)
     {
         $this->module = Module::getInstanceByName('mercadopago');
