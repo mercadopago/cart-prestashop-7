@@ -55,8 +55,8 @@ class RatingSettings extends AbstractSettings
 
         if ($count != 0) {
             $mp_module->update([
-                "evaluation" => $rating,
-                "comments" => $comments
+                "evaluation" => pSQL($rating),
+                "comments" => pSQL($comments)
             ]);
         }
 

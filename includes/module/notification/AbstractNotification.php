@@ -46,6 +46,8 @@ class AbstractNotification
     public $customer_secure_key;
     public $mpuseful;
     public $checkout;
+    public $mp_transaction_amount;
+
 
     public function __construct($transaction_id)
     {
@@ -128,7 +130,7 @@ class AbstractNotification
             $this->module->validateOrder(
                 $cart->id,
                 $this->order_state,
-                $cart->getOrderTotal(),
+                $this->mp_transaction_amount,
                 "Mercado Pago",
                 null,
                 array(),
@@ -447,11 +449,11 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-                "payment_id" => is_array($payments_id) ? implode(',', $payments_id) : $payments_id,
-                "payment_type" => is_array($payments_type) ? implode(',', $payments_type) : $payments_type,
-                "payment_method" => is_array($payments_method) ? implode(',', $payments_method) : $payments_method,
-                "payment_status" => is_array($payments_status) ? implode(',', $payments_status) : $payments_status,
-                "payment_amount" => is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount,
+                "payment_id" => pSQL(is_array($payments_id) ? implode(',', $payments_id) : $payments_id),
+                "payment_type" => pSQL(is_array($payments_type) ? implode(',', $payments_type) : $payments_type),
+                "payment_method" => pSQL(is_array($payments_method) ? implode(',', $payments_method) : $payments_method),
+                "payment_status" => pSQL(is_array($payments_status) ? implode(',', $payments_status) : $payments_status),
+                "payment_amount" => pSQL(is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount),
             ]
         );
     }

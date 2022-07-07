@@ -83,7 +83,9 @@ $count = $mp_module->where('version', '=', MP_VERSION)->count();
 
 if ($count == 0) {
     $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
-    $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
+    if (isset($old_mp['id_mp_module'])) {
+        $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(["updated" => true]);
+    }
     $mp_module->create(["version" => MP_VERSION]);
 }
 

@@ -120,7 +120,7 @@ abstract class MPAbstractDB
     public function columns($columns)
     {
         if (gettype($columns) == "array") {
-            $this->columns = implode(",", $columns);
+            $this->columns = implode(",", array_map('bqSQL', $columns));
         }
 
         return $this;
@@ -136,7 +136,7 @@ abstract class MPAbstractDB
      */
     public function where($column, $operator, $value)
     {
-        $this->where = 'WHERE ' . $column . ' ' . $operator . ' "' . $value . '"';
+        $this->where = 'WHERE ' . bqSQL($column) . ' ' . $operator . ' "' . pSQL($value) . '"';
         return $this;
     }
 
@@ -150,7 +150,7 @@ abstract class MPAbstractDB
      */
     public function andWhere($column, $operator, $value)
     {
-        $this->andWhere = 'AND ' . $column . ' ' . $operator . ' "' . $value . '"';
+        $this->andWhere = 'AND ' . bqSQL($column) . ' ' . $operator . ' "' . pSQL($value) . '"';
         return $this;
     }
 
@@ -161,9 +161,12 @@ abstract class MPAbstractDB
      * @param  string $operator
      * @return MPAbstractDB
      */
-    public function orderBy($column, $operator)
+    public function orderBy($column, $operator = 'desc')
     {
-        $this->orderBy = 'ORDER BY ' . $column . ' ' . $operator;
+        if (!in_array(Tools::strtolower($operator), ['desc', 'asc'])) {
+            $operator = 'desc';
+        }
+        $this->orderBy = 'ORDER BY ' . bqSQL($column) . ' ' . $operator;
         return $this;
     }
 
@@ -180,8 +183,8 @@ abstract class MPAbstractDB
             $params = "";
 
             foreach ($array as $attr => $param) {
-                $attrs  .= $attr . ",";
-                $params .= "'" . $param . "',";
+                $attrs  .= bqSQL($attr) . ",";
+                $params .= "'" . pSQL($param) . "',";
             }
 
             $attrs .= "created_at";
@@ -208,7 +211,7 @@ abstract class MPAbstractDB
             $update = "";
 
             foreach ($array as $attr => $param) {
-                $update .= $attr . " = '" . $param . "',";
+                $update .= bqSQL($attr) . " = '" . pSQL($param) . "',";
             }
 
             $update .= "updated_at = '" . date("Y-m-d H:i:s") . "'";

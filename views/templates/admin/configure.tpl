@@ -156,7 +156,7 @@
                     {l s='of your customers and the adaptation to the regulations or legal ' mod='mercadopago'} \
                     {l s='provisions of each country.' mod='mercadopago'} \
                 </p>\
-                <a href='https://www.mercadopago.com/{$country_link|escape:'htmlall':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
+                <a href='https://www.mercadopago.com/{$country_link|escape:'javascript':'UTF-8'}/account/credentials/appliance?application_id={$application|escape:'javascript':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10' target='_blank'>{l s='Approve my account' mod='mercadopago'}</a> \
             </div>\
         </div>";
 
@@ -247,7 +247,7 @@
 
     //PSJ button
     function getPsjButton(){
-        const country_link = '{$country_link|escape:'htmlall':'UTF-8'}';
+        const country_link = '{$country_link|escape:'javascript':'UTF-8'}';
 
         const textHeader = (country_link.toLowerCase() == 'mco') ? "{l s='Set up your interest payments' mod='mercadopago'}" : "{l s='Set up your installment and interest payments' mod='mercadopago'}";
         const textBody = (country_link.toLowerCase() == 'mco') ? "{l s='At Mercado Pago you can choose the fee you pay for each purchase.' mod='mercadopago'}" : "{l s='At Mercado Pago you can choose the fee you pay for each purchase and also offer interest-free installments to your customer.' mod='mercadopago'}";
@@ -262,7 +262,7 @@
             <div class='row mp-pt-5 mp-pb-25'>\
                 <div class='col-md-12'>\
                     <p class='mp-text-credenciais mp-pb-30'>" + textBody + "</p>\
-                    <a  href='{$psjLink|escape:'html':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
+                    <a  href='{$psjLink|escape:'javascript':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
                 </div>\
             </div>";
     }
