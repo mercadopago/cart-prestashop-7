@@ -139,7 +139,7 @@ $_MODULE['<{mercadopago}prestashop>configure_076903d24ea5c5e4e3eb69ad47f73f69'] 
 $_MODULE['<{mercadopago}prestashop>configure_fe7f9375cb4caa341f58c5d2492166d6'] = ' Está habilitada la funcionalidad [1]Pago con tarjeta guardada o dinero en Mercado Pago[/1]. Puedes controlar esta opción en configuración. ';
 $_MODULE['<{mercadopago}prestashop>configure_a8808a51197e6e2374a6e459b39d0e66'] = 'Ir a configuración';
 $_MODULE['<{mercadopago}prestashop>configure_edb77a26cb4ce99244b57d454a6958f9'] = '¡Atención! El checkout de Mercado Pago para la versión 1.6 de PrestaShop estará desactivado.';
-$_MODULE['<{mercadopago}prestashop>configure_9adbfd400b9f555b11234308b8944659'] = 'A partir de la próxima actualización (4.10.0+), no habrá checkout de Mercado Pago para la versión 1.6 de PrestaShop.';
+$_MODULE['<{mercadopago}prestashop>configure_9adbfd400b9f555b11234308b8944659'] = 'A partir de la próxima actualización (4.11+), no habrá checkout de Mercado Pago para la versión 1.6 de PrestaShop.';
 $_MODULE['<{mercadopago}prestashop>configure_cb278d21299d93020943739fe2111d52'] = 'Siga las instrucciones y actualice su versión de PrestaShop para seguir vendiendo.';
 $_MODULE['<{mercadopago}prestashop>configure_74873d028e0ce282c7d2e6681fd0bfda'] = 'VER COMO ACTUALIZAR';
 $_MODULE['<{mercadopago}prestashop>configure_ebfdf406440ec86efe63337c2190ed88'] = 'Configurar Mercado Pago ';
