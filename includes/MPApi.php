@@ -169,8 +169,9 @@ class MPApi
      */
     public function getPaymentStandard($transaction_id)
     {
+        $transaction_id = preg_replace('/[^\d]/', '', $transaction_id);
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payments/' . $transaction_id, ["Authorization: Bearer " . $access_token]);
+        $response = MPRestCli::get('/v1/payments/' . (int) $transaction_id, ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -192,8 +193,9 @@ class MPApi
      */
     public function getMerchantOrder($id)
     {
+        $id = preg_replace('/[^\d]/', '', $id);
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/merchant_orders/' . $id, ["Authorization: Bearer " . $access_token]);
+        $response = MPRestCli::get('/merchant_orders/' . (int) $id, ["Authorization: Bearer " . $access_token]);
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -215,6 +217,7 @@ class MPApi
      */
     public function getPreference($id)
     {
+        $id = preg_replace('/[^\w-]/', '', $id);
         $access_token = $this->getAccessToken();
         $response = MPRestCli::get('/checkout/preferences/' . $id, ["Authorization: Bearer " . $access_token]);
 
@@ -228,7 +231,7 @@ class MPApi
         $result = $response['response'];
         return $result;
     }
-    
+
     /**
      * @param $preference
      * @return bool
