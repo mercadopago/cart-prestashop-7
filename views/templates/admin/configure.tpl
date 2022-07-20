@@ -55,7 +55,7 @@
 		    <div class="mp-card-badge-warning"></div>
 	    <div>
 		    <span class="mp-card-title"><b>{l s='Attention! Mercado Pago checkout for PrestaShop version 1.6 will be disabled.' mod='mercadopago'}</b></span>
-		    <span class="mp-card-subtitle">{l s='As of the next update (4.10.0+), there will be no Mercado Pago checkout for PrestaShop version 1.6.' mod='mercadopago'}</span>
+		    <span class="mp-card-subtitle">{l s='As of the next update (4.11+), there will be no Mercado Pago checkout for PrestaShop version 1.6.' mod='mercadopago'}</span>
             <span class="mp-card-subtitle">{l s='Follow the instructions and upgrade so you don\'t stop selling.' mod='mercadopago'}</span>
 		    <a class="mp-card-button-a" target="_blank" href="https://devdocs.prestashop.com/1.7/basics/keeping-up-to-date/"><button type="button" class="mp-card-button"><b>{l s='SEE HOW TO UPGRADE' mod='mercadopago'}</b></button></a>
 	    </div>
