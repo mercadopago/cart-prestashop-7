@@ -31,10 +31,13 @@ require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
+    public $mp_transaction;
+
     public function __construct()
     {
         parent::__construct();
         $this->mercadopago = MPApi::getInstance();
+        $this->mp_transaction = new MPTransaction();
     }
 
     /**
@@ -46,22 +49,42 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
     {
         $typeReturn = Tools::getValue('typeReturn');
         $payment_ids = Tools::getValue('collection_id');
+        $cartId = Tools::getValue('cart_id');
 
-        if (isset($payment_ids) && $payment_ids != 'null' && $typeReturn != 'failure') {
+
+        if (isset($payment_ids) && $payment_ids != false && $payment_ids != 'null' && $typeReturn != 'failure') {
             $payment_id = explode(',', $payment_ids)[0];
-            $payment = $this->mercadopago->getPaymentStandard($payment_id);
-
-            if ($payment !== false) {
-                $cart_id = $payment['external_reference'];
-                $transaction_id = $payment['order']['id'];
-
-                $cart = new Cart($cart_id);
-                $order = $this->createOrder($cart, $transaction_id);
-
-                $this->redirectOrderConfirmation($cart, $order);
-            }
+            $this->redirectCheck($payment_id);
+            return;
         }
 
+        if (isset($cartId)) {
+            $order = $this->mp_transaction->where('cart_id', '=', $cartId)->get();
+            $merchant = $this->mercadopago->getMerchantOrder($order['merchant_order_id']);
+            $payment_id = $merchant['payments'][0]['id'];
+
+            $this->redirectCheck($payment_id);
+            return;
+        }
+    }
+
+    /**
+     * Default function to call redirect
+     *
+     * @return void
+     */
+    public function redirectCheck($payment_id)
+    {
+        $payment = $this->mercadopago->getPaymentStandard($payment_id);
+
+        if ($payment !== false) {
+            $cart_id = $payment['external_reference'];
+            $transaction_id = $payment['order']['id'];
+            $cart = new Cart($cart_id);
+            $order = $this->createOrder($cart, $transaction_id);
+
+            $this->redirectOrderConfirmation($cart, $order);
+        }
         $this->redirectError();
     }
 
