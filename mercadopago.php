@@ -73,7 +73,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.11.1';
+        $this->version = '4.11.2';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
         parent::__construct();
