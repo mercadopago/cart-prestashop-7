@@ -78,7 +78,7 @@ class MercadoPagoWalletButtonModuleFrontController extends ModuleFrontController
             'preference' => $preference,
         );
 
-        echo Tools::jsonEncode($response);
+        echo json_encode($response);
         http_response_code($code);
         exit();
     }

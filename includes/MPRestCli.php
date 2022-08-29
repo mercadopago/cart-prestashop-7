@@ -81,9 +81,9 @@ class MPRestCli
     {
         if ($content_type == 'application/json') {
             if (gettype($data) == 'string') {
-                Tools::jsonDecode($data, true);
+                json_decode($data, true);
             } else {
-                $data = Tools::jsonEncode($data);
+                $data = json_encode($data);
             }
 
             if (function_exists('json_last_error')) {
@@ -118,7 +118,7 @@ class MPRestCli
         $api_http_code = curl_getinfo($connect, CURLINFO_HTTP_CODE);
         $response = array(
             'status' => $api_http_code,
-            'response' => Tools::jsonDecode($api_result, true),
+            'response' => json_decode($api_result, true),
         );
 
         curl_close($connect);

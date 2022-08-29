@@ -48,7 +48,7 @@ class WalletButtonPreference extends AbstractStandardPreference
         $payload = $this->buildPreferencePayload($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
 
         $this->generateLogs($payload, $cart);
-        $payloadToJson = Tools::jsonEncode($payload);
+        $payloadToJson = json_encode($payload);
 
         $createPreference = $this->mercadopago->createPreference($payloadToJson);
         MPLog::generate('Cart id ' . $cart->id . ' - Wallet Button Preference created successfully');
@@ -146,7 +146,7 @@ class WalletButtonPreference extends AbstractStandardPreference
             "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
         );
 
-        $encodedLogs = Tools::jsonEncode($logs);
+        $encodedLogs = json_encode($logs);
         MPLog::generate('wallet button preference logs: ' . $encodedLogs);
     }
 }
