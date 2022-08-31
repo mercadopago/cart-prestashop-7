@@ -56,7 +56,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
                     $this->standardModalCheckout($preference);
                 }
 
-                Tools::redirectLink($createPreference['init_point']);
+                Tools::redirect($createPreference['init_point']);
             }
 
             $this->redirectError($preference, Tools::displayError());
@@ -115,7 +115,7 @@ class MercadoPagoStandardModuleFrontController extends ModuleFrontController
     {
         $backUrl = Tools::getValue('back_url');
         if (isset($backUrl)) {
-            Tools::redirectLink($backUrl);
+            Tools::redirect($backUrl);
         }
 
         $preference->redirectError();

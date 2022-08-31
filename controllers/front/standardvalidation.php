@@ -123,7 +123,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $url .= '&id_order=' . $order->id;
         $url .= '&id_module=' . $this->module->id;
 
-        return Tools::redirectLink($url);
+        return Tools::redirect($url);
     }
 
     /**
