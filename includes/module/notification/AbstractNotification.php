@@ -531,7 +531,7 @@ class AbstractNotification
             "version" => MP_VERSION
         );
 
-        echo Tools::jsonEncode($response);
+        echo json_encode($response);
         return http_response_code($code);
     }
 
@@ -570,7 +570,7 @@ class AbstractNotification
           "order_state" => $this->order_state,
         ];
 
-        $encodedLogs = Tools::jsonEncode($logs);
+        $encodedLogs = json_encode($logs);
         MPLog::generate('Order id ' . $this->order_id . ' notification logs: ' . $encodedLogs);
     }
 }

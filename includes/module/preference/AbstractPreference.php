@@ -699,7 +699,7 @@ abstract class AbstractPreference
             "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
         ];
 
-        $encodedLogs = Tools::jsonEncode($logs);
+        $encodedLogs = json_encode($logs);
         MPLog::generate($checkout . ' preference logs: ' . $encodedLogs);
     }
 

@@ -72,7 +72,7 @@ class CustomPreference extends AbstractPreference
 
         //Generate preference
         $this->generateLogs($preference, 'custom');
-        $preferenceEncoded = Tools::jsonEncode($preference);
+        $preferenceEncoded = json_encode($preference);
 
         //Create preference
         $createPreference = $this->mercadopago->createPayment($preferenceEncoded);

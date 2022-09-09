@@ -106,7 +106,7 @@ class TicketPreference extends AbstractPreference
 
         //Generate preference
         $this->generateLogs($preference, 'ticket');
-        $preferenceEncoded = Tools::jsonEncode($preference);
+        $preferenceEncoded = json_encode($preference);
 
         //Create preference
         $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
