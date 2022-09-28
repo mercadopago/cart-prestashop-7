@@ -41,7 +41,7 @@
                 {l s='Mercado Pago clients can now pay with saved cards' mod='mercadopago'}
             </p>
             <p class='mp-wallet-button-notice-subtitle'>
-                {l s='[1]Payment with saved card or Balance in Mercado Pago[/1] features are enabled. You can manage this option in the settings.' tags=['<i>'] mod='mercadopago'}
+                <i>{l s='Payment with saved card or Balance in Mercado Pago features are enabled.' mod='mercadopago'}</i> {l s=' You can manage this option in the settings.' mod='mercadopago'}
             </p>
         </div>
     </div>
