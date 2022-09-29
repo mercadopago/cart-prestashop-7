@@ -48,7 +48,7 @@ class StandardPreference extends AbstractStandardPreference
         $payload = $this->buildPreferencePayload($cart);
 
         $this->generateLogs($payload, $cart);
-        $payloadToJson = Tools::jsonEncode($payload);
+        $payloadToJson = json_encode($payload);
 
         $createPreference = $this->mercadopago->createPreference($payloadToJson);
         MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
@@ -82,7 +82,7 @@ class StandardPreference extends AbstractStandardPreference
     public function getInternalMetadata($cart)
     {
         $internalMetadataParent = parent::getInternalMetadata($cart);
-        
+
         $checkoutType = $this->settings['MERCADOPAGO_STANDARD_MODAL'] ? 'modal' : 'redirect';
 
         $internalMetadataAdditional = array(
@@ -109,7 +109,7 @@ class StandardPreference extends AbstractStandardPreference
             "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
         );
 
-        $encodedLogs = Tools::jsonEncode($logs);
+        $encodedLogs = json_encode($logs);
         MPLog::generate('standard preference logs: ' . $encodedLogs);
     }
 }
