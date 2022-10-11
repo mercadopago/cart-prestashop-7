@@ -381,25 +381,15 @@ class AbstractNotification
      */
     public function saveCreateOrderData($cart)
     {
-        $payments_id = is_array($this->payments_data['payments_id'])
-            ? implode(',', $this->payments_data['payments_id'])
-            : $this->payments_data['payments_id'];
+        $payments_id = $this->verifyValue('payments_id');
 
-        $payments_type = is_array($this->payments_data['payments_type'])
-            ? implode(',', $this->payments_data['payments_type'])
-            : $this->payments_data['payments_type'];
+        $payments_type = $this->verifyValue('payments_type');
 
-        $payments_method = is_array($this->payments_data['payments_method'])
-            ? implode(',', $this->payments_data['payments_method'])
-            : $this->payments_data['payments_method'];
+        $payments_method = $this->verifyValue('payments_method');
 
-        $payments_status = is_array($this->payments_data['payments_status'])
-            ? implode(',', $this->payments_data['payments_status'])
-            : $this->payments_data['payments_status'];
+        $payments_status = $this->verifyValue('payments_status');
 
-        $payments_amount = is_array($this->payments_data['payments_amount'])
-            ? implode(',', $this->payments_data['payments_amount'])
-            : $this->payments_data['payments_amount'];
+        $payments_amount = $this->verifyValue('payments_amount');
 
         $dataToCreate =  [
             "order_id" => $this->order_id,
@@ -531,7 +521,7 @@ class AbstractNotification
             "version" => MP_VERSION
         );
 
-        echo Tools::jsonEncode($response);
+        echo json_encode($response);
         return http_response_code($code);
     }
 
@@ -570,7 +560,26 @@ class AbstractNotification
           "order_state" => $this->order_state,
         ];
 
-        $encodedLogs = Tools::jsonEncode($logs);
+        $encodedLogs = json_encode($logs);
         MPLog::generate('Order id ' . $this->order_id . ' notification logs: ' . $encodedLogs);
+    }
+
+    /**
+     * Verify value
+     *
+     * @param  string $method
+     * @return string
+     */
+    public function verifyValue($key)
+    {
+        if (!isset($this->payments_data[$key])) {
+            return null;
+        }
+
+        if (is_array($this->payments_data[$key])) {
+            return implode(',', $this->payments_data[$key]);
+        }
+
+        return $this->payments_data[$key];
     }
 }

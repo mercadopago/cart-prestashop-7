@@ -51,21 +51,30 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $payment_ids = Tools::getValue('collection_id');
         $cartId = Tools::getValue('cart_id');
 
-
         if (isset($payment_ids) && $payment_ids != false && $payment_ids != 'null' && $typeReturn != 'failure') {
             $payment_id = explode(',', $payment_ids)[0];
             $this->redirectCheck($payment_id);
+            
             return;
         }
 
-        if (isset($cartId)) {
+        if (isset($cartId) && $typeReturn != 'failure') {
             $order = $this->mp_transaction->where('cart_id', '=', $cartId)->get();
-            $merchant = $this->mercadopago->getMerchantOrder($order['merchant_order_id']);
-            $payment_id = $merchant['payments'][0]['id'];
+            $merchant_order_id = $order['merchant_order_id'];
 
-            $this->redirectCheck($payment_id);
+            if ($merchant_order_id || $merchant_order_id === '0') {
+                $merchant_order = $this->mercadopago->getMerchantOrder($order['merchant_order_id']);
+                $payment_id = $merchant_order['payments'][0]['id'];
+
+                $this->redirectCheck($payment_id);
+            } else {
+                $this->redirectError();
+            }
+
             return;
         }
+
+        $this->redirectError();
     }
 
     /**
@@ -85,6 +94,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
 
             $this->redirectOrderConfirmation($cart, $order);
         }
+
         $this->redirectError();
     }
 
@@ -123,7 +133,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $url .= '&id_order=' . $order->id;
         $url .= '&id_module=' . $this->module->id;
 
-        return Tools::redirectLink($url);
+        return Tools::redirect($url);
     }
 
     /**
