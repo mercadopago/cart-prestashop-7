@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.11.3] - 2022-30-09
+
+### Fixed
+- Fixed php notice on order creation
+
+- Error log changed to information log in notifications
+
+- Removed tags used for translation and adapted related HTML tags
+
+- Changed Json encode/decode functions from Tools to native functions
+
+- Updated Tools::redirectLink to Tools::redirect
+
+- Added validation for null, empty or invalid merchant_order_id
+
 ## [4.11.2] - 2022-16-08
 
 ### Fixed

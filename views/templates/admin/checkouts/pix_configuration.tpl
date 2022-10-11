@@ -54,7 +54,8 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
     var form_pix_append = "<div class='row mp-pb-25'>\
         <div class='col-md-12 mp-pt-15'>\
             <p class='mp-text-credenciais'>\
-                {l s='[1]Important:[/1] Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' tags=['<strong>'] mod='mercadopago'}\
+                <strong>{l s='Important: ' mod='mercadopago'}</strong>\
+                {l s='Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -133,16 +134,20 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
         <div class='col-md-12'>\
             <ol>\
                 <li><span class='mp-text-credenciais'>{l s='Download the Mercado Pago app in your mobile phone.' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='On the left side menu, go to [1]Your Profile[/1] and then, to [1]Your Pix Keys[/1].' tags=['<strong>'] mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='On the left side menu, go to ' mod='mercadopago'}\
+                <strong>{l s='Your Profile ' mod='mercadopago'}</strong> {l s='and then, to ' mod='mercadopago'}\
+                <strong>{l s='Your Pix Keys.' mod='mercadopago'}</strong></span></li>\
                 <li><span class='mp-text-credenciais'>{l s='Enter the details of the Pix Keys you would like to register and complete the process.' mod='mercadopago'}</span></li>\
-                <li><span class='mp-text-credenciais'>{l s='Come back to your PrestaShop store admin and go to the [1]Pix tab[/1] to continue with the payment method configuration.' tags=['<strong>'] mod='mercadopago'}</span></li>\
+                <li><span class='mp-text-credenciais'>{l s='Come back to your PrestaShop store admin and go to the ' mod='mercadopago'}\ <strong>{l s='Pix tab ' mod='mercadopago'}</strong>\
+                {l s='to continue with the payment method configuration.' mod='mercadopago'}</span></li>\
             </ol>\
         </div>\
     </div>\
     <div class='row mp-pb-25'>\
         <div class='col-md-12'>\
-            <p class='mp-text-credenciais'>\
-                {l s='[1]Important:[/1] Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' tags=['<strong>'] mod='mercadopago'}\
+           <p class='mp-text-credenciais'>\
+                <strong>{l s='Important: ' mod='mercadopago'}</strong>\
+                {l s='Through Mercado Pago app you can manage the Pix keys you have registered in your account whenever you want.' mod='mercadopago'}\
             </p>\
         </div>\
     </div>\
@@ -152,7 +157,8 @@ form_pix_header.insertBefore(form_pix_header_prepend, form_pix_header.firstChild
             <ul>\
                 <li>\
                     <span class='mp-text-credenciais'>\
-                        {l s='At the moment, Brazil\'s Central Bank works from Monday to Friday, from 9 AM to 6 PM. [1]' tags=['<br>'] mod='mercadopago'}\
+                        {l s='At the moment, Brazil\'s Central Bank works from Monday to Friday, from 9 AM to 6 PM.'
+                        mod='mercadopago'} <br>\
                         {l s='Registrations made outside this period will be confirmed in the next business day.' mod='mercadopago'}\
                     </span>\
                 </li>\
