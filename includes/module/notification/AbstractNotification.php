@@ -572,15 +572,14 @@ class AbstractNotification
      */
     public function verifyValue($key)
     {
-        if(!isset($this->payments_data[$key])){
+        if (!isset($this->payments_data[$key])) {
             return null;
         }
 
-        if(is_array($this->payments_data[$key])){
+        if (is_array($this->payments_data[$key])) {
             return implode(',', $this->payments_data[$key]);
         }
 
         return $this->payments_data[$key];
-
     }
 }
