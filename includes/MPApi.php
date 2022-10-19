@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -127,10 +128,6 @@ class MPApi
         asort($result);
 
 
-        // echo('<pre>');
-        // print_r($result);
-        // die();
-
         $payments = array();
         foreach ($result as $value) {
             // remove on paypay release
@@ -141,30 +138,36 @@ class MPApi
             // PayCash
             if ($value['id'] == 'paycash') {
                 if (isset($value['payment_places'])) {
-                    $payments[] = array(
-                    'payment_places' => $value['payment_places'],
-                    'id' => Tools::strtoupper($value['id']),
-                    'name' => $value['name'],
-                    'type' => $value['payment_type_id'],
-                    'image' => $value['secure_thumbnail'],
-                    'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
-                    'financial_institutions' => $value['financial_institutions'],
-                    );
+                    $paymentsDefaultData = $this->paymentsDefaultData($value);
+                    $paymentPlaces = array('payment_places'=>$value['payment_places']);
+                    $payments[] = array_merge($paymentsDefaultData, $paymentPlaces);
+
                     continue;
                 }
             }
 
-            $payments[] = array(
-                'id' => Tools::strtoupper($value['id']),
-                'name' => $value['name'],
-                'type' => $value['payment_type_id'],
-                'image' => $value['secure_thumbnail'],
-                'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
-                'financial_institutions' => $value['financial_institutions'],
-            );
+            $payments[] = $this->paymentsDefaultData($value);
         }
 
         return $payments;
+    }
+
+    /**
+    * Get payment main data
+    *
+    * @param array $value
+    * @return array
+    */
+    public function paymentsDefaultData($value)
+    {
+        return array(
+            'id' => Tools::strtoupper($value['id']),
+            'name' => $value['name'],
+            'type' => $value['payment_type_id'],
+            'image' => $value['secure_thumbnail'],
+            'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+            'financial_institutions' => $value['financial_institutions'],
+        );
     }
 
     /**
