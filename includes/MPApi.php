@@ -135,15 +135,12 @@ class MPApi
                 continue;
             }
 
-            // PayCash
-            if ($value['id'] == 'paycash') {
-                if (isset($value['payment_places'])) {
-                    $paymentsDefaultData = $this->paymentsDefaultData($value);
-                    $paymentPlaces = array('payment_places'=>$value['payment_places']);
-                    $payments[] = array_merge($paymentsDefaultData, $paymentPlaces);
+            if (isset($value['payment_places'])) {
+                $paymentsDefaultData = $this->paymentsDefaultData($value);
+                $paymentPlaces = array('payment_places'=>$value['payment_places']);
+                $payments[] = array_merge($paymentsDefaultData, $paymentPlaces);
 
-                    continue;
-                }
+                continue;
             }
 
             $payments[] = $this->paymentsDefaultData($value);
