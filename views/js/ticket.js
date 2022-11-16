@@ -147,7 +147,7 @@
       var sixButton = document.getElementById('mp-ticket-finish-order');
       sixButton.setAttribute('disabled', 'disabled');
     } else if (sellerTicket.ps_version === 'seven') {
-      var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
+      var sevenButton = document.querySelector('#payment-confirmation button');
       sevenButton.setAttribute('disabled', 'disabled');
     }
   }
