@@ -53,7 +53,7 @@ class MPRestCli
             $product_id,
             'Accept: application/json',
             'Content-Type: application/json',
-            'x-platform-id:' . self::PLATFORM_ID,
+            'x-platform-id: ' . self::PLATFORM_ID, 
             'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
         ];
         is_array($headers) ? $headers = array_merge($headers_default, $headers): '';
