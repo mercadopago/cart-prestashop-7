@@ -162,7 +162,8 @@ class MPApi
             'type' => $value['payment_type_id'],
             'image' => $value['secure_thumbnail'],
             'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
-            'financial_institutions' => $value['financial_institutions'],
+            'financial_institutions' => $value['financial_institutions'] !== null ? $value['financial_institutions'] : [],
+            'payment_places' => $value['payment_places'] !== null ? $value['payment_places'] : [],
         );
     }
 
