@@ -62,7 +62,8 @@ abstract class AbstractPreference
         $cart = $this->module->context->cart;
         $authorized = false;
 
-        if ($cart->id_customer == 0 ||
+        if (
+            $cart->id_customer == 0 ||
             $cart->id_address_delivery == 0 ||
             $cart->id_address_invoice == 0 ||
             !$this->module->active
@@ -216,7 +217,7 @@ abstract class AbstractPreference
         $itemsTotal = $this->getCalculateDecimalItemsTotal($round, $itemsTotal);
         $priceDiff = $cartTotal - $itemsTotal;
 
-        if ($priceDiff > 0) {
+        if ($priceDiff != 0) {
             $items[] = array(
                 'title' => 'Difference',
                 'quantity' => 1,
