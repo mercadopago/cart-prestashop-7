@@ -173,8 +173,8 @@
   /**
    * Set if the form has been submitted
    */
-     function setFormSubmit() {
-      submitted = true;
+  function setFormSubmit() {
+    submitted = true;
   }
 
   /**
@@ -454,20 +454,20 @@
    *
    * @returns {boolean}
    */
-     function validateCvv() {
-      var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
-      var cvvInput = document.getElementById('id-security-code');
-      var cvvValidation = cvvLength === cvvInput.value.length;
+  function validateCvv() {
+    var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
+    var cvvInput = document.getElementById('id-security-code');
+    var cvvValidation = cvvLength === cvvInput.value.length;
 
-      if (!cvvValidation) {
-        span[0].style.display = 'block';
-        cvvInput.classList.add('mp-form-control-error');
-        cvvInput.focus();
-        getConditionTerms();
-      }
-
-      return cvvValidation;
+    if (!cvvValidation) {
+      span[0].style.display = 'block';
+      cvvInput.classList.add('mp-form-control-error');
+      cvvInput.focus();
+      getConditionTerms();
     }
+
+    return cvvValidation;
+  }
 
   /**
    * Validate fixed Inputs is empty
@@ -555,8 +555,10 @@
       var sixButton = document.getElementById('mp-custom-finish-order');
       sixButton.setAttribute('disabled', 'disabled');
     } else if (psVersion === 'seven') {
-      var sevenButton = document.getElementById('payment-confirmation').childNodes[1].childNodes[1];
-      sevenButton.setAttribute('disabled', 'disabled');
+      var sevenButton = document.querySelector('#payment-confirmation button');
+      if (sevenButton) {
+        sevenButton.setAttribute('disabled', 'disabled');
+      }
     }
   }
 
@@ -567,7 +569,7 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
-    if(!validateCvv()){
+    if (!validateCvv()) {
       return;
     }
 
