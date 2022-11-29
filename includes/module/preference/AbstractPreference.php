@@ -178,7 +178,7 @@ abstract class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => $this->getCalculateDecimalUnitPrice($round, $discounts),
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, -$discounts),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Discount provided by store',
             );
