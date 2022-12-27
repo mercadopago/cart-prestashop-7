@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2022 PrestaShop
  *
@@ -135,7 +136,7 @@ abstract class AbstractPreference
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? Tools::ps_round($product_price) : $product_price,
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, $product_price),
                 'picture_url' => ('https://' ? 'https://' : 'http://') . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
@@ -158,7 +159,7 @@ abstract class AbstractPreference
             $item = array(
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, $wrapping_cost),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
             );
@@ -176,7 +177,7 @@ abstract class AbstractPreference
             $item = array(
                 'title' => 'Discount',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, -$discounts),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Discount provided by store',
             );
@@ -194,7 +195,7 @@ abstract class AbstractPreference
             $item = array(
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, $shipping_cost),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
             );
@@ -203,7 +204,7 @@ abstract class AbstractPreference
         }
 
         // Check has price difference
-        $cartTotal = $round ? Tools::ps_round($cart->getOrderTotal(true)) : $cart->getOrderTotal();
+        $cartTotal = $this->getCalculateDecimalCartTotal($round, $cart);
         $itemsTotal = array_reduce(
             $items,
             function ($accumulator, $item) {
@@ -212,20 +213,53 @@ abstract class AbstractPreference
             }
         );
 
-        $itemsTotal = $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
+        $itemsTotal = $this->getCalculateDecimalItemsTotal($round, $itemsTotal);
         $priceDiff = $cartTotal - $itemsTotal;
 
-        if ($priceDiff > 0) {
+        if ($priceDiff != 0) {
             $items[] = array(
                 'title' => 'Difference',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($priceDiff) : $priceDiff,
+                'unit_price' => $this->getCalculateDecimalUnitPrice($round, $priceDiff),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Adjustment for the Mercado Pago price to be the same as the store',
             );
         }
 
         return $items;
+    }
+
+    /**
+     * Get calculate decimal
+     *
+     * @param $round, $unit_price
+     * @return mixed
+     */
+    public function getCalculateDecimalUnitPrice($round, $unit_price)
+    {
+        return $round ? Tools::ps_round($unit_price) : $unit_price;
+    }
+
+    /**
+     * Get calculate decimal Cart
+     *
+     * @param $round, $cart
+     * @return mixed
+     */
+    public function getCalculateDecimalCartTotal($round, $cart)
+    {
+        return $round ? Tools::ps_round($cart->getOrderTotal(true)) : $cart->getOrderTotal();
+    }
+
+    /**
+     * Get calculate decimal ItemsTotal
+     *
+     * @param $round, $itemsTotal
+     * @return mixed
+     */
+    public function getCalculateDecimalItemsTotal($round, $itemsTotal)
+    {
+        return $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
     }
 
     public function getStatementDescriptor()
@@ -403,19 +437,19 @@ abstract class AbstractPreference
             "custom_settings" => $this->getCustomCheckoutSettings(),
             "ticket_settings" => $this->getTicketCheckoutSettings(),
             "pix_settings" => $this->getPixCheckoutSettings(),
-            "seller_website"=> Tools::getShopDomainSsl(true, true),
+            "seller_website" => Tools::getShopDomainSsl(true, true),
             "billing_address" => array(
                 'zip_code' => $address_invoice->postcode,
                 'street_name' => $address_invoice->address1 . ' - ' . $address_invoice->address2,
                 'street_number' => '-',
-                'city_name'=> $address_invoice->city,
+                'city_name' => $address_invoice->city,
                 'country_name' => $address_invoice->country,
             ),
             "user" => array(
-            "registered_user" => $is_logged ? 'yes' : 'no',
-            "user_email" => $is_logged ? $customer_fields['email'] : " ",
-            "user_registration_date" => $is_logged ? $customer_fields['date_add'] : " ",
-          ),
+                "registered_user" => $is_logged ? 'yes' : 'no',
+                "user_email" => $is_logged ? $customer_fields['email'] : " ",
+                "user_registration_date" => $is_logged ? $customer_fields['date_add'] : " ",
+            ),
         );
 
         return $internal_metadata;
@@ -712,9 +746,9 @@ abstract class AbstractPreference
     public function buildStreetName($address_data)
     {
         $address = $address_data->address1 . ' - ' .
-        $address_data->address2 . ' - ' .
-        $address_data->city . ' - ' .
-        $address_data->country;
+            $address_data->address2 . ' - ' .
+            $address_data->city . ' - ' .
+            $address_data->country;
 
         return $address;
     }
