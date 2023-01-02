@@ -111,9 +111,8 @@ class MPApi
      */
     public function getPaymentMethods()
     {
-        $public_key = $this->getPublicKey();
-        $response = MPRestCli::get('/v1/bifrost/payment-methods', ["Authorization: " . $public_key]);
-
+        $access_token = $this->getAccessToken();
+        $response = MPRestCli::get('/v1/bifrost/payment-methods', ["Authorization: Bearer " . $access_token]);
 
 
         //in case of failures
