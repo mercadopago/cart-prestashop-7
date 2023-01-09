@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed decimal value when creating Pro checkout preference
+- Updated copyright to 2022
 
 ## [4.12.0] - 2022-16-11
 
