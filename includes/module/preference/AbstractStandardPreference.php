@@ -1,7 +1,6 @@
 <?php
-
 /**
- * 2007-2023 PrestaShop
+ * 2007-2022 PrestaShop
  *
  * NOTICE OF LICENSE
  *
@@ -20,7 +19,7 @@
  * needs please refer to http://www.prestashop.com for more information.
  *
  * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2023 PrestaShop SA
+ * @copyright 2007-2022 PrestaShop SA
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  *
@@ -102,17 +101,6 @@ abstract class AbstractStandardPreference extends AbstractPreference
     }
 
     /**
-     * Get calculate decimal
-     *
-     * @param $round, $unit_price
-     * @return mixed
-     */
-    public function getCalculateDecimalUnitPrice($round, $unit_price)
-    {
-        return $round ? Tools::ps_round($unit_price) : Tools::ps_round($unit_price, 2);
-    }
-
-    /**
      * Get customer data
      *
      * @param $cart
@@ -177,7 +165,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
         }
 
         $paymentOptions = array(
-            'installments' => (int) $this->settings['MERCADOPAGO_INSTALLMENTS'],
+            'installments' => (integer) $this->settings['MERCADOPAGO_INSTALLMENTS'],
             'excluded_payment_types' => array(),
             'excluded_payment_methods' => $excludedPaymentMethods,
         );
