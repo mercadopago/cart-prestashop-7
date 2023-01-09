@@ -1,5 +1,5 @@
 {*
-* 2007-2023 PrestaShop
+* 2007-2022 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,13 +18,13 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2023 PrestaShop SA
+* @copyright 2007-2022 PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
 {if $checkout_type == 'pix'}
     <div class="form-group">
-        <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col">
+        <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col"> 
             <div class="mp-pt-5">
                 <label class="mp-pix-text-label">
                     {l s='[1]Pay %s via Pix to guarantee your purchase.[/1]' tags=['<strong>'] sprintf=[{Tools::displayPrice($total_paid_amount|escape:'htmlall':'UTF-8')}] mod='mercadopago'}
