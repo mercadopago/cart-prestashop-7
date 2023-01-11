@@ -128,7 +128,7 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
-            // remove on paypay release
+            //remove on paypay release
             if ($value['id'] == 'paypal') {
                 continue;
             }
