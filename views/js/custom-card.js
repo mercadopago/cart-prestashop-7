@@ -140,7 +140,6 @@
 
           var paymentTypeId = paymentMethods[0].payment_type_id;
           setImageCard(paymentMethods[0].thumbnail);
-          setCvvLength(paymentMethods[0].settings[0].security_code.length);
           setPaymentTypeId(paymentTypeId);
           handleInstallments(paymentTypeId);
           loadAdditionalInfo(paymentMethods[0].additional_info_needed);
@@ -210,15 +209,6 @@
    */
   function setPaymentTypeId(paymentTypeId) {
     document.querySelector('#payment_type_id').value = paymentTypeId;
-  }
-
-  /**
-   * Set cvv length
-   *
-   * @param {number} length
-   */
-  function setCvvLength(length) {
-    cvvLength = length;
   }
 
   /**
@@ -634,26 +624,6 @@
     }
 
     return true;
-  }
-
-  /**
-   * Validate CVV length
-   *
-   * @returns {boolean}
-   */
-  function validateCvv() {
-    var span = getFormCustom().querySelectorAll('small[data-main="#id-security-code"]');
-    var cvvInput = document.getElementById('id-security-code');
-    var cvvValidation = cvvLength === cvvInput.value.length;
-
-    if (!cvvValidation) {
-      span[0].style.display = 'block';
-      cvvInput.classList.add('mp-form-control-error');
-      cvvInput.focus();
-      getConditionTerms();
-    }
-
-    return cvvValidation;
   }
 
   /**
