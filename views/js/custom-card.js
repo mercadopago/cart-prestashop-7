@@ -43,6 +43,7 @@
   var mpCardForm = null;
   var cvvLength = null;
   var submitted = false;
+  var mpRemountCardForm = false;
 
   /**
    * Initialise vars to use on JS custom-card.js
@@ -111,6 +112,21 @@
           if (error) {
             return console.warn('Form Mounted handling error: ', error);
           }
+          additionalInfoHandler();
+        },
+        onFormUnmounted: function (error) {
+          clearInputs();
+
+          if (error) {
+            return console.warn('Form Unmounted handling error: ', error);
+          }
+
+          if (mpRemountCardForm) {
+            loadCardForm();
+            mpRemountCardForm = false;
+          } else {
+            setTimeout(() => { loadCardForm(); }, 5000);
+          }
         },
         onIdentificationTypesReceived: function (error, identificationTypes) {
           if (error) {
@@ -123,8 +139,6 @@
           }
 
           var paymentTypeId = paymentMethods[0].payment_type_id;
-
-          clearInputs();
           setImageCard(paymentMethods[0].thumbnail);
           setCvvLength(paymentMethods[0].settings[0].security_code.length);
           setPaymentTypeId(paymentTypeId);
@@ -152,6 +166,15 @@
 
           sdkResponseHandler(error);
         },
+        onValidityChange: function (error, field) {
+          if (error) {
+            if (field === "cardNumber") {
+              if (error[0].code !== "invalid_length") {
+                cardClean();
+              }
+            }
+          }
+        }
       },
     });
   }
@@ -167,6 +190,30 @@
       document.getElementById('id-card-expiration-month').value = ('0' + cardExpirationMonth).slice(-2);
       document.getElementById('id-card-expiration-year').value = cardExpirationYear;
     });
+  }
+
+  /**
+   *
+   */
+  function cardClean() {
+    document.querySelector("#id-card-number", "no-repeat #fff")
+    var issuerField = document.getElementById("mpIssuer");
+    if (issuerField) {
+      document.getElementById("mpIssuer").innerHTML = " ";
+    }
+
+    additionalInfoHandler();
+    clearInputs();
+    hideErrors();
+    remountCardForm();
+  }
+
+  /**
+   *
+   */
+  function remountCardForm() {
+    mpRemountCardForm = true;
+    mpCardForm.unmount();
   }
 
   /**
@@ -387,28 +434,157 @@
    *
    * @param  {object}  error
    */
-  function showErrors(error) {
+  function showErrors(errors) {
     var form = getFormCustom();
-    var serializedError = error.cause || error;
+    var sdkErrors = trackedSDKErrors();
 
-    for (var x = 0; x < serializedError.length; x++) {
-      var code = serializedError[x].code;
-      var span = undefined;
+    let errorMessage = errors.message || errors[0].message;
+    let errorField = errors.field || errors[0]?.field;
+    var previousField = undefined;
 
-      if (code === '208' || code === '209' || code === '325' || code === '326') {
-        span = form.querySelector('#mp-error-208');
-      } else {
-        span = form.querySelector('#mp-error-' + code);
-      }
+    if (errorMessage && !errorField) {
+      otherMessages(errors);
+    }
 
-      if (span !== undefined) {
-        span.style.display = 'block';
-        form.querySelector(span.getAttribute('data-main')).classList.add('mp-form-control-error');
-      }
+    if (errors.length >= 1) {
+      showIframeErrors(errors);
+
+      errors.forEach(error => {
+        if (error.field && previousField !== error.field) {
+          errorField = error.field;
+
+          if (error.field === "expirationDate") {
+            errorField = expirationDateHandler(error);
+          }
+
+          let formattedError = `${error.cause}_${errorField}`;
+          var span = undefined;
+
+          sdkErrors.forEach((sdkError) => {
+            if (error.message === sdkError.message) {
+              span = form.querySelector("#" + formattedError + "_" + sdkError.code);
+
+              if (span !== undefined) {
+                span.style.display = "block";
+              }
+            }
+
+            previousField = error.field;
+          });
+        }
+
+        focusInputError();
+      });
     }
 
     focusInputError();
     getConditionTerms();
+  }
+
+  /**
+   *
+   * @param {*} error
+   * @returns
+   */
+  function expirationDateHandler(error) {
+    expiration = error.message.includes("expirationMonth")
+      ? error.field + "_expirationMonth"
+      : error.field + "_expirationYear"
+    return expiration;
+  }
+
+  /**
+   *
+   * @param {*} errors
+   */
+  function showIframeErrors(errors) {
+    errors.forEach((error) => {
+      let field;
+      if (error.field === "cardNumber") {
+        field = document.getElementById("id-card-number");
+        field.classList.add("mp-form-control-error");
+      }
+      if (error.field === "expirationDate") {
+        field = document.getElementById("id-card-expiration-date");
+        field.classList.add("mp-form-control-error");
+      }
+      if (error.field === "securityCode") {
+        field = document.getElementById("id-security-code");
+        field.classList.add("mp-form-control-error");
+      }
+    });
+
+    focusInputError();
+  }
+
+  /**
+   *
+   * @returns
+   */
+  function trackedSDKErrors() {
+    var date = new Date();
+    var currentYear = date.getFullYear();
+    var currentMonth = date.getMonth() + 1;
+    var sdkErrors = [
+      {
+        code: "mp001",
+        message: "cardnumber should be a number.",
+      },
+      {
+        code: "mp002",
+        message: "cardNumber should be of length between '8' and '19'.",
+      },
+      {
+        code: "mp003",
+        message: "expirationMonth should be a number.",
+      },
+      {
+        code: "mp004",
+        message: "expirationYear should be of length '2' or '4'.",
+      },
+      {
+        code: "mp005",
+        message: "expirationYear should be a number.",
+      },
+      {
+        code: "mp006",
+        message: "securityCode should be a number.",
+      },
+      {
+        code: "mp007",
+        message: "securityCode should be of length '3' or '4'.",
+      },
+      {
+        code: "mp008",
+        message: "expirationMonth should be a value from 1 to 12.",
+      },
+      {
+        code: "mp009",
+        message: `expirationYear value should be greater or equal than ${currentYear}.`,
+      },
+      {
+        code: "mp010",
+        message: "securityCode should be of length '4'.",
+      },
+      {
+        code: "mp011",
+        message: "cardNumber should be of length '15'.",
+      },
+      {
+        code: "mp012",
+        message: `expirationMonth value should be greater than '${currentMonth}' or expiration
+                  year value should be greater than '${currentYear}.`,
+      },
+      {
+        code: "mp013",
+        message: "securityCode should be of length '3'.",
+      },
+      {
+        code: "mp014",
+        message: "cardNumber should be of length '16'.",
+      },
+    ]
+    return sdkErrors;
   }
 
   /**
@@ -502,22 +678,28 @@
     var emptyInputs = false;
     var form = getFormCustom();
     var formInputs = form.querySelectorAll('[data-checkout]');
-    var fixedInputs = ['cardNumber', 'cardholderName', 'cardExpiration', 'securityCode', 'installments'];
+    var fixedInputs = ['cardNumber', 'installments'];
+    var mpInstallments = document.getElementById("id-installments").value;
 
     for (var x = 0; x < formInputs.length; x++) {
       var element = formInputs[x];
 
       // Check is a input to create token.
-      if (fixedInputs.indexOf(element.getAttribute('data-checkout')) > -1) {
-        if (element.value === -1 || element.value === '') {
+      var attribute = element.getAttribute('data-checkout');
+
+      if (fixedInputs.indexOf(attribute) > -1) {
+        if (element.value === -1 || element.value === '' || element.value.value === undefined) {
           var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
 
-          if (span.length > 0) {
+          if (
+            (attribute === "cardNumber" && mpInstallments === "") ||
+            mpInstallments === undefined ||
+            attribute !== "cardNumber"
+          ) {
             span[0].style.display = 'block';
+            element.classList.add("mp-form-control-error");
+            emptyInputs = true;
           }
-
-          element.classList.add('mp-form-control-error');
-          emptyInputs = true;
         }
       }
     }
@@ -543,7 +725,17 @@
 
     if (additionalInfoNeeded.cardholder_name) {
       var inputCardholderName = document.getElementById('id-card-holder-name');
-      if (inputCardholderName.value === -1 || inputCardholderName.value === '') {
+      if (
+        inputCardholderName.value === -1 ||
+        inputCardholderName.value === "" ||
+        !/^[a-zA-ZãÃáÁàÀâÂäÄẽẼéÉèÈêÊëËĩĨíÍìÌîÎïÏõÕóÓòÒôÔöÖũŨúÚùÙûÛüÜçÇ’ñÑ .']+$/
+          .test(inputCardholderName.value)
+      ) {
+        document.getElementById(inputCardholderName.id).style.display = "block";
+        var small = document.querySelectorAll('small[data-main="#' + inputCardholderName.id + '"]');
+        for (let index = 0; index < small.length; index++) {
+          small[index].style.display = "block";
+        }
         inputCardholderName.classList.add('mp-form-control-error');
         emptyInputs = true;
       }
@@ -563,11 +755,76 @@
         docNumber.classList.add('mp-form-control-error');
         document.getElementById('mp-error-324').style.display = 'inline-block';
         emptyInputs = true;
+      } else if ( inputDocType.value.toLowerCase() === ('cpf') ) {
+        if (!validateDocNumber(docNumber.value)) {
+          var element = document.getElementById(docNumber.id);
+          element.style.display = 'inline-block';
+          element.classList.add('mp-form-control-error');
+          var small = document.querySelectorAll('small[data-main="#' + docNumber.id + '"]');
+          for (let index = 0; index < small.length; index++) {
+            small[index].style.display = "block";
+          }
+        }
       }
     }
 
     return emptyInputs;
   }
+
+  /**
+   * Validate doc number
+   */
+  function validateDocNumber(docNumber) {
+    if (docNumber.length === 11) {
+      return validateCPF(docNumber);
+    }
+    return false
+  }
+
+  /**
+   * CPF validator
+   * @param {*} strCPF
+   * @returns
+   */
+  function validateCPF(strCPF) {
+    var sum;
+    var remainder;
+    sum = 0;
+
+    if (strCPF == "00000000000") return false;
+    if (strCPF == "11111111111") return false;
+    if (strCPF == "22222222222") return false;
+    if (strCPF == "33333333333") return false;
+    if (strCPF == "44444444444") return false;
+    if (strCPF == "55555555555") return false;
+    if (strCPF == "66666666666") return false;
+    if (strCPF == "77777777777") return false;
+    if (strCPF == "88888888888") return false;
+    if (strCPF == "99999999999") return false;
+
+    for (i = 1; i <= 9; i++) {
+      sum = sum + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+    }
+
+    remainder = (sum * 10) % 11;
+
+    if (remainder == 10 || remainder == 11) remainder = 0;
+    if (remainder != parseInt(strCPF.substring(9, 10))) return false;
+
+    sum = 0;
+    for (i = 1; i <= 10; i++) {
+      sum = sum + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+    }
+    remainder = (sum * 10) % 11;
+
+    if (remainder == 10 || remainder == 11) remainder = 0;
+
+    if (remainder != parseInt(strCPF.substring(10, 11))) {
+      document.getElementById("mpDocNumber");
+      return false;
+    }
+    return true;
+  };
 
   /**
    * Disable finish order button
