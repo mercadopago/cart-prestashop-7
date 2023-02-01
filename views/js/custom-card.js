@@ -57,7 +57,6 @@
 
     loadCardForm();
 
-    setChangeEventOnExpirationDate();
     setChangeEventOnCardNumber();
   };
 
@@ -87,6 +86,7 @@
         cardExpirationDate: {
           id: 'id-card-expiration-date',
           placeholder: 'MM/YYYY',
+          mode: "undefined",
           style: {
             "font-size": "1rem",
             "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
@@ -176,19 +176,6 @@
           }
         }
       },
-    });
-  }
-
-  /**
-   * Split the date into month and year
-   */
-  function setChangeEventOnExpirationDate() {
-    document.getElementById('id-card-expiration').addEventListener('change', function (event) {
-      var cardExpirationDate = document.getElementById('id-card-expiration').value;
-      var cardExpirationMonth = cardExpirationDate.split('/')[0] | ' ';
-      var cardExpirationYear = cardExpirationDate.split('/')[1] | ' ';
-      document.getElementById('id-card-expiration-month').value = ('0' + cardExpirationMonth).slice(-2);
-      document.getElementById('id-card-expiration-year').value = cardExpirationYear;
     });
   }
 
