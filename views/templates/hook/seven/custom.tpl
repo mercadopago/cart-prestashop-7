@@ -99,6 +99,8 @@
                     </label>
                     <div
                         id="id-card-number"
+                        class="mp-form-control"
+                        data-checkout="cardNumber"
                     >
                     </div>
                     <small id="mp-error-205" class="mp-erro-form" data-main="#id-card-number">
@@ -142,6 +144,8 @@
                     </label>
                     <div
                         id="id-card-expiration-date"
+                        class="mp-form-control"
+                        data-checkout="cardExpiration"
                     >
                     </div>
                     <small id="mp-error-208" class="mp-erro-form" data-main="#id-card-expiration">
@@ -172,6 +176,8 @@
                     </label>
                     <div
                         id="id-security-code"
+                        class="mp-form-control"
+                        data-checkout="securityCode"
                     >
                     </div>
                     <small class="mp-small mp-pt-5">

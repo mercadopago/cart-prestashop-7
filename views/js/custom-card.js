@@ -73,10 +73,34 @@
       iframe: true,
       form: {
         id: 'mp_custom_checkout',
-        cardNumber: { id: 'id-card-number', placeholder: '0000 0000 0000 0000' },
+        cardNumber: {
+          id: 'id-card-number',
+          placeholder: '0000 0000 0000 0000',
+          style: {
+            "font-size": "1rem",
+            "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+            "color": "#7a7a7a"
+          }
+        },
         cardholderName: { id: 'id-card-holder-name'},
-        cardExpirationDate: { id: 'id-card-expiration-date', placeholder: 'MM/YYYY' },
-        securityCode: { id: 'id-security-code', placeholder: 'CVV' },
+        cardExpirationDate: {
+          id: 'id-card-expiration-date',
+          placeholder: 'MM/YYYY',
+          style: {
+            "font-size": "1rem",
+            "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+            "color": "#7a7a7a"
+          }
+        },
+        securityCode: {
+          id: 'id-security-code',
+          placeholder: 'CVV',
+          style: {
+            "font-size": "1rem",
+            "font-family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+            "color": "#7a7a7a"
+          }
+        },
         installments: { id: 'id-installments' },
         identificationType: { id: 'id-docType' },
         identificationNumber: { id: 'id-doc-number' },
