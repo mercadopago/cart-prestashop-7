@@ -97,15 +97,10 @@
                         {l s='Card number' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
+                    <div
                         id="id-card-number"
-                        class="form-control mp-form-control"
-                        type="text"
-                        maxlength="24"
-                        autocomplete="off"
-                        data-checkout="cardNumber"
-                        onkeyup="maskInput(this, mcc);"
-                    />
+                    >
+                    </div>
                     <small id="mp-error-205" class="mp-erro-form" data-main="#id-card-number">
                         {l s='Invalid card number' mod='mercadopago'}
                     </small>
@@ -145,20 +140,10 @@
                         {l s='Expiration date' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
-                        id="id-card-expiration"
-                        class="form-control mp-form-control"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="MM/AAAA"
-                        maxlength="7"
-                        data-checkout="cardExpiration"
-                        onkeyup="maskInput(this, mdate);"
-                    />
-
-                    <input id="id-card-expiration-month" type="hidden" />
-                    <input id="id-card-expiration-year" type="hidden" />
-
+                    <div
+                        id="id-card-expiration-date"
+                    >
+                    </div>
                     <small id="mp-error-208" class="mp-erro-form" data-main="#id-card-expiration">
                         {l s='Invalid card expiration date' mod='mercadopago'}
                     </small>
@@ -185,16 +170,10 @@
                         {l s='Security code' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
+                    <div
                         id="id-security-code"
-                        class="form-control mp-form-control"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="{l s='CVV' mod='mercadopago'}"
-                        maxlength="4"
-                        data-checkout="securityCode"
-                        onkeyup="maskInput(this, minteger);"
-                    />
+                    >
+                    </div>
                     <small class="mp-small mp-pt-5">
                         {l s='last 3 numbers on the back of your card' mod='mercadopago'}
                     </small>

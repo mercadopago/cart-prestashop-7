@@ -70,13 +70,13 @@
       amount: getAmount(),
       autoMount: true,
       processingMode: 'aggregator',
+      iframe: true,
       form: {
         id: 'mp_custom_checkout',
-        cardNumber: { id: 'id-card-number' },
-        cardholderName: { id: 'id-card-holder-name' },
-        cardExpirationMonth: { id: 'id-card-expiration-month' },
-        cardExpirationYear: { id: 'id-card-expiration-year' },
-        securityCode: { id: 'id-security-code' },
+        cardNumber: { id: 'id-card-number', placeholder: '0000 0000 0000 0000' },
+        cardholderName: { id: 'id-card-holder-name'},
+        cardExpirationDate: { id: 'id-card-expiration-date', placeholder: 'MM/YYYY' },
+        securityCode: { id: 'id-security-code', placeholder: 'CVV' },
         installments: { id: 'id-installments' },
         identificationType: { id: 'id-docType' },
         identificationNumber: { id: 'id-doc-number' },
@@ -288,7 +288,7 @@
     hideErrors();
     clearTax();
     document.getElementById('id-card-number').style.background = 'no-repeat #fff';
-    document.getElementById('id-card-expiration').value = '';
+    document.getElementById('id-card-expiration-date').value = '';
     document.getElementById('id-doc-number').value = '';
     document.getElementById('id-security-code').value = '';
     document.getElementById('id-card-holder-name').value = '';
