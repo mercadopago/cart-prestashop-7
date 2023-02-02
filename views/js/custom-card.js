@@ -183,7 +183,7 @@
    *
    */
   function cardClean() {
-    document.querySelector("#id-card-number", "no-repeat #fff")
+    document.querySelector("#id-card-number", "no-repeat #fff");
     var issuerField = document.getElementById("mpIssuer");
     if (issuerField) {
       document.getElementById("mpIssuer").innerHTML = " ";
@@ -465,9 +465,9 @@
    * @returns
    */
   function expirationDateHandler(error) {
-    expiration = error.message.includes("expirationMonth")
-      ? error.field + "_expirationMonth"
-      : error.field + "_expirationYear"
+    expiration = error.message.includes("expirationMonth") ?
+      error.field + "_expirationMonth" :
+      error.field + "_expirationYear";
     return expiration;
   }
 
@@ -561,7 +561,7 @@
         code: "mp014",
         message: "cardNumber should be of length '16'.",
       },
-    ]
+    ];
     return sdkErrors;
   }
 
@@ -708,6 +708,7 @@
     }
 
     if (additionalInfoNeeded.cardholder_identification_number) {
+      var inputDocType = document.getElementById('id-docType');
       var docNumber = document.getElementById('id-doc-number');
       if (docNumber.value === -1 || docNumber.value === '') {
         docNumber.classList.add('mp-form-control-error');
@@ -733,7 +734,7 @@
     if (docNumber.length === 11) {
       return validateCPF(docNumber);
     }
-    return false
+    return false;
   }
 
   /**
@@ -779,7 +780,7 @@
       return false;
     }
     return true;
-  };
+  }
 
   /**
    * Disable finish order button
