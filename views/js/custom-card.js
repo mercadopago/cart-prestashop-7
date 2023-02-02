@@ -807,10 +807,6 @@
    * @param object token
    */
   function sdkResponseHandler(error) {
-    if (!validateCvv()) {
-      return;
-    }
-
     if (error) {
       showErrors(error);
       return;
