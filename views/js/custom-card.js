@@ -134,6 +134,7 @@
           }
         },
         onPaymentMethodsReceived: function (error, paymentMethods) {
+          hideErrors();
           if (error) {
             return console.warn('paymentMethods handling error: ', error);
           }
@@ -395,12 +396,12 @@
   }
 
   /**
-   * Clears card number input on keyup when there's less than 4 digits
+   * Clears card number input on keyup when installments are not available
    *
    */
   function setChangeEventOnCardNumber() {
-    document.getElementById('id-card-number').addEventListener('keyup', function (e) {
-      if (e.target.value.length <= 4) {
+    document.getElementById('id-installments').addEventListener('keyup', function (e) {
+      if (e.target.value.length <= 1) {
         clearInputs();
       }
     });
@@ -645,7 +646,7 @@
       var attribute = element.getAttribute('data-checkout');
 
       if (fixedInputs.indexOf(attribute) > -1) {
-        if (element.value === -1 || element.value === '' || element.value.value === undefined) {
+        if (element.value === -1 || element.value === '' || element.value === undefined) {
           var span = form.querySelectorAll('small[data-main="#' + element.id + '"]');
 
           if (
@@ -710,17 +711,14 @@
       var docNumber = document.getElementById('id-doc-number');
       if (docNumber.value === -1 || docNumber.value === '') {
         docNumber.classList.add('mp-form-control-error');
-        document.getElementById('mp-error-324').style.display = 'inline-block';
+        docNumber.style.display = 'inline-block';
+        document.querySelector('small[data-main="#' + docNumber.id + '"]').style.display = "block";
         emptyInputs = true;
       } else if ( inputDocType.value.toLowerCase() === ('cpf') ) {
         if (!validateDocNumber(docNumber.value)) {
-          var element = document.getElementById(docNumber.id);
-          element.style.display = 'inline-block';
-          element.classList.add('mp-form-control-error');
-          var small = document.querySelectorAll('small[data-main="#' + docNumber.id + '"]');
-          for (let index = 0; index < small.length; index++) {
-            small[index].style.display = "block";
-          }
+          docNumber.classList.add('mp-form-control-error');
+          docNumber.style.display = 'inline-block';
+          document.querySelector('small[data-main="#' + docNumber.id + '"]').style.display = "block";
         }
       }
     }
