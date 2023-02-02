@@ -417,8 +417,8 @@
     var sdkErrors = trackedSDKErrors();
 
     let errorMessage = errors.message || errors[0].message;
-    let errorField = errors.field || errors[0]?.field;
-    var previousField = undefined;
+    let errorField = errors.field || (errors[0].field ? errors[0].field : undefined);
+    var previousField;
 
     if (errorMessage && !errorField) {
       otherMessages(errors);
@@ -436,7 +436,7 @@
           }
 
           let formattedError = `${error.cause}_${errorField}`;
-          var span = undefined;
+          var span;
 
           sdkErrors.forEach((sdkError) => {
             if (error.message === sdkError.message) {
@@ -451,7 +451,6 @@
           });
         }
 
-        focusInputError();
       });
     }
 
@@ -491,8 +490,6 @@
         field.classList.add("mp-form-control-error");
       }
     });
-
-    focusInputError();
   }
 
   /**
@@ -700,7 +697,7 @@
     }
 
     if (additionalInfoNeeded.cardholder_identification_type) {
-      var inputDocType = document.getElementById('id-docType');
+      let inputDocType = document.getElementById('id-docType');
       if (inputDocType.value === -1 || inputDocType.value === '') {
         inputDocType.classList.add('mp-form-control-error');
         emptyInputs = true;
@@ -708,7 +705,7 @@
     }
 
     if (additionalInfoNeeded.cardholder_identification_number) {
-      var inputDocType = document.getElementById('id-docType');
+      let inputDocType = document.getElementById('id-docType');
       var docNumber = document.getElementById('id-doc-number');
       if (docNumber.value === -1 || docNumber.value === '') {
         docNumber.classList.add('mp-form-control-error');
