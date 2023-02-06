@@ -53,7 +53,7 @@ class WebhookNotification extends AbstractNotification
         $this->verifyWebhook($cart);
 
         $this->total = $this->getTotal($cart, $this->checkout);
-        $orderId = Order::getOrderByCartId($cart->id);
+        $orderId = Order::getIdByCartId($cart->id);
 
         if ($orderId != 0) {
             $this->verifyCustomPayment();

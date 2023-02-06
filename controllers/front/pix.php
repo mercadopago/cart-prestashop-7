@@ -96,7 +96,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
         $preference->disableCartRule();
 
         $oldCart = new Cart($cart->id);
-        $order = Order::getOrderByCartId($oldCart->id);
+        $order = Order::getIdByCartId($oldCart->id);
         $order = new Order($order);
 
         return $order;

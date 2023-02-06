@@ -111,7 +111,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $notification = new IpnNotification($transaction_id, $merchant_order);
         $notification = $notification->createStandardOrder($cart);
 
-        $order = Order::getOrderByCartId($cart->id);
+        $order = Order::getIdByCartId($cart->id);
         $order = new Order($order);
 
         return $order;

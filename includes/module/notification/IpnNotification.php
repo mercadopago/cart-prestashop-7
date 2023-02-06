@@ -146,7 +146,7 @@ class IpnNotification extends AbstractNotification
      */
     public function getOrderId($cart)
     {
-        $orderId = Order::getOrderByCartId($cart->id);
+        $orderId = Order::getIdByCartId($cart->id);
         $this->order_id = $orderId;
 
         return $orderId;
