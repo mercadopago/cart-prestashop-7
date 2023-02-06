@@ -396,18 +396,6 @@
   }
 
   /**
-   * Clears card number input on keyup when installments are not available
-   *
-   */
-  function setChangeEventOnCardNumber() {
-    document.getElementById('id-installments').addEventListener('keyup', function (e) {
-      if (e.target.value.length <= 1) {
-        clearInputs();
-      }
-    });
-  }
-
-  /**
    * Show errors
    *
    * @param  {object}  error
