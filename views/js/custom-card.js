@@ -57,7 +57,6 @@
 
     loadCardForm();
 
-    setChangeEventOnCardNumber();
   };
 
   /**
