@@ -486,7 +486,7 @@
   function trackedSDKErrors() {
     var date = new Date();
     var currentYear = date.getFullYear();
-    var currentMonth = date.getMonth() + 1;
+    var currentMonth = date.getMonth() >= 10 ? date.getMonth() : '0' + date.getMonth();
     var sdkErrors = [
       {
         code: "mp001",
@@ -534,8 +534,7 @@
       },
       {
         code: "mp012",
-        message: `expirationMonth value should be greater than '${currentMonth}' or expiration
-                  year value should be greater than '${currentYear}.`,
+        message: `expirationMonth value should be greater than '${currentMonth}' or expirationYear value should be greater than '${currentYear}'.`,
       },
       {
         code: "mp013",
