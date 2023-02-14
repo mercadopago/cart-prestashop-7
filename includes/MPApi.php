@@ -112,8 +112,10 @@ class MPApi
     public function getPaymentMethods()
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/bifrost/payment-methods', ["Authorization: Bearer " . $access_token]);
-
+        $response = MPRestCli::get('/v1/bifrost/payment-methods', [
+            "Authorization: Bearer " . $access_token,
+            "x-product-id: " . MPRestCli::PRODUCT_ID
+        ]);
 
         //in case of failures
         if ($response['status'] > 202) {
