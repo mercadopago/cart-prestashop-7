@@ -111,6 +111,7 @@
                     <div
                         id="id-card-number"
                         class="form-control mp-form-control"
+                        style="height: 27px"
                         data-checkout="cardNumber"
                     >
                     </div>
@@ -138,6 +139,7 @@
                     <input
                         id="id-card-holder-name"
                         class="form-control mp-form-control"
+                        style="height: 27px"
                         type="text"
                         autocomplete="off"
                         data-checkout="cardholderName"
@@ -157,6 +159,7 @@
                     <div
                         id="id-card-expiration-date"
                         class="form-control mp-form-control"
+                        style="height: 27px"
                         data-checkout="cardExpiration"
                     >
                     </div>
@@ -189,6 +192,7 @@
                     <div
                         id="id-security-code"
                         class="form-control mp-form-control"
+                        style="height: 27px"
                         data-checkout="securityCode"
                     >
                     </div>
@@ -223,6 +227,7 @@
                     <select
                         id="id-issuers-options"
                         class="issuers-options form-control mp-form-control mp-select mp-pointer noUniform"
+                        style="height: 27px"
                         type="text"
                         data-checkout="issuer"
                     >
@@ -238,6 +243,7 @@
                     <select
                         id="id-installments"
                         class="form-control mp-form-control mp-pointer not_uniform noUniform"
+                        style="height: 27px"
                         type="text"
                         data-no-uniform="true"
                         data-checkout="installments"
@@ -268,6 +274,7 @@
                     <select
                         id="id-docType"
                         class="form-control mp-form-control mp-pointer noUniform"
+                        style="height: 27px"
                         data-checkout="docType"
                     >
                     </select>
@@ -276,7 +283,7 @@
                 <!-- Input Doc Number -->
                 <div id="mp-doc-number-div" class="col-md-8 col-8 mp-pb-20 mp-m-col">
                     <label for="id-doc-number" class="mp-pb-5">{l s='Document number' mod='mercadopago'}</label>
-                    <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control" autocomplete="off" />
+                    <input id="id-doc-number" data-checkout="docNumber" type="text" class="form-control mp-form-control" style="height: 27px" autocomplete="off" />
                     <small class="mp-small mp-pt-5">{l s='Only numbers' mod='mercadopago'}</small>
 
                     <small id="mp-error-324" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
