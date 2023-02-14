@@ -32,12 +32,14 @@ require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
     public $mp_transaction;
+    public $mpuseful;
 
     public function __construct()
     {
         parent::__construct();
         $this->mercadopago = MPApi::getInstance();
         $this->mp_transaction = new MPTransaction();
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -111,7 +113,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $notification = new IpnNotification($transaction_id, $merchant_order);
         $notification = $notification->createStandardOrder($cart);
 
-        $order = Order::getIdByCartId($cart->id);
+        $order = $this->mpuseful->getOrderIdByCartId($cart->id);
         $order = new Order($order);
 
         return $order;

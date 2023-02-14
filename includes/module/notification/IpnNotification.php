@@ -34,6 +34,7 @@ class IpnNotification extends AbstractNotification
     public $merchant_order;
     public $preference;
     public $isWalletButton;
+    public $mpuseful;
 
     public function __construct($transaction_id, $merchant_order)
     {
@@ -44,6 +45,7 @@ class IpnNotification extends AbstractNotification
         $this->isWalletButton = $this->checkout === 'wallet_button';
         $this->preference = $this->getCheckoutPreference();
         $this->mp_transaction_amount = $merchant_order['total_amount'];
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -146,7 +148,7 @@ class IpnNotification extends AbstractNotification
      */
     public function getOrderId($cart)
     {
-        $orderId = Order::getIdByCartId($cart->id);
+        $orderId = $this->mpuseful->getOrderIdByCartId($cart->id);
         $this->order_id = $orderId;
 
         return $orderId;
