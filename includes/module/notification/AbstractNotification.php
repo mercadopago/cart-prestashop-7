@@ -137,7 +137,7 @@ class AbstractNotification
                 false
             );
 
-            $this->order_id = Order::getOrderByCartId($cart->id);
+            $this->order_id = $this->mpuseful->getOrderIdByCartId($cart->id);
             $order = new Order($this->order_id);
 
             $payments = $order->getOrderPaymentCollection();
