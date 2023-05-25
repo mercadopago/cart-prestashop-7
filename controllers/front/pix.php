@@ -32,9 +32,12 @@ require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.ph
 
 class MercadoPagoPixModuleFrontController extends ModuleFrontController
 {
+    public $mpuseful;
+
     public function __construct()
     {
         parent::__construct();
+        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -96,7 +99,7 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
         $preference->disableCartRule();
 
         $oldCart = new Cart($cart->id);
-        $order = Order::getOrderByCartId($oldCart->id);
+        $order = $this->mpuseful->getOrderIdByCartId($oldCart->id);
         $order = new Order($order);
 
         return $order;

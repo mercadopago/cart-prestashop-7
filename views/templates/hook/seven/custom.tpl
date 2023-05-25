@@ -97,20 +97,23 @@
                         {l s='Card number' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
+                    <div
                         id="id-card-number"
                         class="form-control mp-form-control"
-                        type="text"
-                        maxlength="24"
-                        autocomplete="off"
                         data-checkout="cardNumber"
-                        onkeyup="maskInput(this, mcc);"
-                    />
-                    <small id="mp-error-205" class="mp-erro-form" data-main="#id-card-number">
-                        {l s='Invalid card number' mod='mercadopago'}
+                    >
+                    </div>
+                    <small id="invalid_type_cardNumber_mp001" class="mp-erro-form" data-main="#id-card-number">
+                        {l s='Card number should be a number' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-E301" class="mp-erro-form mp-error-E301" data-main="#id-card-number">
-                        {l s='Invalid card number' mod='mercadopago'}
+                    <small id="invalid_length_cardNumber_mp002" class="mp-erro-form" data-main="#id-card-number">
+                        {l s='Card number should be of length between 8 and 19' mod='mercadopago'}
+                    </small>
+                    <small id="invalid_length_cardNumber_mp011" class="mp-erro-form" data-main="#id-card-number">
+                        {l s='Card number should be of length 15' mod='mercadopago'}
+                    </small>
+                    <small id="invalid_length_cardNumber_mp014" class="mp-erro-form" data-main="#id-card-number">
+                        {l s='Card number should be of length 16' mod='mercadopago'}
                     </small>
                 </div>
             </div>
@@ -129,11 +132,8 @@
                         autocomplete="off"
                         data-checkout="cardholderName"
                     />
-                    <small id="mp-error-221" class="mp-erro-form" data-main="#id-card-holder-name">
-                        {l s='Invalid card holder name' mod='mercadopago'}
-                    </small>
-                    <small id="mp-error-316" class="mp-erro-form" data-main="#id-card-holder-name">
-                        {l s='Invalid card holder name' mod='mercadopago'}
+                    <small id="mp-error-empty-cardholder-name" class="mp-erro-form" data-main="#id-card-holder-name">
+                        {l s='Invalid card holder full name' mod='mercadopago'}
                     </small>
                 </div>
             </div>
@@ -141,41 +141,34 @@
             <div class="form-group">
                 <!-- Input expiration date -->
                 <div class="col-md-6 col-6 mp-pb-20 mp-pl-0 mp-m-col">
-                    <label for="id-card-expiration" class="mp-pb-5">
+                    <label for="id-card-expiration-date" class="mp-pb-5">
                         {l s='Expiration date' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
-                        id="id-card-expiration"
+                    <div
+                        id="id-card-expiration-date"
                         class="form-control mp-form-control"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="MM/AAAA"
-                        maxlength="7"
                         data-checkout="cardExpiration"
-                        onkeyup="maskInput(this, mdate);"
-                    />
+                    >
+                    </div>
 
-                    <input id="id-card-expiration-month" type="hidden" />
-                    <input id="id-card-expiration-year" type="hidden" />
-
-                    <small id="mp-error-208" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_type_expirationDate_expirationMonth_mp003" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration month should be a number' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-209" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_length_expirationDate_expirationYear_mp004" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration year should be of length 2 or 4' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-325" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_type_expirationDate_expirationYear_mp005" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration year should be a number' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-326" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_value_expirationDate_expirationMonth_mp008" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration month should be a value from 1 to 12' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-E205" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_value_expirationDate_expirationYear_mp009" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration year value should be greater or equal than current year' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-301" class="mp-erro-form" data-main="#id-card-expiration">
-                        {l s='Invalid card expiration date' mod='mercadopago'}
+                    <small id="invalid_value_expirationDate_expirationMonth_mp012" class="mp-erro-form" data-main="#id-card-expiration-date">
+                        {l s='Expiration month or expiration year value is invalid' mod='mercadopago'}
                     </small>
                 </div>
 
@@ -185,25 +178,27 @@
                         {l s='Security code' mod='mercadopago'}
                         <em class="mp-required">*</em>
                     </label>
-                    <input
+                    <div
                         id="id-security-code"
                         class="form-control mp-form-control"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="{l s='CVV' mod='mercadopago'}"
-                        maxlength="4"
                         data-checkout="securityCode"
-                        onkeyup="maskInput(this, minteger);"
-                    />
+                    >
+                    </div>
+
                     <small class="mp-small mp-pt-5">
                         {l s='last 3 numbers on the back of your card' mod='mercadopago'}
                     </small>
-
-                    <small id="mp-error-224" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
-                        {l s='Invalid Security code' mod='mercadopago'}
+                    <small id="invalid_type_securityCode_mp006" class="mp-erro-form" data-main="#id-security-code">
+                        {l s='Security code should be a number' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-E302" class="mp-erro-form mp-pt-0" data-main="#id-security-code">
-                        {l s='Invalid Security code' mod='mercadopago'}
+                    <small id="invalid_length_securityCode_mp007" class="mp-erro-form" data-main="#id-security-code">
+                        {l s='Security code should be of length 3 or 4' mod='mercadopago'}
+                    </small>
+                    <small id="invalid_length_securityCode_mp010" class="mp-erro-form" data-main="#id-security-code">
+                        {l s='Security code should be of length 4' mod='mercadopago'}
+                    </small>
+                    <small id="invalid_length_securityCode_mp013" class="mp-erro-form" data-main="#id-security-code">
+                        {l s='Security code should be of length 3' mod='mercadopago'}
                     </small>
                 </div>
             </div>
@@ -243,7 +238,7 @@
                         data-checkout="installments"
                     >
                     </select>
-                    <small id="id-installments-status" class="mp-erro-form"></small>
+                    <small id="id-installments-status" class="mp-erro-form" data-main="#id-installments"></small>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -294,10 +289,7 @@
                     <small class="mp-small mp-pt-5">
                         {l s='Only numbers' mod='mercadopago'}
                     </small>
-                    <small id="mp-error-214" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
-                        {l s='Invalid document number' mod='mercadopago'}
-                    </small>
-                    <small id="mp-error-324" class="mp-erro-form mp-pt-0" data-main="#id-doc-number">
+                    <small id="mp-error-empty-doc-number" class="mp-erro-form" data-main="#id-doc-number">
                         {l s='Invalid document number' mod='mercadopago'}
                     </small>
                 </div>
