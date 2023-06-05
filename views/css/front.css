@@ -259,7 +259,11 @@ body#checkout section.checkout-step .payment-options label {
 
 .mp-form-control {
   padding: 0.5rem 0.5rem;
+  height: calc(2.5rem - 2px);
+  color: #7a7a7a;
+  font-weight: 500;
   background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .mp-form-control-error {

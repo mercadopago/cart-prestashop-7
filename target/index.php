@@ -1,3 +1,4 @@
+<?php
 /**
 * 2007-2023 PrestaShop
 *
@@ -25,4 +26,12 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
-var vObj,vFun;function maskInput(e,c){vObj=e,vFun=c,setTimeout(execmascara(),1)}function execmascara(){vObj.value=vFun(vObj.value)}function mdate(e){return e=(e=(e=e.replace(/\D/g,"")).replace(/(\d{2})(\d)/,"$1/$2")).replace(/(\d{2})(\d{2})$/,"$1$2")}function minteger(e){return e.replace(/\D/g,"")}function mcc(e){return e=(e=(e=(e=e.replace(/\D/g,"")).replace(/^(\d{4})(\d)/g,"$1 $2")).replace(/^(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3")).replace(/^(\d{4})\s(\d{4})\s(\d{4})(\d)/g,"$1 $2 $3 $4")}function mcpf(e){return e=(e=(e=(e=e.replace(/\D/g,"")).replace(/(\d{3})(\d)/,"$1.$2")).replace(/(\d{3})(\d)/,"$1.$2")).replace(/(\d{3})(\d{1,2})$/,"$1-$2")}function mcnpj(e){return e=(e=(e=(e=(e=e.replace(/\D/g,"")).replace(/^(\d{2})(\d)/,"$1.$2")).replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3")).replace(/\.(\d{3})(\d)/,".$1/$2")).replace(/(\d{4})(\d)/,"$1-$2")}
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+
+header('Location: ../');
+exit;
