@@ -27,6 +27,10 @@
 * to avoid any conflicts with others containers.
 */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once MP_ROOT_URL . '/includes/MPAbstractDB.php';
 
 class PSOrderState extends MPAbstractDB

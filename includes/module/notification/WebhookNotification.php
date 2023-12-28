@@ -27,12 +27,15 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
 
 class WebhookNotification extends AbstractNotification
 {
     public $payment;
-    public $mpuseful;
 
     public function __construct($transaction_id, $payment)
     {
@@ -41,7 +44,6 @@ class WebhookNotification extends AbstractNotification
         $this->payment = $payment;
         $this->checkout = $payment['metadata']['checkout_type'];
         $this->mp_transaction_amount = $payment['transaction_amount'];
-        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -55,7 +57,7 @@ class WebhookNotification extends AbstractNotification
         $this->verifyWebhook($cart);
 
         $this->total = $this->getTotal($cart, $this->checkout);
-        $orderId = $this->mpuseful->getOrderIdByCartId($cart->id);
+        $orderId = Order::getOrderByCartId($cart->id);
 
         if ($orderId != 0) {
             $this->verifyCustomPayment();

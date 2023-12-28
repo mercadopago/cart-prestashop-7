@@ -27,6 +27,10 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
 
@@ -37,7 +41,6 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         parent::__construct();
         $this->mercadopago = MPApi::getInstance();
     }
-
     /**
      * Default function of Prestashop for init the controller
      *

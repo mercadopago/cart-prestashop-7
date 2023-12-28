@@ -27,19 +27,21 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
     public $mp_transaction;
-    public $mpuseful;
 
     public function __construct()
     {
         parent::__construct();
         $this->mercadopago = MPApi::getInstance();
         $this->mp_transaction = new MPTransaction();
-        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -56,7 +58,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         if (isset($payment_ids) && $payment_ids != false && $payment_ids != 'null' && $typeReturn != 'failure') {
             $payment_id = explode(',', $payment_ids)[0];
             $this->redirectCheck($payment_id);
-
+            
             return;
         }
 
@@ -113,7 +115,7 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $notification = new IpnNotification($transaction_id, $merchant_order);
         $notification = $notification->createStandardOrder($cart);
 
-        $order = $this->mpuseful->getOrderIdByCartId($cart->id);
+        $order = Order::getOrderByCartId($cart->id);
         $order = new Order($order);
 
         return $order;

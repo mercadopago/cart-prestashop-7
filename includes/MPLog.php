@@ -27,6 +27,10 @@
 * to avoid any conflicts with others containers.
 */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MPLog
 {
     const LOG_SEVERITY_INFORMATIVE = 1;

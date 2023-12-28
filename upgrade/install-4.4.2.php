@@ -24,6 +24,10 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 function upgrade_module_4_4_2($module)
 {
     // Execute module update MySQL commands

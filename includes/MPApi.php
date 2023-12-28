@@ -27,6 +27,10 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MPApi
 {
     public function __construct()
@@ -111,11 +115,10 @@ class MPApi
      */
     public function getPaymentMethods()
     {
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/bifrost/payment-methods', [
-            "Authorization: Bearer " . $access_token,
-            "x-product-id: " . MPRestCli::PRODUCT_ID
-        ]);
+        $public_key = $this->getPublicKey();
+        $response = MPRestCli::get('/ppcore/prod/payment-methods/v1/payment-methods', ["Authorization: " . $public_key]);
+
+
 
         //in case of failures
         if ($response['status'] > 202) {
@@ -130,7 +133,7 @@ class MPApi
 
         $payments = array();
         foreach ($result as $value) {
-            //remove on paypay release
+            // remove on paypay release
             if ($value['id'] == 'paypal') {
                 continue;
             }
@@ -255,7 +258,7 @@ class MPApi
             "Authorization: Bearer " . $access_token
         ];
         $response = MPRestCli::post(
-            '/checkout/preferences',
+            '/ppcore/prod/transaction/v1/preferences',
             $preference,
             $headers
         );
@@ -286,7 +289,7 @@ class MPApi
             "Authorization: Bearer " . $access_token
         ];
         $response = MPRestCli::post(
-            '/v1/payments',
+            '/ppcore/prod/transaction/v1/payments',
             $preference,
             $headers
         );
