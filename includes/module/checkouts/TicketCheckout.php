@@ -27,6 +27,10 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class TicketCheckout
 {
     const ALLOW_PAYMENT_METHOD_TYPES = ['ticket', 'atm'];

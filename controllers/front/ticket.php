@@ -27,17 +27,18 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once MP_ROOT_URL . '/includes/module/preference/TicketPreference.php';
 require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
 
 class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 {
-    public $mpuseful;
-
     public function __construct()
     {
         parent::__construct();
-        $this->mpuseful = MPUseful::getInstance();
     }
 
     /**
@@ -71,7 +72,7 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 
                 //order confirmation redirect
                 $old_cart = new Cart($this->context->cart->id);
-                $order = $this->mpuseful->getOrderIdByCartId($old_cart->id);
+                $order = Order::getOrderByCartId($old_cart->id);
                 $order = new Order($order);
 
                 $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';

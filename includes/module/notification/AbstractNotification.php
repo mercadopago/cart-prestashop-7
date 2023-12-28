@@ -27,6 +27,10 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class AbstractNotification
 {
     public $total;
@@ -137,7 +141,7 @@ class AbstractNotification
                 false
             );
 
-            $this->order_id = $this->mpuseful->getOrderIdByCartId($cart->id);
+            $this->order_id = Order::getOrderByCartId($cart->id);
             $order = new Order($this->order_id);
 
             $payments = $order->getOrderPaymentCollection();

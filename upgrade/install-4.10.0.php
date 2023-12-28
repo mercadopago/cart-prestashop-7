@@ -24,6 +24,10 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 function upgrade_module_4_10_0()
 {
     Configuration::updateValue('MERCADOPAGO_CUSTOM_WALLET_BUTTON', true);

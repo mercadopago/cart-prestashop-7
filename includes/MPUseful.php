@@ -27,6 +27,10 @@
  * to avoid any conflicts with others containers.
  */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MPUseful
 {
     const SEPARATOR = '|';
@@ -342,22 +346,6 @@ class MPUseful
 
             default:
                 return 0.00;
-        }
-    }
-
-    /**
-     * Handles call to get order id in different Prestashop versions
-     *
-     * @param int $id_cart Cart id
-     *
-     * @return int $id_order
-     */
-    public function getOrderIdByCartId($cartId)
-    {
-        if (method_exists(Order::class, 'getIdByCartId')) {
-            return Order::getIdByCartId($cartId);
-        } else {
-            return Order::getOrderByCartId($cartId);
         }
     }
 }

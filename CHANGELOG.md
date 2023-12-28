@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.15.0] - 2023-26-12
+
+### Changed
+- Changes the endpoints that the plugin calls to create payment, preferences and obtaining payment-methods.
+- Changed endpoints: 
+    - `v1/payments` to `/ppcore/prod/transaction/v1/payments`
+    - `checkout/preferences` to `/ppcore/prod/transaction/v1/preferences`
+    - `v1/bifrost/payment-methods` to `/ppcore/prod/payment-methods/v1/payment-methods`
+    
+### Fixed
+- Updated copyright to 2023
+- Added validation to ensure that PHP files are executed in the PrestaShop context
+- Added .htaccess file in the root folder, to prevent someone from listing the files of the module, and direct execution of PHP file
+
 ## [4.14.0] - 2023-25-05
 
 ### Added

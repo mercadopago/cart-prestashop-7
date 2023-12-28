@@ -27,6 +27,10 @@
 * to avoid any conflicts with others containers.
 */
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class MPRestCli
 {
     const PRODUCT_ID = 'BC32CCRU643001OI39AG';
