@@ -172,11 +172,11 @@ $_MODULE['<{mercadopago}prestashop>configure_80a11d2a54a677f6fadd9c041c0d6b98'] 
 $_MODULE['<{mercadopago}prestashop>configure_024eb7a83d8dec5f53ef18d2cc24c42a'] = 'Digite os dados da sua empresa no módulo:';
 $_MODULE['<{mercadopago}prestashop>configure_cdd96fbd5af791ea36d0eab3b5c0cbcc'] = 'Você é um parceiro do Mercado Pago?';
 $_MODULE['<{mercadopago}prestashop>configure_fc54b11a6e493b53ee51223b2fe64136'] = 'Configure tarifas';
-$_MODULE['<{mercadopago}prestashop>configure_c788e817e851e24feee5b482bdc63519'] = 'Configure seu parcelamento e juros';
+$_MODULE['<{mercadopago}prestashop>configure_c788e817e851e24feee5b482bdc63519'] = 'Configure seu parcelamento e acréscimos';
 $_MODULE['<{mercadopago}prestashop>configure_1f289555a859f1f72e2106e5e22e6230'] = 'No Mercado Pago você pode escolher a tarifa que vai pagar em cada compra.';
-$_MODULE['<{mercadopago}prestashop>configure_b828a06ef824adc9e9436d044e1353cf'] = 'No Mercado Pago você pode escolher a tarifa que vai pagar em cada compra e também oferecer parcelas sem juros para seu cliente.';
+$_MODULE['<{mercadopago}prestashop>configure_b828a06ef824adc9e9436d044e1353cf'] = 'No Mercado Pago você pode escolher a tarifa que vai pagar em cada compra e também oferecer parcelas sem acréscimos para seu cliente.';
 $_MODULE['<{mercadopago}prestashop>configure_db61f0106282fdece56611495848f3c4'] = 'Configurar tarifas';
-$_MODULE['<{mercadopago}prestashop>configure_e9bab24bfb44527799e8a3550717e20a'] = 'Configurar parcelamento e juros';
+$_MODULE['<{mercadopago}prestashop>configure_e9bab24bfb44527799e8a3550717e20a'] = 'Configurar parcelamento e acréscimos';
 $_MODULE['<{mercadopago}prestashop>template_1_9ab558f4124ae3f7f96ddb62799c5ae0'] = 'Crie a melhor experiência de pagamento para seus clientes';
 $_MODULE['<{mercadopago}prestashop>template_1_2e2d4be43cfc9cf97f58cc59b19fe5a5'] = 'Siga estas etapas e leve sua conversão às nuvens:';
 $_MODULE['<{mercadopago}prestashop>template_1_3972296bf88ad8b9df45219704cbc499'] = 'Obtenha suas';
