@@ -1,6 +1,6 @@
 <?php
 /**
- * 2007-2023 PrestaShop.
+ * 2007-2024 PrestaShop.
  *
  * NOTICE OF LICENSE
  *
