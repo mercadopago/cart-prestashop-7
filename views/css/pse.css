@@ -1,0 +1,22 @@
+.mp-pse-checkout-container > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.mp-pse-checkout-subtitle {
+    margin-top: 20px;
+}
+
+.mp-pse-checkout-container label {
+    padding-bottom: 5px;
+}
+
+.mp-pse-checkout-required-field {
+    color: red;
+}
+
+.mp-pse-advanced-config-subtitle {
+    padding-top: 20px;
+}

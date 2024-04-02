@@ -66,8 +66,8 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
 
                 //order confirmation redirect
                 $old_cart = new Cart($this->context->cart->id);
-                $order = Order::getOrderByCartId($old_cart->id);
-                $order = new Order($order);
+                $orderId = Order::getIdByCartId($old_cart->id);
+                $order = new Order($orderId);
 
                 $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
                 $uri .= '&id_cart=' . $order->id_cart;

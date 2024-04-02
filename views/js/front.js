@@ -81,3 +81,23 @@ function mcnpj (v) {
   v = v.replace(/(\d{4})(\d)/, '$1-$2');
   return v;
 }
+
+function waitForElement(selector) {
+  return new Promise(resolve => {
+      if (document.querySelector(selector)) {
+          return resolve(document.querySelector(selector));
+      }
+
+      const observer = new MutationObserver(() => {
+          if (document.querySelector(selector)) {
+              observer.disconnect();
+              resolve(document.querySelector(selector));
+          }
+      });
+
+      observer.observe(document.body, {
+          childList: true,
+          subtree: true
+      });
+  });
+}

@@ -27,9 +27,12 @@
  * to avoid any conflicts with others containers.
  */
 
+ 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
+require_once MP_ROOT_URL . '/includes/module/settings/CoreSdkSettings.php';
 
 class MPApi
 {
@@ -168,6 +171,7 @@ class MPApi
             'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
             'financial_institutions' => isset($value['financial_institutions']) ? $value['financial_institutions'] : [],
             'payment_places' => isset($value['payment_places']) ? $value['payment_places'] : [],
+            'allowed_identification_types' => isset($value['allowed_identification_types']) ? $value['allowed_identification_types'] : [],
         );
     }
 
@@ -180,19 +184,17 @@ class MPApi
      */
     public function getPaymentStandard($transaction_id)
     {
-        $transaction_id = preg_replace('/[^\d]/', '', $transaction_id);
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/v1/payments/' . (int) $transaction_id, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_payment_standard error: ' . $response['response']['message'], 'error');
-            return false;
+        try {
+            $transaction_id = preg_replace('/[^\d]/', '', $transaction_id);
+            $sdk = CoreSdkSettings::getInstance();
+            $paymentModule = $sdk->getPaymentInstance();
+            return json_decode(json_encode($paymentModule->read(array(
+                "id" => $transaction_id
+            ))), true);
+        } catch (\Throwable $th) {
+            MPLog::generate('SDK get_payment_standard error: ' . $th->getMessage(), 'error');
+            return  false;
         }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
     }
 
     /**
@@ -204,19 +206,15 @@ class MPApi
      */
     public function getMerchantOrder($id)
     {
-        $id = preg_replace('/[^\d]/', '', $id);
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/merchant_orders/' . (int) $id, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_merchant_orders error: ' . $response['response']['message'], 'error');
+        try {
+            $id = preg_replace('/[^\d]/', '', $id);
+            $sdk = CoreSdkSettings::getInstance();
+            $merchantOrderModule = $sdk->getMerchantOrderInstance();
+            return json_decode(json_encode($merchantOrderModule->getMerchantOrder($id)), true);
+        } catch (\Throwable $th) {
+            MPLog::generate('SDK get_merchant_orders error: ' . $response['response']['message'], 'error');
             return false;
         }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
     }
 
     /**
@@ -228,19 +226,17 @@ class MPApi
      */
     public function getPreference($id)
     {
-        $id = preg_replace('/[^\w-]/', '', $id);
-        $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/checkout/preferences/' . $id, ["Authorization: Bearer " . $access_token]);
-
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_checkout_preferences error: ' . $response['response']['message'], 'error');
-            return false;
+        try {
+            $id = preg_replace('/[^\w-]/', '', $id);
+            $sdk = CoreSdkSettings::getInstance();
+            $preferenceModule = $sdk->getPreferenceInstance();
+            return json_decode(json_encode($preferenceModule->read(array(
+                "id" => $id
+            ))));
+        } catch (\Throwable $th) {
+            MPLog::generate('SDK get_checkout_preferences error: ' . $th->getMessage(), 'error');
+            return  false;
         }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
     }
 
     /**
@@ -250,28 +246,17 @@ class MPApi
      */
     public function createPreference($preference)
     {
-        $access_token = $this->getAccessToken();
-        $headers = [
-            "platform:desktop",
-            "type:prestashop",
-            "so:1.0.0",
-            "Authorization: Bearer " . $access_token
-        ];
-        $response = MPRestCli::post(
-            '/ppcore/prod/transaction/v1/preferences',
-            $preference,
-            $headers
-        );
+        try {
+            $sdk = CoreSdkSettings::getInstance();
+            $preferenceModule = $sdk->getPreferenceInstance();
 
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API create_preferences error: ' . $response['response']['message'], 'error');
-            return false;
+            $preferenceModule->setEntity($preference);
+
+            return $preferenceModule->save();
+        } catch (\Throwable $th) {
+            MPLog::generate('API create_preference error: ' . $th->getMessage(), 'error');
+            return  $th->getMessage();
         }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
     }
 
     /**
@@ -281,28 +266,17 @@ class MPApi
      */
     public function createPayment($preference)
     {
-        $access_token = $this->getAccessToken();
-        $headers = [
-            "platform:desktop",
-            "type:prestashop",
-            "so:1.0.0",
-            "Authorization: Bearer " . $access_token
-        ];
-        $response = MPRestCli::post(
-            '/ppcore/prod/transaction/v1/payments',
-            $preference,
-            $headers
-        );
+        try {
+            $sdk = CoreSdkSettings::getInstance();
+            $paymentModule = $sdk->getPaymentInstance();
 
-        //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API create_custom_payment error: ' . $response['response']['message'], 'error');
-            return $response['response']['message'];
+            $paymentModule->setEntity($preference);
+    
+            return $paymentModule->save();
+        } catch (\Throwable $th) {
+            MPLog::generate('API create_custom_payment error: ' . $th->getMessage(), 'error');
+            return  $th->getMessage();
         }
-
-        //response treatment
-        $result = $response['response'];
-        return $result;
     }
 
     /**

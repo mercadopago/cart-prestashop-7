@@ -31,6 +31,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+require_once MP_ROOT_URL . '/includes/module/checkouts/PseCheckout.php';
+
 abstract class AbstractPreference
 {
     public $module;
@@ -614,6 +616,10 @@ abstract class AbstractPreference
         $this->settings['MERCADOPAGO_PIX_CHECKOUT'] = Configuration::get('MERCADOPAGO_PIX_CHECKOUT');
         $this->settings['MERCADOPAGO_PIX_DISCOUNT'] = Configuration::get('MERCADOPAGO_PIX_DISCOUNT');
         $this->settings['MERCADOPAGO_PIX_EXPIRATION'] = Configuration::get('MERCADOPAGO_PIX_EXPIRATION');
+
+        //pse checkout
+        $this->settings[PseCheckout::PSE_CHECKOUT_NAME] = Configuration::get(PseCheckout::PSE_CHECKOUT_NAME);
+        $this->settings[PseCheckout::PSE_CHECKOUT_DISCOUNT_NAME] = Configuration::get(PseCheckout::PSE_CHECKOUT_DISCOUNT_NAME);
 
         return $this->settings;
     }

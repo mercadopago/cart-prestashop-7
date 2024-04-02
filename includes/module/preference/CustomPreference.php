@@ -76,10 +76,9 @@ class CustomPreference extends AbstractPreference
 
         //Generate preference
         $this->generateLogs($preference, 'custom');
-        $preferenceEncoded = json_encode($preference);
-
+            
         //Create preference
-        $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
+        $createPreference = $this->mercadopago->createPayment($preference);
         MPLog::generate('Cart id ' . $cart->id . ' - Custom Preference created successfully');
 
         return $createPreference;

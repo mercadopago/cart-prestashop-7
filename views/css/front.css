@@ -486,6 +486,17 @@ body#checkout section.checkout-step .payment-options label {
   height: 100%;
 }
 
+.mp-credit-card-box-text {
+  font-size: 16px;
+  line-height: 29px;
+}
+
+.mp-credit-card-box-text-bold {
+  font-size: 16px;
+  line-height: 29px;
+  font-weight: bold;
+}
+
 .mp-erro-febraban,
 .mp-erro-efetivo-mlu {
   font-family: sans-serif !important;

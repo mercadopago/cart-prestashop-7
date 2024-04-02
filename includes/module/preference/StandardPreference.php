@@ -52,9 +52,8 @@ class StandardPreference extends AbstractStandardPreference
         $payload = $this->buildPreferencePayload($cart);
 
         $this->generateLogs($payload, $cart);
-        $payloadToJson = json_encode($payload);
 
-        $createPreference = $this->mercadopago->createPreference($payloadToJson);
+        $createPreference = $this->mercadopago->createPreference($payload);
         MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
 
         return $createPreference;

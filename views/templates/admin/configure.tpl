@@ -201,6 +201,9 @@
 
         // ----- pix configuration form ------ //
         {include file='./checkouts/pix_configuration.tpl'}
+
+        // ----- pse configuration form ------ //
+        {include file='./checkouts/pse_configuration.tpl'}
     }
 
     //Online payments

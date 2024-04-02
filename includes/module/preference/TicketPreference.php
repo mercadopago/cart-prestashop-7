@@ -110,10 +110,9 @@ class TicketPreference extends AbstractPreference
 
         //Generate preference
         $this->generateLogs($preference, 'ticket');
-        $preferenceEncoded = json_encode($preference);
 
         //Create preference
-        $createPreference = $this->mercadopago->createPayment($preferenceEncoded);
+        $createPreference = $this->mercadopago->createPayment($preference);
         MPLog::generate('Cart id ' . $cart->id . ' - Ticket Preference created successfully');
 
         return $createPreference;
