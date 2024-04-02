@@ -133,7 +133,7 @@ class IpnNotification extends AbstractNotification
         $preference = $this->mercadopago->getPreference($this->merchant_order['preference_id']);
 
         $checkout = 'pro';
-        $checkoutType = isset($preference['metadata']['checkout_type']) ? $preference['metadata']['checkout_type'] : false;
+        $checkoutType = isset($preference->metadata->checkout_type) ? $preference->metadata->checkout_type : false;
 
         if ($checkoutType && $checkoutType === 'wallet_button') {
             $checkout = 'wallet_button';
@@ -150,7 +150,7 @@ class IpnNotification extends AbstractNotification
      */
     public function getOrderId($cart)
     {
-        $orderId = Order::getOrderByCartId($cart->id);
+        $orderId = Order::getIdByCartId($cart->id);
         $this->order_id = $orderId;
 
         return $orderId;

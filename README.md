@@ -4,9 +4,9 @@
   </a>
 </p>
 
-# Prestashop 1.6.x & 1.7.x - Mercado Pago Module (v4.16.0)
+# Prestashop 1.7.x & 8.1.x - Mercado Pago Module (v4.17.0)
 
-With the official module of Mercado Pago you will have an integration, hundreds of solutions and thousands of sales. Maximize your conversions and make your customers return to your store by increasing their confidence in the shopping experience.
+With the official module of Mercado Pago you will have an integration, hundreds of solutions and thousands of sales. Maximize your conversions and make your customers return to your store by increasing their confidence in the shopping experience
 
 ## :warning: Attention / Atención / Atenção
 

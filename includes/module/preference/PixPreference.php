@@ -57,9 +57,8 @@ class PixPreference extends AbstractPreference
         $payload['transaction_amount'] = $this->getAmount();
 
         $this->generateLogs($payload, 'pix');
-        $payloadToJson = json_encode($payload);
 
-        $createPreference = $this->mercadopago->createPayment($payloadToJson);
+        $createPreference = $this->mercadopago->createPayment($payload);
         MPLog::generate('Cart ID ' . $this->cart->id . ' - Pix Preference created successfully');
 
         return $createPreference;
@@ -120,6 +119,9 @@ class PixPreference extends AbstractPreference
             'payer' => $this->getCustomerData(),
             'metadata' => $this->getInternalMetadata($this->cart),
             'additional_info' => $this->getAdditionalInfo(),
+            'point_of_interaction' => [
+                'type' => 'CHECKOUT',
+            ]
         ];
 
         return array_merge($payloadParent, $payloadAdditional);

@@ -71,7 +71,7 @@
                         <div class="col-xs-6 col-md-6 col-6">
                             <div class="mp-pix-container mp-pix-box mp-pix-container-column">
                                 <span class="mp-pix-box-title">{l s='Amount' mod='mercadopago'}</span>
-                                <span class="mp-pix-box-subtitle mp-pt-5">{Tools::displayPrice($payment['transaction_details']['total_paid_amount']|escape:'htmlall':'UTF-8')}</span>
+                                <span class="mp-pix-box-subtitle mp-pt-5">{$total_paid_amount|escape:'htmlall':'UTF-8'}</span>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6 col-6">
@@ -206,4 +206,27 @@
             document.execCommand('copy');
         });
     </script>
+{/if}
+{if isset($payment['metadata']['checkout_type']) && $payment['metadata']['checkout_type'] == 'credit_card' && $cost_of_installments > 0}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mp-credit-card-return">
+
+                <h3 class="credit-card-return-title">{l s='PAYMENT DETAILS:' mod='mercadopago'}</h2>
+
+                <div class="row mp-credit-card-frame">
+                    <div class="col-md-12 mp-hg-100">
+                        <span class="mp-credit-card-box-text">{l s='Cost of installments:' mod='mercadopago'}</span>
+                        <span class="mp-credit-card-box-text-bold">{$cost_of_installments_formated|escape:'htmlall':'UTF-8'}</span>
+                    </div>
+                    <div class="col-md-12 mp-hg-100">
+                        <span class="mp-credit-card-box-text">{l s='Total with installments:' mod='mercadopago'}</span>
+                        <span class="mp-credit-card-box-text-bold">{$total_paid_amount|escape:'htmlall':'UTF-8'}</span>
+                        <span class="mp-credit-card-box-text">{l s='(%s installments of %s)' sprintf=[$payment['installments'], {$installment_amount|escape:'htmlall':'UTF-8'}] mod='mercadopago'}</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {/if}

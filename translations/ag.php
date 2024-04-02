@@ -76,6 +76,10 @@ $_MODULE['<{mercadopago}prestashop>payment_return_ccedf5e35e22d944bc79a37853bed5
 $_MODULE['<{mercadopago}prestashop>payment_return_0c8d796851f81c120a0b2399065c45ee'] = 'O pagá usando el código QR';
 $_MODULE['<{mercadopago}prestashop>payment_return_8a65009c23d57db0bf421df9b3b0b3c1'] = 'Ingresá tu banco o app de pagos y elegí pagar con Pix con código QR. Después, escaneá el siguiente código:';
 $_MODULE['<{mercadopago}prestashop>payment_return_139df29331cbecb963285f57edb447be'] = 'Pix tiene límite diario de transferencias. Consulta a tu banco para más información.';
+$_MODULE['<{mercadopago}prestashop>payment_return_23832a8aff5179873681c27abe8d9627'] = 'DETALLES DEL PAGO:';
+$_MODULE['<{mercadopago}prestashop>payment_return_8e80ad06d379865a1d48ddac6b11ac43'] = 'Coste de las cuotas:';
+$_MODULE['<{mercadopago}prestashop>payment_return_3759398c2f035600df9b8775704f2caf'] = 'Total con cuotas:';
+$_MODULE['<{mercadopago}prestashop>payment_return_44f8e735d2811a666f000f6afbbcc176'] = '(%s cuotas de %s)';
 $_MODULE['<{mercadopago}prestashop>order_confirmation_78c678f5cd66862b22483c66d4a1957a'] = 'Paga %s vía Pix para garantizar la compra.';
 $_MODULE['<{mercadopago}prestashop>order_confirmation_7380891db8bece452e94dddd099cf2ad'] = 'Consultar código Pix.';
 $_MODULE['<{mercadopago}prestashop>custom_8705ccdee4a8a284b7b302dd3472d25b'] = 'Usa tus tarjetas guardadas';

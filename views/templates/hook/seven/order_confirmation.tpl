@@ -27,7 +27,7 @@
         <div class="col-xs-12 col-md-12 col-12 mp-px-0 mp-m-col">
             <div class="mp-pt-5">
                 <label class="mp-pix-text-label">
-                    <strong> {l s='Pay %s via Pix to guarantee your purchase.' sprintf=[{Tools::displayPrice($total_paid_amount|escape:'htmlall':'UTF-8')}] mod='mercadopago'} </strong>
+                    <strong> {l s='Pay %s via Pix to guarantee your purchase.' sprintf=[{$total_paid_amount|escape:'htmlall':'UTF-8'}] mod='mercadopago'} </strong>
                     <a class="mp-link-checkout-custom" href="#pix-order">
                         <strong> {l s='Check Pix code.' mod='mercadopago'} </strong>
                     </a>
