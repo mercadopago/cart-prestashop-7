@@ -14,7 +14,7 @@ if [ ! -d "$TMP_DIR" ]; then
 fi
 
 cd $BASE_DIR
-cp -r !(*.md|composer.*|package*.json|mercadopago.zip|vendor|node_modules|phpcs.xml|scripts.js|bin) $TMP_DIR && cp -r .htaccess $TMP_DIR
+cp -r !(*.md|composer.*|package*.json|mercadopago.zip|node_modules|phpcs.xml|scripts.js|bin) $TMP_DIR && cp -r .htaccess $TMP_DIR
 
 if [ $? -ne 0 ]; then
 	echo "Error copying files"
