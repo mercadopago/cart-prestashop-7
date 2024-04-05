@@ -3,10 +3,12 @@
     "prepend-autoloader": false
   },
   "require": {
+    "mp-plugins/php-sdk": "2.7.0"
+  },
+  "require-dev": {
     "squizlabs/php_codesniffer": "3.5.6",
     "friendsofphp/php-cs-fixer": "2.16.4",
-    "guzzlehttp/guzzle": "^7.4",
-    "mp-plugins/php-sdk": "2.7.0"
+    "guzzlehttp/guzzle": "^7.4"
   },
   "scripts": {
     "phpcs": [

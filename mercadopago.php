@@ -24,12 +24,14 @@
  *  International Registered Trademark & Property of MercadoPago
  */
 
-define('MP_VERSION', '4.17.0');
+define('MP_VERSION', '4.17.1');
 define('MP_ROOT_URL', dirname(__FILE__));
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
+
+require_once MP_ROOT_URL . '/vendor/autoload.php';
 
 class Mercadopago extends PaymentModule
 {
@@ -74,7 +76,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         //Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.17.0';
+        $this->version = '4.17.1';
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
         parent::__construct();
