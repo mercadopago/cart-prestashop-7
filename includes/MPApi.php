@@ -188,9 +188,9 @@ class MPApi
             $transaction_id = preg_replace('/[^\d]/', '', $transaction_id);
             $sdk = CoreSdkSettings::getInstance();
             $paymentModule = $sdk->getPaymentInstance();
-            return json_decode(json_encode($paymentModule->read(array(
+            return $paymentModule->read(array(
                 "id" => $transaction_id
-            ))), true);
+            ), [], false);
         } catch (\Throwable $th) {
             MPLog::generate('SDK get_payment_standard error: ' . $th->getMessage(), 'error');
             return  false;
