@@ -1,5 +1,5 @@
 {*
-* 2007-2024 PrestaShop
+* 2007-2025 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,14 +18,14 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2024 PrestaShop SA
+* @copyright 2007-2025 PrestaShop SA
 * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
 
 <form id="mp_pse_checkout" class="mp-checkout-form mp-pse-checkout-container" method="post" action="{$redirect|escape:'htmlall':'UTF-8'}">
     <h3 class="mp-pse-checkout-subtitle mp-frame-title">{l s='Select where you want to pay' mod='mercadopago'}</h3>
-    
+
     <div class="form-group">
         <div class="form-group">
             <label for="mp_pse_person_type">{l s='Person Type' mod='mercadopago'}<b class="mp-pse-checkout-required-field">*</b></label>
@@ -39,7 +39,7 @@
                 {l s='Select a person type' mod='mercadopago'}
             </small>
         </div>
-        
+
         <div class="form-group">
             <label for="mp_pse_document_type">{l s='Holder document' mod='mercadopago'}<b class="mp-pse-checkout-required-field">*</b></label>
             <select id="mp_pse_document_type" name="mercadopago_pse[documentType]" class="form-control mp-form-control mp-select mp-pointer">
