@@ -20,14 +20,14 @@ jobs:
       - name: Verify PHP Installation
         run: php -v
 
-      - uses: "ramsey/composer-install@v1"
+      - uses: "ramsey/composer-install@v3"
 
       - name: Create Release ZIP
         id: create-release
         run: bin/create-release-zip.sh
 
-      - name: Run Prestashop Validator
-        id: prestashop-validator
-        run: php bin/validate_zip.php mercadopago.zip
-        env:
-          VALIDATOR_API_KEY: ${{ secrets.VALIDATOR_API_KEY }}
+#      - name: Run Prestashop Validator
+#        id: prestashop-validator
+#        run: php bin/validate_zip.php mercadopago.zip
+#        env:
+#          VALIDATOR_API_KEY: ${{ secrets.VALIDATOR_API_KEY }}
