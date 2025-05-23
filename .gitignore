@@ -1,0 +1,12 @@
+/nbproject/private/
+/node_modules/
+/vendor/
+
+.DS_Store
+.idea
+.vscode
+
+*.cache
+*.xml
+
+mercadopago.zip

@@ -86,50 +86,61 @@ class StandardCheckout
     public function getStandard($cart)
     {
         $count = 0;
-        $tarjetas = array();
-        $paymentMethods = $this->payment->mercadopago->getPaymentMethods();
+        $debit = array();
+        $credit = array();
+        $ticket = array();
+        $tarjetas = $this->payment->mercadopago->getPaymentMethods();
 
-        $uniqueIds = [];
-        $filteredPaymentsMethods = [];
-
-        foreach ($paymentMethods as $item) {
-            if (!in_array($item['id'], $uniqueIds)) {
-                $uniqueIds[] = $item['id'];
-                $item['sort'] = (int)$item['sort'];
-                $filteredPaymentsMethods[] = $item;
-            }
-        }
-
-        usort($filteredPaymentsMethods, function($a, $b) {
-            return $a['sort'] <=> $b['sort'];
-        });
-
-        foreach ($filteredPaymentsMethods as $paymentMethod) {
-            if ($count >= 7) {
-                break;
-            }
-            
-            if (Configuration::get($paymentMethod['config']) != "" && (int)$paymentMethod['sort'] !== 999) {
-                $tarjetas[] = $paymentMethod;
+        foreach ($tarjetas as $tarjeta) {
+            if (Configuration::get($tarjeta['config']) != "") {
                 $count++;
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_CREDIT_CARD) {
+                    $credit[] = $tarjeta;
+                }
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_DEBIT_CARD) {
+                    $debit[] = $tarjeta;
+                }
+                if ($this->paymentMethodsCheck($tarjeta) === self::METHOD_TICKET) {
+                    $ticket[] = $tarjeta;
+                }
             }
         }
-        
+
         $site_id = Configuration::get('MERCADOPAGO_SITE_ID');
         $modal = Configuration::get('MERCADOPAGO_STANDARD_MODAL');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'standard');
 
         $informations = array(
-            "tarjetas" => $tarjetas,
             "count" => $count,
+            "debit" => $debit,
+            "credit" => $credit,
+            "ticket" => $ticket,
             "modal" => $modal,
             "redirect" => $redirect,
-            "site_id" => $site_id,
             "public_key" => $this->payment->mercadopago->getPublicKey(),
+            "installments" => Configuration::get('MERCADOPAGO_INSTALLMENTS'),
             "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
-            'standardIcons' => $this->mpuseful->getIconsDetails($site_id)
         );
-        
         return $informations;
+    }
+
+    /**
+     * Payment Methods check
+     *
+     * @param mixed $tarjeta
+     * @return int
+     */
+    private function paymentMethodsCheck($tarjeta)
+    {
+        if (Tools::strtolower($tarjeta['id']) != 'meliplace' && $tarjeta['type'] != 'account_money') {
+            if ($tarjeta['type'] == 'credit_card') {
+                return self::METHOD_CREDIT_CARD;
+            }
+            if ($tarjeta['type'] == 'debit_card' || $tarjeta['type'] == 'prepaid_card') {
+                return self::METHOD_DEBIT_CARD;
+            } else {
+                return self::METHOD_TICKET;
+            }
+        }
     }
 }
