@@ -28,6 +28,10 @@
   margin: 0;
 }
 
+.mp-pix-copy-code {
+  background-color: #3483FA !important;
+}
+
 /* confirmation page */
 
 .mp-pix-confirmation {

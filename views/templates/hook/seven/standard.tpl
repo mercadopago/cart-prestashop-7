@@ -25,56 +25,49 @@
 
     <form id="mp_standard_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'html':'UTF-8'}">
         <div class="row mp-frame-checkout-seven">
-            {if count($credit) != 0}
-                <div class="col-xs-12 col-md-12 col-12">
-                    <div class="frame-tarjetas">
-                        <p class="mp-subtitle-standard-checkout">
-                            {l s='Credit card' mod='mercadopago'}
-                            <span class="mp-badge-checkout">
-                                {l s='Up to' mod='mercadopago'} {$installments|escape:'html':'UTF-8'} {l s='installments' mod='mercadopago'}
-                            </span>
-                        </p>
-
-                        <div class="mp-payment-methods-container">
-                            {foreach $credit as $tarjeta}
-                                <div class="mp-payment-method-logo-container">
-                                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
-                                </div>
-                            {/foreach}
-                        </div>
+            {if !empty($standardIcons)}
+                {assign var='icon1' value=$standardIcons[0]->link}
+                {assign var='icon2' value=$standardIcons[1]->link}
+            {/if}
+            <div class="col-xs-12 col-md-12 col-12">
+                <p class="mp-title-standard-checkout">
+                    {l s='Discover how practical Mercado Pago is' mod='mercadopago'}
+                </p>
+                <div class="mp-container-standard-checkout">
+                    <p class="mp-text-standard-checkout">
+                        <img src="{$icon1|escape:'html':'UTF-8'}" class="mp-img-standard-checkout" />
+                        <span>{l s='Pay with your saved cards' mod='mercadopago'}</span> {l s='or account money without filling out personal details.' mod='mercadopago'}
+                    </p>
+                    <p class="mp-text-standard-checkout">
+                        <img src="{$icon2|escape:'html':'UTF-8'}" class="mp-img-standard-checkout" />
+                        <span>{l s='Buy safely' mod='mercadopago'}</span> {l s='with your preferred payment method.' mod='mercadopago'}
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-lg-12 col-md-12 col-12">
+                <div class="frame-tarjetas">
+                    <div class="mp-payment-methods-container">
+                        {foreach $tarjetas as $tarjeta}
+                            <div class="mp-payment-method-logo-container">
+                                <img src="{$tarjeta.image|default:$tarjeta.thumbnail|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
+                            </div>
+                        {/foreach}
                     </div>
                 </div>
-            {/if}
-
-            {if count($debit) != 0}
-                <div class="col-xs-12 col-lg-6 col-md-6 col-12">
-                    <div class="frame-tarjetas">
-                        <p class="mp-subtitle-standard-checkout">{l s='Debit card' mod='mercadopago'}</p>
-                        <div class="mp-payment-methods-container">
-                            {foreach $debit as $tarjeta}
-                                <div class="mp-payment-method-logo-container">
-                                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
-                                </div>
-                            {/foreach}
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="col-xs-12 col-lg-12 col-md-12 col-12">
+                <div class="mp-payment-methods-message-container">
+                    <p class="mp-payment-methods-message">
+                        <img src="https://http2.mlstatic.com/storage/cpp/static-files/8afdd939-4197-4030-bf24-90a391cc1dd8.png" class="mp-img-standard-checkout-bw" />
+                        <span>{l s='We`ll take you to Mercado Pago' mod='mercadopago'}</span>
+                    </p>
+                    <p class="mp-payment-methods-message">
+                        {l s='If you don`t have an account, you can use your email.' mod='mercadopago'}
+                    </p>              
                 </div>
-            {/if}
-
-            {if count($ticket) != 0}
-                <div class="col-xs-12 col-lg-6 col-md-6 col-12">
-                    <div class="frame-tarjetas">
-                        <p class="mp-subtitle-standard-checkout">{l s='Wire transfer' mod='mercadopago'}</p>
-                        <div class="mp-payment-methods-container">
-                            {foreach $ticket as $tarjeta}
-                                <div class="mp-payment-method-logo-container">
-                                    <img src="{$tarjeta['image']|escape:'html':'UTF-8'}" class="mp-payment-method-logo-image" />
-                                </div>
-                            {/foreach}
-                        </div>
-                    </div>
-                </div>
-            {/if}
+            </div>
 
             {if $modal != true}
                 <div class="col-md-12 mp-pt-20">

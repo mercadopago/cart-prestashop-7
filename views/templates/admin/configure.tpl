@@ -31,23 +31,6 @@
     </div>
 {/if}
 
-<div class="mp-wallet-button-notice mp-mb-15">
-    <div class="mp-left-wallet-button">
-        <div>
-            <img src="{$module_dir|escape:'html':'UTF-8'}views/img/mp_saved_cards.png" alt="Saved Cards"/>
-        </div>
-        <div class="mp-wallet-button-notice-text">
-            <p class='mp-wallet-button-notice-title'>
-                {l s='Mercado Pago clients can now pay with saved cards' mod='mercadopago'}
-            </p>
-            <p class='mp-wallet-button-notice-subtitle'>
-                <i>{l s='Payment with saved card or Balance in Mercado Pago features are enabled.' mod='mercadopago'}</i> {l s=' You can manage this option in the settings.' mod='mercadopago'}
-            </p>
-        </div>
-    </div>
-    <button type="button" class="btn btn-primary" onclick="getCheckoutAnchor('tab-custom', 'a_template_1','custom_checkout')" >{l s='Go to settings' mod='mercadopago'}</button>
-</div>
-
 {if (version_compare(_PS_VERSION_, '1.7', '<'))}
     <div class="mp-card-info">
 	    <div class="mp-card-color-alert"></div>
@@ -268,17 +251,5 @@
                     <a  href='{$psjLink|escape:'javascript':'UTF-8'}' class='btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300' target='_blank'>" + textButton + "</a>\
                 </div>\
             </div>";
-    }
-
-    //Banner button
-    function getCheckoutAnchor(tab, template, checkout) {
-        var containerTab = document.getElementById(tab);
-        var templateTab = document.getElementById(template);
-        templateTab.click();
-
-        if (containerTab) {
-            containerTab.click();
-            document.getElementById(checkout).scrollIntoView();
-        }
     }
 </script>

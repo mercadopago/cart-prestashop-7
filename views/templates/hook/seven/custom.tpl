@@ -30,17 +30,16 @@
             <div class='col-xs-12 col-md-12 col-12'>
                 <div class='mp-wallet-button-container'>
                     <div class='mp-wallet-button-title'>
-                        <img src='{$module_dir|escape:"html":"UTF-8"}views/img/mp_logo.png'>
-                        <span>{l s='Use your saved cards' mod='mercadopago'}</span>
+                        <p>{l s='Pay with your saved cards' mod='mercadopago'}</p>
                     </div>
 
                     <div class='mp-wallet-button-description'>
-                        {l s='Those who already use Mercado Livre or Mercado Pago can pay without entering any details.' mod='mercadopago'}
+                        <p>{l s='Access Mercado Pago and pay faster without filling out forms.' mod='mercadopago'}</p>
                     </div>
 
                     <div class='mp-wallet-button-button'>
                         <button type='button' id='mp-wallet-button-btn'>
-                            {l s='Pay with saved card' mod='mercadopago'}
+                            <img src="https://http2.mlstatic.com/storage/cpp/static-files/c8931485-44eb-4841-b372-690f92a496a2.png">
                         </button>
                     </div>
                 </div>
