@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.18.1] - 2025-05-20
+### Changed
+- Updating the logo to comply with Mercado Pago's new brand guidelines
+
+## [4.18.0] - 2025-05-19
+### Changed
+- Rebranding of the Mercado Pago Brand on the Checkout Page and in the Admin Panel
+
 ## [4.17.3] - 2025-02-03
 ### Fixed
 - Fixed order status update due to error in value rounding
