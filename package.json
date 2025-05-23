@@ -1,0 +1,32 @@
+{
+  "main": "scripts.js",
+  "version": "4.17.3",
+  "description": "Gateway de pagamento Mercado Pago para PrestaShop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mercadopago/cart-prestashop-7"
+  },
+  "engines": {
+    "node": ">=14.17.3",
+    "npm": ">=6.14.13"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "php": "npm run php:lint && npm run php:fix",
+    "php:lint": "composer phpcs",
+    "php:fix": "composer phpcbf",
+    "build:js": "node -e 'require(\"./scripts.js\").minifyFiles(\"js\")'",
+    "build:css": "node -e 'require(\"./scripts.js\").minifyFiles(\"css\")'",
+    "lint:js": "jshint ./views/js --exclude **/*.min.js",
+    "lint:css": "stylelint **/*.css --fix",
+    "add-minify": "git add *.min.js && git add *.min.css",
+    "commit:pre": "npm run lint:js && npm run lint:css && npm run php:lint && npm run build:js && npm run build:css && npm run add-minify"
+  },
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "jshint": "^2.13.4",
+    "minify": "^7.0.2",
+    "stylelint": "^13.13.1",
+    "stylelint-config-standard": "^22.0.0"
+  }
+}
