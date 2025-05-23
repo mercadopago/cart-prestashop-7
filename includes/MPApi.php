@@ -121,18 +121,21 @@ class MPApi
         $public_key = $this->getPublicKey();
         $response = MPRestCli::get('/ppcore/prod/payment-methods/v1/payment-methods', ["Authorization: " . $public_key]);
 
-
-
         //in case of failures
-        if ($response['status'] > 202) {
-            MPLog::generate('API get_payment_methods error: ' . $response['response']['message'], 'error');
+        if (is_array($response) && isset($response['status'])) {
+            if ($response['status'] > 202) {
+                $message = isset($response['response']['message']) ? $response['response']['message'] : 'Mensagem não disponível';
+                MPLog::generate('API get_payment_methods error: ' . $message, 'error');
+                return false;
+            }
+        } else {
+            MPLog::generate('API get_payment_methods error: Resposta inválida da API', 'error');
             return false;
         }
 
         //response treatment
         $result = $response['response'];
         asort($result);
-
 
         $payments = array();
         foreach ($result as $value) {
@@ -169,6 +172,7 @@ class MPApi
             'type' => $value['payment_type_id'],
             'image' => $value['secure_thumbnail'],
             'config' => 'MERCADOPAGO_PAYMENT_' . Tools::strtoupper($value['id']),
+            'sort' => isset($value['sort']) ? $value['sort'] : '999',
             'financial_institutions' => isset($value['financial_institutions']) ? $value['financial_institutions'] : [],
             'payment_places' => isset($value['payment_places']) ? $value['payment_places'] : [],
             'allowed_identification_types' => isset($value['allowed_identification_types']) ? $value['allowed_identification_types'] : [],

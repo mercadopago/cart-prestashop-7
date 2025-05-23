@@ -87,7 +87,7 @@
                             <div class="col-xs-12 col-md-12 col-12">
                                 <span class="mp-pix-text-subtitle">{l s='Scan this QR code to pay' mod='mercadopago'}</span>
                                 <div class="mp-pix-tooltip">
-                                    <img class="mp-badge-info" src="{$module_dir|escape:'html':'UTF-8'}views/img/icons/badge_info_blue.png"/>
+                                    <img class="mp-badge-info" src="https://http2.mlstatic.com/storage/cpp/static-files/d654eed2-384d-4cf9-9239-0089808c97a1.png"/>
                                     <span class="mp-pix-tooltip-text">{l s='Before you confirming your purchase, you will see the amount to pay and the seller\'s information.' mod='mercadopago'}</span>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                                 <input id="mp-pix-input-code" type="text" class="form-control mp-form-control" value="{$payment['point_of_interaction']['transaction_data']['qr_code']|escape:'html':'UTF-8'}">
                             </div>
                             <div class="col-md-4 col-xs-4 col-4">
-                                <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
+                                <button id="mp-pix-copy-code" class="mp-pix-copy-code btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
 
                         <div class="row mp-pt-25">
                             <div class="col-xs-12 col-md-12 col-12">
-                                <button id="mp-pix-copy-code" class="btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
+                                <button id="mp-pix-copy-code" class="mp-pix-copy-code btn btn-primary">{l s='Copy code' mod='mercadopago'}</button>
                             </div>
                         </div>
 

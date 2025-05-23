@@ -348,4 +348,46 @@ class MPUseful
                 return 0.00;
         }
     }
+
+    /**
+     * List the icon by site_id
+     *
+     * @param string $country
+     * @return array
+     */
+    public function getIconsDetails($country)
+    {
+        $iconDetails = [
+            'shield' => 'https://http2.mlstatic.com/storage/cpp/static-files/65ff41dd-41fd-4a16-8c80-eaf1ee6a247b.png',
+            'wallet' => 'https://http2.mlstatic.com/storage/cpp/static-files/11291e4a-d090-4904-b439-80afa83d473c.png',
+            'dollar_sign' => 'https://http2.mlstatic.com/storage/cpp/static-files/93224a93-ad4e-4b93-84cf-5e1e74df7d7c.png',
+        ];
+        
+        $iconMap = [
+            'MLB' => ['shield', 'dollar_sign'],
+            'MCO' => ['wallet', 'dollar_sign'],
+            'MLA' => ['wallet', 'dollar_sign'],
+            'MLC' => ['wallet', 'shield'],
+            'MLM' => ['shield', 'dollar_sign'],
+            'MLU' => ['wallet', 'shield'],
+            'MLV' => ['wallet', 'shield'],
+            'MPE' => ['wallet', 'shield'],
+        ];
+        
+        $defaultIcons = ['wallet', 'shield'];
+        
+        $iconsToReturn = $iconMap[$country] ?? $defaultIcons;
+
+        $icons = [];
+        foreach ($iconsToReturn as $iconName) {
+            if (isset($iconDetails[$iconName])) {
+                $icon = new stdClass();
+                $icon->name = $iconName;
+                $icon->link = $iconDetails[$iconName];
+                $icons[] = $icon;
+            }
+        }
+
+        return $icons;
+    }
 }

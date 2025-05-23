@@ -197,7 +197,7 @@ html {
   font-stretch: normal;
   line-height: 1.5;
   letter-spacing: normal;
-  color: #555555;
+  color: #737373;
 }
 
 .mp-number-checkout-body {
@@ -224,7 +224,7 @@ html {
 
 .mp-number-checked i {
   font-size: 20px !important;
-  color: #009ee3 !important;
+  color: #3483FA !important;
 }
 
 .mp-alert-token {
@@ -278,7 +278,7 @@ html {
 .mercadopago-banner {
   padding: 0 !important;
   margin: 0 !important;
-  min-height: 500px;
+  min-height: 462px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -289,31 +289,27 @@ html {
 }
 
 .mp-label-banner {
-  padding: 110px 100px 130px;
+  padding: 40px 74px 74px;
 }
 
-.mp-title-banner::before {
-  content: '';
-  width: 7px;
-  height: 80px;
-  display: block;
-  float: left;
-  background-color: #00b1ea;
-  margin-right: 15px;
-  margin-top: 8px;
+.mp-logo-banner {
+  width: 237px; 
+  height: 94px; 
+  object-fit: contain;
+  margin-top: 10px;
+  margin-left: -24px;
 }
 
 .mp-title-banner {
   font-family: sans-serif !important;
-  font-size: 40px !important;
+  font-size: 52px !important;
   font-weight: bold !important;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.2 !important;
   letter-spacing: normal;
-  color: #ffffff !important;
-  text-transform: uppercase;
-  margin-left: -20px;
+  color: #000000 !important;
+  margin-top: -13px;
 }
 
 .mp-text-banner {
@@ -325,7 +321,7 @@ html {
   font-stretch: normal;
   line-height: 1.2 !important;
   letter-spacing: normal;
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: #000000 !important;
 }
 
 .mp-btn-banner {
@@ -333,9 +329,9 @@ html {
   font-size: 16px !important;
   padding: 12px 40px !important;
   color: #ffffff !important;
-  border-color: #009ee3 !important;
-  background-color: #009ee3 !important;
-  margin-top: 30px !important;
+  border-color: #3483FA !important;
+  background-color: #3483FA !important;
+  margin-top: 15px !important;
 }
 
 .mp-btn-banner:hover {
@@ -349,8 +345,17 @@ html {
 }
 
 .mp-row-installments {
-  padding: 0 0 0 80px;
   box-shadow: 0 5px 10px 0 rgba(155, 169, 187, 0.3);
+  background-color: #ffffff;
+}
+
+.row-text-installments {
+  display: flex;
+  align-items: center;
+  height: 265px;  
+}
+
+.text-installments {
   font-family: sans-serif;
   font-size: 24px;
   font-weight: normal;
@@ -358,15 +363,23 @@ html {
   font-stretch: normal;
   line-height: 1.25;
   letter-spacing: normal;
-  color: rgba(0, 0, 0, 0.8);
-  background-color: #ffffff;
+  color: #737373;
+  padding-left: 74px !important;
+  margin-bottom: 0 !important;
+}
+
+.row-img-installments {
   display: flex;
   align-items: center;
-  justify-content: center;
+  height: 265px;  
+  justify-content: end;
 }
 
 .mp-img-tarjetitas {
-  width: 100%;
+  width: 449px;
+  height: 237px;
+  margin-top: 31px;
+  margin-right: 74px;
 }
 
 .mp-info-installments {
@@ -377,7 +390,7 @@ html {
   font-stretch: normal;
   line-height: 1.22 !important;
   letter-spacing: normal;
-  color: #04204c !important;
+  color: #191919 !important;
   padding-top: 30px;
 }
 
@@ -385,13 +398,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 0;
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(0, 158, 227, 0.04665616246498594) 100%
-    );
+  padding: 70px 0;
+  background: #FFFFFF;
 }
 
 .mp-title-beneficios {
@@ -402,14 +410,41 @@ html {
   font-stretch: normal;
   line-height: 1.25 !important;
   letter-spacing: normal;
-  color: #04204c !important;
+  color: #191919 !important;
   padding-bottom: 20px;
-  margin-top: 0 !important;
+  margin-top: 35px !important;
+  margin-bottom: -6.5px !important;
 }
 
 .mp-panel-text-icon {
   display: flex;
   align-items: center;
+}
+
+.mp-panel-text-icon .icon-mercadopago{
+  width: auto;
+  height: 24px;
+}
+
+
+.mp-beneficios-icon {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.mp-beneficios-icon img{
+  width: auto;
+  height: 24px;
+}
+
+.mp-panel-title {
+  display: flex;
+    width: 100%;
+}
+
+.mp-panel-title h2 {
+  margin-top: 35px !important;
 }
 
 .icon-mercadopago {
@@ -425,19 +460,20 @@ html {
   font-stretch: normal;
   line-height: 1.25 !important;
   letter-spacing: normal;
-  color: #7a8899 !important;
-  padding: 10px 0;
+  color: #737373 !important;
+  padding: 9px 0;
   display: inline-block;
 }
 
 .mp-img-beneficios {
-  width: auto;
-  max-height: 300px;
+  width: 354px;
+  height: 343px;
+  margin-top: -15px;
 }
 
 .mp-img-puedohacer {
   width: auto;
-  max-height: 300px;
+  height: 343px;
   padding-right: 20px;
   float: right;
 }
@@ -462,7 +498,7 @@ html {
   font-stretch: normal;
   line-height: 1.25 !important;
   letter-spacing: normal;
-  color: #04204c !important;
+  color: #191919 !important;
   padding-bottom: 25px;
   margin-top: 0 !important;
 }
@@ -476,7 +512,7 @@ html {
   margin: 0 auto 8px !important;
   font-size: 18px;
   font-weight: normal;
-  border-color: #2ec74b !important;
+  border-color: #3483FA !important;
   padding-top: 3px;
 }
 
@@ -485,7 +521,7 @@ html {
   width: 115px;
   height: 1px;
   display: block;
-  background-color: #2ec74b;
+  background-color: #3483FA;
   margin-top: -12px;
   margin-left: 34px;
 }
@@ -496,7 +532,7 @@ html {
   height: 1px;
   display: block;
   float: left;
-  background-color: #2ec74b;
+  background-color: #3483FA;
   margin-top: 13px;
   margin-left: -115px;
 }
@@ -507,7 +543,7 @@ html {
   height: 1px;
   display: block;
   float: left;
-  background-color: #2ec74b;
+  background-color: #3483FA;
   margin-top: 13px;
   margin-left: -115px;
 }
@@ -525,7 +561,7 @@ html {
 .mp-title-footer {
   font-family: sans-serif !important;
   font-size: 25px !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.25 !important;
@@ -537,15 +573,14 @@ html {
   border-radius: 4px;
   font-size: 16px !important;
   padding: 12px 40px !important;
-  color: #ffffff !important;
-  border-color: #005e88 !important;
-  background-color: #005e88 !important;
+  color: #3483FA !important;
+  border-color: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   margin-top: 30px !important;
 }
 
 .mp-btn-footer:hover {
-  border: 1px solid #004666 !important;
-  background-color: #004666 !important;
+  background-color: #E3EEFC !important;
 }
 
 .mercadopago-partner {
@@ -560,6 +595,10 @@ html {
 
 .mp-right-partner {
   padding: 20px 25px 5px 0 !important;
+}
+
+.mp-right-partner a {
+  color: #3483fa !important;
 }
 
 .mp-img-partner {

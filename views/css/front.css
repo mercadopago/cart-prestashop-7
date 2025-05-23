@@ -131,6 +131,17 @@ body#checkout section.checkout-step .payment-options label {
   text-align: left !important;
 }
 
+
+body#checkout section.checkout-step .payment-options label img[src="https://http2.mlstatic.com/storage/cpp/static-files/306698cd-ff92-4cc0-801c-1ca35d06ed5a.png"] {
+  width: 21px !important;
+  height: 21px !important;
+}
+
+
+body#checkout section.checkout-step .payment-options u {
+  text-decoration: none !important;
+}
+
 .mp-title-checkout {
   padding: 5px 0 0;
 }
@@ -240,12 +251,96 @@ body#checkout section.checkout-step .payment-options label {
   color: #333333 !important;
 }
 
+.mp-title-standard-checkout {
+  font-family: inherit !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 22px !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.mp-container-standard-checkout .mp-text-standard-checkout {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.29 !important;
+  color: rgba(0, 0, 0, 0.55) !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  margin-bottom: 32px !important;
+}
+
+.mp-container-standard-checkout .mp-text-standard-checkout:nth-of-type(1) {
+  margin-bottom: 16px !important;
+}
+
+.mp-container-standard-checkout .mp-text-standard-checkout:nth-of-type(2) {
+  margin-bottom: 32px !important;
+}
+
+.mp-container-standard-checkout .mp-text-standard-checkout span{
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.29 !important;
+  color: rgba(0, 0, 0, 0.55) !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  margin-bottom: 32px !important;
+}
+
+.mp-message-standard-checkout span{
+  margin-bottom: 8px;
+}
+
+.mp-payment-methods-message-container{
+  background-color: rgba(245, 245, 245, 1);
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 13px !important;
+}
+
+.mp-payment-methods-message-container .mp-payment-methods-message {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.29 !important;
+  color: rgba(0, 0, 0, 0.55) !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+}
+
+.mp-payment-methods-message-container .mp-payment-methods-message:nth-of-type(1) {
+  margin-bottom: 8px !important;
+}
+
+.mp-payment-methods-message-container .mp-payment-methods-message span{
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.29 !important;
+  color: rgba(0, 0, 0, 0.55) !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  margin-bottom: 32px !important;
+}
+
+.mp-container-standard-checkout .mp-img-standard-checkout {
+  width: 16px;
+  height: 16px;
+  margin-right: 3px;
+}
+
+.mp-payment-methods-message-container .mp-img-standard-checkout-bw {
+  width: auto;
+  height: 16px;
+  margin-right: 6px;
+}
+
 .mp-subtitle-standard-checkout {
   padding: 10px 0 0;
   margin: 0 0 5px !important;
   text-transform: uppercase;
   font-family: sans-serif !important;
 }
+
+
 
 /* custom chckout */
 
@@ -266,11 +361,24 @@ body#checkout section.checkout-step .payment-options label {
   border: 2px solid #f04449 !important;
 }
 
+.mp-label-checkout-custom {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  font-size: 14px;
+  color: #232323;
+  margin-bottom: 0;
+}
+
 .mp-link-checkout-custom {
-  color: #2fb5d2 !important;
+  color: #3483FA !important;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
+}
+
+a.mp-link-checkout-custom {
+  text-decoration: none !important;
 }
 
 .mp-link-checkout-terms {
@@ -284,7 +392,8 @@ body#checkout section.checkout-step .payment-options label {
 }
 
 .mp-checkout-form {
-  padding: 0 40px;
+  padding-left: 25px !important;
+  padding-top: 20px !important;
 }
 
 .mp-frame-title {
@@ -308,6 +417,10 @@ body#checkout section.checkout-step .payment-options label {
   margin-left: 0 !important;
   float: left;
   cursor: pointer;
+}
+
+.form-check-input:checked {
+  accent-color: #3483fa ; 
 }
 
 .mp-select {
@@ -399,43 +512,66 @@ body#checkout section.checkout-step .payment-options label {
   margin: 0 !important;
 }
 
-.mp-wallet-button-container .mp-wallet-button-title span {
-  padding-left: 8px;
+.mp-wallet-button-container .mp-wallet-button-title p {
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  line-height: 22px;
 }
 
-.mp-wallet-button-container .mp-wallet-button-description {
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 18px;
-  display: flex;
-  align-items: center;
-  color: rgb(0 0 0 / 55%);
-  margin: 8px 0 16px;
+.mp-wallet-button-container .mp-wallet-button-description p{
+  width: 100%;
+  text-align: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 12px 0 16px;
+  padding: 0 15px;
 }
 
-.mp-wallet-button-container .mp-wallet-button-button button {
+.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 8px 12px;
-  background: #009ee3;
+  background: #FFE600;
   border-radius: 4px;
   font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 16px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
   text-align: center;
-  color: #ffffff;
   border: none;
   cursor: pointer;
   transition: all 0.3ms ease-in-out;
+  width: 100%;
+  height: 48px;
+  border-radius: 6px;
+  padding-right: 16px;
+  padding-left: 16px;
+  gap: 8px;
 }
 
-.mp-wallet-button-container .mp-wallet-button-button button:hover {
-  color: #ffffff;
-  background-color: #007eb5;
+.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn:focus {
+  outline: none;
+  background-color: #FFE600 !important;
+  box-shadow:
+    0px 0px 0px 2px rgba(255, 255, 255, 1),
+    0px 0px 0px 5px rgba(65, 137, 230, 0.3),
+    0px 0px 0px 3px rgba(41, 104, 200, 1);
+}
+
+.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn img{
+  width: 196px;
+  height: 28px;
+}
+
+.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn:hover {
+  background-color: #FBD100;
   transition: all 0.3ms ease-in-out;
 }
 
@@ -615,25 +751,17 @@ body#checkout section.checkout-step .payment-options label {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding-top: 12px;
   margin-left: -8px;
+  margin-bottom: 32px;
 }
 
 .mp-payment-methods-container > div {
   margin: 0 0 8px 8px;
 }
 
-.mp-payment-method-logo-container {
-  width: 60px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
-  box-sizing: border-box;
-  border-radius: 4px;
-  padding: 4px;
+.mp-payment-method-logo-container img{
+  width: 32px !important;
+  height: 24px !important;
 }
 
 .mp-payment-method-logo-image {
