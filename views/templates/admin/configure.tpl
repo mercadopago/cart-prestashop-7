@@ -25,7 +25,7 @@
 
 <!-- Alert -->
 {if $message != ''}
-    <div class='alert {$alert|escape:'html':'UTF-8'} alert-dismissible'>
+    <div class='alert {$form_alert|escape:'html':'UTF-8'} alert-dismissible'>
         <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
         {$message|escape:'html':'UTF-8'}
     </div>

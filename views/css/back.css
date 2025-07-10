@@ -931,6 +931,11 @@ ol > li::marker {
   color: #ffffff;
 }
 
+.page-subtitle{
+  margin-top: 65px !important;
+  left: 226px !important;
+}
+
 @media (max-width: 768px) {
   .mp-pl-30 {
     padding-left: 0 !important;

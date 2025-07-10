@@ -330,13 +330,16 @@
             <input type="hidden" id="campaignIdCustom" name="mercadopago_custom[campaign_id]" />
             <input type="hidden" id="couponPercentCustom" name="mercadopago_custom[percent_off]" />
             <input type="hidden" id="couponAmountCustom" name="mercadopago_custom[coupon_amount]" />
+            <input type="hidden" id="doc_type" name="mercadopago_custom[doc_type]" />
+            <input type="hidden" id="doc_number" name="mercadopago_custom[doc_number]" />        
         </div>
     </div>
 </form>
 
 <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
 <script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/jquery-1.11.0.min.js"></script>
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/custom-card{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"></script>
+<script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/document-validator.js"></script>
+<script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/custom-card.js"></script>
 
 {if $public_key != ''}
     <script>

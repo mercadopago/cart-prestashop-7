@@ -58,7 +58,66 @@
 
     setChangeEventOnExpirationDate();
     setChangeEventOnCardNumber();
+
+    setupDocumentFields();
   };
+
+  /**
+   * Configures document fields (CPF/CNPJ) with their respective masks and validations
+   * @returns {void}
+   */
+  function setupDocumentFields() {
+    const docTypeElement = document.getElementById('id-docType');
+    const docNumberElement = document.getElementById('id-doc-number');
+    
+    let docNumberHiddenElement = document.getElementById('id-doc-number-clean');
+    if (!docNumberHiddenElement) {
+      docNumberHiddenElement = document.createElement('input');
+      docNumberHiddenElement.type = 'hidden';
+      docNumberHiddenElement.id = 'id-doc-number-clean';
+      docNumberElement.parentNode.appendChild(docNumberHiddenElement);
+    }
+
+    if (!docTypeElement || !docNumberElement) {
+      return;
+    }
+
+    if (seller.site_id.toUpperCase() === 'MLB') {
+      const DOCUMENT_TYPES = {
+        CPF: {
+          maxLength: '14',
+          mask: 'mcpf'
+        },
+        CNPJ: {
+          maxLength: '18',
+          mask: 'mcnpj'
+        }
+      };
+
+      /**
+       * Applies the configuration for document field based on document type (CPF/CNPJ)
+       * @param {string} docType - Type of document to configure (CPF or CNPJ)
+       */
+      function applyDocumentConfig(docType) {
+        const config = DOCUMENT_TYPES[docType];
+        if (!config) return;
+
+        docNumberElement.setAttribute('maxlength', config.maxLength);
+        docNumberElement.setAttribute('onkeyup', `maskInput(this, ${config.mask}); document.getElementById('id-doc-number-clean').value = this.value.replace(/[^\\d]+/g, '')`);
+        docNumberElement.value = '';
+        docNumberHiddenElement.value = '';
+      }
+
+      applyDocumentConfig('CPF');
+
+      docTypeElement.addEventListener('change', function() {
+        applyDocumentConfig(this.value);
+      });
+    } else {
+      // For non-Brazil countries, just set up the basic field update
+      docNumberElement.setAttribute('onkeyup', 'document.getElementById(\'id-doc-number-clean\').value = this.value.replace(/[^\\d]+/g, \'\')');
+    }
+  }
 
   /**
    * Create instance of Mercado Pago sdk v2 and mount form
@@ -79,7 +138,7 @@
         securityCode: { id: 'id-security-code' },
         installments: { id: 'id-installments' },
         identificationType: { id: 'id-docType' },
-        identificationNumber: { id: 'id-doc-number' },
+        identificationNumber: { id: 'id-doc-number-clean' },
         issuer: { id: 'id-issuers-options' },
       },
       callbacks: {
@@ -292,6 +351,12 @@
     document.getElementById('id-doc-number').value = '';
     document.getElementById('id-security-code').value = '';
     document.getElementById('id-card-holder-name').value = '';
+    
+    // Also clear the hidden document field
+    var docNumberHiddenElement = document.getElementById('id-doc-number-clean');
+    if (docNumberHiddenElement) {
+      docNumberHiddenElement.value = '';
+    }
   }
 
   /**
@@ -503,8 +568,6 @@
 
   /**
    * Validate Additional Inputs
-   *
-   * @return bool
    */
   function validateAdditionalInputs() {
     var emptyInputs = false;
@@ -539,6 +602,16 @@
         docNumber.classList.add('mp-form-control-error');
         document.getElementById('mp-error-324').style.display = 'inline-block';
         emptyInputs = true;
+      } else {
+        if (seller.site_id.toUpperCase() === 'MLB') {
+          var inputDocType = document.getElementById('id-docType');
+          var documentIsvalid = validateDocument(docNumber.value, inputDocType.value);
+          if (documentIsvalid == false) {
+            docNumber.classList.add('mp-form-control-error');
+            document.getElementById('mp-error-324').style.display = 'inline-block';
+            emptyInputs = true;
+          }
+        }
       }
     }
 
@@ -563,6 +636,15 @@
   }
 
   /**
+   * Clean document number removing any non-digit characters
+   * @param {string} docNumber
+   * @return {string}
+   */
+  function cleanDocumentNumber(docNumber) {
+    return docNumber.replace(/[^\d]+/g, '');
+  }
+
+  /**
    * Handler Response of mp.createToken
    *
    * @param number error
@@ -583,11 +665,22 @@
     }
 
     var formData = mpCardForm.getCardFormData();
+    
+    // Clean document number before setting it
+    var cleanedDocNumber = cleanDocumentNumber(formData.identificationNumber);
+    formData.identificationNumber = cleanedDocNumber;
+
+    var docNumberHiddenElement = document.getElementById('id-doc-number-clean');
+    if (docNumberHiddenElement) {
+      docNumberHiddenElement.value = cleanedDocNumber;
+    }
 
     document.querySelector('#card_token_id').value = formData.token;
     document.querySelector('#mp_issuer').value = formData.issuerId;
     document.querySelector('#mp_installments').value = formData.installments;
     document.querySelector('#payment_method_id').value = formData.paymentMethodId;
+    document.querySelector('#doc_type').value = formData.identificationType;
+    document.querySelector('#doc_number').value = cleanedDocNumber;
 
     setFormSubmit();
     disableFinishOrderButton(psVersion);
@@ -601,7 +694,7 @@
     if (document.forms.mp_custom_checkout !== undefined) {
       document.forms.mp_custom_checkout.onsubmit = function () {
         if (validateInputs()) {
-          mpCardForm.createCardToken();
+          mpCardForm.createCardToken();          
           return false;
         }
 
