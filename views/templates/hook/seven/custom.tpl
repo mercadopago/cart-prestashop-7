@@ -366,6 +366,13 @@
 
             initializeCustom(mp_custom);
         }
+
+        // support module: onepagecheckoutps - PresTeamShop - Checkout 5.0.
+        if (typeof OPC !== typeof undefined) {
+            prestashop.on('opc-payment-getPaymentList-complete', () => {
+                loadCustom();
+            });
+        }
     </script>
 {/if}
 

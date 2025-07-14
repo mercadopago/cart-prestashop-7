@@ -102,8 +102,20 @@
     {/if}
 
     {if $modal == true}
+        {literal}
         <script>
+            // support module: onepagecheckoutps - PresTeamShop - Checkout 5.0.
+            if (typeof OPC !== typeof undefined) {
+                prestashop.on('opc-payment-getPaymentList-complete', () => {
+                    initMercadoPagoStandar();
+                });
+            }
+
             window.addEventListener('load', (event) => {
+                initMercadoPagoStandar();
+            });
+
+            function initMercadoPagoStandar() {
                 var mp_button = {};
 
                 document.forms['mp_standard_checkout'].onsubmit = function (e) {
@@ -128,6 +140,7 @@
                         window.location.href = 'index.php?controller=order&step=3&typeReturn=failure';
                     });
                 };
-            });
+            }
         </script>
+        {/literal}
     {/if}
