@@ -348,7 +348,8 @@
     </div>
 </form>
 
-<script type="text/javascript" src="{$module_dir|escape:'htmlall':'UTF-8'}views/js/ticket{$assets_ext_min|escape:'htmlall':'UTF-8'}.js?v={$version|escape:'htmlall':'UTF-8'}"/>
+<script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/document-validator.js"></script>
+<script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/ticket.js"></script>
 <script type="text/javascript">
     window.onload = loadTicket();
     function loadTicket() {

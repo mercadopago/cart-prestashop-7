@@ -333,6 +333,8 @@
 
 {if $public_key != ''}
     <script type="text/javascript" src='https://sdk.mercadopago.com/js/v2'></script>
+    <script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/document-validator.js"></script>
+    <script type="text/javascript" src="{$module_dir|escape:'javascript':'UTF-8'}views/js/custom-card.js"></script>
     <script type="text/javascript">
         // Collapsible payments cards acepteds
         var show_payments = document.querySelector('#button-show-payments');

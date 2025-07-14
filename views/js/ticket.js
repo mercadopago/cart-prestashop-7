@@ -220,18 +220,14 @@
 
     return docnumberValidate;
   }
-
+  
   /**
    * Validate Document number for MLB
    * @param {string} docnumber
    * @return {bool}
    */
   function validateDocTypeMLB(docnumber) {
-    if (mercadoPagoDocnumber === 'CPF') {
-      return validateCPF(docnumber);
-    } else {
-      return validateCNPJ(docnumber);
-    }
+    return validateDocument(docnumber, mercadoPagoDocnumber);
   }
 
   /**
@@ -247,121 +243,7 @@
     }
   }
 
-  /**
-   * Validate CPF
-   * @param {string} strCPF
-   * @return {bool}
-   */
-  function validateCPF(strCPF) {
-    var Soma;
-    var Resto;
-
-    Soma = 0;
-    strCPF = strCPF.replace(/[.-\s]/g, '');
-
-    if (strCPF === '00000000000') {
-      return false;
-    }
-
-    for (var i = 1; i <= 9; i++) {
-      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-    }
-
-    Resto = (Soma * 10) % 11;
-    if (Resto === 10 || Resto === 11) {
-      Resto = 0;
-    }
-    if (Resto !== parseInt(strCPF.substring(9, 10))) {
-      return false;
-    }
-
-    Soma = 0;
-    for (var k = 1; k <= 10; k++) {
-      Soma = Soma + parseInt(strCPF.substring(k - 1, k)) * (12 - k);
-    }
-
-    Resto = (Soma * 10) % 11;
-    if (Resto === 10 || Resto === 11) {
-      Resto = 0;
-    }
-    if (Resto !== parseInt(strCPF.substring(10, 11))) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Validate CNPJ
-   * @param {string} strCNPJ
-   * @return {bool}
-   */
-  function validateCNPJ(strCNPJ) {
-    strCNPJ = strCNPJ.replace(/[^\d]+/g, '');
-
-    if (strCNPJ === '') {
-      return false;
-    }
-
-    if (strCNPJ.length !== 14) {
-      return false;
-    }
-
-    if (
-      strCNPJ === '00000000000000' ||
-      strCNPJ === '11111111111111' ||
-      strCNPJ === '22222222222222' ||
-      strCNPJ === '33333333333333' ||
-      strCNPJ === '44444444444444' ||
-      strCNPJ === '55555555555555' ||
-      strCNPJ === '66666666666666' ||
-      strCNPJ === '77777777777777' ||
-      strCNPJ === '88888888888888' ||
-      strCNPJ === '99999999999999'
-    ) {
-      return false;
-    }
-
-    var tamanho = strCNPJ.length - 2;
-    var numeros = strCNPJ.substring(0, tamanho);
-    var digitos = strCNPJ.substring(tamanho);
-    var soma = 0;
-    var pos = tamanho - 7;
-
-    for (var i = tamanho; i >= 1; i--) {
-      soma += numeros.charAt(tamanho - i) * pos--;
-      if (pos < 2) {
-        pos = 9;
-      }
-    }
-
-    var resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-
-    if (resultado.toString() !== digitos.charAt(0)) {
-      return false;
-    }
-
-    tamanho = tamanho + 1;
-    numeros = strCNPJ.substring(0, tamanho);
-    soma = 0;
-    pos = tamanho - 7;
-
-    for (i = tamanho; i >= 1; i--) {
-      soma += numeros.charAt(tamanho - i) * pos--;
-      if (pos < 2) {
-        pos = 9;
-      }
-    }
-
-    resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-
-    if (resultado.toString() !== digitos.charAt(1)) {
-      return false;
-    }
-
-    return true;
-  }
-
+ 
   /**
    * Validate CI MLU
    * @param {string} docNumber

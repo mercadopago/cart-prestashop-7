@@ -59,6 +59,8 @@ class CustomPreference extends AbstractPreference
         $preference['token'] = $custom_info['card_token_id'];
         $preference['installments'] = (int) $custom_info['installments'];
         $preference['payment_method_id'] = $custom_info['payment_method_id'];
+        $preference['payer']['identification']['type'] = $custom_info['doc_type'];
+        $preference['payer']['identification']['number'] = $custom_info['doc_number'];
 
         if (!empty($custom_info['issuer'])) {
             $preference['issuer_id'] = (int) $custom_info['issuer'];
