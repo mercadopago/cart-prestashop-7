@@ -94,6 +94,13 @@ class IpnNotification extends AbstractNotification
             $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
+        if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
+            $payments = $this->merchant_order['payments'];
+            if (!empty($payments) && isset($payments[0]['id'])) {
+                $this->transaction_id = $payments[0]['id'];
+            }
+        }
+
         $this->getOrderId($cart);
         $this->total = $this->getTotal($cart, $this->checkout);
         $this->status = 'pending';
@@ -170,6 +177,10 @@ class IpnNotification extends AbstractNotification
         $this->payments_data['payments_status'] = array();
         $this->payments_data['payments_amount'] = array();
 
+        if (!empty($payments) && isset($payments[0]['id'])) {
+            $this->transaction_id = $payments[0]['id'];
+        }
+
         foreach ($payments as $payment) {
             $payment_info = $this->mercadopago->getPaymentStandard($payment['id']);
             $this->status = $payment_info['status'];
@@ -187,5 +198,11 @@ class IpnNotification extends AbstractNotification
                 $this->pending += $payment_info['transaction_amount'];
             }
         }
+
+        MPLog::generate(sprintf(
+            'Processed %d payments for order. Transaction IDs: %s',
+            count($this->payments_data['payments_id']),
+            implode(', ', $this->payments_data['payments_id'])
+        ));
     }
 }
