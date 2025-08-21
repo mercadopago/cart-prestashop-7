@@ -113,8 +113,30 @@ class AbstractNotification
     {
         try {
             $order_payments = $order->getOrderPaymentCollection();
-            $order_payments[0]->amount = $this->approved;
-            $order_payments[0]->update();
+
+            if (!empty($this->payments_data['payments_id']) && count($this->payments_data['payments_id']) > 1) {
+                foreach ($order_payments as $payment) {
+                    $payment->delete();
+                }
+
+                foreach ($this->payments_data['payments_id'] as $index => $payment_id) {
+                    $new_payment = new OrderPayment();
+                    $new_payment->order_reference = $order->reference;
+                    $new_payment->id_currency = $order->id_currency;
+                    $new_payment->amount = $this->payments_data['payments_amount'][$index];
+                    $new_payment->payment_method = 'Mercado Pago';
+                    $new_payment->transaction_id = $payment_id;
+                    $new_payment->add();
+                }
+            } else {
+                $order_payments[0]->amount = $this->approved;
+
+                if (!empty($this->transaction_id)) {
+                    $order_payments[0]->transaction_id = $this->transaction_id;
+                }
+
+                $order_payments[0]->update();
+            }
         } catch (Exception $e) {
             MPLog::generate('Error on update order transaction: ' . $e->getMessage(), 'error');
         }
