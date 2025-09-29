@@ -252,15 +252,10 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="mp-text-cft" id="mp-tax-cft-text"></div>
+                            <div class="mp-text-mla-tax" id="mp-mla-tax-text"></div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mp-text-tea" id="mp-tax-tea-text"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div id="mp-doc-div-title" class="col-md-12 col-12 mp-frame-title">

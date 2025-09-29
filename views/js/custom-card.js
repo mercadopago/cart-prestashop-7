@@ -336,8 +336,7 @@
    * Clear Tax
    */
   function clearTax() {
-    document.querySelector('.mp-text-cft').innerHTML = '';
-    document.querySelector('.mp-text-tea').innerHTML = '';
+    document.querySelector('.mp-text-mla-tax').innerHTML = '';
   }
 
   /**
@@ -392,21 +391,66 @@
    * @params any payer_costs
    */
   function showTaxes(payer_costs) {
+
+    document.querySelector('#mp-mla-tax-text').innerHTML = '';
+
+    const taxInfo = {
+      cft: '0,00',
+      tna: '0,00',
+      tea: '0,00'
+    };
+
+    const validateAndCleanNumberFromLabel = (value) => {
+      if (!value) return null;
+      const cleaned = value.replace('%', '').trim();
+      const numberPattern = /^\d+([,.]\d+)?$/;
+      return numberPattern.test(cleaned) ? cleaned : null;
+    };
+
     var installmentsSelect = document.querySelector('#id-installments');
 
     for (var i = 0; i < payer_costs.length; i++) {
-      if (payer_costs[i].installments === installmentsSelect.value) {
-        var taxes_split = payer_costs[i].labels[0].split('|');
-        var cft = taxes_split[0].replace('_', ' ');
-        var tea = taxes_split[1].replace('_', ' ');
+      if (installmentsSelect.value != '1' && payer_costs[i].installments === installmentsSelect.value) {
 
-        if (cft === 'CFT 0,00%' && tea === 'TEA 0,00%') {
-          cft = '';
-          tea = '';
-        }
+        payer_costs[i].labels.forEach(label => {
+          if (typeof label !== 'string') return;
+    
+          const taxes_split = label.split('|');
 
-        document.querySelector('#mp-tax-cft-text').innerHTML = cft;
-        document.querySelector('#mp-tax-tea-text').innerHTML = tea;
+          taxes_split.forEach(tax => {
+            if (tax.includes('CFT_')) {
+              const splitResult = tax.split('CFT_');
+              if (splitResult.length > 1 && splitResult[1]) {
+                const validatedValue = validateAndCleanNumberFromLabel(splitResult[1]);
+                if (validatedValue) {
+                  taxInfo.cft = validatedValue;
+                }
+              }
+            } else if (tax.includes('TEA_')) {
+              const splitResult = tax.split('TEA_');
+              if (splitResult.length > 1 && splitResult[1]) {
+                const validatedValue = validateAndCleanNumberFromLabel(splitResult[1]);
+                if (validatedValue) {
+                  taxInfo.tea = validatedValue;
+                }
+              }
+            } else if (tax.includes('TNA_')) {
+              const splitResult = tax.split('TNA_');
+              if (splitResult.length > 1 && splitResult[1]) {
+                const validatedValue = validateAndCleanNumberFromLabel(splitResult[1]);
+                if (validatedValue) {
+                  taxInfo.tna = validatedValue;
+                }
+              }
+            }
+          });
+        });
+
+        // TODO: Include TNA in the future
+        // var taxText = `<b>CFTEA: ${taxInfo.cft}%</b> - TNA: ${taxInfo.tna}% - TEA: ${taxInfo.tea}%. Tasa fija.`
+        var taxText = `<b>CFTEA: ${taxInfo.cft}%</b> - TEA: ${taxInfo.tea}%. Tasa fija.`
+
+        document.querySelector('#mp-mla-tax-text').innerHTML = taxText;
       }
     }
   }
