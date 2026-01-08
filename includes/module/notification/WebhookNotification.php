@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2025 PrestaShop
  *
@@ -106,7 +107,13 @@ class WebhookNotification extends AbstractNotification
         $this->payments_data['payments_status'] = $this->status;
 
         if ($this->status == 'approved') {
-            $this->approved += $this->payment['transaction_details']['total_paid_amount'];
+            // For cash payments (like OXXO), total_paid_amount may not be available
+            // Use transaction_amount as fallback
+            if (isset($this->payment['transaction_details']['total_paid_amount'])) {
+                $this->approved += $this->payment['transaction_details']['total_paid_amount'];
+            } else {
+                $this->approved += $this->payment['transaction_amount'];
+            }
         } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
             $this->pending += $this->payment['transaction_amount'];
         }

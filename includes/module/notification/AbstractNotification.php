@@ -37,7 +37,7 @@ class AbstractNotification
     public $module;
     public $status;
     public $amount;
-    public $aproved;
+    public $approved;
     public $pending;
     public $order_id;
     public $mercadopago;
@@ -114,7 +114,8 @@ class AbstractNotification
         try {
             $order_payments = $order->getOrderPaymentCollection();
 
-            if (!empty($this->payments_data['payments_id']) && count($this->payments_data['payments_id']) > 1) {
+            // Check if payments_id is an array with multiple payments
+            if (!empty($this->payments_data['payments_id']) && is_array($this->payments_data['payments_id']) && count($this->payments_data['payments_id']) > 1) {
                 foreach ($order_payments as $payment) {
                     $payment->delete();
                 }
