@@ -171,8 +171,10 @@ class AbstractNotification
             $order = new Order($this->order_id);
 
             $payments = $order->getOrderPaymentCollection();
-            $payments[0]->transaction_id = $this->transaction_id;
-            $payments[0]->update();
+            if ($payments->count() > 0) {
+               $payments[0]->transaction_id = $this->transaction_id;
+               $payments[0]->update();
+            }
 
             $this->saveCreateOrderData($cart);
 

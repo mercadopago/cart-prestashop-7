@@ -88,33 +88,41 @@ class IpnNotification extends AbstractNotification
      * @param mixed $cart
      * @return void
      */
-    public function createStandardOrder($cart)
-    {
-        if ($this->isWalletButton) {
-            $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
-        }
+public function createStandardOrder($cart)
+{
+    if ($this->isWalletButton) {
+        $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
+    }
 
-        if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
-            $payments = $this->merchant_order['payments'];
-            if (!empty($payments) && isset($payments[0]['id'])) {
-                $this->transaction_id = $payments[0]['id'];
-            }
-        }
-
-        $this->getOrderId($cart);
-        $this->total = $this->getTotal($cart, $this->checkout);
-        $this->status = 'pending';
-        $this->pending += $this->total;
-        $this->validateOrderState();
-
-        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            $this->createOrder($cart, true);
-        }
-
-        if ($this->isWalletButton) {
-            $this->preference->disableCartRule();
+    if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
+        $payments = $this->merchant_order['payments'];
+        if (!empty($payments) && isset($payments[0]['id'])) {
+            $this->transaction_id = $payments[0]['id'];
         }
     }
+
+    $this->getOrderId($cart);
+    $this->total = $this->getTotal($cart, $this->checkout);
+
+    // Si hay pagos en el merchant_order, verificarlos para obtener el estado real
+    if (!empty($this->merchant_order['payments'])) {
+        $this->verifyPayments($this->merchant_order['payments']);
+    } else {
+        // Sin pagos disponibles, asumir pendiente como antes
+        $this->status = 'pending';
+        $this->pending += $this->total;
+    }
+
+    $this->validateOrderState();
+
+    if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
+        $this->createOrder($cart, true);
+    }
+
+    if ($this->isWalletButton) {
+        $this->preference->disableCartRule();
+    }
+}
 
     /**
      * Get Checkout Preference
