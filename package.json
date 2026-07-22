@@ -1,6 +1,6 @@
 {
   "main": "scripts.js",
-  "version": "4.18.5",
+  "version": "4.18.6",
   "description": "Gateway de pagamento Mercado Pago para PrestaShop",
   "repository": {
     "type": "git",
