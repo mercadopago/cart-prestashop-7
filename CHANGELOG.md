@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Security
+- Pin Composer to v2 in the `release-zip-validator` CI workflow to guarantee a patched Composer (>= 2.10.2) is used, mitigating CVE-2026-59946 / CVE-2026-59947 / CVE-2026-59948 (PPCO-5408)
+
+## [4.18.6] - 2026-07-16
+### Fixed
+- Fix modal overlay stuck on close in Checkout Pro (PPSP-1255): filter iframe removal by MercadoPago src to avoid affecting third-party iframes; extract shared overlay logic to partial template for PS6/PS7.
+
 ## [4.18.5] - 2025-09-25
 ### Changed
 - Changed format of MLA taxes for credit card installments selection
