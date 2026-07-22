@@ -102,9 +102,9 @@
     {/if}
 
     {if $modal == true}
-        <script>
+        <script {if isset($csp_nonce)}nonce="{$csp_nonce}"{/if}>
             window.addEventListener('load', (event) => {
-                var mp_button = {};
+                {include file="../_mp_checkout_overlay.tpl"}
 
                 document.forms['mp_standard_checkout'].onsubmit = function (e) {
                     e.preventDefault();
@@ -113,15 +113,12 @@
                     .then(response => response.json())
                     .then(function(response) {
                         if (response.preference) {
-                            mp_button = {
-                                'preference': {
-                                    'id': response.preference['id'],
-                                },
-                                'autoOpen': true,
-                            };
-
                             var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
-                            mp.checkout(mp_button);
+                            mp.checkout({
+                                preference: { id: response.preference['id'] },
+                                autoOpen: true,
+                            });
+                            watchForMPClose();
 
                             return false;
                         }
