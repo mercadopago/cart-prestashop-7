@@ -1,39 +1,29 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class MPUseful
 {
-    const SEPARATOR = '|';
+    public const SEPARATOR = '|';
 
     /**
      * Instance the class
@@ -46,6 +36,7 @@ class MPUseful
         if (null === $mpuseful) {
             $mpuseful = new MPUseful();
         }
+
         return $mpuseful;
     }
 
@@ -53,52 +44,53 @@ class MPUseful
      * Get default sponsor_id
      *
      * @param string $country
-     * @return void
+     *
+     * @return int
      */
     public function getCountryConfigs($country)
     {
-        $country_configs = array(
-            'MCO' => array(
-                'site_id'    => 'MCO',
+        $country_configs = [
+            'MCO' => [
+                'site_id' => 'MCO',
                 'sponsor_id' => 237788769,
-                'currency'   => 'COP',
-            ),
-            'MLA' => array(
-                'site_id'    => 'MLA',
+                'currency' => 'COP',
+            ],
+            'MLA' => [
+                'site_id' => 'MLA',
                 'sponsor_id' => 237788409,
-                'currency'   => 'ARS',
-            ),
-            'MLB' => array(
-                'site_id'    => 'MLB',
+                'currency' => 'ARS',
+            ],
+            'MLB' => [
+                'site_id' => 'MLB',
                 'sponsor_id' => 236914421,
-                'currency'   => 'BRL',
-            ),
-            'MLC' => array(
-                'site_id'    => 'MLC',
+                'currency' => 'BRL',
+            ],
+            'MLC' => [
+                'site_id' => 'MLC',
                 'sponsor_id' => 237788173,
-                'currency'   => 'CLP',
-            ),
-            'MLM' => array(
-                'site_id'    => 'MLM',
+                'currency' => 'CLP',
+            ],
+            'MLM' => [
+                'site_id' => 'MLM',
                 'sponsor_id' => 237793014,
-                'currency'   => 'MXN',
-            ),
-            'MLU' => array(
-                'site_id'    => 'MLU',
+                'currency' => 'MXN',
+            ],
+            'MLU' => [
+                'site_id' => 'MLU',
                 'sponsor_id' => 241729464,
-                'currency'   => 'UYU',
-            ),
-            'MLV' => array(
-                'site_id'    => 'MLV',
+                'currency' => 'UYU',
+            ],
+            'MLV' => [
+                'site_id' => 'MLV',
                 'sponsor_id' => 237789083,
-                'currency'   => 'VEF',
-            ),
-            'MPE' => array(
-                'site_id'    => 'MPE',
+                'currency' => 'VEF',
+            ],
+            'MPE' => [
+                'site_id' => 'MPE',
                 'sponsor_id' => 237791025,
-                'currency'   => 'PEN',
-            )
-        );
+                'currency' => 'PEN',
+            ],
+        ];
 
         return $country_configs[$country]['sponsor_id'];
     }
@@ -107,11 +99,12 @@ class MPUseful
      * Get default currency
      *
      * @param string $currency
+     *
      * @return string
      */
     public function setMPCurrency($currency)
     {
-        $site_id = array(
+        $site_id = [
             'COP' => 'mco',
             'ARS' => 'mla',
             'BRL' => 'mlb',
@@ -120,7 +113,7 @@ class MPUseful
             'UYU' => 'mlu',
             'VEF' => 'mlv',
             'PEN' => 'mpe',
-        );
+        ];
 
         if (array_key_exists($currency, $site_id)) {
             return $site_id[$currency];
@@ -133,11 +126,12 @@ class MPUseful
      * Get modal link
      *
      * @param string $localization
+     *
      * @return string
      */
     public function getModalLink($localization)
     {
-        $site_id = array(
+        $site_id = [
             'MCO' => 'https://www.mercadopago.com.co/integrations/v1/web-payment-checkout.js',
             'MLA' => 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js',
             'MLB' => 'https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js',
@@ -146,7 +140,7 @@ class MPUseful
             'MLU' => 'https://www.mercadopago.com.uy/integrations/v1/web-payment-checkout.js',
             'MLV' => 'https://www.mercadopago.com.ve/integrations/v1/web-payment-checkout.js',
             'MPE' => 'https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js',
-        );
+        ];
 
         if (array_key_exists($localization, $site_id)) {
             return $site_id[$localization];
@@ -159,11 +153,12 @@ class MPUseful
      * Get seller protect link
      *
      * @param string $country
+     *
      * @return string
      */
     public function setSellerProtectLink($country)
     {
-        $protect_link = array(
+        $protect_link = [
             'mld' => 'https://www.mercadopago.com/',
             'mco' => 'https://www.mercadopago.com.co/ayuda/seguridad-vendedor_1800',
             'mla' => 'https://www.mercadopago.com.ar/ayuda/dinero-seguridad-ventas_288',
@@ -173,7 +168,7 @@ class MPUseful
             'mlu' => 'https://www.mercadopago.com.uy/ayuda/dinero-seguridad-ventas_288',
             'mlv' => 'https://www.mercadopago.com.ve/accion-pausada',
             'mpe' => 'https://www.mercadopago.com.pe/ayuda/dinero-seguridad-ventas_288',
-        );
+        ];
 
         return $protect_link[$country];
     }
@@ -181,12 +176,13 @@ class MPUseful
     /**
      * Set Country Link PSJ
      *
-     * @param  string $country
+     * @param string $country
+     *
      * @return string
      */
     public function getCountryPsjLink($country)
     {
-        $psj_link = array(
+        $psj_link = [
             'mld' => 'https://www.mercadopago.com/',
             'mco' => 'https://www.mercadopago.com.co/costs-section#from-section=menu',
             'mla' => 'https://www.mercadopago.com.ar/costs-section#from-section=menu',
@@ -196,7 +192,7 @@ class MPUseful
             'mlu' => 'https://www.mercadopago.com.uy/costs-section#from-section=menu',
             'mlv' => 'https://www.mercadopago.com.ve/costs-section#from-section=menu',
             'mpe' => 'https://www.mercadopago.com.pe/costs-section#from-section=menu',
-        );
+        ];
 
         return $psj_link[$country];
     }
@@ -204,12 +200,13 @@ class MPUseful
     /**
      * Set the terms and policies link
      *
-     * @param  string $country
+     * @param string $country
+     *
      * @return string
      */
     public function getTermsAndPoliciesLink($country)
     {
-        $terms_link = array(
+        $terms_link = [
             'MCO' => 'https://www.mercadopago.com.co/ayuda/terminos-y-politicas_194',
             'MLA' => 'https://www.mercadopago.com.ar/ayuda/terminos-y-politicas_194',
             'MLB' => 'https://www.mercadopago.com.br/ajuda/termos-e-politicas_194',
@@ -218,7 +215,7 @@ class MPUseful
             'MLU' => 'https://www.mercadopago.com.uy/ayuda/terminos-y-politicas_194',
             'MLV' => 'https://www.mercadopago.com.ve/ayuda/terminos-y-politicas_194',
             'MPE' => 'https://www.mercadopago.com.pe/ayuda/terminos-y-politicas_194',
-        );
+        ];
 
         return array_key_exists($country, $terms_link) ? $terms_link[$country] : $terms_link['MLA'];
     }
@@ -226,7 +223,8 @@ class MPUseful
     /**
      * Separate payment id from payment place
      *
-     * @param  string $compositeId
+     * @param string $compositeId
+     *
      * @return array
      */
     private function parse($compositeId)
@@ -242,7 +240,8 @@ class MPUseful
     /**
      * Returns payment method id
      *
-     * @param  string $compositeId
+     * @param string $compositeId
+     *
      * @return string
      */
     public function getPaymentMethodId($compositeId)
@@ -253,7 +252,8 @@ class MPUseful
     /**
      * Returns payment place id
      *
-     * @param  string $compositeId
+     * @param string $compositeId
+     *
      * @return string
      */
     public function getPaymentPlaceId($compositeId)
@@ -264,8 +264,9 @@ class MPUseful
     /**
      * Calculate the discounted total
      *
-     * @param  mixed $cart
-     * @param  string $strDiscount
+     * @param mixed $cart
+     * @param string $strDiscount
+     *
      * @return float
      */
     public function getTheTotalDiscounted($cart, $strDiscount)
@@ -300,36 +301,36 @@ class MPUseful
      */
     public function getCorrectedTotal($cart, $checkout)
     {
-        $round       = $this->getRound();
+        $round = $this->getRound();
         $strDiscount = $this->getDiscountByCheckoutType($checkout);
 
-        $shipping  = (float) $cart->getOrderTotal(true, 5);
-        $products  = (float) $cart->getOrderTotal(true, 4);
+        $shipping = (float) $cart->getOrderTotal(true, 5);
+        $products = (float) $cart->getOrderTotal(true, 4);
         $cartTotal = (float) $cart->getOrderTotal();
 
         $discount = $products * ((float) $strDiscount / 100);
         $products = ($discount != 0) ? $products - $discount : $products;
 
-        $subtotal   = $products + $shipping;
+        $subtotal = $products + $shipping;
         $difference = $cartTotal - $subtotal - $discount;
-        $amount     = $subtotal + $difference;
+        $amount = $subtotal + $difference;
 
-        $amountWithRound  = $round ? Tools::ps_round($amount) : Tools::ps_round($amount, 2);
+        $amountWithRound = $round ? Tools::ps_round($amount) : Tools::ps_round($amount, 2);
         $amountDifference = $amountWithRound - $amount;
 
         return [
-            "amount"            => $amount,
-            "discount"          => $round ? Tools::ps_round($discount) : Tools::ps_round($discount, 2),
-            "str_discount"      => $strDiscount,
-            "amount_with_round" => $amountWithRound,
-            "amount_difference" => $round ? Tools::ps_round($amountDifference) : Tools::ps_round($amountDifference, 2),
+            'amount' => $amount,
+            'discount' => $round ? Tools::ps_round($discount) : Tools::ps_round($discount, 2),
+            'str_discount' => $strDiscount,
+            'amount_with_round' => $amountWithRound,
+            'amount_difference' => $round ? Tools::ps_round($amountDifference) : Tools::ps_round($amountDifference, 2),
         ];
     }
 
     /**
      * Get discount based on checkout type
      *
-     * @return int
+     * @return bool|float|string
      */
     public function getDiscountByCheckoutType($checkout)
     {
@@ -353,6 +354,7 @@ class MPUseful
      * List the icon by site_id
      *
      * @param string $country
+     *
      * @return array
      */
     public function getIconsDetails($country)
@@ -362,7 +364,7 @@ class MPUseful
             'wallet' => 'https://http2.mlstatic.com/storage/cpp/static-files/11291e4a-d090-4904-b439-80afa83d473c.png',
             'dollar_sign' => 'https://http2.mlstatic.com/storage/cpp/static-files/93224a93-ad4e-4b93-84cf-5e1e74df7d7c.png',
         ];
-        
+
         $iconMap = [
             'MLB' => ['shield', 'dollar_sign'],
             'MCO' => ['wallet', 'dollar_sign'],
@@ -373,19 +375,17 @@ class MPUseful
             'MLV' => ['wallet', 'shield'],
             'MPE' => ['wallet', 'shield'],
         ];
-        
+
         $defaultIcons = ['wallet', 'shield'];
-        
+
         $iconsToReturn = $iconMap[$country] ?? $defaultIcons;
 
         $icons = [];
         foreach ($iconsToReturn as $iconName) {
-            if (isset($iconDetails[$iconName])) {
-                $icon = new stdClass();
-                $icon->name = $iconName;
-                $icon->link = $iconDetails[$iconName];
-                $icons[] = $icon;
-            }
+            $icon = new stdClass();
+            $icon->name = $iconName;
+            $icon->link = $iconDetails[$iconName];
+            $icons[] = $icon;
         }
 
         return $icons;

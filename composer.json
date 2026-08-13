@@ -1,8 +1,12 @@
 {
   "config": {
-    "prepend-autoloader": false
+    "prepend-autoloader": false,
+    "platform": {
+      "php": "7.4"
+    }
   },
   "require": {
+    "php": ">=7.4",
     "mp-plugins/php-sdk": "2.10.1"
   },
   "require-dev": {

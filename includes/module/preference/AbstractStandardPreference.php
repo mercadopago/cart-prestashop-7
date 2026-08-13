@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/preference/AbstractPreference.php';
 
 abstract class AbstractStandardPreference extends AbstractPreference
 {
@@ -50,56 +40,58 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * To build payload from Wallet Button payment
      *
      * @param $cart
+     *
      * @return array
      */
     public function buildPreferencePayload($cart, $discount = 0)
     {
-        $items         = $this->getCartItems($cart);
+        $items = $this->getCartItems($cart);
         $payloadParent = $this->getCommonPreference($cart);
 
         if ($discount != 0) {
             $totalInfo = $this->mpuseful->getCorrectedTotal($cart, 'wallet_button');
 
-            $discountPerItem = array(
-                'id'          => 'discount',
-                'title'       => 'Discount',
-                'quantity'    => 1,
-                'unit_price'  => -$totalInfo['discount'],
+            $discountPerItem = [
+                'id' => 'discount',
+                'title' => 'Discount',
+                'quantity' => 1,
+                'unit_price' => -$totalInfo['discount'],
                 'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
                 'description' => 'Discount provided by store',
-            );
+            ];
             array_push($items, $discountPerItem);
 
             $itemsAmount = array_reduce(
                 $items,
                 function ($accumulator, $item) {
                     $accumulator += $item['unit_price'] * $item['quantity'];
+
                     return $accumulator;
                 }
             );
 
-            $amountDifferenceItem = array(
-                'id'          => 'difference',
-                'title'       => 'Difference',
-                'quantity'    => 1,
-                'unit_price'  => $totalInfo['amount_with_round'] - $itemsAmount,
+            $amountDifferenceItem = [
+                'id' => 'difference',
+                'title' => 'Difference',
+                'quantity' => 1,
+                'unit_price' => $totalInfo['amount_with_round'] - $itemsAmount,
                 'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
                 'description' => 'Difference provided by store',
-            );
+            ];
             array_push($items, $amountDifferenceItem);
         }
 
-        $payloadAdditional = array(
-            'items'              => $items,
-            'payer'              => $this->getCustomerData($cart),
-            'shipments'          => $this->getShipment($cart),
-            'back_urls'          => $this->getBackUrls($cart),
-            'payment_methods'    => $this->getPaymentOptions(),
-            'auto_return'        => $this->getAutoReturn(),
-            'binary_mode'        => $this->getBinaryMode(),
-            'expires'            => $this->getExpirationStatus(),
+        $payloadAdditional = [
+            'items' => $items,
+            'payer' => $this->getCustomerData($cart),
+            'shipments' => $this->getShipment($cart),
+            'back_urls' => $this->getBackUrls($cart),
+            'payment_methods' => $this->getPaymentOptions(),
+            'auto_return' => $this->getAutoReturn(),
+            'binary_mode' => $this->getBinaryMode(),
+            'expires' => $this->getExpirationStatus(),
             'expiration_date_to' => $this->getExpirationDate(),
-        );
+        ];
 
         return array_merge($payloadParent, $payloadAdditional);
     }
@@ -108,7 +100,8 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * Get customer data
      *
      * @param $cart
-     * @return array
+     *
+     * @return array|null
      */
     public function getCustomerData($cart)
     {
@@ -117,19 +110,19 @@ abstract class AbstractStandardPreference extends AbstractPreference
             $customerFields = $customer->getFields();
             $addressInvoice = new Address((int) $cart->id_address_invoice);
 
-            $customerData = array(
+            $customerData = [
                 'email' => $customerFields['email'],
                 'first_name' => $customerFields['firstname'],
                 'last_name' => $customerFields['lastname'],
-                'phone' => array(
+                'phone' => [
                     'area_code' => '',
                     'number' => $addressInvoice->phone,
-                ),
-                'identification' => array(
+                ],
+                'identification' => [
                     'type' => '',
                     'number' => '',
-                ),
-                'address' => array(
+                ],
+                'address' => [
                     'zip_code' => $addressInvoice->postcode,
                     'street_name' => $addressInvoice->address1 . ' - ' .
                         $addressInvoice->address2 . ' - ' .
@@ -138,11 +131,14 @@ abstract class AbstractStandardPreference extends AbstractPreference
                     'street_number' => '',
                     'city' => $addressInvoice->city,
                     'federal_unit' => '',
-                ),
+                ],
                 'date_created' => date('c', strtotime($customerFields['date_add'])),
-            );
+            ];
+
             return $customerData;
         }
+
+        return null;
     }
 
     /**
@@ -152,7 +148,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
      */
     public function getPaymentOptions()
     {
-        $excludedPaymentMethods = array();
+        $excludedPaymentMethods = [];
         $paymentMethods = $this->mercadopago->getPaymentMethods();
 
         Configuration::updateValue('MERCADOPAGO_PAYMENT_ACCOUNT_MONEY', 'on');
@@ -162,17 +158,17 @@ abstract class AbstractStandardPreference extends AbstractPreference
             $value = Configuration::get($pmVariableName);
 
             if ($value != 'on') {
-                $excludedPaymentMethods[] = array(
+                $excludedPaymentMethods[] = [
                     'id' => Tools::strtolower($paymentMethod['id']),
-                );
+                ];
             }
         }
 
-        $paymentOptions = array(
-            'installments' => (integer) $this->settings['MERCADOPAGO_INSTALLMENTS'],
-            'excluded_payment_types' => array(),
+        $paymentOptions = [
+            'installments' => (int) $this->settings['MERCADOPAGO_INSTALLMENTS'],
+            'excluded_payment_types' => [],
             'excluded_payment_methods' => $excludedPaymentMethods,
-        );
+        ];
 
         return $paymentOptions;
     }
@@ -181,14 +177,15 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * Get store shipment
      *
      * @param $cart
+     *
      * @return array
      */
     public function getShipment($cart)
     {
         $addressShipment = new Address((int) $cart->id_address_delivery);
 
-        $shipment = array(
-            'receiver_address' => array(
+        $shipment = [
+            'receiver_address' => [
                 'zip_code' => $addressShipment->postcode,
                 'street_name' => $addressShipment->address1 . ' - ' .
                     $addressShipment->address2 . ' - ' .
@@ -198,8 +195,8 @@ abstract class AbstractStandardPreference extends AbstractPreference
                 'apartment' => '-',
                 'floor' => '-',
                 'city_name' => $addressShipment->city,
-            ),
-        );
+            ],
+        ];
 
         return $shipment;
     }
@@ -208,15 +205,16 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * Get back urls for preference callback
      *
      * @param $cart
+     *
      * @return array
      */
     public function getBackUrls($cart)
     {
-        return array(
+        return [
             'success' => $this->getReturnUrl($cart, 'success'),
             'failure' => $this->getReturnUrl($cart, 'failure'),
             'pending' => $this->getReturnUrl($cart, 'pending'),
-        );
+        ];
     }
 
     /**
@@ -280,6 +278,7 @@ abstract class AbstractStandardPreference extends AbstractPreference
      * Get internal metadata
      *
      * @param $cart
+     *
      * @return array
      */
     public function getInternalMetadata($cart)

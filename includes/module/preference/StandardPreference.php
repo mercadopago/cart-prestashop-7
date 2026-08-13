@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractStandardPreference.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/preference/AbstractStandardPreference.php';
 
 class StandardPreference extends AbstractStandardPreference
 {
@@ -45,6 +35,7 @@ class StandardPreference extends AbstractStandardPreference
      * Create standard preference
      *
      * @param $cart
+     *
      * @return mixed
      */
     public function createPreference($cart)
@@ -63,15 +54,16 @@ class StandardPreference extends AbstractStandardPreference
      * To build payload from standard payment
      *
      * @param $cart
+     *
      * @return array
      */
     public function buildPreferencePayload($cart, $discount = 0)
     {
         $payloadParent = parent::buildPreferencePayload($cart);
 
-        $payloadAdditional = array(
+        $payloadAdditional = [
             'metadata' => $this->getInternalMetadata($cart),
-        );
+        ];
 
         return array_merge($payloadParent, $payloadAdditional);
     }
@@ -80,6 +72,7 @@ class StandardPreference extends AbstractStandardPreference
      * Get internal metadata
      *
      * @param $cart
+     *
      * @return array
      */
     public function getInternalMetadata($cart)
@@ -88,10 +81,10 @@ class StandardPreference extends AbstractStandardPreference
 
         $checkoutType = $this->settings['MERCADOPAGO_STANDARD_MODAL'] ? 'modal' : 'redirect';
 
-        $internalMetadataAdditional = array(
+        $internalMetadataAdditional = [
             'checkout' => 'pro',
             'checkout_type' => $checkoutType,
-        );
+        ];
 
         return array_merge($internalMetadataParent, $internalMetadataAdditional);
     }
@@ -101,16 +94,17 @@ class StandardPreference extends AbstractStandardPreference
      *
      * @param $preference
      * @param $cart
+     *
      * @return void
      */
     public function generateLogs($preference, $cart)
     {
-        $logs = array(
-            "cart_id" => $preference['external_reference'],
-            "cart_total" => $cart->getOrderTotal(),
-            "cart_items" => $preference['items'],
-            "metadata" => array_diff_key($preference['metadata'], array_flip(['collector'])),
-        );
+        $logs = [
+            'cart_id' => $preference['external_reference'],
+            'cart_total' => $cart->getOrderTotal(),
+            'cart_items' => $preference['items'],
+            'metadata' => array_diff_key($preference['metadata'], array_flip(['collector'])),
+        ];
 
         $encodedLogs = json_encode($logs);
         MPLog::generate('standard preference logs: ' . $encodedLogs);

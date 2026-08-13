@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/preference/AbstractPreference.php';
 
 class PixPreference extends AbstractPreference
 {
@@ -47,7 +37,7 @@ class PixPreference extends AbstractPreference
     /**
      * Create Pix preference
      *
-     * @return array
+     * @return array|string
      */
     public function createPreference()
     {
@@ -94,13 +84,15 @@ class PixPreference extends AbstractPreference
     /**
      * Delete cart rule if an error occurs
      *
-     * @return void
+     * @return bool
      */
     public function deleteCartRule()
     {
         if ($this->settings['MERCADOPAGO_PIX_DISCOUNT'] != '') {
-            parent::deleteCartRule();
+            return parent::deleteCartRule();
         }
+
+        return true;
     }
 
     /**
@@ -121,7 +113,7 @@ class PixPreference extends AbstractPreference
             'additional_info' => $this->getAdditionalInfo(),
             'point_of_interaction' => [
                 'type' => 'CHECKOUT',
-            ]
+            ],
         ];
 
         return array_merge($payloadParent, $payloadAdditional);
@@ -154,15 +146,15 @@ class PixPreference extends AbstractPreference
         $customerFields = Context::getContext()->customer->getFields();
         $addressInvoice = new Address((int) $this->cart->id_address_invoice);
 
-        $customerData = array(
+        $customerData = [
             'email' => $customerFields['email'],
             'first_name' => $customerFields['firstname'],
             'last_name' => $customerFields['lastname'],
-            'identification' => array(
+            'identification' => [
                 'type' => '',
                 'number' => '',
-            ),
-            'address' => array(
+            ],
+            'address' => [
                 'zip_code' => $addressInvoice->postcode,
                 'street_name' => $addressInvoice->address1 . ' - ' .
                     $addressInvoice->address2 . ' - ' .
@@ -171,8 +163,8 @@ class PixPreference extends AbstractPreference
                 'street_number' => '',
                 'city' => $addressInvoice->city,
                 'federal_unit' => '',
-            )
-        );
+            ],
+        ];
 
         return $customerData;
     }
@@ -201,15 +193,15 @@ class PixPreference extends AbstractPreference
      */
     public function getAdditionalInfo()
     {
-        $additionalInfo = array(
+        $additionalInfo = [
             'payer' => $this->getCustomCustomerData($this->cart),
             'shipments' => $this->getShipmentAddress($this->cart),
-            'items' =>  $this->getCartItems(
+            'items' => $this->getCartItems(
                 $this->cart,
                 true,
                 $this->settings['MERCADOPAGO_PIX_DISCOUNT']
             ),
-        );
+        ];
 
         return $additionalInfo;
     }
@@ -222,6 +214,7 @@ class PixPreference extends AbstractPreference
     public function getAmount()
     {
         $total = (float) $this->cart->getOrderTotal();
+
         return $total;
     }
 }

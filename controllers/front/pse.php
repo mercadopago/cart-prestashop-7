@@ -1,39 +1,29 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/preference/PsePreference.php';
-require_once MP_ROOT_URL . '/includes/module/notification/WebhookNotification.php';
-require_once MP_ROOT_URL . '/includes/module/checkouts/PseCheckout.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/preference/PsePreference.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/WebhookNotification.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/checkouts/PseCheckout.php';
 
 class MercadoPagoPseModuleFrontController extends ModuleFrontController
 {
@@ -46,28 +36,36 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
      * Default function of Prestashop for init the controller
      *
      * @return void
+     *
      * @throws Exception
      */
     public function postProcess()
     {
         $preference = new PsePreference(new PseCheckout(), $this->context->cart);
         $pseFormData = Tools::getValue('mercadopago_pse');
-        $payerData = array(
-            'entity_type' => $pseFormData['personType'],
-            'document_type' => $pseFormData['documentType'],
-            'document_number' => $pseFormData['documentNumber'],
-            'financial_institution' => $pseFormData['financialInstitution']
-        );
+        if (!is_array($pseFormData)) {
+            $pseFormData = [];
+        }
+        $payerData = [
+            'entity_type' => isset($pseFormData['personType']) ? $pseFormData['personType'] : null,
+            'document_type' => isset($pseFormData['documentType']) ? $pseFormData['documentType'] : null,
+            'document_number' => isset($pseFormData['documentNumber']) ? $pseFormData['documentNumber'] : null,
+            'financial_institution' => isset($pseFormData['financialInstitution']) ? $pseFormData['financialInstitution'] : null,
+        ];
 
         try {
             $preference->verifyModuleParameters();
             $payment = $preference->createPayment($payerData, $this->getCallbackPath($this->context->cart));
 
-            if (!is_array($payment)) return $this->handleWithPaymentError($preference, $payment, null);
+            if (!is_array($payment)) {
+                $this->handleWithPaymentError($preference, $payment, null);
+
+                return;
+            }
 
             $preference->saveCreatePreferenceData(
                 $this->context->cart,
-                $payment['notification_url'],
+                $payment['notification_url']
             );
 
             $this->createOrder($payment, $this->context->cart);
@@ -80,8 +78,8 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @param array      $payment
-     * @param object     $cart
+     * @param array $payment
+     * @param object $cart
      *
      * @return void
      */
@@ -97,7 +95,8 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
      *
      * @return string
      */
-    private function getCallbackPath($cart) {
+    private function getCallbackPath($cart)
+    {
         $path = '?id_cart=' . $cart->id;
         $path .= '&key=' . $cart->secure_key;
         $path .= '&id_order=' . $cart->id;
@@ -109,18 +108,19 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @param PsePreference  $preference
-     * @param array  $paymentResponse
-     * @param Exception  $err
+     * @param PsePreference $preference
+     * @param array|string|null $paymentResponse
+     * @param Exception|null $err
      *
      * @return void
-    */
+     */
     private function handleWithPaymentError($preference, $paymentResponse, $err)
     {
         if (is_string($paymentResponse)) {
-            $message = MPApi::validateMessageApi($paymentResponse) || 'Somenthing went wrong during PSE payment creation';
+            $message = MPApi::validateMessageApi($paymentResponse) ?: 'Somenthing went wrong during PSE payment creation';
 
             $this->redirectToErrorPage($preference, Tools::displayError($message));
+
             return;
         }
 
@@ -129,8 +129,8 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
     }
 
     /**
-     * @param Preference  $preference
-     * @param string      $errorMessage
+     * @param AbstractPreference $preference
+     * @param string $errorMessage
      *
      * @return void
      */

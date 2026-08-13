@@ -21,38 +21,21 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/AbstractSettings.php';
-
-class HomologationSettings extends AbstractSettings
+/**
+ * Migrate the deprecated hook aliases (header, paymentReturn, orderConfirmation)
+ * to their modern display* names on stores that already have the module installed.
+ *
+ * @param Mercadopago $module
+ *
+ * @return bool
+ */
+function upgrade_module_4_18_7($module)
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->submit = null;
-        $this->values = $this->getFormValues();
-        $this->form = $this->generateForm();
-    }
+    $module->unregisterHook('header');
+    $module->unregisterHook('paymentReturn');
+    $module->unregisterHook('orderConfirmation');
 
-    /**
-     * Generate inputs form
-     *
-     * @return array
-     */
-    public function generateForm()
-    {
-        $title = $this->module->l('Homologation', 'HomologationSettings');
-        $fields = null;
-
-        return $this->buildForm($title, $fields);
-    }
-
-    /**
-     * Set values for the form inputs
-     *
-     * @return null
-     */
-    public function getFormValues()
-    {
-        return null;
-    }
+    return $module->registerHook('displayHeader')
+        && $module->registerHook('displayPaymentReturn')
+        && $module->registerHook('displayOrderConfirmation');
 }

@@ -1,42 +1,32 @@
 <?php
 /**
-* 2007-2025 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2025 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
-
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class MPRestCli
 {
-    const PRODUCT_ID = 'BC32CCRU643001OI39AG';
-    const PLATFORM_ID = 'BP1EEMU0A3M001J8OJUG';
-    const API_BASE_URL = 'https://api.mercadopago.com';
-    const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
+    public const PRODUCT_ID = 'BC32CCRU643001OI39AG';
+    public const PLATFORM_ID = 'BP1EEMU0A3M001J8OJUG';
+    public const API_BASE_URL = 'https://api.mercadopago.com';
+    public const API_BASE_MELI_URL = 'https://api.mercadolibre.com';
 
     public function __construct()
     {
@@ -47,27 +37,34 @@ class MPRestCli
      * @param $method
      * @param $headers
      * @param $uri_base
-     * @return false|resource
+     *
+     * @return CurlHandle|false
      */
     private static function getConnect($uri, $method, $headers, $uri_base)
     {
-        $product_id = ($method == 'POST') ? "x-product-id: " . self::PRODUCT_ID : "";
+        $product_id = ($method == 'POST') ? 'x-product-id: ' . self::PRODUCT_ID : '';
 
         $headers_default = [
             $product_id,
             'Accept: application/json',
             'Content-Type: application/json',
             'x-platform-id: ' . self::PLATFORM_ID,
-            'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID')
+            'x-integrator-id:' . Configuration::get('MERCADOPAGO_INTEGRATOR_ID'),
         ];
-        is_array($headers) ? $headers = array_merge($headers_default, $headers): '';
+        is_array($headers) ? $headers = array_merge($headers_default, $headers) : '';
 
         $connect = curl_init($uri_base . $uri);
 
-        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v'.MP_VERSION);
+        if ($connect === false) {
+            return false;
+        }
+
+        curl_setopt($connect, CURLOPT_USERAGENT, 'MercadoPago Prestashop v' . MP_VERSION);
         curl_setopt($connect, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($connect, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($connect, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($connect, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($connect, CURLOPT_SSL_VERIFYHOST, 2);
 
         return $connect;
     }
@@ -78,7 +75,9 @@ class MPRestCli
      * @param $connect
      * @param $data
      * @param $content_type
+     *
      * @return void
+     *
      * @throws Exception
      */
     private static function setData($connect, $data, $content_type)
@@ -107,12 +106,18 @@ class MPRestCli
      * @param $data
      * @param $headers
      * @param $uri_base
+     *
      * @return array
+     *
      * @throws Exception
      */
     private static function exec($method, $uri, $data, $headers, $uri_base)
     {
         $connect = self::getConnect($uri, $method, $headers, $uri_base);
+
+        if ($connect === false) {
+            return ['status' => 500, 'response' => null];
+        }
 
         if ($data) {
             self::setData($connect, $data, 'application/json');
@@ -120,10 +125,10 @@ class MPRestCli
 
         $api_result = curl_exec($connect);
         $api_http_code = curl_getinfo($connect, CURLINFO_HTTP_CODE);
-        $response = array(
+        $response = [
             'status' => $api_http_code,
             'response' => json_decode($api_result, true),
-        );
+        ];
 
         curl_close($connect);
 
@@ -132,8 +137,10 @@ class MPRestCli
 
     /**
      * @param $uri
-     * @param null $headers
+     * @param array|null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function getMercadoLibre($uri, $headers = null)
@@ -143,8 +150,10 @@ class MPRestCli
 
     /**
      * @param $uri
-     * @param null $headers
+     * @param array|null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function get($uri, $headers = null)
@@ -155,8 +164,10 @@ class MPRestCli
     /**
      * @param $uri
      * @param $data
-     * @param null $headers
+     * @param array|null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function post($uri, $data, $headers = null)
@@ -167,8 +178,10 @@ class MPRestCli
     /**
      * @param $uri
      * @param $data
-     * @param null $headers
+     * @param array|null $headers
+     *
      * @return array
+     *
      * @throws Exception
      */
     public static function put($uri, $data, $headers = null)

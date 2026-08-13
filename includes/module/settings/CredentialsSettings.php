@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/AbstractSettings.php';
 
 class CredentialsSettings extends AbstractSettings
 {
@@ -47,13 +37,13 @@ class CredentialsSettings extends AbstractSettings
     /**
      * Generate inputs form
      *
-     * @return void
+     * @return array
      */
     public function generateForm()
     {
         $title = $this->module->l('Credentials', 'CredentialsSettings');
-        $fields = array(
-            array(
+        $fields = [
+            [
                 'col' => 4,
                 'type' => 'switch',
                 'label' => $this->module->l('Production', 'CredentialsSettings'),
@@ -62,20 +52,20 @@ class CredentialsSettings extends AbstractSettings
                 'desc' => $this->module->l('Select "YES" only when you are ready to sell. ', 'CredentialsSettings') .
                     $this->module->l('Change to NO to activate the Sandbox ', 'CredentialsSettings') .
                     $this->module->l('test environment.', 'CredentialsSettings'),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'id' => 'MERCADOPAGO_PROD_STATUS_ON',
                         'value' => true,
-                        'label' => $this->module->l('Yes', 'CredentialsSettings')
-                    ),
-                    array(
+                        'label' => $this->module->l('Yes', 'CredentialsSettings'),
+                    ],
+                    [
                         'id' => 'MERCADOPAGO_PROD_STATUS_OFF',
                         'value' => false,
-                        'label' => $this->module->l('No', 'CredentialsSettings')
-                    )
-                ),
-            ),
-            array(
+                        'label' => $this->module->l('No', 'CredentialsSettings'),
+                    ],
+                ],
+            ],
+            [
                 'col' => 8,
                 'type' => 'html',
                 'name' => '',
@@ -84,41 +74,41 @@ class CredentialsSettings extends AbstractSettings
                 'html_content' => '<a href="https://www.mercadopago.com/'
                     . Configuration::get('MERCADOPAGO_COUNTRY_LINK') .
                     '/account/credentials" target="_blank" class="btn btn-default mp-btn-credenciais">'
-                    . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>'
-            ),
-            array(
+                    . $this->module->l('Search my credentials', 'CredentialsSettings') . '</a>',
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_PUBLIC_KEY',
                 'label' => $this->module->l('Public Key', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => ' ',
                 'name' => 'MERCADOPAGO_ACCESS_TOKEN',
                 'label' => $this->module->l('Access token', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_SANDBOX_PUBLIC_KEY',
                 'label' => $this->module->l('Public Key', 'CredentialsSettings'),
-                'required' => true
-            ),
-            array(
+                'required' => true,
+            ],
+            [
                 'col' => 8,
                 'type' => 'text',
                 'desc' => '',
                 'name' => 'MERCADOPAGO_SANDBOX_ACCESS_TOKEN',
                 'label' => $this->module->l('Access token', 'CredentialsSettings'),
-                'required' => true
-            )
-        );
+                'required' => true,
+            ],
+        ];
 
         return $this->buildForm($title, $fields);
     }
@@ -130,32 +120,32 @@ class CredentialsSettings extends AbstractSettings
      */
     public function postFormProcess()
     {
-        $this->validate = ([
+        $this->validate = [
             'MERCADOPAGO_PUBLIC_KEY' => 'public_key',
             'MERCADOPAGO_ACCESS_TOKEN' => 'access_token',
             'MERCADOPAGO_SANDBOX_PUBLIC_KEY' => 'public_key',
             'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => 'access_token',
-        ]);
+        ];
 
         parent::postFormProcess();
 
-        //activate checkout
+        // activate checkout
         if (Mercadopago::$form_alert != 'alert-danger') {
             $mp_check = Configuration::get('MERCADOPAGO_CHECK_CREDENTIALS');
             $payment_methods = $this->mercadopago->getPaymentMethods();
             foreach ($payment_methods as $payment_method) {
                 $pm_name = 'MERCADOPAGO_PAYMENT_' . $payment_method['id'];
-                if ($mp_check == "") {
+                if ($mp_check == '') {
                     Configuration::updateValue($pm_name, 'on');
                 }
 
-                if ($payment_method['type'] != 'credit_card' &&
-                    $payment_method['type'] != 'debit_card' &&
-                    $payment_method['type'] != 'prepaid_card' &&
-                    !in_array($payment_method['id'], $this->getTicketExcludedMethods())
+                if ($payment_method['type'] != 'credit_card'
+                    && $payment_method['type'] != 'debit_card'
+                    && $payment_method['type'] != 'prepaid_card'
+                    && !in_array($payment_method['id'], $this->getTicketExcludedMethods())
                 ) {
                     $pm_name = 'MERCADOPAGO_TICKET_PAYMENT_' . $payment_method['id'];
-                    if ($mp_check == "") {
+                    if ($mp_check == '') {
                         Configuration::updateValue($pm_name, 'on');
                     }
                 }
@@ -175,13 +165,13 @@ class CredentialsSettings extends AbstractSettings
      */
     public function getFormValues()
     {
-        return array(
+        return [
             'MERCADOPAGO_PROD_STATUS' => Configuration::get('MERCADOPAGO_PROD_STATUS'),
             'MERCADOPAGO_PUBLIC_KEY' => Configuration::get('MERCADOPAGO_PUBLIC_KEY'),
             'MERCADOPAGO_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_ACCESS_TOKEN'),
             'MERCADOPAGO_SANDBOX_PUBLIC_KEY' => Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY'),
-            'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN')
-        );
+            'MERCADOPAGO_SANDBOX_ACCESS_TOKEN' => Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN'),
+        ];
     }
 
     /**
@@ -189,7 +179,8 @@ class CredentialsSettings extends AbstractSettings
      *
      * @param string $input
      * @param string $value
-     * @return boolean
+     *
+     * @return bool
      */
     public function validateCredentials($input, $value)
     {

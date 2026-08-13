@@ -1,32 +1,22 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -37,7 +27,7 @@ class AbstractNotification
     public $module;
     public $status;
     public $amount;
-    public $aproved;
+    public $approved;
     public $pending;
     public $order_id;
     public $mercadopago;
@@ -46,6 +36,7 @@ class AbstractNotification
     public $transaction_id;
     public $mp_transaction;
     public $ps_order_state;
+    public $ps_order_state_lang;
     public $order_state_lang;
     public $customer_secure_key;
     public $mpuseful;
@@ -70,14 +61,15 @@ class AbstractNotification
     /**
      * Verify if received notification and save on BD
      *
-     * @param  mixed $cart
+     * @param mixed $cart
+     *
      * @return void
      */
     public function verifyWebhook($cart)
     {
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-                "received_webhook" => true
+                'received_webhook' => true,
             ]
         );
         MPLog::generate('Notification received on cart id ' . $cart->id);
@@ -107,6 +99,7 @@ class AbstractNotification
      * Update order transaction
      *
      * @param mixed $order
+     *
      * @return void
      */
     public function updateOrderTransaction($order)
@@ -114,7 +107,7 @@ class AbstractNotification
         try {
             $order_payments = $order->getOrderPaymentCollection();
 
-            if (!empty($this->payments_data['payments_id']) && count($this->payments_data['payments_id']) > 1) {
+            if (!empty($this->payments_data['payments_id']) && is_array($this->payments_data['payments_id']) && count($this->payments_data['payments_id']) > 1) {
                 foreach ($order_payments as $payment) {
                     $payment->delete();
                 }
@@ -145,8 +138,8 @@ class AbstractNotification
     /**
      * Create order on Prestashop database
      *
-     * @param  mixed $cart
-     * @param  float $total
+     * @param mixed $cart
+     *
      * @return void
      */
     public function createOrder($cart, $custom_create_order = false)
@@ -160,9 +153,9 @@ class AbstractNotification
                 $cart->id,
                 $this->order_state,
                 $payment_amount,
-                "Mercado Pago",
+                'Mercado Pago',
                 null,
-                array(),
+                [],
                 (int) $cart->id_currency,
                 false
             );
@@ -171,8 +164,12 @@ class AbstractNotification
             $order = new Order($this->order_id);
 
             $payments = $order->getOrderPaymentCollection();
-            $payments[0]->transaction_id = $this->transaction_id;
-            $payments[0]->update();
+            if ($payments->count() > 0) {
+                /** @var OrderPayment $payment */
+                $payment = $payments[0];
+                $payment->transaction_id = $this->transaction_id;
+                $payment->update();
+            }
 
             $this->saveCreateOrderData($cart);
 
@@ -196,7 +193,8 @@ class AbstractNotification
     /**
      * Validate status to update order
      *
-     * @param  mixed $cart
+     * @param mixed $cart
+     *
      * @return void
      */
     public function updateOrder($cart)
@@ -359,7 +357,7 @@ class AbstractNotification
      */
     public function ruleFraud($cart, $order, $actual_status, $validate_actual)
     {
-        MPLog::generate('The order '. $this->order_id .' have a possible payment fraud', 'error');
+        MPLog::generate('The order ' . $this->order_id . ' have a possible payment fraud', 'error');
 
         $status_fraud = $this->getNotificationPaymentState('possible_fraud');
         $this->order_state = $status_fraud;
@@ -368,7 +366,7 @@ class AbstractNotification
             MPLog::generate('Order status is the same', 'warning');
             $this->getNotificationResponse('Order status is the same', 202);
         } elseif ($validate_actual == true) {
-            MPLog::generate('The order '. $this->order_id .' has been updated to possible fraud status', 'error');
+            MPLog::generate('The order ' . $this->order_id . ' has been updated to possible fraud status', 'error');
             $this->updatePrestashopOrder($cart, $order);
         } else {
             MPLog::generate('The order has been updated to a status that does not belong to Mercado Pago', 'warning');
@@ -379,7 +377,8 @@ class AbstractNotification
     /**
      * Update order on Prestashop database
      *
-     * @param  mixed $cart
+     * @param mixed $cart
+     *
      * @return void
      */
     public function updatePrestashopOrder($cart, $order)
@@ -404,9 +403,8 @@ class AbstractNotification
     /**
      * Save payments info on mp_transaction table
      *
-     * @param  mixed $cart
-     * @param  mixed $data
-     * @param  int   $order_id
+     * @param mixed $cart
+     *
      * @return void
      */
     public function saveCreateOrderData($cart)
@@ -421,11 +419,11 @@ class AbstractNotification
 
         $payments_amount = $this->verifyValue('payments_amount');
 
-        $dataToCreate =  [
-            "order_id" => $this->order_id,
-            "notification_url" => $_SERVER['REQUEST_URI'],
-            "merchant_order_id" => $this->transaction_id,
-            "received_webhook" => true,
+        $dataToCreate = [
+            'order_id' => $this->order_id,
+            'notification_url' => $_SERVER['REQUEST_URI'],
+            'merchant_order_id' => $this->transaction_id,
+            'received_webhook' => true,
         ];
 
         if ($payments_id) {
@@ -454,8 +452,8 @@ class AbstractNotification
     /**
      * Update payments info on mp_transaction table
      *
-     * @param  mixed $cart
-     * @param  mixed $data
+     * @param mixed $cart
+     *
      * @return void
      */
     public function saveUpdateOrderData($cart)
@@ -468,22 +466,23 @@ class AbstractNotification
 
         $this->mp_transaction->where('cart_id', '=', $cart->id)->update(
             [
-                "payment_id" => pSQL(is_array($payments_id) ? implode(',', $payments_id) : $payments_id),
-                "payment_type" => pSQL(is_array($payments_type) ? implode(',', $payments_type) : $payments_type),
-                "payment_method" => pSQL(is_array($payments_method) ? implode(',', $payments_method) : $payments_method),
-                "payment_status" => pSQL(is_array($payments_status) ? implode(',', $payments_status) : $payments_status),
-                "payment_amount" => pSQL(is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount),
+                'payment_id' => pSQL(is_array($payments_id) ? implode(',', $payments_id) : $payments_id),
+                'payment_type' => pSQL(is_array($payments_type) ? implode(',', $payments_type) : $payments_type),
+                'payment_method' => pSQL(is_array($payments_method) ? implode(',', $payments_method) : $payments_method),
+                'payment_status' => pSQL(is_array($payments_status) ? implode(',', $payments_status) : $payments_status),
+                'payment_amount' => pSQL(is_array($payments_amount) ? implode(',', $payments_amount) : $payments_amount),
             ]
         );
     }
 
     /**
-     * @param  $state
+     * @param $state
+     *
      * @return mixed
      */
     public function getNotificationPaymentState($state)
     {
-        $payment_states = array(
+        $payment_states = [
             'in_process' => 'MERCADOPAGO_STATUS_0',
             'approved' => 'MERCADOPAGO_STATUS_1',
             'cancelled' => 'MERCADOPAGO_STATUS_2',
@@ -494,13 +493,14 @@ class AbstractNotification
             'pending' => 'MERCADOPAGO_STATUS_7',
             'authorized' => 'MERCADOPAGO_STATUS_8',
             'possible_fraud' => 'MERCADOPAGO_STATUS_9',
-        );
+        ];
 
         return Configuration::get($payment_states[$state]);
     }
 
     /**
-     * @param  integer $actual
+     * @param int $actual
+     *
      * @return bool
      */
     public function validateActualStatus($actual)
@@ -515,7 +515,8 @@ class AbstractNotification
     }
 
     /**
-     * @param  integer $actual
+     * @param int $actual
+     *
      * @return bool
      */
     public function getBackOrderStatus($actual)
@@ -538,20 +539,22 @@ class AbstractNotification
     /**
      * Get responses to send for notification
      *
-     * @param  string  $message
-     * @param  integer $code
-     * @return void
+     * @param string $message
+     * @param int $code
+     *
+     * @return bool|int
      */
     public static function getNotificationResponse($message, $code)
     {
         header('Content-type: application/json');
-        $response = array(
-            "code" => $code,
-            "message" => $message,
-            "version" => MP_VERSION
-        );
+        $response = [
+            'code' => $code,
+            'message' => $message,
+            'version' => MP_VERSION,
+        ];
 
         echo json_encode($response);
+
         return http_response_code($code);
     }
 
@@ -575,19 +578,18 @@ class AbstractNotification
     /**
      * Generate notification logs
      *
-     * @param  string $method
      * @return void
      */
     public function generateLogs()
     {
         $logs = [
-          "transaction_id" => $this->transaction_id,
-          "cart_total" => $this->total,
-          "order_id" => $this->order_id,
-          "payment_status" => $this->status,
-          "approved_order_state" => $this->approved,
-          "pending_order_state" => $this->pending,
-          "order_state" => $this->order_state,
+            'transaction_id' => $this->transaction_id,
+            'cart_total' => $this->total,
+            'order_id' => $this->order_id,
+            'payment_status' => $this->status,
+            'approved_order_state' => $this->approved,
+            'pending_order_state' => $this->pending,
+            'order_state' => $this->order_state,
         ];
 
         $encodedLogs = json_encode($logs);
@@ -597,8 +599,9 @@ class AbstractNotification
     /**
      * Verify value
      *
-     * @param  string $method
-     * @return string
+     * @param string $key
+     *
+     * @return string|null
      */
     public function verifyValue($key)
     {
