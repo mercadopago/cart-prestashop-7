@@ -1,38 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
- 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/settings/CoreSdkSettings.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/CoreSdkSettings.php';
 
 class MPApi
 {
@@ -51,6 +40,7 @@ class MPApi
         if (null === $mercadopago) {
             $mercadopago = new MPApi();
         }
+
         return $mercadopago;
     }
 
@@ -86,25 +76,27 @@ class MPApi
      * Validate if the seller is homologated
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function getCredentialsWrapper($access_token)
     {
         $response = MPRestCli::get(
             '/plugins-credentials-wrapper/credentials',
-            ["Authorization: Bearer " . $access_token]
+            ['Authorization: Bearer ' . $access_token]
         );
 
-        //in case of failures
+        // in case of failures
         if ($response['status'] > 202) {
             MPLog::generate(
                 'Validate homologation error (plugins-credentials-wrapper API). Status: ' . $response['status'],
                 'error'
             );
+
             return false;
         }
 
-        //response treatment
+        // response treatment
         $result = $response['response'];
 
         return $result;
@@ -114,30 +106,33 @@ class MPApi
      * Get payment methods
      *
      * @return array|bool
+     *
      * @throws Exception
      */
     public function getPaymentMethods()
     {
         $public_key = $this->getPublicKey();
-        $response = MPRestCli::get('/ppcore/prod/payment-methods/v1/payment-methods', ["Authorization: " . $public_key]);
+        $response = MPRestCli::get('/ppcore/prod/payment-methods/v1/payment-methods', ['Authorization: ' . $public_key]);
 
-        //in case of failures
+        // in case of failures
         if (is_array($response) && isset($response['status'])) {
             if ($response['status'] > 202) {
                 $message = isset($response['response']['message']) ? $response['response']['message'] : 'Mensagem não disponível';
                 MPLog::generate('API get_payment_methods error: ' . $message, 'error');
+
                 return false;
             }
         } else {
             MPLog::generate('API get_payment_methods error: Resposta inválida da API', 'error');
+
             return false;
         }
 
-        //response treatment
+        // response treatment
         $result = $response['response'];
         asort($result);
 
-        $payments = array();
+        $payments = [];
         foreach ($result as $value) {
             // remove on paypay release
             if ($value['id'] == 'paypal') {
@@ -146,7 +141,7 @@ class MPApi
 
             if (isset($value['payment_places'])) {
                 $paymentsDefaultData = $this->paymentsDefaultData($value);
-                $paymentPlaces = array('payment_places'=>$value['payment_places']);
+                $paymentPlaces = ['payment_places' => $value['payment_places']];
                 $payments[] = array_merge($paymentsDefaultData, $paymentPlaces);
 
                 continue;
@@ -159,14 +154,15 @@ class MPApi
     }
 
     /**
-    * Get payment main data
-    *
-    * @param array $value
-    * @return array
-    */
+     * Get payment main data
+     *
+     * @param array $value
+     *
+     * @return array
+     */
     public function paymentsDefaultData($value)
     {
-        return array(
+        return [
             'id' => Tools::strtoupper($value['id']),
             'name' => $value['name'],
             'type' => $value['payment_type_id'],
@@ -176,47 +172,55 @@ class MPApi
             'financial_institutions' => isset($value['financial_institutions']) ? $value['financial_institutions'] : [],
             'payment_places' => isset($value['payment_places']) ? $value['payment_places'] : [],
             'allowed_identification_types' => isset($value['allowed_identification_types']) ? $value['allowed_identification_types'] : [],
-        );
+        ];
     }
 
     /**
      * Get standard payment
      *
-     * @param integer $transaction_id
-     * @return bool
+     * @param int $transaction_id
+     *
+     * @return array|false
+     *
      * @throws Exception
      */
     public function getPaymentStandard($transaction_id)
     {
         try {
-            $transaction_id = preg_replace('/[^\d]/', '', $transaction_id);
+            $transaction_id = preg_replace('/[^\d]/', '', (string) $transaction_id);
             $sdk = CoreSdkSettings::getInstance();
             $paymentModule = $sdk->getPaymentInstance();
-            return $paymentModule->read(array(
-                "id" => $transaction_id
-            ), [], false);
-        } catch (\Throwable $th) {
+
+            return $paymentModule->read([
+                'id' => $transaction_id,
+            ], [], false);
+        } catch (Throwable $th) {
             MPLog::generate('SDK get_payment_standard error: ' . $th->getMessage(), 'error');
-            return  false;
+
+            return false;
         }
     }
 
     /**
      * Get merchant order
      *
-     * @param integer $id
-     * @return bool
+     * @param int $id
+     *
+     * @return array|false
+     *
      * @throws Exception
      */
     public function getMerchantOrder($id)
     {
         try {
-            $id = preg_replace('/[^\d]/', '', $id);
+            $id = preg_replace('/[^\d]/', '', (string) $id);
             $sdk = CoreSdkSettings::getInstance();
             $merchantOrderModule = $sdk->getMerchantOrderInstance();
+
             return json_decode(json_encode($merchantOrderModule->getMerchantOrder($id)), true);
-        } catch (\Throwable $th) {
-            MPLog::generate('SDK get_merchant_orders error: ' . $response['response']['message'], 'error');
+        } catch (Throwable $th) {
+            MPLog::generate('SDK get_merchant_orders error: ' . $th->getMessage(), 'error');
+
             return false;
         }
     }
@@ -224,28 +228,34 @@ class MPApi
     /**
      * Get preferences
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return mixed
+     *
      * @throws Exception
      */
     public function getPreference($id)
     {
         try {
-            $id = preg_replace('/[^\w-]/', '', $id);
+            $id = preg_replace('/[^\w-]/', '', (string) $id);
             $sdk = CoreSdkSettings::getInstance();
             $preferenceModule = $sdk->getPreferenceInstance();
-            return json_decode(json_encode($preferenceModule->read(array(
-                "id" => $id
-            ))));
-        } catch (\Throwable $th) {
+
+            return json_decode(json_encode($preferenceModule->read([
+                'id' => $id,
+            ])));
+        } catch (Throwable $th) {
             MPLog::generate('SDK get_checkout_preferences error: ' . $th->getMessage(), 'error');
-            return  false;
+
+            return false;
         }
     }
 
     /**
      * @param $preference
-     * @return bool
+     *
+     * @return array|string
+     *
      * @throws Exception
      */
     public function createPreference($preference)
@@ -257,15 +267,18 @@ class MPApi
             $preferenceModule->setEntity($preference);
 
             return $preferenceModule->save();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             MPLog::generate('API create_preference error: ' . $th->getMessage(), 'error');
-            return  $th->getMessage();
+
+            return $th->getMessage();
         }
     }
 
     /**
      * @param $preference
-     * @return bool
+     *
+     * @return array|string
+     *
      * @throws Exception
      */
     public function createPayment($preference)
@@ -275,11 +288,12 @@ class MPApi
             $paymentModule = $sdk->getPaymentInstance();
 
             $paymentModule->setEntity($preference);
-    
+
             return $paymentModule->save();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             MPLog::generate('API create_custom_payment error: ' . $th->getMessage(), 'error');
-            return  $th->getMessage();
+
+            return $th->getMessage();
         }
     }
 
@@ -287,49 +301,58 @@ class MPApi
      * Is valid access token
      *
      * @param string $access_token
-     * @return boolean
+     *
+     * @return bool
+     *
      * @throws Exception
      */
     public function isValidAccessToken($access_token)
     {
-        $response = MPRestCli::get('/users/me', ["Authorization: Bearer " . $access_token]);
+        $response = MPRestCli::get('/users/me', ['Authorization: Bearer ' . $access_token]);
 
-        //in case of failures
+        // in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API valid_access_token error: ' . $response['response']['message'], 'error');
+
             return false;
         }
 
-        //response treatment
+        // response treatment
         $result = $response['response'];
+
         return $result;
     }
 
     /**
      * Is test user
      *
-     * @return boolean
+     * @return bool
+     *
      * @throws Exception
      */
     public function isTestUser()
     {
         $access_token = $this->getAccessToken();
-        $response = MPRestCli::get('/users/me', ["Authorization: Bearer " . $access_token]);
+        $response = MPRestCli::get('/users/me', ['Authorization: Bearer ' . $access_token]);
 
-        //in case of failures
+        // in case of failures
         if ($response['status'] > 202) {
             MPLog::generate('API is_test_user error: ' . $response['response']['message'], 'error');
+
             return false;
         }
 
-        //response treatment
+        // response treatment
         if (in_array('test_user', $response['response']['tags'])) {
             return true;
         }
+
+        return false;
     }
 
     /**
      * @param string|null $message
+     *
      * @return string|null
      */
     public static function validateMessageApi($message = null)

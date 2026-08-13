@@ -1,37 +1,27 @@
 <?php
 /**
-* 2007-2025 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2025 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
-
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/settings/AbstractSettings.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/AbstractSettings.php';
 
 class StoreSettings extends AbstractSettings
 {
@@ -50,20 +40,20 @@ class StoreSettings extends AbstractSettings
     /**
      * Generate inputs form
      *
-     * @return void
+     * @return array
      */
     public function generateForm()
     {
         $title = $this->module->l('Store Information', 'StoreSettings');
-        $fields = array(
-            array(
+        $fields = [
+            [
                 'col' => 6,
                 'type' => 'text',
                 'label' => $this->module->l('Name', 'StoreSettings'),
                 'name' => 'MERCADOPAGO_INVOICE_NAME',
                 'desc' => $this->module->l('This is the name that will appear on the customers invoice.', 'StoreSettings'),
-            ),
-            array(
+            ],
+            [
                 'col' => 4,
                 'type' => 'select',
                 'label' => $this->module->l('Category', 'StoreSettings'),
@@ -71,21 +61,21 @@ class StoreSettings extends AbstractSettings
                 'desc' => $this->module->l('What category do your products belong to? ', 'StoreSettings') .
                     $this->module->l('Choose the one that best characterizes them ', 'StoreSettings') .
                     $this->module->l('(choose other if your product is too specific).', 'StoreSettings'),
-                'options' => array(
+                'options' => [
                     'query' => $this->getCategories(),
                     'id' => 'id',
-                    'name' => 'name'
-                )
-            ),
-            array(
+                    'name' => 'name',
+                ],
+            ],
+            [
                 'col' => 2,
                 'type' => 'text',
                 'name' => 'MERCADOPAGO_INTEGRATOR_ID',
                 'label' => $this->module->l('Integrator ID', 'StoreSettings'),
                 'desc' => $this->module->l('With this number we identify all your transactions ', 'StoreSettings') .
                     $this->module->l('and know how many sales we process with your account.', 'StoreSettings'),
-            ),
-        );
+            ],
+        ];
 
         return $this->buildForm($title, $fields);
     }
@@ -108,11 +98,11 @@ class StoreSettings extends AbstractSettings
      */
     public function getFormValues()
     {
-        return array(
+        return [
             'MERCADOPAGO_INVOICE_NAME' => Configuration::get('MERCADOPAGO_INVOICE_NAME'),
             'MERCADOPAGO_INTEGRATOR_ID' => Configuration::get('MERCADOPAGO_INTEGRATOR_ID'),
             'MERCADOPAGO_STORE_CATEGORY' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-        );
+        ];
     }
 
     /**
@@ -122,50 +112,50 @@ class StoreSettings extends AbstractSettings
      */
     public function getCategories()
     {
-        $categories = array();
-        $categories[] = array('id' => 'no_category', 'name' => $this->module->l('Category'));
-        $categories[] = array('id' => 'others', 'name' => 'Other categories');
-        $categories[] = array('id' => 'art', 'name' => 'Collectibles & Art');
-        $categories[] = array(
+        $categories = [];
+        $categories[] = ['id' => 'no_category', 'name' => $this->module->l('Category')];
+        $categories[] = ['id' => 'others', 'name' => 'Other categories'];
+        $categories[] = ['id' => 'art', 'name' => 'Collectibles & Art'];
+        $categories[] = [
             'id' => 'baby',
-            'name' => 'Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats'
-        );
-        $categories[] = array('id' => 'coupons', 'name' => 'Coupons');
-        $categories[] = array('id' => 'donations', 'name' => 'Donations');
-        $categories[] = array('id' => 'computing', 'name' => 'Computers & Tablets');
-        $categories[] = array('id' => 'cameras', 'name' => 'Cameras & Photography');
-        $categories[] = array('id' => 'video_games', 'name' => 'Video Games & Consoles');
-        $categories[] = array('id' => 'television', 'name' => 'LCD, LED, Smart TV, Plasmas, TVs');
-        $categories[] = array(
+            'name' => 'Toys for Baby, Stroller, Stroller Accessories, Car Safety Seats',
+        ];
+        $categories[] = ['id' => 'coupons', 'name' => 'Coupons'];
+        $categories[] = ['id' => 'donations', 'name' => 'Donations'];
+        $categories[] = ['id' => 'computing', 'name' => 'Computers & Tablets'];
+        $categories[] = ['id' => 'cameras', 'name' => 'Cameras & Photography'];
+        $categories[] = ['id' => 'video_games', 'name' => 'Video Games & Consoles'];
+        $categories[] = ['id' => 'television', 'name' => 'LCD, LED, Smart TV, Plasmas, TVs'];
+        $categories[] = [
             'id' => 'car_electronics',
-            'name' => 'Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC'
-        );
-        $categories[] = array('id' => 'electronics', 'name' => 'Audio & Surveillance, Video & GPS, Others');
-        $categories[] = array('id' => 'automotive', 'name' => 'Parts & Accessories');
-        $categories[] = array(
+            'name' => 'Car Audio, Car Alarm Systems & Security, Car DVRs, Car Video Players, Car PC',
+        ];
+        $categories[] = ['id' => 'electronics', 'name' => 'Audio & Surveillance, Video & GPS, Others'];
+        $categories[] = ['id' => 'automotive', 'name' => 'Parts & Accessories'];
+        $categories[] = [
             'id' => 'entertainment',
-            'name' => 'Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys'
-        );
-        $categories[] = array(
+            'name' => 'Music, Movies & Series, Books, Magazines & Comics, Board Games & Toys',
+        ];
+        $categories[] = [
             'id' => 'fashion',
-            'name' => 'Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches'
-        );
-        $categories[] = array('id' => 'games', 'name' => 'Online Games & Credits');
-        $categories[] = array('id' => 'home', 'name' => 'Home appliances. Home & Garden');
-        $categories[] = array('id' => 'musical', 'name' => 'Instruments & Gear');
-        $categories[] = array('id' => 'phones', 'name' => 'Cell Phones & Accessories');
-        $categories[] = array('id' => 'services', 'name' => 'General services');
-        $categories[] = array('id' => 'learnings', 'name' => 'Trainings, Conferences, Workshops');
-        $categories[] = array(
+            'name' => 'Men\'s, Women\'s, Kids & baby, Handbags & Accessories, Health & Beauty, Shoes, Jewelry & Watches',
+        ];
+        $categories[] = ['id' => 'games', 'name' => 'Online Games & Credits'];
+        $categories[] = ['id' => 'home', 'name' => 'Home appliances. Home & Garden'];
+        $categories[] = ['id' => 'musical', 'name' => 'Instruments & Gear'];
+        $categories[] = ['id' => 'phones', 'name' => 'Cell Phones & Accessories'];
+        $categories[] = ['id' => 'services', 'name' => 'General services'];
+        $categories[] = ['id' => 'learnings', 'name' => 'Trainings, Conferences, Workshops'];
+        $categories[] = [
             'id' => 'tickets',
-            'name' => 'Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more'
-        );
-        $categories[] = array('id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers');
-        $categories[] = array(
+            'name' => 'Tickets for Concerts, Sports, Arts, Theater, Family, Excursions tickets, Events & more',
+        ];
+        $categories[] = ['id' => 'travels', 'name' => 'Plane tickets, Hotel vouchers, Travel vouchers'];
+        $categories[] = [
             'id' => 'virtual_goods',
             'name' => 'E-books, Music Files, Software, Digital Images, PDF Files and any item which can be
-            electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge'
-        );
+            electronically stored in a file, Mobile Recharge, DTH Recharge and any Online Recharge',
+        ];
 
         return $categories;
     }

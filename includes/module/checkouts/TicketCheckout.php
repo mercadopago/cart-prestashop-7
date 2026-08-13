@@ -1,39 +1,29 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 class TicketCheckout
 {
-    const ALLOW_PAYMENT_METHOD_TYPES = ['ticket', 'atm'];
+    public const ALLOW_PAYMENT_METHOD_TYPES = ['ticket', 'atm'];
 
     /**
      * @var Mercadopago
@@ -41,6 +31,11 @@ class TicketCheckout
     public $payment;
 
     public $mpuseful;
+
+    /**
+     * @var string
+     */
+    public $assets_ext_min;
 
     /**
      * Ticket Checkout constructor.
@@ -55,46 +50,36 @@ class TicketCheckout
     }
 
     /**
-     * @param  $cart
+     * @param $cart
+     *
      * @return array
-     * @throws PrestaShopException
-     */
-    public function getTicketCheckoutPS16($cart)
-    {
-        $checkoutInfo = $this->getTicketCheckout($cart);
-        $frontInformations = array_merge(
-            $checkoutInfo,
-            array("mp_logo" => _MODULE_DIR_ . 'mercadopago/views/img/mpinfo_checkout.png')
-        );
-        return $frontInformations;
-    }
-
-    /**
-     * @param  $cart
-     * @return array
+     *
      * @throws PrestaShopException
      */
     public function getTicketCheckoutPS17($cart)
     {
         $checkoutInfo = $this->getTicketCheckout($cart);
-        $frontInformations = array_merge($checkoutInfo, array("module_dir" => $this->payment->path));
+        $frontInformations = array_merge($checkoutInfo, ['module_dir' => $this->payment->path]);
+
         return $frontInformations;
     }
 
     /**
-     * @param  $cart
+     * @param $cart
+     *
      * @return array
+     *
      * @throws PrestaShopException
      */
     public function getTicketCheckout($cart)
     {
         $this->getTicketJS();
-        $ticket = array();
+        $ticket = [];
         $paymentMethods = $this->payment->mercadopago->getPaymentMethods();
         foreach ($paymentMethods as $paymentMethod) {
-            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $paymentMethod['id']) != "") {
-                if (in_array($paymentMethod['type'], self::ALLOW_PAYMENT_METHOD_TYPES) &&
-                     Tools::strtolower($paymentMethod['id']) != 'meliplace'
+            if (Configuration::get('MERCADOPAGO_TICKET_PAYMENT_' . $paymentMethod['id']) != '') {
+                if (in_array($paymentMethod['type'], self::ALLOW_PAYMENT_METHOD_TYPES)
+                     && Tools::strtolower($paymentMethod['id']) != 'meliplace'
                 ) {
                     $ticket[] = $paymentMethod;
                 }
@@ -107,18 +92,18 @@ class TicketCheckout
         $discount = Configuration::get('MERCADOPAGO_TICKET_DISCOUNT');
         $redirect = $this->payment->context->link->getModuleLink($this->payment->name, 'ticket');
 
-        $info = array(
-            "ticket" => $ticket,
-            "site_id" => $site_id,
-            "address" => $address,
-            "version" => MP_VERSION,
-            "context" => $context,
-            "redirect" => $redirect,
-            "discount" => $discount,
-            "module_dir" => $this->payment->path,
-            "assets_ext_min" => $this->assets_ext_min,
-            "terms_url" => $this->mpuseful->getTermsAndPoliciesLink($site_id),
-        );
+        $info = [
+            'ticket' => $ticket,
+            'site_id' => $site_id,
+            'address' => $address,
+            'version' => MP_VERSION,
+            'context' => $context,
+            'redirect' => $redirect,
+            'discount' => $discount,
+            'module_dir' => $this->payment->path,
+            'assets_ext_min' => $this->assets_ext_min,
+            'terms_url' => $this->mpuseful->getTermsAndPoliciesLink($site_id),
+        ];
 
         return $info;
     }

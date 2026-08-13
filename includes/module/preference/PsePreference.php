@@ -1,49 +1,39 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- * @author    PrestaShop SA <contact@prestashop.com>
- * @copyright 2007-2025 PrestaShop SA
- * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/preference/AbstractPreference.php';
-require_once MP_ROOT_URL . '/includes/module/checkouts/PseCheckout.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/preference/AbstractPreference.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/checkouts/PseCheckout.php';
 
 class PsePreference extends AbstractPreference
 {
     /**
      * @var PseCheckout
-    */
+     */
     public $pseCheckout;
 
     /**
      * @var object
-    */
+     */
     public $cart;
 
     public function __construct($pseCheckout, $cart)
@@ -58,7 +48,7 @@ class PsePreference extends AbstractPreference
     /**
      * @param array $payerData from checkout screen
      * @param string $callbackPath
-     * 
+     *
      * @return array
      */
     public function createPayment($payerData, $callbackPath)
@@ -115,7 +105,7 @@ class PsePreference extends AbstractPreference
     /**
      * @param array $payerData
      * @param string $callbackPath
-     * 
+     *
      * @return array
      */
     public function buildPayload($payerData, $callbackPath)
@@ -124,16 +114,16 @@ class PsePreference extends AbstractPreference
         $buildedPayerObject = $this->buildPayerObject($payerData);
 
         $payloadAdditional = [
-            'notification_url' => $this->getNotificationUrl($this->cart) . '&topic=payment' . '&method=pse',
-            'callback_url' => Context::getContext()->link->getPageLink("order-confirmation", true) . $callbackPath,
+            'notification_url' => $this->getNotificationUrl($this->cart) . '&topic=payment&method=pse',
+            'callback_url' => Context::getContext()->link->getPageLink('order-confirmation', true) . $callbackPath,
             'description' => $this->getPreferenceDescription($this->cart),
             'payment_method_id' => $this->pseCheckout::PAYMENT_METHOD_NAME,
             'payer' => $buildedPayerObject,
             'metadata' => $this->buildMetadataObject($this->cart),
             'additional_info' => $this->buildAdditionalInfoObject($buildedPayerObject),
-            'transaction_details' => array(
-                'financial_institution' => $payerData['financial_institution']
-            )
+            'transaction_details' => [
+                'financial_institution' => $payerData['financial_institution'],
+            ],
         ];
 
         return array_merge($payloadParent, $payloadAdditional);
@@ -147,20 +137,20 @@ class PsePreference extends AbstractPreference
         $customerFields = Context::getContext()->customer->getFields();
         $payerInfoFromCart = new Address((int) $this->cart->id_address_invoice);
 
-        $customerData = array(
+        $customerData = [
             'email' => $customerFields['email'],
             'first_name' => $customerFields['firstname'],
             'last_name' => $customerFields['lastname'],
             'entity_type' => $payerData['entity_type'],
-            'identification' => array(
+            'identification' => [
                 'type' => $payerData['document_type'],
                 'number' => $payerData['document_number'],
-            ),
-            'phone' => array(
+            ],
+            'phone' => [
                 'area_code' => '-',
                 'number' => $payerInfoFromCart->phone,
-            ),
-            'address' => array(
+            ],
+            'address' => [
                 'zip_code' => $payerInfoFromCart->postcode,
                 'street_name' => $payerInfoFromCart->address1 . ' - ' .
                     $payerInfoFromCart->address2 . ' - ' .
@@ -169,8 +159,8 @@ class PsePreference extends AbstractPreference
                 'street_number' => '',
                 'city' => $payerInfoFromCart->city,
                 'federal_unit' => '',
-            )
-        );
+            ],
+        ];
 
         return $customerData;
     }
@@ -192,23 +182,23 @@ class PsePreference extends AbstractPreference
 
     /**
      * @param array $payer builded from buildPayerObject
-     * 
+     *
      * @return array
      */
     private function buildAdditionalInfoObject($payer)
     {
         $isCustomCheckout = $this->pseCheckout::CHECKOUT_TYPE === 'custom';
 
-        $additionalInfo = array(
+        $additionalInfo = [
             'ip_address' => $_SERVER['REMOTE_ADDR'],
             'payer' => $payer,
             'shipments' => $this->getShipmentAddress($this->cart),
-            'items' =>  $this->getCartItems(
+            'items' => $this->getCartItems(
                 $this->cart,
                 $isCustomCheckout,
                 $this->pseCheckout->getDiscount()
             ),
-        );
+        ];
 
         return $additionalInfo;
     }

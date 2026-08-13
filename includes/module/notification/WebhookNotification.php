@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/AbstractNotification.php';
 
 class WebhookNotification extends AbstractNotification
 {
@@ -49,7 +39,8 @@ class WebhookNotification extends AbstractNotification
     /**
      * Receive and treat the notification
      *
-     * @param  mixed $cart
+     * @param mixed $cart
+     *
      * @return void
      */
     public function receiveNotification($cart)
@@ -71,13 +62,21 @@ class WebhookNotification extends AbstractNotification
                 $this->updateOrderTransaction($order);
                 $this->updateOrder($cart);
             }
+        } else {
+            MPLog::generate(sprintf(
+                'Custom webhook received for cart %d before its order exists (transaction %s); the order is '
+                . 'created on the customer return flow, so this status callback is not applied here',
+                (int) $cart->id,
+                $this->transaction_id
+            ), 'warning');
         }
     }
 
     /**
      * Create order for custom payments without notification
      *
-     * @param  mixed $cart
+     * @param mixed $cart
+     *
      * @return void
      */
     public function createCustomOrder($cart)
@@ -106,7 +105,14 @@ class WebhookNotification extends AbstractNotification
         $this->payments_data['payments_status'] = $this->status;
 
         if ($this->status == 'approved') {
-            $this->approved += $this->payment['transaction_details']['total_paid_amount'];
+            // Cash payments (e.g. OXXO) may not expose transaction_details.total_paid_amount
+            // when confirmed; fall back to transaction_amount so the status still updates
+            // (mercadopago/cart-prestashop-7#88).
+            if (isset($this->payment['transaction_details']['total_paid_amount'])) {
+                $this->approved += $this->payment['transaction_details']['total_paid_amount'];
+            } else {
+                $this->approved += $this->payment['transaction_amount'];
+            }
         } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
             $this->pending += $this->payment['transaction_amount'];
         }

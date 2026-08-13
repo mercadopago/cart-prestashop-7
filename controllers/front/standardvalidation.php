@@ -1,40 +1,35 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/notification/IpnNotification.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/IpnNotification.php';
 
 class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontController
 {
+    /**
+     * @var MPApi
+     */
+    public $mercadopago;
+
     public $mp_transaction;
 
     public function __construct()
@@ -68,6 +63,13 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
 
             if ($merchant_order_id || $merchant_order_id === '0') {
                 $merchant_order = $this->mercadopago->getMerchantOrder($order['merchant_order_id']);
+
+                if ($merchant_order === false || !isset($merchant_order['payments'][0]['id'])) {
+                    $this->redirectError();
+
+                    return;
+                }
+
                 $payment_id = $merchant_order['payments'][0]['id'];
 
                 $this->redirectCheck($payment_id);
@@ -96,7 +98,9 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
             $cart = new Cart($cart_id);
             $order = $this->createOrder($cart, $transaction_id);
 
-            $this->redirectOrderConfirmation($cart, $order);
+            if (Validate::isLoadedObject($order)) {
+                $this->redirectOrderConfirmation($cart, $order);
+            }
         }
 
         $this->redirectError();
@@ -106,14 +110,27 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      * Create order without notification
      *
      * @param mixed $cart
-     * @param integer $transaction_id
-     * @return void
+     * @param int $transaction_id
+     *
+     * @return Order|false
      */
     public function createOrder($cart, $transaction_id)
     {
         $merchant_order = $this->mercadopago->getMerchantOrder($transaction_id);
+
+        if (!is_array($merchant_order)) {
+            MPLog::generate(
+                'Standard checkout order not created for cart ' . (int) $cart->id . ': merchant order '
+                . (int) $transaction_id . ' could not be retrieved from Mercado Pago (verify the access token '
+                . 'is authorized for merchant_orders)',
+                'error'
+            );
+
+            return false;
+        }
+
         $notification = new IpnNotification($transaction_id, $merchant_order);
-        $notification = $notification->createStandardOrder($cart);
+        $notification->createStandardOrder($cart);
 
         $orderId = Order::getIdByCartId($cart->id);
         $order = new Order($orderId);
@@ -126,7 +143,8 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      *
      * @param mixed $cart
      * @param mixed $order
-     * @return void
+     *
+     * @return mixed
      */
     public function redirectOrderConfirmation($cart, $order)
     {

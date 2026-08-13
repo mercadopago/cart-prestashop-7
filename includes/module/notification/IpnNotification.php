@@ -1,37 +1,27 @@
 <?php
 /**
- * 2007-2025 PrestaShop
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
+ * https://opensource.org/licenses/OSL-3.0
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@prestashop.com so we can send you a copy immediately.
  *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
- * versions in the future. If you wish to customize PrestaShop for your
- * needs please refer to http://www.prestashop.com for more information.
- *
- *  @author    PrestaShop SA <contact@prestashop.com>
- *  @copyright 2007-2025 PrestaShop SA
- *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- *  International Registered Trademark & Property of PrestaShop SA
- *
- * Don't forget to prefix your containers with your own identifier
- * to avoid any conflicts with others containers.
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once MP_ROOT_URL . '/includes/module/notification/AbstractNotification.php';
+require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/AbstractNotification.php';
 
 class IpnNotification extends AbstractNotification
 {
@@ -47,13 +37,14 @@ class IpnNotification extends AbstractNotification
         $this->checkout = $this->getCheckoutType();
         $this->isWalletButton = $this->checkout === 'wallet_button';
         $this->preference = $this->getCheckoutPreference();
-        $this->mp_transaction_amount = $merchant_order['total_amount'];
+        $this->mp_transaction_amount = isset($merchant_order['total_amount']) ? $merchant_order['total_amount'] : 0;
     }
 
     /**
      * Receive and treat the notification
      *
      * @param mixed $cart
+     *
      * @return void
      */
     public function receiveNotification($cart)
@@ -86,25 +77,44 @@ class IpnNotification extends AbstractNotification
      * Create order for standard payments without notification
      *
      * @param mixed $cart
+     *
      * @return void
      */
     public function createStandardOrder($cart)
     {
+        if (!is_array($this->merchant_order)) {
+            MPLog::generate(
+                'Standard order not created: merchant order was not retrieved or authorized by Mercado Pago',
+                'error'
+            );
+
+            return;
+        }
+
         if ($this->isWalletButton) {
             $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
         if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
             $payments = $this->merchant_order['payments'];
-            if (!empty($payments) && isset($payments[0]['id'])) {
+            if (isset($payments[0]['id'])) {
                 $this->transaction_id = $payments[0]['id'];
             }
         }
 
         $this->getOrderId($cart);
         $this->total = $this->getTotal($cart, $this->checkout);
-        $this->status = 'pending';
-        $this->pending += $this->total;
+
+        // If the merchant order carries payments, verify them to resolve the real
+        // status. Assuming a hardcoded 'pending' marks already-approved payments
+        // as rejected on PrestaShop 8.2 (mercadopago/cart-prestashop-7#89).
+        if (!empty($this->merchant_order['payments'])) {
+            $this->verifyPayments($this->merchant_order['payments']);
+        } else {
+            $this->status = 'pending';
+            $this->pending += $this->total;
+        }
+
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
@@ -153,7 +163,8 @@ class IpnNotification extends AbstractNotification
      * Verify if order exists then get order_id
      *
      * @param mixed $cart
-     * @return void
+     *
+     * @return int
      */
     public function getOrderId($cart)
     {
@@ -167,15 +178,16 @@ class IpnNotification extends AbstractNotification
      * Verify merchant order payments
      *
      * @param mixed $payments
+     *
      * @return void
      */
     public function verifyPayments($payments)
     {
-        $this->payments_data['payments_id'] = array();
-        $this->payments_data['payments_type'] = array();
-        $this->payments_data['payments_method'] = array();
-        $this->payments_data['payments_status'] = array();
-        $this->payments_data['payments_amount'] = array();
+        $this->payments_data['payments_id'] = [];
+        $this->payments_data['payments_type'] = [];
+        $this->payments_data['payments_method'] = [];
+        $this->payments_data['payments_status'] = [];
+        $this->payments_data['payments_amount'] = [];
 
         if (!empty($payments) && isset($payments[0]['id'])) {
             $this->transaction_id = $payments[0]['id'];

@@ -1,27 +1,21 @@
-{*
-    * 2007-2025 PrestaShop
-    *
-    * NOTICE OF LICENSE
-    *
-    * This source file is subject to the Academic Free License (AFL 3.0)
-    * that is bundled with this package in the file LICENSE.txt.
-    * It is also available through the world-wide-web at this URL:
-    * http://opensource.org/licenses/afl-3.0.php
-    * If you did not receive a copy of the license and are unable to
-    * obtain it through the world-wide-web, please send an email
-    * to license@prestashop.com so we can send you a copy immediately.
-    *
-    * DISCLAIMER
-    *
-    * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-    * versions in the future. If you wish to customize PrestaShop for your
-    * needs please refer to http://www.prestashop.com for more information.
-    *
-    * @author PrestaShop SA <contact@prestashop.com>
-    * @copyright 2007-2025 PrestaShop SA
-    * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
-    * International Registered Trademark & Property of PrestaShop SA
-    *}
+{**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ *}
 
     <form id="mp_standard_checkout" class="mp-checkout-form" method="post" action="{$redirect|escape:'html':'UTF-8'}">
         <div class="row mp-frame-checkout-seven">
@@ -102,9 +96,20 @@
     {/if}
 
     {if $modal == true}
-        <script {if isset($csp_nonce)}nonce="{$csp_nonce}"{/if}>
+        <script {if isset($csp_nonce)}nonce="{$csp_nonce|escape:'htmlall':'UTF-8'}"{/if}>
+            // support module: onepagecheckoutps - PresTeamShop - Checkout 5.0.
+            if (typeof OPC !== typeof undefined) {
+                prestashop.on('opc-payment-getPaymentList-complete', () => {
+                    initMercadoPagoStandar();
+                });
+            }
+
             window.addEventListener('load', (event) => {
-                {include file="../_mp_checkout_overlay.tpl"}
+                initMercadoPagoStandar();
+            });
+
+            function initMercadoPagoStandar() {
+                {include file="module:mercadopago/views/templates/hook/_mp_checkout_overlay.tpl"}
 
                 document.forms['mp_standard_checkout'].onsubmit = function (e) {
                     e.preventDefault();
@@ -125,6 +130,6 @@
                         window.location.href = 'index.php?controller=order&step=3&typeReturn=failure';
                     });
                 };
-            });
+            }
         </script>
     {/if}

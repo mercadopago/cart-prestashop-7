@@ -21,38 +21,19 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/AbstractSettings.php';
-
-class HomologationSettings extends AbstractSettings
+/**
+ * Drop the PrestaShop 1.6-only hooks (payment, displayTopColumn) on stores that
+ * already have the module installed. The module now targets PrestaShop 1.7.7+,
+ * so these hooks are no longer implemented.
+ *
+ * @param Mercadopago $module
+ *
+ * @return bool
+ */
+function upgrade_module_4_19_0($module)
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->submit = null;
-        $this->values = $this->getFormValues();
-        $this->form = $this->generateForm();
-    }
+    $module->unregisterHook('payment');
+    $module->unregisterHook('displayTopColumn');
 
-    /**
-     * Generate inputs form
-     *
-     * @return array
-     */
-    public function generateForm()
-    {
-        $title = $this->module->l('Homologation', 'HomologationSettings');
-        $fields = null;
-
-        return $this->buildForm($title, $fields);
-    }
-
-    /**
-     * Set values for the form inputs
-     *
-     * @return null
-     */
-    public function getFormValues()
-    {
-        return null;
-    }
+    return true;
 }
