@@ -141,6 +141,10 @@ abstract class AbstractPreference
                 'picture_url' => 'https://' . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
+                '_scope_key' => (int) $product['id_product'] . '-' . (int) $product['id_product_attribute'],
+                '_product_id' => (int) $product['id_product'],
+                '_product_attribute_id' => (int) $product['id_product_attribute'],
+                '_reduction_applies' => !empty($product['reduction_applies']),
             ];
 
             if ($custom != true) {
@@ -163,29 +167,14 @@ abstract class AbstractPreference
                 'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
+                '_scope_key' => 'service_wrapping',
             ];
 
             $items[] = $item;
         }
 
-        // Discounts
+        // Discounts are distributed among positive items because Mercado Pago does not accept negative prices.
         $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
-        if ($discounts > 0) {
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
-            $item = [
-                'title' => 'Discount',
-                'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
-                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'description' => 'Discount provided by store',
-            ];
-
-            $items[] = $item;
-        }
-
         // Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
@@ -199,36 +188,432 @@ abstract class AbstractPreference
                 'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
+                '_scope_key' => 'service_shipping',
             ];
 
             $items[] = $item;
         }
 
-        // Check has price difference
-        $cartTotal = $round ? Tools::ps_round($cart->getOrderTotal(true)) : $cart->getOrderTotal();
-        $itemsTotal = array_reduce(
-            $items,
-            function ($accumulator, $item) {
-                $accumulator += $item['unit_price'] * $item['quantity'];
+        if ($discounts > 0) {
+            $items = $this->applyPrestashopDiscounts($items, $cart, $discounts);
+        }
 
-                return $accumulator;
+        $cartTotal = (float) $cart->getOrderTotal(true);
+        if ($percent !== null) {
+            $checkoutDiscount = (float) $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS) * ((float) $percent / 100);
+            $cartTotal -= $checkoutDiscount;
+        }
+
+        $cartTotal = $this->roundPrice($cartTotal);
+        $items = $this->reconcileItemsToTotal($items, $cartTotal);
+        $this->logDiscountTotals($cart, $discounts, $cartTotal, $items);
+
+        foreach ($items as &$item) {
+            foreach (array_keys($item) as $key) {
+                if (strpos($key, '_') === 0) {
+                    unset($item[$key]);
+                }
             }
-        );
+        }
+        unset($item);
 
-        $itemsTotal = $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
-        $priceDiff = $cartTotal - $itemsTotal;
+        return $items;
+    }
 
-        if ($priceDiff > 0) {
-            $items[] = [
-                'title' => 'Difference',
-                'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($priceDiff) : $priceDiff,
-                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'description' => 'Adjustment for the Mercado Pago price to be the same as the store',
-            ];
+    /**
+     * Distribute PrestaShop cart rules over the items they actually affect when that scope is available.
+     * The final reconciliation remains authoritative because fixed reductions and combined rules are not
+     * always attributable to individual product lines by PrestaShop.
+     *
+     * @param array $items
+     * @param Cart $cart
+     * @param float $discountTotal
+     *
+     * @return array
+     */
+    protected function applyPrestashopDiscounts($items, $cart, $discountTotal)
+    {
+        $remaining = $this->priceToUnits($discountTotal);
+        $filters = [
+            CartRule::FILTER_ACTION_GIFT => 'gift',
+            CartRule::FILTER_ACTION_SHIPPING => 'shipping',
+            CartRule::FILTER_ACTION_REDUCTION => 'reduction',
+        ];
+
+        foreach ($filters as $filter => $type) {
+            $cartRules = $cart->getCartRules($filter, false);
+            foreach ($cartRules as $cartRule) {
+                if ($remaining <= 0) {
+                    break 2;
+                }
+
+                $ruleUnits = min($remaining, $this->priceToUnits((float) $cartRule['value_real']));
+                if ($ruleUnits <= 0) {
+                    continue;
+                }
+
+                $eligibleKeys = $this->getCartRuleItemKeys($cartRule, $cart, $type, $items);
+                $applied = $this->reduceItemsByUnits($items, $ruleUnits, $eligibleKeys);
+                $remaining -= $applied;
+            }
+        }
+
+        if ($remaining > 0) {
+            $remaining -= $this->reduceItemsByUnits($items, $remaining, $this->getProductItemKeys($items));
+        }
+
+        if ($remaining > 0) {
+            $this->reduceItemsByUnits($items, $remaining, []);
         }
 
         return $items;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getCartRuleItemKeys($cartRule, $cart, $type, $items)
+    {
+        if ($type == 'shipping') {
+            return ['service_shipping'];
+        }
+
+        if ($type == 'gift') {
+            $keys = [];
+            foreach ($items as $item) {
+                if (!isset($item['_product_id']) || $item['_product_id'] != (int) $cartRule['gift_product']) {
+                    continue;
+                }
+                if ((int) $cartRule['gift_product_attribute'] === 0
+                    || $item['_product_attribute_id'] == (int) $cartRule['gift_product_attribute']) {
+                    $keys[] = $item['_scope_key'];
+                }
+            }
+
+            return empty($keys) ? ['__no_eligible_item__'] : array_values(array_unique($keys));
+        }
+
+        $reductionProduct = (int) $cartRule['reduction_product'];
+        if ($reductionProduct > 0) {
+            $keys = [];
+            foreach ($items as $item) {
+                if (isset($item['_product_id']) && $item['_product_id'] == $reductionProduct) {
+                    $keys[] = $item['_scope_key'];
+                }
+            }
+
+            return array_values(array_unique($keys));
+        }
+
+        if ($reductionProduct == -1) {
+            $cheapestKey = null;
+            $cheapestPrice = null;
+            foreach ($items as $item) {
+                if (!isset($item['_product_id']) || (!empty($cartRule['reduction_exclude_special']) && $item['_reduction_applies'])) {
+                    continue;
+                }
+                if ($cheapestPrice === null || $item['unit_price'] < $cheapestPrice) {
+                    $cheapestPrice = $item['unit_price'];
+                    $cheapestKey = $item['_scope_key'];
+                }
+            }
+
+            return $cheapestKey === null ? ['__no_eligible_item__'] : [$cheapestKey];
+        }
+
+        if ($reductionProduct == -2 && isset($cartRule['obj'])) {
+            $selectedProducts = $cartRule['obj']->checkProductRestrictionsFromCart($cart, true, false);
+
+            return is_array($selectedProducts) && !empty($selectedProducts)
+                ? array_values(array_unique($selectedProducts))
+                : ['__no_eligible_item__'];
+        }
+
+        $keys = [];
+        foreach ($items as $item) {
+            if (!isset($item['_product_id']) || (!empty($cartRule['reduction_exclude_special']) && $item['_reduction_applies'])) {
+                continue;
+            }
+            $keys[] = $item['_scope_key'];
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * Reduce items proportionally, splitting a quantity into at most two lines when a rounding remainder exists.
+     * Every emitted unit keeps a value of at least one minor currency unit.
+     *
+     * @return int Applied amount in minor currency units
+     */
+    protected function reduceItemsByUnits(&$items, $amountUnits, $eligibleKeys)
+    {
+        $eligibleIndexes = [];
+        $totalCapacity = 0;
+        foreach ($items as $index => $item) {
+            $scopeKey = isset($item['_scope_key']) ? $item['_scope_key'] : 'item_' . $index;
+            if (!empty($eligibleKeys) && !in_array($scopeKey, $eligibleKeys)) {
+                continue;
+            }
+
+            $quantity = (int) $item['quantity'];
+            $capacity = max(0, ($this->priceToUnits($item['unit_price']) - 1) * $quantity);
+            if ($capacity > 0) {
+                $eligibleIndexes[$index] = $capacity;
+                $totalCapacity += $capacity;
+            }
+        }
+
+        $amountUnits = min((int) $amountUnits, $totalCapacity);
+        if ($amountUnits <= 0) {
+            return 0;
+        }
+
+        $allocations = [];
+        $allocated = 0;
+        foreach ($eligibleIndexes as $index => $capacity) {
+            $allocation = min($capacity, (int) floor($amountUnits * $capacity / $totalCapacity));
+            $allocations[$index] = $allocation;
+            $allocated += $allocation;
+        }
+
+        $remainder = $amountUnits - $allocated;
+        foreach ($eligibleIndexes as $index => $capacity) {
+            if ($remainder <= 0) {
+                break;
+            }
+            $extra = min($remainder, $capacity - $allocations[$index]);
+            $allocations[$index] += $extra;
+            $remainder -= $extra;
+        }
+
+        $result = [];
+        foreach ($items as $index => $item) {
+            if (empty($allocations[$index])) {
+                $result[] = $item;
+                continue;
+            }
+            foreach ($this->splitItemWithReduction($item, $allocations[$index]) as $splitItem) {
+                $result[] = $splitItem;
+            }
+        }
+        $items = $result;
+
+        return $amountUnits;
+    }
+
+    /**
+     * @return array
+     */
+    protected function splitItemWithReduction($item, $reductionUnits)
+    {
+        $quantity = (int) $item['quantity'];
+        $unitPrice = $this->priceToUnits($item['unit_price']);
+        $baseReduction = (int) floor($reductionUnits / $quantity);
+        $remainder = $reductionUnits % $quantity;
+        $result = [];
+
+        if ($quantity - $remainder > 0) {
+            $baseItem = $item;
+            $baseItem['quantity'] = $quantity - $remainder;
+            $baseItem['unit_price'] = $this->unitsToPrice($unitPrice - $baseReduction);
+            $result[] = $baseItem;
+        }
+
+        if ($remainder > 0) {
+            $remainderItem = $item;
+            $remainderItem['quantity'] = $remainder;
+            $remainderItem['unit_price'] = $this->unitsToPrice($unitPrice - $baseReduction - 1);
+            $result[] = $remainderItem;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Make the sum of item lines exactly equal to the payment amount.
+     *
+     * @return array
+     *
+     * @throws PrestaShopException
+     */
+    protected function reconcileItemsToTotal($items, $expectedTotal)
+    {
+        $expectedUnits = $this->priceToUnits($expectedTotal);
+        if ($expectedUnits <= 0) {
+            throw new PrestaShopException('Mercado Pago cannot create a payment preference with a non-positive total.');
+        }
+
+        $currentUnits = $this->getItemsTotalUnits($items);
+        if ($currentUnits > $expectedUnits) {
+            $this->reduceItemsByUnits($items, $currentUnits - $expectedUnits, []);
+        } elseif ($currentUnits < $expectedUnits) {
+            $items = $this->increaseItemsByUnits($items, $expectedUnits - $currentUnits);
+        }
+
+        if ($this->getItemsTotalUnits($items) != $expectedUnits) {
+            MPLog::generate('Unable to represent the cart total with positive Mercado Pago item prices', 'error');
+            throw new PrestaShopException('Mercado Pago items could not be reconciled with the cart total.');
+        }
+
+        foreach ($items as $item) {
+            if ($this->priceToUnits($item['unit_price']) <= 0) {
+                throw new PrestaShopException('Mercado Pago item prices must be positive.');
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return array
+     */
+    protected function increaseItemsByUnits($items, $amountUnits)
+    {
+        if (empty($items)) {
+            return $items;
+        }
+
+        $index = count($items) - 1;
+        $item = $items[$index];
+        $quantity = (int) $item['quantity'];
+        $unitPrice = $this->priceToUnits($item['unit_price']);
+        $baseIncrease = (int) floor($amountUnits / $quantity);
+        $remainder = $amountUnits % $quantity;
+        array_splice($items, $index, 1, $this->splitIncreasedItem($item, $unitPrice, $baseIncrease, $remainder));
+
+        return $items;
+    }
+
+    /**
+     * @return array
+     */
+    protected function splitIncreasedItem($item, $unitPrice, $baseIncrease, $remainder)
+    {
+        $quantity = (int) $item['quantity'];
+        $result = [];
+        if ($quantity - $remainder > 0) {
+            $baseItem = $item;
+            $baseItem['quantity'] = $quantity - $remainder;
+            $baseItem['unit_price'] = $this->unitsToPrice($unitPrice + $baseIncrease);
+            $result[] = $baseItem;
+        }
+        if ($remainder > 0) {
+            $remainderItem = $item;
+            $remainderItem['quantity'] = $remainder;
+            $remainderItem['unit_price'] = $this->unitsToPrice($unitPrice + $baseIncrease + 1);
+            $result[] = $remainderItem;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getProductItemKeys($items)
+    {
+        $keys = [];
+        foreach ($items as $item) {
+            if (isset($item['_product_id'])) {
+                $keys[] = $item['_scope_key'];
+            }
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * @return int
+     */
+    protected function getItemsTotalUnits($items)
+    {
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $this->priceToUnits($item['unit_price']) * (int) $item['quantity'];
+        }
+
+        return $total;
+    }
+
+    /**
+     * @return int
+     */
+    protected function priceToUnits($price)
+    {
+        return (int) round((float) $price * $this->getPriceFactor());
+    }
+
+    /**
+     * @return float|int
+     */
+    protected function unitsToPrice($units)
+    {
+        return $this->getPriceFactor() == 1 ? (int) $units : $units / $this->getPriceFactor();
+    }
+
+    /**
+     * @return int
+     */
+    protected function getPriceFactor()
+    {
+        return $this->mpuseful->getRound() ? 1 : 100;
+    }
+
+    /**
+     * @return float|int
+     */
+    protected function roundPrice($price)
+    {
+        return $this->unitsToPrice($this->priceToUnits($price));
+    }
+
+    protected function logDiscountTotals($cart, $discounts, $expectedTotal, $items)
+    {
+        if ($discounts <= 0) {
+            return;
+        }
+
+        $rules = [];
+        foreach ($this->getPrestashopCartRules($cart) as $cartRule) {
+            $rules[] = sprintf(
+                '#%d %s%s: %s',
+                (int) $cartRule['id_cart_rule'],
+                empty($cartRule['code']) ? '' : $cartRule['code'] . ' - ',
+                $cartRule['name'],
+                $this->roundPrice($cartRule['amount'])
+            );
+        }
+
+        MPLog::generate(sprintf(
+            'Cart %d discount totals - Original subtotal: %s; Prestashop discount: %s; Expected final total: %s; '
+            . 'MercadoPago items total: %s; Applied cart rules: %s',
+            (int) $cart->id,
+            $this->roundPrice($cart->getOrderTotal(true) + $discounts),
+            $this->roundPrice($discounts),
+            $expectedTotal,
+            $this->unitsToPrice($this->getItemsTotalUnits($items)),
+            empty($rules) ? 'none' : implode(' | ', $rules)
+        ));
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPrestashopCartRules($cart)
+    {
+        $result = [];
+        foreach ($cart->getCartRules(CartRule::FILTER_ACTION_ALL, false) as $cartRule) {
+            $result[] = [
+                'id_cart_rule' => (int) $cartRule['id_cart_rule'],
+                'name' => $cartRule['name'],
+                'code' => $cartRule['code'],
+                'amount' => $this->roundPrice($cartRule['value_real']),
+                'free_shipping' => (bool) $cartRule['free_shipping'],
+            ];
+        }
+
+        return $result;
     }
 
     public function getStatementDescriptor()
@@ -431,6 +816,23 @@ abstract class AbstractPreference
                 'user_registration_date' => $is_logged ? $customer_fields['date_add'] : ' ',
             ],
         ];
+
+        $discountTotal = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
+        if ($discountTotal > 0) {
+            $internal_metadata['prestashop_discount'] = [
+                'prestashop_cart_id' => (int) $cart->id,
+                'subtotal_before_discounts' => $this->roundPrice($cart->getOrderTotal(true) + $discountTotal),
+                'products_subtotal_before_discounts' => $this->roundPrice(
+                    $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS)
+                ),
+                'shipping_before_discounts' => $this->roundPrice(
+                    $cart->getOrderTotal(true, Cart::ONLY_SHIPPING)
+                ),
+                'discount_total' => $this->roundPrice($discountTotal),
+                'discounts' => $this->getPrestashopCartRules($cart),
+                'total_after_discounts' => $this->roundPrice($cart->getOrderTotal(true)),
+            ];
+        }
 
         return $internal_metadata;
     }

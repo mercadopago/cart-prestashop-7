@@ -215,6 +215,6 @@ class PixPreference extends AbstractPreference
     {
         $total = (float) $this->cart->getOrderTotal();
 
-        return $total;
+        return $this->roundPrice($total);
     }
 }
