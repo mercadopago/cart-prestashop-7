@@ -57,18 +57,35 @@ class WebhookNotification extends AbstractNotification
             $baseOrder = new Order($orderId);
             $orders = Order::getByReference($baseOrder->reference);
 
-            foreach ($orders as $order) {
-                $this->order_id = $order->id;
-                $this->updateOrderTransaction($order);
-                $this->updateOrder($cart);
-            }
+            $this->updateOrders($cart, $orders);
         } else {
+            $status = isset($this->payment['status']) ? $this->payment['status'] : null;
+            if ($status === 'rejected' || $status === 'cancelled') {
+                MPLog::generate(sprintf(
+                    'Custom webhook for cart %d has terminal %s status and no order to update',
+                    (int) $cart->id,
+                    $status
+                ));
+                $this->setNotificationResponse('No order exists for this terminal payment status', 200);
+
+                return;
+            }
+
             MPLog::generate(sprintf(
                 'Custom webhook received for cart %d before its order exists (transaction %s); the order is '
                 . 'created on the customer return flow, so this status callback is not applied here',
                 (int) $cart->id,
                 $this->transaction_id
             ), 'warning');
+            // Non-2xx on purpose: no order exists yet to apply this status to, and unlike the
+            // standard/IPN flow there is no fallback order-creation path here — the order can
+            // only be created by the customer's synchronous return. Keeping this retryable gives
+            // Mercado Pago's retry window a chance to redeliver after that flow completes,
+            // instead of silently dropping the status update if delivery races the return.
+            $this->setNotificationResponse(
+                'Custom webhook received before its order exists; awaiting the customer return flow to create it',
+                404
+            );
         }
     }
 
@@ -86,7 +103,7 @@ class WebhookNotification extends AbstractNotification
         $this->validateOrderState();
 
         if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            $this->createOrder($cart, true);
+            $this->createOrder($cart);
         }
     }
 

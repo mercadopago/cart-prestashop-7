@@ -17,24 +17,24 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 .mp-pse-checkout-container > div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 20px;
 }
 
 .mp-pse-checkout-subtitle {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .mp-pse-checkout-container label {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 .mp-pse-checkout-required-field {
-    color: red;
+  color: #ff0000;
 }
 
 .mp-pse-advanced-config-subtitle {
-    padding-top: 20px;
+  padding-top: 20px;
 }

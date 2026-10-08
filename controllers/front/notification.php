@@ -73,11 +73,15 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
     {
         MPLog::generate('Entered the IpnNotification rule');
 
-        $merchant_order = $this->mercadopago->getMerchantOrder($transaction_id);
-        if ($merchant_order === false || !isset($merchant_order['external_reference'])) {
-            $this->getErrorResponse();
+        try {
+            $merchant_order = $this->mercadopago->getMerchantOrder($transaction_id, true);
+        } catch (Throwable $th) {
+            $this->sendNotificationResponse('Could not retrieve notification data; retry later', 503);
 
             return;
+        }
+        if ($merchant_order === false || !isset($merchant_order['external_reference'])) {
+            $this->getErrorResponse();
         }
 
         $cart_id = $merchant_order['external_reference'];
@@ -88,12 +92,19 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
 
         if (!hash_equals((string) $customer_secure_key, (string) $secure_key)) {
             $this->getErrorResponse();
+        }
+
+        $notification = new IpnNotification($transaction_id, $merchant_order);
+        try {
+            $notification->receiveNotification($cart);
+        } catch (Throwable $th) {
+            MPLog::generate('Notification processing failed before completion', 'error');
+            $this->sendNotificationResponse('Could not complete notification processing; retry later', 503);
 
             return;
         }
 
-        $notification = new IpnNotification($transaction_id, $merchant_order);
-        $notification->receiveNotification($cart);
+        $this->sendNotificationResult($notification);
     }
 
     /**
@@ -108,11 +119,15 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
     {
         MPLog::generate('Entered the WebhookNotification rule');
 
-        $payment = $this->mercadopago->getPaymentStandard($transaction_id);
-        if ($payment === false || !isset($payment['external_reference'])) {
-            $this->getErrorResponse();
+        try {
+            $payment = $this->mercadopago->getPaymentStandard($transaction_id, true);
+        } catch (Throwable $th) {
+            $this->sendNotificationResponse('Could not retrieve notification data; retry later', 503);
 
             return;
+        }
+        if ($payment === false || !isset($payment['external_reference'])) {
+            $this->getErrorResponse();
         }
 
         $cart_id = $payment['external_reference'];
@@ -123,12 +138,19 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
 
         if (!hash_equals((string) $customer_secure_key, (string) $secure_key)) {
             $this->getErrorResponse();
+        }
+
+        $notification = new WebhookNotification($transaction_id, $payment);
+        try {
+            $notification->receiveNotification($cart);
+        } catch (Throwable $th) {
+            MPLog::generate('Notification processing failed before completion', 'error');
+            $this->sendNotificationResponse('Could not complete notification processing; retry later', 503);
 
             return;
         }
 
-        $notification = new WebhookNotification($transaction_id, $payment);
-        $notification->receiveNotification($cart);
+        $this->sendNotificationResult($notification);
     }
 
     /**
@@ -139,9 +161,60 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
     public function getErrorResponse()
     {
         MPLog::generate('The notification does not have the necessary parameters to create an order');
-        WebhookNotification::getNotificationResponse(
+        AbstractNotification::getNotificationResponse(
             'The notification does not have the necessary parameters',
             200
         );
+    }
+
+    /**
+     * Sends the single response for this notification request, once all processing —
+     * including any multi-order loop under the same reference — has finished (PPSP-1573).
+     * Terminates the request; must be the last thing called for a given request.
+     *
+     * Every current branch of updateOrder()/createOrder()/createStandardOrder()/
+     * receiveNotification() calls setNotificationResponse() before returning, so the null
+     * check below should be unreachable today. It stays as a defensive net for whoever adds
+     * the next branch: failing loudly with a non-2xx (so Mercado Pago retries and the gap gets
+     * noticed) is deliberately safer here than defaulting to a 2xx that reads as success and
+     * lets the omission hide indefinitely — the exact failure mode this ticket closed.
+     *
+     * @param AbstractNotification $notification
+     *
+     * @return void
+     */
+    public function sendNotificationResult(AbstractNotification $notification)
+    {
+        $message = $notification->responseMessage;
+        $code = $notification->responseCode;
+
+        if ($message === null || $code === null) {
+            MPLog::generate(
+                'Notification processing finished without recording an explicit response outcome '
+                . '(a code path is missing a setNotificationResponse() call) — see PPSP-1573',
+                'error'
+            );
+            $message = 'Notification processed without a recorded outcome';
+            $code = 500;
+        }
+
+        $this->sendNotificationResponse($message, $code);
+    }
+
+    /**
+     * Sends the terminal HTTP response for a notification request.
+     *
+     * Kept in its own method so the aggregation contract can be tested without
+     * terminating the PHP process. Production always delegates to the existing
+     * responder, which writes the JSON response and exits.
+     *
+     * @param string $message
+     * @param int $code
+     *
+     * @return void
+     */
+    protected function sendNotificationResponse($message, $code)
+    {
+        AbstractNotification::getNotificationResponse($message, $code);
     }
 }

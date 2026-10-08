@@ -122,12 +122,10 @@ body#checkout section.checkout-step .payment-options label {
   text-align: left !important;
 }
 
-
-body#checkout section.checkout-step .payment-options label img[src="https://http2.mlstatic.com/storage/cpp/static-files/306698cd-ff92-4cc0-801c-1ca35d06ed5a.png"] {
+body#checkout section.checkout-step .payment-options label img[src='https://http2.mlstatic.com/storage/cpp/static-files/306698cd-ff92-4cc0-801c-1ca35d06ed5a.png'] {
   width: 21px !important;
   height: 21px !important;
 }
-
 
 body#checkout section.checkout-step .payment-options u {
   text-decoration: none !important;
@@ -268,7 +266,11 @@ body#checkout section.checkout-step .payment-options u {
   margin-bottom: 32px !important;
 }
 
-.mp-container-standard-checkout .mp-text-standard-checkout span{
+.mp-message-standard-checkout span {
+  margin-bottom: 8px;
+}
+
+.mp-container-standard-checkout .mp-text-standard-checkout span {
   font-size: 14px !important;
   font-weight: 600 !important;
   line-height: 1.29 !important;
@@ -278,11 +280,7 @@ body#checkout section.checkout-step .payment-options u {
   margin-bottom: 32px !important;
 }
 
-.mp-message-standard-checkout span{
-  margin-bottom: 8px;
-}
-
-.mp-payment-methods-message-container{
+.mp-payment-methods-message-container {
   background-color: rgba(245, 245, 245, 1);
   padding: 20px;
   border-radius: 6px;
@@ -302,7 +300,7 @@ body#checkout section.checkout-step .payment-options u {
   margin-bottom: 8px !important;
 }
 
-.mp-payment-methods-message-container .mp-payment-methods-message span{
+.mp-payment-methods-message-container .mp-payment-methods-message span {
   font-size: 12px !important;
   font-weight: 600 !important;
   line-height: 1.29 !important;
@@ -330,8 +328,6 @@ body#checkout section.checkout-step .payment-options u {
   text-transform: uppercase;
   font-family: sans-serif !important;
 }
-
-
 
 /* custom chckout */
 
@@ -362,7 +358,7 @@ body#checkout section.checkout-step .payment-options u {
 }
 
 .mp-link-checkout-custom {
-  color: #3483FA !important;
+  color: #3483fa !important;
   font-size: 14px;
   cursor: pointer;
   user-select: none;
@@ -411,7 +407,7 @@ a.mp-link-checkout-custom {
 }
 
 .form-check-input:checked {
-  accent-color: #3483fa ; 
+  accent-color: #3483fa;
 }
 
 .mp-select {
@@ -490,6 +486,11 @@ a.mp-link-checkout-custom {
   color: rgb(0 0 0 / 90%);
 }
 
+.mp-payment-method-logo-container img {
+  width: 32px !important;
+  height: 24px !important;
+}
+
 .mp-wallet-button-container .mp-wallet-button-title img {
   max-width: 100% !important;
   max-height: 100% !important;
@@ -507,7 +508,7 @@ a.mp-link-checkout-custom {
   line-height: 22px;
 }
 
-.mp-wallet-button-container .mp-wallet-button-description p{
+.mp-wallet-button-container .mp-wallet-button-description p {
   width: 100%;
   text-align: center;
   font-weight: 400;
@@ -524,8 +525,7 @@ a.mp-link-checkout-custom {
   justify-content: center;
   align-items: center;
   padding: 8px 12px;
-  background: #FFE600;
-  border-radius: 4px;
+  background: #ffe600;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -544,20 +544,20 @@ a.mp-link-checkout-custom {
 
 .mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn:focus {
   outline: none;
-  background-color: #FFE600 !important;
+  background-color: #ffe600 !important;
   box-shadow:
-    0px 0px 0px 2px rgba(255, 255, 255, 1),
-    0px 0px 0px 5px rgba(65, 137, 230, 0.3),
-    0px 0px 0px 3px rgba(41, 104, 200, 1);
+    0 0 0 2px rgba(255, 255, 255, 1),
+    0 0 0 5px rgba(65, 137, 230, 0.3),
+    0 0 0 3px rgba(41, 104, 200, 1);
 }
 
-.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn img{
+.mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn img {
   width: 196px;
   height: 28px;
 }
 
 .mp-wallet-button-container .mp-wallet-button-button #mp-wallet-button-btn:hover {
-  background-color: #FBD100;
+  background-color: #fbd100;
   transition: all 0.3ms ease-in-out;
 }
 
@@ -743,11 +743,6 @@ a.mp-link-checkout-custom {
 
 .mp-payment-methods-container > div {
   margin: 0 0 8px 8px;
-}
-
-.mp-payment-method-logo-container img{
-  width: 32px !important;
-  height: 24px !important;
 }
 
 .mp-payment-method-logo-image {
