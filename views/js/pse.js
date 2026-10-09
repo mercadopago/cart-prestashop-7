@@ -18,10 +18,10 @@
  */
 
 function someFieldElementIsEmpty({ personType, documentType, documentNumber, financialInstitution }) {
-    return !fieldElementIsValid(personType.field)
-        || !fieldElementIsValid(documentType.field)
-        || !fieldElementIsValid(documentNumber.field)
-        || !fieldElementIsValid(financialInstitution.field);
+    return !fieldElementIsValid(personType.field) ||
+        !fieldElementIsValid(documentType.field) ||
+        !fieldElementIsValid(documentNumber.field) ||
+        !fieldElementIsValid(financialInstitution.field);
 }
 
 function fieldElementIsValid(fieldElement) {
@@ -57,7 +57,7 @@ function getPseFormFields() {
             field: document.getElementById('mp_pse_bank'),
             error: document.getElementById('mp_pse_bank_error'),
         },
-    }
+    };
 }
 
 function documentIsValid(validationParams, documentNumber) {
@@ -79,7 +79,7 @@ function getDocumentNumberValidationParams(selectedDocument) {
         minLength: validationParams.minlength,
         maxLength: validationParams.maxlength,
         type: validationParams.type,
-    }
+    };
 }
 
 function uncheckConditionTerms() {
@@ -141,8 +141,8 @@ function validatePseCheckout() {
             }
 
             pseForm.submit();
-        }
-    })
+        };
+    });
 }
 
 validatePseCheckout();

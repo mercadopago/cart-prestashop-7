@@ -245,30 +245,63 @@ abstract class AbstractPreference
      *
      * @param $cart
      *
-     * @return string|void
+     * @return string|null
      */
     public function getNotificationUrl($cart)
     {
         $customer = new Customer((int) $cart->id_customer);
 
-        if (!strrpos($this->getSiteUrl(), 'localhost')) {
-            $notification_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
-                '?fc=module&module=mercadopago&controller=notification&' .
-                'checkout=' . $this->checkout . '&customer=' . $customer->secure_key .
-                '&notification=ipn&&source_news=ipn';
+        // The configured shop domain is the only trusted source for this outbound URL. Using
+        // Tools::getHttpHost() here would let a forged Host header suppress notifications, while
+        // Tools::getShopDomainSsl() would fall back to that same header when configuration is absent.
+        $domain = $this->getValidatedShopAuthority(ShopUrl::getMainShopDomainSSL());
+        $host = $domain === null ? null : parse_url('https://' . $domain, PHP_URL_HOST);
 
-            return $notification_url;
+        if ($domain === null || !is_string($host) || strcasecmp($host, 'localhost') === 0) {
+            return null;
         }
+
+        $notification_url = 'https://' . Tools::htmlentitiesutf8($domain) . __PS_BASE_URI__ .
+            '?fc=module&module=mercadopago&controller=notification&' .
+            'checkout=' . $this->checkout . '&customer=' . $customer->secure_key .
+            '&notification=ipn&&source_news=ipn';
+
+        return $notification_url;
     }
 
     /**
      * Get site url
      *
+     * Scheme: resolved via `Configuration::get('PS_SSL_ENABLED') || Tools::usingSecureMode()`,
+     * the same combined check PrestaShop core itself uses in `Tools::getShopProtocol()` (PPSP-1574,
+     * verified against PrestaShop 8.2.7 and 9.0.3 source) — see git history on this method for the
+     * two narrower attempts that preceded it.
+     *
+     * Domain: resolved directly from the current shop's configured `ShopUrl` instead of
+     * `Tools::getShopDomainSsl()` or `$_SERVER['HTTP_HOST']` (PPSP-1892, CWE-601). The helper falls
+     * back to `Tools::getHttpHost()` when no domain is configured, which would reintroduce the
+     * client-controlled Host header into the `callback_url`. HTTPS uses `domain_ssl`; HTTP uses
+     * `domain`, and a missing selected domain fails closed instead of consulting request headers.
+     *
+     * `getNotificationUrl()` follows the same trust boundary independently: it reads the configured
+     * SSL domain directly so a request header cannot suppress or redirect payment notifications.
+     *
      * @return string
+     *
+     * @throws UnexpectedValueException
      */
     public function getSiteUrl()
     {
-        $url = Tools::htmlentitiesutf8('https://' . $_SERVER['HTTP_HOST'] . __PS_BASE_URI__);
+        $useSsl = Configuration::get('PS_SSL_ENABLED') || Tools::usingSecureMode();
+        $scheme = $useSsl ? 'https://' : 'http://';
+        $domain = $useSsl ? ShopUrl::getMainShopDomainSSL() : ShopUrl::getMainShopDomain();
+        $domain = $this->getValidatedShopAuthority($domain);
+
+        if ($domain === null) {
+            throw new UnexpectedValueException('Unable to build callback URL: shop domain is not configured or valid.');
+        }
+
+        $url = Tools::htmlentitiesutf8($scheme . $domain . __PS_BASE_URI__);
 
         return $url;
     }
@@ -276,18 +309,76 @@ abstract class AbstractPreference
     /**
      * Get return url
      *
+     * `back_urls` (PPSP-1892, CWE-601): Mercado Pago redirects the customer's browser here
+     * after checkout, so this cannot fall back to `Tools::getShopDomainSsl()`/the request's
+     * `Host` header the way it did before — see `getSiteUrl()` for the same trust boundary.
+     *
      * @param mixed $cart
      * @param string $typeReturn
      *
      * @return string
+     *
+     * @throws UnexpectedValueException
      */
     public function getReturnUrl($cart, $typeReturn)
     {
-        $return_url = Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ .
+        $return_url = $this->getConfiguredSslShopUrl() . __PS_BASE_URI__ .
             '?fc=module&module=mercadopago&controller=standardvalidation&' .
             'checkout=standard&cart_id=' . $cart->id . '&typeReturn=' . $typeReturn;
 
         return $return_url;
+    }
+
+    /**
+     * Resolve the shop's configured HTTPS URL directly from `ShopUrl`, never from request
+     * headers, failing closed when no domain is configured (PPSP-1892, CWE-601).
+     *
+     * @return string
+     *
+     * @throws UnexpectedValueException
+     */
+    private function getConfiguredSslShopUrl()
+    {
+        $domain = $this->getValidatedShopAuthority(ShopUrl::getMainShopDomainSSL());
+
+        if ($domain === null) {
+            throw new UnexpectedValueException('Unable to resolve shop domain: SSL domain is not configured or valid.');
+        }
+
+        return 'https://' . Tools::htmlentitiesutf8($domain);
+    }
+
+    /**
+     * Validate a configured shop domain as a hostname with an optional numeric port.
+     *
+     * @param mixed $domain
+     *
+     * @return string|null
+     */
+    private function getValidatedShopAuthority($domain)
+    {
+        $authority = trim((string) $domain);
+        $parts = $authority === '' ? false : parse_url('https://' . $authority);
+
+        if (!is_array($parts)
+            || !isset($parts['host'])
+            || filter_var($parts['host'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) === false
+            || isset($parts['user'])
+            || isset($parts['pass'])
+            || isset($parts['path'])
+            || isset($parts['query'])
+            || isset($parts['fragment'])
+            || (isset($parts['port']) && $parts['port'] === 0)
+        ) {
+            return null;
+        }
+
+        $expectedAuthority = $parts['host'];
+        if (isset($parts['port'])) {
+            $expectedAuthority .= ':' . $parts['port'];
+        }
+
+        return $authority === $expectedAuthority ? $authority : null;
     }
 
     /**
@@ -417,7 +508,7 @@ abstract class AbstractPreference
             'custom_settings' => $this->getCustomCheckoutSettings(),
             'ticket_settings' => $this->getTicketCheckoutSettings(),
             'pix_settings' => $this->getPixCheckoutSettings(),
-            'seller_website' => Tools::getShopDomainSsl(true, true),
+            'seller_website' => $this->getConfiguredSslShopUrl(),
             'billing_address' => [
                 'zip_code' => $address_invoice->postcode,
                 'street_name' => $address_invoice->address1 . ' - ' . $address_invoice->address2,

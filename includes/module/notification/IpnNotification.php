@@ -63,11 +63,7 @@ class IpnNotification extends AbstractNotification
             $baseOrder = new Order($orderId);
             $orders = Order::getByReference($baseOrder->reference);
 
-            foreach ($orders as $order) {
-                $this->order_id = $order->id;
-                $this->updateOrderTransaction($order);
-                $this->updateOrder($cart);
-            }
+            $this->updateOrders($cart, $orders);
         } else {
             $this->createStandardOrder($cart);
         }
@@ -87,6 +83,10 @@ class IpnNotification extends AbstractNotification
                 'Standard order not created: merchant order was not retrieved or authorized by Mercado Pago',
                 'error'
             );
+            $this->setNotificationResponse(
+                'Standard order not created: merchant order was not retrieved or authorized by Mercado Pago',
+                422
+            );
 
             return;
         }
@@ -95,34 +95,43 @@ class IpnNotification extends AbstractNotification
             $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
         }
 
-        if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
-            $payments = $this->merchant_order['payments'];
-            if (isset($payments[0]['id'])) {
-                $this->transaction_id = $payments[0]['id'];
+        try {
+            if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
+                $payments = $this->merchant_order['payments'];
+                if (isset($payments[0]['id'])) {
+                    $this->transaction_id = $payments[0]['id'];
+                }
             }
-        }
 
-        $this->getOrderId($cart);
-        $this->total = $this->getTotal($cart, $this->checkout);
+            $this->getOrderId($cart);
+            $this->total = $this->getTotal($cart, $this->checkout);
 
-        // If the merchant order carries payments, verify them to resolve the real
-        // status. Assuming a hardcoded 'pending' marks already-approved payments
-        // as rejected on PrestaShop 8.2 (mercadopago/cart-prestashop-7#89).
-        if (!empty($this->merchant_order['payments'])) {
-            $this->verifyPayments($this->merchant_order['payments']);
-        } else {
-            $this->status = 'pending';
-            $this->pending += $this->total;
-        }
+            // If the merchant order carries payments, verify them to resolve the real
+            // status. Assuming a hardcoded 'pending' marks already-approved payments
+            // as rejected on PrestaShop 8.2 (mercadopago/cart-prestashop-7#89).
+            if (!empty($this->merchant_order['payments'])) {
+                $this->verifyPayments($this->merchant_order['payments']);
+            } else {
+                $this->status = 'pending';
+                $this->pending += $this->total;
+            }
 
-        $this->validateOrderState();
+            $this->validateOrderState();
 
-        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            $this->createOrder($cart, true);
-        }
-
-        if ($this->isWalletButton) {
-            $this->preference->disableCartRule();
+            if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
+                $this->createOrder($cart);
+            } else {
+                MPLog::generate(sprintf(
+                    'Standard order not created for cart %d: order already exists, payment rejected, or amount not yet complete (status %s)',
+                    (int) $cart->id,
+                    $this->status
+                ));
+                $this->setNotificationResponse('No order created for this notification', 200);
+            }
+        } finally {
+            if ($this->isWalletButton) {
+                $this->preference->disableCartRule();
+            }
         }
     }
 
@@ -194,7 +203,10 @@ class IpnNotification extends AbstractNotification
         }
 
         foreach ($payments as $payment) {
-            $payment_info = $this->mercadopago->getPaymentStandard($payment['id']);
+            $payment_info = $this->mercadopago->getPaymentStandard($payment['id'], true);
+            if (!is_array($payment_info) || !isset($payment_info['status'], $payment_info['id'])) {
+                throw new RuntimeException('Could not retrieve merchant order payment data');
+            }
             $this->status = $payment_info['status'];
 
             $this->payments_data['payments_id'][] = $payment_info['id'];

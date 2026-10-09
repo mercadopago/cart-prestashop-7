@@ -89,7 +89,7 @@
        * Applies the configuration for document field based on document type (CPF/CNPJ)
        * @param {string} docType - Type of document to configure (CPF or CNPJ)
        */
-      function applyDocumentConfig(docType) {
+      const applyDocumentConfig = function(docType) {
         const config = DOCUMENT_TYPES[docType];
         if (!config) return;
 
@@ -97,7 +97,7 @@
         docNumberElement.setAttribute('onkeyup', `maskInput(this, ${config.mask}); document.getElementById('id-doc-number-clean').value = this.value.replace(/[^\\d]+/g, '')`);
         docNumberElement.value = '';
         docNumberHiddenElement.value = '';
-      }
+      };
 
       applyDocumentConfig('CPF');
 
@@ -439,7 +439,7 @@
 
         // TODO: Include TNA in the future
         // var taxText = `<b>CFTEA: ${taxInfo.cft}%</b> - TNA: ${taxInfo.tna}% - TEA: ${taxInfo.tea}%. Tasa fija.`
-        var taxText = `<b>CFTEA: ${taxInfo.cft}%</b> - TEA: ${taxInfo.tea}%. Tasa fija.`
+        var taxText = `<b>CFTEA: ${taxInfo.cft}%</b> - TEA: ${taxInfo.tea}%. Tasa fija.`;
 
         document.querySelector('#mp-mla-tax-text').innerHTML = taxText;
       }
@@ -639,8 +639,8 @@
         emptyInputs = true;
       } else {
         if (seller.site_id.toUpperCase() === 'MLB') {
-          var inputDocType = document.getElementById('id-docType');
-          var documentIsvalid = validateDocument(docNumber.value, inputDocType.value);
+          var inputDocTypeForValidation = document.getElementById('id-docType');
+          var documentIsvalid = validateDocument(docNumber.value, inputDocTypeForValidation.value);
           if (documentIsvalid == false) {
             docNumber.classList.add('mp-form-control-error');
             document.getElementById('mp-error-324').style.display = 'inline-block';

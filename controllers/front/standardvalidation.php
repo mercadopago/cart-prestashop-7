@@ -130,7 +130,13 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         }
 
         $notification = new IpnNotification($transaction_id, $merchant_order);
-        $notification->createStandardOrder($cart);
+        try {
+            $notification->createStandardOrder($cart);
+        } catch (Throwable $th) {
+            MPLog::generate('Standard checkout payment lookup failed; order creation deferred', 'error');
+
+            return false;
+        }
 
         $orderId = Order::getIdByCartId($cart->id);
         $order = new Order($orderId);

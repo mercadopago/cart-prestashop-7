@@ -179,12 +179,13 @@ class MPApi
      * Get standard payment
      *
      * @param int $transaction_id
+     * @param bool $throwOnError Propagate SDK failures so notification callers can request retry
      *
      * @return array|false
      *
      * @throws Exception
      */
-    public function getPaymentStandard($transaction_id)
+    public function getPaymentStandard($transaction_id, $throwOnError = false)
     {
         try {
             $transaction_id = preg_replace('/[^\d]/', '', (string) $transaction_id);
@@ -197,6 +198,10 @@ class MPApi
         } catch (Throwable $th) {
             MPLog::generate('SDK get_payment_standard error: ' . $th->getMessage(), 'error');
 
+            if ($throwOnError) {
+                throw $th;
+            }
+
             return false;
         }
     }
@@ -205,12 +210,13 @@ class MPApi
      * Get merchant order
      *
      * @param int $id
+     * @param bool $throwOnError Propagate SDK failures so notification callers can request retry
      *
      * @return array|false
      *
      * @throws Exception
      */
-    public function getMerchantOrder($id)
+    public function getMerchantOrder($id, $throwOnError = false)
     {
         try {
             $id = preg_replace('/[^\d]/', '', (string) $id);
@@ -220,6 +226,10 @@ class MPApi
             return json_decode(json_encode($merchantOrderModule->getMerchantOrder($id)), true);
         } catch (Throwable $th) {
             MPLog::generate('SDK get_merchant_orders error: ' . $th->getMessage(), 'error');
+
+            if ($throwOnError) {
+                throw $th;
+            }
 
             return false;
         }

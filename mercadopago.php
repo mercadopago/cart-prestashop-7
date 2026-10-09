@@ -17,7 +17,7 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-define('MP_VERSION', '4.19.0');
+define('MP_VERSION', '4.19.1');
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -67,7 +67,7 @@ class Mercadopago extends PaymentModule
         $this->bootstrap = true;
 
         // Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '4.19.0';
+        $this->version = '4.19.1';
         $this->ps_versions_compliancy = ['min' => '1.7.7.0', 'max' => '8.2.7'];
 
         parent::__construct();
@@ -540,16 +540,14 @@ class Mercadopago extends PaymentModule
             return true;
         }
 
-        if (
-            $country === 'mlb'
+        if ($country === 'mlb'
             && $checkout === 'MERCADOPAGO_PIX_CHECKOUT'
             && $this->isEnabledPaymentMethod('pix')
         ) {
             return true;
         }
 
-        if (
-            $this->pseCheckout->isAvailableToCountry($country)
+        if ($this->pseCheckout->isAvailableToCountry($country)
             && $checkout === PseCheckout::PSE_CHECKOUT_NAME
             && $this->isEnabledPaymentMethod(PseCheckout::PAYMENT_METHOD_NAME)
         ) {

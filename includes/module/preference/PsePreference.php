@@ -114,7 +114,7 @@ class PsePreference extends AbstractPreference
         $buildedPayerObject = $this->buildPayerObject($payerData);
 
         $payloadAdditional = [
-            'notification_url' => $this->getNotificationUrl($this->cart) . '&topic=payment&method=pse',
+            'notification_url' => $this->getPseNotificationUrl(),
             'callback_url' => Context::getContext()->link->getPageLink('order-confirmation', true) . $callbackPath,
             'description' => $this->getPreferenceDescription($this->cart),
             'payment_method_id' => $this->pseCheckout::PAYMENT_METHOD_NAME,
@@ -127,6 +127,27 @@ class PsePreference extends AbstractPreference
         ];
 
         return array_merge($payloadParent, $payloadAdditional);
+    }
+
+    /**
+     * getNotificationUrl() returns null when the shop domain is not safely configured
+     * (PPSP-1892, CWE-601 fail-closed guard). Concatenating the PSE query suffix onto that
+     * would silently send Mercado Pago a bare "&topic=payment&method=pse" as the webhook
+     * target, so this fails closed too instead of building an invalid URL (PPSP-1892).
+     *
+     * @return string
+     *
+     * @throws UnexpectedValueException
+     */
+    protected function getPseNotificationUrl()
+    {
+        $notificationUrl = $this->getNotificationUrl($this->cart);
+
+        if ($notificationUrl === null || $notificationUrl === '') {
+            throw new UnexpectedValueException('Unable to build PSE notification URL: shop domain is not configured.');
+        }
+
+        return $notificationUrl . '&topic=payment&method=pse';
     }
 
     /**
