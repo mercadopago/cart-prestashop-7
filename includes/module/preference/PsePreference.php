@@ -229,6 +229,6 @@ class PsePreference extends AbstractPreference
      */
     public function getAmount()
     {
-        return $this->cart->getOrderTotal();
+        return $this->roundPrice($this->cart->getOrderTotal());
     }
 }
