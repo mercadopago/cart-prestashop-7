@@ -26,12 +26,15 @@ require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/Abstrac
 class WebhookNotification extends AbstractNotification
 {
     public $payment;
+    protected $notifiedPaymentId;
+    private $allowHistoricalAck = false;
 
     public function __construct($transaction_id, $payment)
     {
         parent::__construct($transaction_id);
 
         $this->payment = $payment;
+        $this->notifiedPaymentId = (string) $transaction_id;
         $this->checkout = $payment['metadata']['checkout_type'];
         $this->mp_transaction_amount = $payment['transaction_amount'];
     }
@@ -45,66 +48,71 @@ class WebhookNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->verifyWebhook($cart);
-
-        $this->total = $this->getTotal($cart, $this->checkout);
-        $orderId = Order::getIdByCartId($cart->id);
-
-        if ($orderId != 0) {
-            $this->verifyCustomPayment();
-            $this->validateOrderState();
-
-            $baseOrder = new Order($orderId);
-            $orders = Order::getByReference($baseOrder->reference);
-
-            $this->updateOrders($cart, $orders);
-        } else {
-            $status = isset($this->payment['status']) ? $this->payment['status'] : null;
-            if ($status === 'rejected' || $status === 'cancelled') {
-                MPLog::generate(sprintf(
-                    'Custom webhook for cart %d has terminal %s status and no order to update',
-                    (int) $cart->id,
-                    $status
-                ));
-                $this->setNotificationResponse('No order exists for this terminal payment status', 200);
-
-                return;
-            }
-
-            MPLog::generate(sprintf(
-                'Custom webhook received for cart %d before its order exists (transaction %s); the order is '
-                . 'created on the customer return flow, so this status callback is not applied here',
-                (int) $cart->id,
-                $this->transaction_id
-            ), 'warning');
-            // Non-2xx on purpose: no order exists yet to apply this status to, and unlike the
-            // standard/IPN flow there is no fallback order-creation path here — the order can
-            // only be created by the customer's synchronous return. Keeping this retryable gives
-            // Mercado Pago's retry window a chance to redeliver after that flow completes,
-            // instead of silently dropping the status update if delivery races the return.
-            $this->setNotificationResponse(
-                'Custom webhook received before its order exists; awaiting the customer return flow to create it',
-                404
-            );
-        }
+        $this->allowHistoricalAck = true;
+        $this->processCartPayment($cart, false);
     }
 
-    /**
-     * Create order for custom payments without notification
-     *
-     * @param mixed $cart
-     *
-     * @return void
-     */
+    /** @return Order */
     public function createCustomOrder($cart)
     {
-        $this->total = $this->getTotal($cart, $this->checkout);
-        $this->verifyCustomPayment();
-        $this->validateOrderState();
+        $this->allowHistoricalAck = false;
+        $this->processCartPayment($cart, true);
 
-        if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-            $this->createOrder($cart);
+        return $this->getSynchronousOrder($cart);
+    }
+
+    protected function loadPaymentSnapshot($cart): array
+    {
+        require_once __DIR__ . '/CartPaymentInitiation.php';
+        $policy = new CartPaymentInitiation($this->mercadopago);
+        $ids = $this->knownPaymentIds($cart, true);
+        $ids[] = $this->notifiedPaymentId;
+        $payments = [];
+        foreach (array_unique($ids) as $id) {
+            $payment = $this->mercadopago->getPaymentStandard($id, true);
+            if (!is_array($payment) || !isset($payment['id'], $payment['external_reference'])
+                || (string) $payment['id'] !== (string) $id
+                || (string) $payment['external_reference'] !== (string) $cart->id
+            ) {
+                throw new RuntimeException('Custom payment ownership could not be verified');
+            }
+            $scope = $policy->webhookPaymentScope($cart, $payment);
+            if ($scope === 'retired') {
+                if (!$policy->canArchiveClosedPayment($cart, $payment)) {
+                    throw new RuntimeException('A retired payment generation has unresolved funds');
+                }
+                $precision = in_array($payment['currency_id'], ['CLP', 'COP'], true) ? 0 : 2;
+                $retired = PaymentReconciliationSnapshot::fromPayments([$payment], $precision);
+                if ((string) $id === $this->notifiedPaymentId) {
+                    if (!$this->allowHistoricalAck) {
+                        throw new RuntimeException('A retired payment cannot confirm current checkout creation');
+                    }
+                    $this->historicalPaymentEvent = true;
+
+                    return $retired;
+                }
+                $this->auditOnlyAttempts = array_replace($this->auditOnlyAttempts, $retired['attempts']);
+                continue;
+            }
+            if (!in_array($payment['metadata']['checkout_type'] ?? null, ['credit_card', 'pix', 'ticket', 'pse'], true)) {
+                if ((string) $id !== (string) $this->notifiedPaymentId
+                    && !isset($this->recordedPaymentIds[(string) $id])
+                    && in_array($payment['status'] ?? null, ['rejected', 'cancelled'], true)
+                ) {
+                    $this->archiveNegativeAttempt($payment);
+                    continue;
+                }
+                throw new RuntimeException('Payment belongs to another checkout integration');
+            }
+            $payments[] = $payment;
+            if ((string) $id === (string) $this->notifiedPaymentId) {
+                $this->payment = $payment;
+                $this->checkout = $payment['metadata']['checkout_type'];
+            }
         }
+        $precision = in_array(Configuration::get('MERCADOPAGO_SITE_ID'), ['MCO', 'MLC'], true) ? 0 : 2;
+
+        return PaymentReconciliationSnapshot::fromPayments($payments, $precision);
     }
 
     /**
@@ -114,24 +122,7 @@ class WebhookNotification extends AbstractNotification
      */
     public function verifyCustomPayment()
     {
-        $this->status = $this->payment['status'];
-        $this->payments_data['payments_id'] = $this->payment['id'];
-        $this->payments_data['payments_type'] = $this->payment['payment_type_id'];
-        $this->payments_data['payments_method'] = $this->payment['payment_method_id'];
-        $this->payments_data['payments_amount'] = $this->payment['transaction_amount'];
-        $this->payments_data['payments_status'] = $this->status;
-
-        if ($this->status == 'approved') {
-            // Cash payments (e.g. OXXO) may not expose transaction_details.total_paid_amount
-            // when confirmed; fall back to transaction_amount so the status still updates
-            // (mercadopago/cart-prestashop-7#88).
-            if (isset($this->payment['transaction_details']['total_paid_amount'])) {
-                $this->approved += $this->payment['transaction_details']['total_paid_amount'];
-            } else {
-                $this->approved += $this->payment['transaction_amount'];
-            }
-        } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
-            $this->pending += $this->payment['transaction_amount'];
-        }
+        $precision = in_array(Configuration::get('MERCADOPAGO_SITE_ID'), ['MCO', 'MLC'], true) ? 0 : 2;
+        $this->applyPaymentSnapshot(PaymentReconciliationSnapshot::fromPayments([$this->payment], $precision));
     }
 }

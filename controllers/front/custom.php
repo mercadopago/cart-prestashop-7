@@ -31,34 +31,42 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
         parent::__construct();
     }
 
+    /** Keep dependency construction outside the checkout state transitions. */
+    protected function createCheckoutPreference()
+    {
+        return new CustomPreference();
+    }
+
     /**
      * @throws Exception
      */
     public function postProcess()
     {
-        $preference = new CustomPreference();
+        $preference = $this->createCheckoutPreference();
+        $paymentIssued = false;
+        $failurePhase = 'response';
         try {
             $preference->verifyModuleParameters();
             $custom_info = Tools::getValue('mercadopago_custom');
             $customPreference = $preference->createPreference($this->context->cart, $custom_info);
+            $paymentIssued = is_array($customPreference) && isset($customPreference['id']);
 
             if (is_array($customPreference) && array_key_exists('notification_url', $customPreference)
                 && $customPreference['status'] != 'rejected') {
                 // payment created
+                $failurePhase = 'persistence';
                 $preference->saveCreatePreferenceData($this->context->cart, $customPreference['notification_url']);
                 MPLog::generate('Cart id ' . $this->context->cart->id . ' - Custom payment created successfully');
 
                 // create order
                 $transaction_id = $customPreference['id'];
+                $failurePhase = 'reconciliation';
                 $notification = new WebhookNotification($transaction_id, $customPreference);
-                $notification->createCustomOrder($this->context->cart);
+                $order = $notification->createCustomOrder($this->context->cart);
+                $failurePhase = 'confirmation';
                 $preference->disableCartRule();
 
                 // order confirmation redirect
-                $old_cart = new Cart($this->context->cart->id);
-                $orderId = Order::getIdByCartId($old_cart->id);
-                $order = new Order($orderId);
-
                 $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
                 $uri .= '&id_cart=' . $order->id_cart;
                 $uri .= '&key=' . $order->secure_key;
@@ -77,8 +85,23 @@ class MercadoPagoCustomModuleFrontController extends ModuleFrontController
                     $this->context->cookie->__set('redirect_message', Tools::displayError($message));
                 }
             }
-        } catch (Exception $e) {
+        } catch (PaymentInitiationBlocked $held) {
+            $preference->redirectPaymentHold();
+
+            return;
+        } catch (Throwable $e) {
+            if ($paymentIssued) {
+                $preference->holdIssuedCheckout($this->context->cart, $e, $failurePhase);
+
+                return;
+            }
             MPLog::generate('Exception Message: ' . $e->getMessage());
+        }
+
+        if ($paymentIssued && ($customPreference['status'] ?? null) !== 'rejected') {
+            $preference->holdIssuedCheckout($this->context->cart);
+
+            return;
         }
 
         $preference->deleteCartRule();

@@ -54,6 +54,8 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         // Validate checkout notification
         if ($checkout == 'standard' && $topic == 'merchant_order') {
             $this->processIpnNotification($transaction_id, $secure_key);
+        } elseif ($checkout == 'standard' && $topic == 'payment') {
+            $this->processStandardPaymentNotification($transaction_id, $secure_key);
         } elseif ($checkout == 'custom' && $topic == 'payment') {
             $this->processWebhookNotification($transaction_id, $secure_key);
         } else {
@@ -69,7 +71,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
      *
      * @return void
      */
-    public function processIpnNotification($transaction_id, $secure_key)
+    public function processIpnNotification($transaction_id, $secure_key, array $candidateIds = [])
     {
         MPLog::generate('Entered the IpnNotification rule');
 
@@ -94,7 +96,9 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
             $this->getErrorResponse();
         }
 
-        $notification = new IpnNotification($transaction_id, $merchant_order);
+        $notification = new IpnNotification($transaction_id, $merchant_order, $candidateIds);
+        $notification->mercadopago = $this->mercadopago;
+        $notification->customer_secure_key = $secure_key;
         try {
             $notification->receiveNotification($cart);
         } catch (Throwable $th) {
@@ -105,6 +109,37 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         }
 
         $this->sendNotificationResult($notification);
+    }
+
+    /** Individual Checkout Pro events supply candidates omitted by MO/search. */
+    public function processStandardPaymentNotification($transaction_id, $secure_key)
+    {
+        try {
+            $ids = IpnNotification::normalizeCandidatePaymentIds([$transaction_id]);
+        } catch (InvalidArgumentException $error) {
+            $this->getErrorResponse();
+
+            return;
+        }
+        try {
+            $payment = $this->mercadopago->getPaymentStandard($ids[0], true);
+        } catch (Throwable $error) {
+            $this->sendNotificationResponse('Could not retrieve notification data; retry later', 503);
+
+            return;
+        }
+        if (!is_array($payment) || !isset($payment['id'], $payment['external_reference'], $payment['order']['id'])
+            || (string) $payment['id'] !== $ids[0]
+            || !preg_match('/^[1-9][0-9]{0,19}$/D', (string) $payment['order']['id'])
+            || !preg_match('/^[1-9][0-9]{0,9}$/D', (string) $payment['external_reference'])
+        ) {
+            $this->getErrorResponse();
+
+            return;
+        }
+        // The existing MO/customer-key checks remain authoritative. The payment
+        // is reread with all other IDs under the same reconciler/cart lock.
+        $this->processIpnNotification($payment['order']['id'], $secure_key, $ids);
     }
 
     /**
@@ -141,6 +176,7 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
         }
 
         $notification = new WebhookNotification($transaction_id, $payment);
+        $notification->customer_secure_key = $secure_key;
         try {
             $notification->receiveNotification($cart);
         } catch (Throwable $th) {

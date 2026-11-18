@@ -41,41 +41,42 @@ class CustomPreference extends AbstractPreference
      */
     public function createPreference($cart, $custom_info)
     {
-        $preference = $this->getCommonPreference($cart);
-        $preference['description'] = $this->getPreferenceDescription($cart);
-        $preference['binary_mode'] = $this->getBinaryMode();
-        $preference['payer']['email'] = $this->getCustomerEmail();
-        $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
-        $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
-        $preference['metadata'] = $this->getInternalMetadata($cart);
-        $preference['token'] = $custom_info['card_token_id'];
-        $preference['installments'] = (int) $custom_info['installments'];
-        $preference['payment_method_id'] = $custom_info['payment_method_id'];
-        $preference['payer']['identification']['type'] = $custom_info['doc_type'];
-        $preference['payer']['identification']['number'] = $custom_info['doc_number'];
+        return $this->initiatePayment($cart, 'payment', function () use ($cart, $custom_info) {
+            // The Mercado Pago checkout discount has to become a real PrestaShop cart rule *before*
+            // anything reads the cart: getCartItems() and getInternalMetadata() distribute/report
+            // whatever Cart::ONLY_DISCOUNTS returns, and getTransactionAmount() reads the final total.
+            // PrestaShop recomputes all of them from cart_cart_rule on every call, so this ordering is
+            // what keeps the three consistent (see .agents/traps.md).
 
-        if (!empty($custom_info['issuer'])) {
-            $preference['issuer_id'] = (int) $custom_info['issuer'];
-        }
+            $preference = $this->getCommonPreference($cart);
+            $preference['description'] = $this->getPreferenceDescription($cart);
+            $preference['binary_mode'] = $this->getBinaryMode();
+            $preference['payer']['email'] = $this->getCustomerEmail();
+            $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
+            $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
+            $preference['metadata'] = $this->getInternalMetadata($cart);
+            $preference['token'] = $custom_info['card_token_id'];
+            $preference['installments'] = (int) $custom_info['installments'];
+            $preference['payment_method_id'] = $custom_info['payment_method_id'];
+            $preference['payer']['identification']['type'] = $custom_info['doc_type'];
+            $preference['payer']['identification']['number'] = $custom_info['doc_number'];
 
-        $preference['additional_info']['items'] = $this->getCartItems(
-            $cart,
-            true,
-            $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']
-        );
+            if (!empty($custom_info['issuer'])) {
+                $preference['issuer_id'] = (int) $custom_info['issuer'];
+            }
 
-        // Update cart total with CartRule()
-        $this->setCartRule($cart, $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']);
-        $preference['transaction_amount'] = $this->getTransactionAmount($cart);
+            $preference['additional_info']['items'] = $this->getCartItems($cart, true);
+            $preference['transaction_amount'] = $this->getTransactionAmount($cart);
 
-        // Generate preference
-        $this->generateLogs($preference, 'custom');
+            // Generate preference
+            $this->generateLogs($preference, 'custom');
 
-        // Create preference
-        $createPreference = $this->mercadopago->createPayment($preference);
-        MPLog::generate('Cart id ' . $cart->id . ' - Custom Preference created successfully');
+            // Create preference
 
-        return $createPreference;
+            return $preference;
+        }, function () use ($cart) {
+            $this->setCartRule($cart, $this->settings['MERCADOPAGO_CUSTOM_DISCOUNT']);
+        });
     }
 
     /**
@@ -87,13 +88,7 @@ class CustomPreference extends AbstractPreference
      */
     public function getTransactionAmount($cart)
     {
-        $total = (float) $cart->getOrderTotal();
-        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
-        if ($localization == 'MCO' || $localization == 'MLC') {
-            return Tools::ps_round($total, 2);
-        }
-
-        return $total;
+        return $this->roundPrice((float) $cart->getOrderTotal());
     }
 
     /**

@@ -40,14 +40,13 @@ class WalletButtonPreference extends AbstractStandardPreference
      */
     public function createPreference($cart)
     {
-        $payload = $this->buildPreferencePayload($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
+        return $this->initiatePayment($cart, 'preference', function () use ($cart) {
+            $payload = $this->buildPreferencePayload($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
 
-        $this->generateLogs($payload, $cart);
+            $this->generateLogs($payload, $cart);
 
-        $createPreference = $this->mercadopago->createPreference($payload);
-        MPLog::generate('Cart id ' . $cart->id . ' - Wallet Button Preference created successfully');
-
-        return $createPreference;
+            return $payload;
+        });
     }
 
     /**

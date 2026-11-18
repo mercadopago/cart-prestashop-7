@@ -32,6 +32,18 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
         parent::__construct();
     }
 
+    /** Keep dependency construction outside the checkout state transitions. */
+    protected function createCheckoutPreference()
+    {
+        return new PsePreference(new PseCheckout(), $this->context->cart);
+    }
+
+    /** Complete the successful bank handoff. */
+    protected function redirectToBank($url)
+    {
+        Tools::redirect($url);
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
@@ -41,7 +53,7 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $preference = new PsePreference(new PseCheckout(), $this->context->cart);
+        $preference = $this->createCheckoutPreference();
         $pseFormData = Tools::getValue('mercadopago_pse');
         if (!is_array($pseFormData)) {
             $pseFormData = [];
@@ -53,28 +65,56 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
             'financial_institution' => isset($pseFormData['financialInstitution']) ? $pseFormData['financialInstitution'] : null,
         ];
 
+        $paymentIssued = false;
+        $failurePhase = 'response';
         try {
             $preference->verifyModuleParameters();
             $payment = $preference->createPayment($payerData, $this->getCallbackPath($this->context->cart));
 
-            if (!is_array($payment)) {
+            $paymentIssued = is_array($payment) && isset($payment['id']);
+
+            if (!$paymentIssued) {
                 $this->handleWithPaymentError($preference, $payment, null);
 
                 return;
             }
 
-            $preference->saveCreatePreferenceData(
-                $this->context->cart,
-                $payment['notification_url']
-            );
+            if (isset($payment['notification_url'], $payment['transaction_details']['external_resource_url'])
+                && is_string($payment['notification_url']) && $payment['notification_url'] !== ''
+                && is_string($payment['transaction_details']['external_resource_url'])
+                && $payment['transaction_details']['external_resource_url'] !== ''
+            ) {
+                $failurePhase = 'persistence';
+                $preference->saveCreatePreferenceData(
+                    $this->context->cart,
+                    $payment['notification_url']
+                );
 
-            $this->createOrder($payment, $this->context->cart);
-            $preference->deactivateDiscount();
+                $failurePhase = 'reconciliation';
+                $this->createOrder($payment, $this->context->cart);
+                $failurePhase = 'confirmation';
+                $preference->deactivateDiscount();
 
-            Tools::redirect($payment['transaction_details']['external_resource_url']);
-        } catch (Exception $err) {
+                $this->redirectToBank($payment['transaction_details']['external_resource_url']);
+
+                return;
+            }
+        } catch (PaymentInitiationBlocked $held) {
+            $preference->redirectPaymentHold();
+
+            return;
+        } catch (Throwable $err) {
+            if ($paymentIssued) {
+                $preference->holdIssuedCheckout($this->context->cart, $err, $failurePhase);
+
+                return;
+            }
             $this->handleWithPaymentError($preference, null, $err);
+
+            return;
         }
+
+        $preference->holdIssuedCheckout($this->context->cart);
     }
 
     /**
@@ -110,7 +150,7 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
     /**
      * @param PsePreference $preference
      * @param array|string|null $paymentResponse
-     * @param Exception|null $err
+     * @param Throwable|null $err
      *
      * @return void
      */
@@ -124,7 +164,7 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
             return;
         }
 
-        MPLog::generate('Exception Message: ' . $err->getMessage());
+        MPLog::generate('PSE payment creation failed before an issued response', 'error');
         $this->redirectToErrorPage($preference, Tools::displayError());
     }
 
@@ -138,6 +178,6 @@ class MercadoPagoPseModuleFrontController extends ModuleFrontController
     {
         $this->context->cookie->__set('redirect_message', $errorMessage);
         $preference->deleteCartRule();
-        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
+        $preference->redirectError();
     }
 }

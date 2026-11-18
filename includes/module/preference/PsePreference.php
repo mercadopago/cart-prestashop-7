@@ -53,18 +53,19 @@ class PsePreference extends AbstractPreference
      */
     public function createPayment($payerData, $callbackPath)
     {
-        $payload = $this->buildPayload($payerData, $callbackPath);
+        return $this->initiatePayment($this->cart, 'payment', function () use ($payerData, $callbackPath) {
+            // Apply the checkout discount as a real cart rule before the payload reads the cart items,
+            // the metadata and the total — see the ordering trap in .agents/traps.md.
 
-        $this->applyDiscountByCart($this->cart);
+            $payload = $this->buildPayload($payerData, $callbackPath);
+            $payload['transaction_amount'] = $this->getAmount();
 
-        $payload['transaction_amount'] = $this->getAmount();
+            $this->generateLogs($payload, $this->pseCheckout::PAYMENT_METHOD_NAME);
 
-        $this->generateLogs($payload, $this->pseCheckout::PAYMENT_METHOD_NAME);
-
-        $createdPayment = $this->mercadopago->createPayment($payload);
-        MPLog::generate('Cart ID ' . $this->cart->id . ' - PSE payment created successfully');
-
-        return $createdPayment;
+            return $payload;
+        }, function () {
+            $this->applyDiscountByCart($this->cart);
+        });
     }
 
     /**
@@ -214,11 +215,7 @@ class PsePreference extends AbstractPreference
             'ip_address' => $_SERVER['REMOTE_ADDR'],
             'payer' => $payer,
             'shipments' => $this->getShipmentAddress($this->cart),
-            'items' => $this->getCartItems(
-                $this->cart,
-                $isCustomCheckout,
-                $this->pseCheckout->getDiscount()
-            ),
+            'items' => $this->getCartItems($this->cart, $isCustomCheckout),
         ];
 
         return $additionalInfo;
@@ -229,6 +226,6 @@ class PsePreference extends AbstractPreference
      */
     public function getAmount()
     {
-        return $this->cart->getOrderTotal();
+        return $this->roundPrice((float) $this->cart->getOrderTotal());
     }
 }

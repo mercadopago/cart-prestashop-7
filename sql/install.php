@@ -21,6 +21,14 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+if (!isset($record_installation_mp_module_id)
+    || !is_callable($record_installation_mp_module_id)
+    || !isset($record_installation_previous_mp_module)
+    || !is_callable($record_installation_previous_mp_module)
+) {
+    return false;
+}
+
 $sql = [];
 
 // module table
@@ -43,11 +51,14 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'mp_transactions` (
       `order_id` INT(10) UNSIGNED NULL,
       `customer_id` INT(11) UNSIGNED NOT NULL,
       `total` DECIMAL(15,2) NULL,
-      `payment_id` VARCHAR(100) NULL,
-      `payment_method` VARCHAR(100) NULL,
-      `payment_type` VARCHAR(100) NULL,
-      `payment_status` VARCHAR(100) NULL,
-      `payment_amount` VARCHAR(100) NULL,
+      `payment_id` TEXT NULL,
+      `payment_method` TEXT NULL,
+      `payment_type` TEXT NULL,
+      `payment_status` TEXT NULL,
+      `payment_amount` TEXT NULL,
+      `payment_attempts` MEDIUMTEXT NULL,
+      `creation_recovery` MEDIUMTEXT NULL,
+      `payment_initiation` MEDIUMTEXT NULL,
       `merchant_order_id` VARCHAR(100) NULL,
       `notification_url` TEXT NULL,
       `is_payment_test` TINYINT(1) NULL,
@@ -66,35 +77,80 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'mp_transactions` (
 // Create tables
 foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
-        MPLog::generate('Failed to execute query: ' . Db::getInstance()->getMsgError(), 'error');
-
         return false;
     }
 }
 
-// Insert necessary data on DB
-$mp_module = new MPModule();
-$count = $mp_module->where('version', '=', MP_VERSION)->count();
+// Insert version metadata and propagate every database failure to install().
+$current_modules = Db::getInstance()->executeS(
+    'SELECT `id_mp_module` FROM `' . _DB_PREFIX_ . 'mp_module`'
+    . " WHERE `version` = '" . pSQL(MP_VERSION) . "'"
+    . ' ORDER BY `id_mp_module` DESC LIMIT 1',
+    true,
+    false
+);
 
-if ($count == 0) {
-    $old_mp = $mp_module->orderBy('id_mp_module', 'desc')->get();
-    if (isset($old_mp['id_mp_module'])) {
-        $old_mp = $mp_module->where('id_mp_module', '=', $old_mp['id_mp_module'])->update(['updated' => true]);
-    }
-    $mp_module->create(['version' => MP_VERSION]);
+if (!is_array($current_modules)) {
+    return false;
 }
 
-// Prestashop configuration table
-Configuration::updateValue('MERCADOPAGO_AUTO_RETURN', true);
-Configuration::updateValue('MERCADOPAGO_PROD_STATUS', false);
-Configuration::updateValue('MERCADOPAGO_INSTALLMENTS', 24);
-Configuration::updateValue('MERCADOPAGO_STANDARD', false);
-Configuration::updateValue('MERCADOPAGO_HOMOLOGATION', false);
-Configuration::updateValue('MERCADOPAGO_STANDARD_MODAL', true);
-Configuration::updateValue('MERCADOPAGO_CUSTOM_WALLET_BUTTON', true);
+if (count($current_modules) === 0) {
+    if (!Db::getInstance()->insert(
+        'mp_module',
+        [
+            'version' => pSQL(MP_VERSION),
+            'created_at' => date('Y-m-d H:i:s'),
+        ]
+    )) {
+        return false;
+    }
 
-// Remove Mercado Envios
-Configuration::updateValue('MERCADOENVIOS_ACTIVATE', false);
-Configuration::deleteByName('MERCADOPAGO_CARRIER');
-Configuration::deleteByName('MERCADOPAGO_CARRIER_ID_1');
-Configuration::deleteByName('MERCADOPAGO_CARRIER_ID_2');
+    $id_mp_module = (int) Db::getInstance()->Insert_ID();
+    if ($id_mp_module <= 0) {
+        return false;
+    }
+
+    $record_installation_mp_module_id($id_mp_module);
+} elseif (!isset($current_modules[0]['id_mp_module'])
+    || (int) $current_modules[0]['id_mp_module'] <= 0
+) {
+    return false;
+} else {
+    $id_mp_module = (int) $current_modules[0]['id_mp_module'];
+}
+
+$previous_modules = Db::getInstance()->executeS(
+    'SELECT `id_mp_module`, `updated`, `updated_at` FROM `' . _DB_PREFIX_ . 'mp_module`'
+    . ' WHERE `id_mp_module` < ' . $id_mp_module
+    . ' ORDER BY `id_mp_module` DESC LIMIT 1',
+    true,
+    false
+);
+
+if (!is_array($previous_modules)) {
+    return false;
+}
+
+if (isset($previous_modules[0]['id_mp_module'])) {
+    $previous_id = (int) $previous_modules[0]['id_mp_module'];
+    if ($previous_id <= 0) {
+        return false;
+    }
+
+    if (!isset($previous_modules[0]['updated']) || (int) $previous_modules[0]['updated'] !== 1) {
+        $record_installation_previous_mp_module($previous_modules[0]);
+
+        if (!Db::getInstance()->update(
+            'mp_module',
+            [
+                'updated' => true,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            '`id_mp_module` = ' . $previous_id
+        )) {
+            return false;
+        }
+    }
+}
+
+return true;

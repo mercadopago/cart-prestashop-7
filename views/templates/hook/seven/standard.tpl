@@ -117,6 +117,10 @@
                     fetch('index.php?fc=module&module=mercadopago&controller=standard')
                     .then(response => response.json())
                     .then(function(response) {
+                        if (response.payment_confirmation_pending && response.confirmation_url) {
+                            window.location.href = response.confirmation_url;
+                            return false;
+                        }
                         if (response.preference) {
                             var mp = new MercadoPago('{$public_key|escape:"html":"UTF-8"}');
                             mp.checkout({

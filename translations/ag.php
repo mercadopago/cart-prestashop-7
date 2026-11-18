@@ -447,3 +447,8 @@ $_MODULE['<{mercadopago}prestashop>credentialssettings_5bc7ab301074148dc708229c5
 $_MODULE['<{mercadopago}prestashop>credentialssettings_f9465576c2b33512983a54a95bad3210'] = 'Configuración guardada con éxito. Ahora puede configurar el módulo.';
 $_MODULE['<{mercadopago}prestashop>homologationsettings_2488dda96f94d5e5d7f227690ed5fabc'] = 'Homologación';
 $_MODULE['<{mercadopago}prestashop>abstractpreference_e2b7dec8fa4b498156dfee6e4c84b156'] = 'Este medio de pago no está disponible';
+
+$_MODULE['<{mercadopago}prestashop>confirmation_pending_655046dc88715cca863c25e67841c558'] = 'Confirmación de pago pendiente';
+$_MODULE['<{mercadopago}prestashop>confirmation_pending_0688537114c8493258f71eb7b6a00948'] = 'Todavía estamos verificando tu pago. No vuelvas a pagar mientras la confirmación esté pendiente.';
+$_MODULE['<{mercadopago}prestashop>confirmation_pending_85e4cd6d068d1bb8ec10d46de91333ad'] = 'Si la confirmación sigue pendiente, contacta a la tienda antes de hacer otro pago.';
+$_MODULE['<{mercadopago}prestashop>confirmation_pending_a474adbd315aa24a330cbf83c7597571'] = 'Verificar confirmación de pago';

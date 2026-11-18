@@ -31,6 +31,12 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
         parent::__construct();
     }
 
+    /** Keep dependency construction outside the checkout state transitions. */
+    protected function createCheckoutPreference()
+    {
+        return new PixPreference($this->context->cart);
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
@@ -40,35 +46,48 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $preference = new PixPreference($this->context->cart);
+        $preference = $this->createCheckoutPreference();
 
+        $paymentIssued = false;
+        $failurePhase = 'response';
         try {
             $preference->verifyModuleParameters();
             $payment = $preference->createPreference();
+            $paymentIssued = is_array($payment) && isset($payment['id']);
 
             if (is_array($payment)) {
+                $failurePhase = 'persistence';
                 $preference->saveCreatePreferenceData(
                     $this->context->cart,
                     $payment['notification_url']
                 );
 
+                $failurePhase = 'reconciliation';
                 $order = $this->createOrder(
                     $payment,
                     $this->context->cart,
                     $preference
                 );
 
+                $failurePhase = 'confirmation';
                 $link = $this->getSucessRedirectLink($order, $payment);
 
                 Tools::redirect($link);
             }
             if (is_string($payment)) {
                 $message = MPApi::validateMessageApi($payment);
-                if (!empty($message)) {
-                    $this->redirectError($preference, Tools::displayError($message));
-                }
+                $this->redirectError($preference, empty($message) ? Tools::displayError() : Tools::displayError($message));
             }
-        } catch (Exception $err) {
+        } catch (PaymentInitiationBlocked $held) {
+            $preference->redirectPaymentHold();
+
+            return;
+        } catch (Throwable $err) {
+            if ($paymentIssued) {
+                $preference->holdIssuedCheckout($this->context->cart, $err, $failurePhase);
+
+                return;
+            }
             MPLog::generate('Exception Message: ' . $err->getMessage());
             $this->redirectError($preference, Tools::displayError());
         }
@@ -87,12 +106,8 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     {
         $transactionId = $payment['id'];
         $notification = new WebhookNotification($transactionId, $payment);
-        $notification->createCustomOrder($cart);
+        $order = $notification->createCustomOrder($cart);
         $preference->disableCartRule();
-
-        $oldCart = new Cart($cart->id);
-        $orderId = Order::getIdByCartId($oldCart->id);
-        $order = new Order($orderId);
 
         return $order;
     }
@@ -133,6 +148,6 @@ class MercadoPagoPixModuleFrontController extends ModuleFrontController
     {
         $this->context->cookie->__set('redirect_message', $errorMessage);
         $preference->deleteCartRule();
-        Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
+        $preference->redirectError();
     }
 }
