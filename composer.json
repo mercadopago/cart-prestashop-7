@@ -24,6 +24,10 @@
         "Composer\\Config::disableProcessTimeout",
         "phpcbf --extensions=php --standard=phpcs.xml ."
     ],
+    "phpunit": [
+        "Composer\\Config::disableProcessTimeout",
+        "phpunit --configuration phpunit.unit.xml.dist"
+    ],
     "test:unit": "phpunit --configuration phpunit.xml.dist"
   }
 }

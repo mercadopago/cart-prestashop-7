@@ -46,68 +46,67 @@ class TicketPreference extends AbstractPreference
      */
     public function createPreference($cart, $ticket_info)
     {
-        $this->ticket_info = $ticket_info;
-        $preference = $this->getCommonPreference($cart);
-        $preference['date_of_expiration'] = $this->getExpirationDate();
-        $preference['description'] = $this->getPreferenceDescription($cart);
-        $preference['payment_method_id'] = $this->mpuseful->getPaymentMethodId($ticket_info['paymentMethodId']);
-        $preference['payer']['email'] = $this->getCustomerEmail();
-        $preference['metadata'] = $this->getInternalMetadata($cart);
+        return $this->initiatePayment($cart, 'payment', function () use ($cart, $ticket_info) {
+            $this->ticket_info = $ticket_info;
 
-        if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLB') {
-            $preference['payer']['first_name'] = $ticket_info['firstname'];
-            $preference['payer']['last_name'] = $ticket_info['docType'] == 'CPF' ? $ticket_info['lastname'] : '';
-            $preference['payer']['identification']['type'] = $ticket_info['docType'];
-            $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
-            $preference['payer']['address']['street_name'] = $ticket_info['address'];
-            $preference['payer']['address']['street_number'] = $ticket_info['number'];
-            $preference['payer']['address']['neighborhood'] = $ticket_info['city'];
-            $preference['payer']['address']['city'] = $ticket_info['city'];
-            $preference['payer']['address']['federal_unit'] = $ticket_info['state'];
-            $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
-        }
+            // Apply the checkout discount as a real cart rule before reading items/metadata/total —
+            // see the ordering trap in .agents/traps.md.
 
-        if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLU') {
-            $preference['payer']['identification']['type'] = $ticket_info['docType'];
-            $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
-        }
+            $preference = $this->getCommonPreference($cart);
+            $preference['date_of_expiration'] = $this->getExpirationDate();
+            $preference['description'] = $this->getPreferenceDescription($cart);
+            $preference['payment_method_id'] = $this->mpuseful->getPaymentMethodId($ticket_info['paymentMethodId']);
+            $preference['payer']['email'] = $this->getCustomerEmail();
+            $preference['metadata'] = $this->getInternalMetadata($cart);
 
-        $bankTransfers = $this->getBankTransferMethods();
-        if (in_array(Tools::strtoupper($ticket_info['paymentMethodId']), $bankTransfers)) {
-            $financial_institution = '1065';
-            if (isset($this->financial_institutions[Tools::strtoupper($ticket_info['paymentMethodId'])])) {
-                $financial_institution = $this->financial_institutions[
-                    Tools::strtoupper($ticket_info['paymentMethodId'])
-                ];
+            if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLB') {
+                $preference['payer']['first_name'] = $ticket_info['firstname'];
+                $preference['payer']['last_name'] = $ticket_info['docType'] == 'CPF' ? $ticket_info['lastname'] : '';
+                $preference['payer']['identification']['type'] = $ticket_info['docType'];
+                $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
+                $preference['payer']['address']['street_name'] = $ticket_info['address'];
+                $preference['payer']['address']['street_number'] = $ticket_info['number'];
+                $preference['payer']['address']['neighborhood'] = $ticket_info['city'];
+                $preference['payer']['address']['city'] = $ticket_info['city'];
+                $preference['payer']['address']['federal_unit'] = $ticket_info['state'];
+                $preference['payer']['address']['zip_code'] = $ticket_info['zipcode'];
             }
-            $preference['callback_url'] = $this->getSiteUrl();
-            $preference['transaction_details']['financial_institution'] = $financial_institution;
-            $preference['additional_info']['ip_address'] = '127.0.0.1';
-            $preference['payer']['identification']['type'] = 'RUT';
-            $preference['payer']['identification']['number'] = '0';
-            $preference['payer']['entity_type'] = 'individual';
-        }
 
-        $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
-        $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
-        $preference['additional_info']['items'] = $this->getCartItems(
-            $cart,
-            true,
-            $this->settings['MERCADOPAGO_TICKET_DISCOUNT']
-        );
+            if ($this->settings['MERCADOPAGO_SITE_ID'] == 'MLU') {
+                $preference['payer']['identification']['type'] = $ticket_info['docType'];
+                $preference['payer']['identification']['number'] = $ticket_info['docNumber'];
+            }
 
-        // Update cart total with CartRule()
-        $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
-        $preference['transaction_amount'] = $this->getTransactionAmount($cart);
+            $bankTransfers = $this->getBankTransferMethods();
+            if (in_array(Tools::strtoupper($ticket_info['paymentMethodId']), $bankTransfers)) {
+                $financial_institution = '1065';
+                if (isset($this->financial_institutions[Tools::strtoupper($ticket_info['paymentMethodId'])])) {
+                    $financial_institution = $this->financial_institutions[
+                        Tools::strtoupper($ticket_info['paymentMethodId'])
+                    ];
+                }
+                $preference['callback_url'] = $this->getSiteUrl();
+                $preference['transaction_details']['financial_institution'] = $financial_institution;
+                $preference['additional_info']['ip_address'] = '127.0.0.1';
+                $preference['payer']['identification']['type'] = 'RUT';
+                $preference['payer']['identification']['number'] = '0';
+                $preference['payer']['entity_type'] = 'individual';
+            }
 
-        // Generate preference
-        $this->generateLogs($preference, 'ticket');
+            $preference['additional_info']['payer'] = $this->getCustomCustomerData($cart);
+            $preference['additional_info']['shipments'] = $this->getShipmentAddress($cart);
+            $preference['additional_info']['items'] = $this->getCartItems($cart, true);
+            $preference['transaction_amount'] = $this->getTransactionAmount($cart);
 
-        // Create preference
-        $createPreference = $this->mercadopago->createPayment($preference);
-        MPLog::generate('Cart id ' . $cart->id . ' - Ticket Preference created successfully');
+            // Generate preference
+            $this->generateLogs($preference, 'ticket');
 
-        return $createPreference;
+            // Create preference
+
+            return $preference;
+        }, function () use ($cart) {
+            $this->setCartRule($cart, $this->settings['MERCADOPAGO_TICKET_DISCOUNT']);
+        });
     }
 
     /**
@@ -119,13 +118,7 @@ class TicketPreference extends AbstractPreference
      */
     public function getTransactionAmount($cart)
     {
-        $total = (float) $cart->getOrderTotal();
-        $localization = $this->settings['MERCADOPAGO_SITE_ID'];
-        if ($localization == 'MCO' || $localization == 'MLC') {
-            return Tools::ps_round($total, 2);
-        }
-
-        return $total;
+        return $this->roundPrice((float) $cart->getOrderTotal());
     }
 
     /**

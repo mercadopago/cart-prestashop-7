@@ -22,6 +22,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/settings/CoreSdkSettings.php';
+require_once __DIR__ . '/module/settings/PaymentIssuanceManager.php';
 
 class MPApi
 {
@@ -207,6 +208,87 @@ class MPApi
     }
 
     /**
+     * Discover candidates omitted by a stale merchant-order payment list.
+     * Callers must refetch each ID before using its financial state.
+     *
+     * @param string $cartId
+     * @param string $merchantOrderId
+     *
+     * @return array
+     */
+    public function getMerchantOrderPaymentIds(string $cartId, string $merchantOrderId): array
+    {
+        if (!preg_match('/^[1-9][0-9]{0,19}$/D', $cartId)
+            || !preg_match('/^(?:0|[1-9][0-9]{0,19})$/D', $merchantOrderId)
+        ) {
+            throw new InvalidArgumentException('Invalid payment discovery scope');
+        }
+        try {
+            $paymentModule = CoreSdkSettings::getInstance()->getPaymentInstance();
+            $ids = [];
+            $seen = [];
+            $total = null;
+            $offset = 0;
+            do {
+                // Use the existing authenticated SDK transport without entity mapping.
+                $page = $paymentModule->read(['id' => 'search'], [
+                    'external_reference' => $cartId, 'sort' => 'date_created', 'criteria' => 'asc',
+                    'limit' => 50, 'offset' => $offset,
+                ], false);
+                if (!is_array($page) || !isset($page['results'], $page['paging']['total'], $page['paging']['offset'])
+                    || !is_array($page['results']) || !is_int($page['paging']['total'])
+                    || $page['paging']['total'] < 0 || $page['paging']['total'] > 1000
+                    || ($total !== null && $total !== $page['paging']['total'])
+                    || $page['paging']['offset'] !== $offset
+                    || count($page['results']) !== min(50, max(0, $page['paging']['total'] - $offset))
+                ) {
+                    throw new RuntimeException('Incomplete payment discovery response');
+                }
+                $total = $page['paging']['total'];
+                foreach ($page['results'] as $payment) {
+                    if (!is_array($payment) || !isset($payment['id'], $payment['external_reference'])
+                        || !preg_match('/^[1-9][0-9]{0,19}$/D', (string) $payment['id'])
+                        || (string) $payment['external_reference'] !== $cartId
+                        || isset($seen[(string) $payment['id']])
+                    ) {
+                        throw new RuntimeException('Payment discovery ownership could not be verified');
+                    }
+                    $seen[(string) $payment['id']] = true;
+                    // Reused carts can contain attempts from a different preference.
+                    if ($merchantOrderId === '0' || (isset($payment['order']['id']) && (string) $payment['order']['id'] === $merchantOrderId)) {
+                        $ids[] = (string) $payment['id'];
+                    }
+                }
+                $offset += count($page['results']);
+            } while ($offset < $page['paging']['total']);
+
+            return array_values(array_unique($ids));
+        } catch (Throwable $th) {
+            MPLog::generate('SDK payment discovery failed; reconciliation deferred', 'error');
+            throw new RuntimeException('Could not complete payment discovery', 0, $th);
+        }
+    }
+
+    /** All cart search results are candidates, not amounts or closure evidence. */
+    public function getCartPaymentIds(string $cartId): array
+    {
+        return $this->getMerchantOrderPaymentIds($cartId, '0');
+    }
+
+    /** Authenticated seller identity, never inferred from a token or caller input. */
+    public function getAuthenticatedCollectorId(): string
+    {
+        require_once __DIR__ . '/module/model/AuthenticatedSellerResource.php';
+        $resource = CoreSdkSettings::getInstance()->getEntityInstance(AuthenticatedSellerResource::class, 'https://api.mercadopago.com');
+        $seller = $resource->read(['id' => 'me'], [], false);
+        if (!is_array($seller) || !isset($seller['id']) || !preg_match('/^[1-9][0-9]{0,19}$/D', (string) $seller['id'])) {
+            throw new RuntimeException('Authenticated seller identity is unavailable');
+        }
+
+        return (string) $seller['id'];
+    }
+
+    /**
      * Get merchant order
      *
      * @param int $id
@@ -251,9 +333,10 @@ class MPApi
             $sdk = CoreSdkSettings::getInstance();
             $preferenceModule = $sdk->getPreferenceInstance();
 
+            // The SDK entity omits response-only identity fields such as id and collector_id.
             return json_decode(json_encode($preferenceModule->read([
                 'id' => $id,
-            ])));
+            ], [], false)));
         } catch (Throwable $th) {
             MPLog::generate('SDK get_checkout_preferences error: ' . $th->getMessage(), 'error');
 
@@ -264,7 +347,7 @@ class MPApi
     /**
      * @param $preference
      *
-     * @return array|string
+     * @return array|string|PaymentIssuanceRejected
      *
      * @throws Exception
      */
@@ -275,6 +358,9 @@ class MPApi
             $preferenceModule = $sdk->getPreferenceInstance();
 
             $preferenceModule->setEntity($preference);
+
+            // The pinned SDK exposes its manager through AbstractEntity's public accessors.
+            $preferenceModule->__set('manager', new PaymentIssuanceManager($preferenceModule->__get('manager')));
 
             return $preferenceModule->save();
         } catch (Throwable $th) {
@@ -287,7 +373,7 @@ class MPApi
     /**
      * @param $preference
      *
-     * @return array|string
+     * @return array|string|PaymentIssuanceRejected
      *
      * @throws Exception
      */
@@ -298,6 +384,8 @@ class MPApi
             $paymentModule = $sdk->getPaymentInstance();
 
             $paymentModule->setEntity($preference);
+
+            $paymentModule->__set('manager', new PaymentIssuanceManager($paymentModule->__get('manager')));
 
             return $paymentModule->save();
         } catch (Throwable $th) {

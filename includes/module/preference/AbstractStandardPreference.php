@@ -49,36 +49,10 @@ abstract class AbstractStandardPreference extends AbstractPreference
         $payloadParent = $this->getCommonPreference($cart);
 
         if ($discount != 0) {
+            // The wallet button discount is absorbed by the existing item lines instead of being
+            // appended as a negative "Discount" item, which Mercado Pago rejects.
             $totalInfo = $this->mpuseful->getCorrectedTotal($cart, 'wallet_button');
-
-            $discountPerItem = [
-                'id' => 'discount',
-                'title' => 'Discount',
-                'quantity' => 1,
-                'unit_price' => -$totalInfo['discount'],
-                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-                'description' => 'Discount provided by store',
-            ];
-            array_push($items, $discountPerItem);
-
-            $itemsAmount = array_reduce(
-                $items,
-                function ($accumulator, $item) {
-                    $accumulator += $item['unit_price'] * $item['quantity'];
-
-                    return $accumulator;
-                }
-            );
-
-            $amountDifferenceItem = [
-                'id' => 'difference',
-                'title' => 'Difference',
-                'quantity' => 1,
-                'unit_price' => $totalInfo['amount_with_round'] - $itemsAmount,
-                'category_id' => Configuration::get('MERCADOPAGO_STORE_CATEGORY'),
-                'description' => 'Difference provided by store',
-            ];
-            array_push($items, $amountDifferenceItem);
+            $items = $this->reconcileItemsToTotal($items, $totalInfo['amount_with_round']);
         }
 
         $payloadAdditional = [

@@ -31,6 +31,12 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
         parent::__construct();
     }
 
+    /** Keep dependency construction outside the checkout state transitions. */
+    protected function createCheckoutPreference()
+    {
+        return new TicketPreference();
+    }
+
     /**
      * Default function of Prestashop for init the controller
      *
@@ -38,16 +44,20 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
      */
     public function postProcess()
     {
-        $preference = new TicketPreference();
+        $preference = $this->createCheckoutPreference();
+        $paymentIssued = false;
+        $failurePhase = 'response';
         try {
             $preference->verifyModuleParameters();
 
             $ticket_info = Tools::getValue('mercadopago_ticket');
             $ticketPreference = $preference->createPreference($this->context->cart, $ticket_info);
+            $paymentIssued = is_array($ticketPreference) && isset($ticketPreference['id']);
 
             if (is_array($ticketPreference) && array_key_exists('transaction_details', $ticketPreference)) {
                 // payment created
                 $transaction_details = $ticketPreference['transaction_details'];
+                $failurePhase = 'persistence';
                 $preference->saveCreatePreferenceData(
                     $this->context->cart,
                     $transaction_details['external_resource_url']
@@ -56,15 +66,13 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
 
                 // create order
                 $transaction_id = $ticketPreference['id'];
+                $failurePhase = 'reconciliation';
                 $notification = new WebhookNotification($transaction_id, $ticketPreference);
-                $notification->createCustomOrder($this->context->cart);
+                $order = $notification->createCustomOrder($this->context->cart);
+                $failurePhase = 'confirmation';
                 $preference->disableCartRule();
 
                 // order confirmation redirect
-                $old_cart = new Cart($this->context->cart->id);
-                $orderId = Order::getIdByCartId($old_cart->id);
-                $order = new Order($orderId);
-
                 $uri = __PS_BASE_URI__ . 'index.php?controller=order-confirmation';
                 $uri .= '&id_cart=' . $order->id_cart;
                 $uri .= '&key=' . $order->secure_key;
@@ -83,9 +91,24 @@ class MercadoPagoTicketModuleFrontController extends ModuleFrontController
                     $this->context->cookie->__set('redirect_message', Tools::displayError($message));
                 }
             }
-        } catch (Exception $e) {
+        } catch (PaymentInitiationBlocked $held) {
+            $preference->redirectPaymentHold();
+
+            return;
+        } catch (Throwable $e) {
+            if ($paymentIssued) {
+                $preference->holdIssuedCheckout($this->context->cart, $e, $failurePhase);
+
+                return;
+            }
             $this->context->cookie->__set('redirect_message', Tools::displayError());
             MPLog::generate('Exception Message: ' . $e->getMessage());
+        }
+
+        if ($paymentIssued && ($ticketPreference['status'] ?? null) !== 'rejected') {
+            $preference->holdIssuedCheckout($this->context->cart);
+
+            return;
         }
 
         $preference->deleteCartRule();

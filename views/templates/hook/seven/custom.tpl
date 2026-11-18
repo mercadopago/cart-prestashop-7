@@ -377,6 +377,10 @@
                 fetch('index.php?fc=module&module=mercadopago&controller=walletbutton')
                 .then(response => response.json())
                 .then(function(response) {
+                    if (response.payment_confirmation_pending && response.confirmation_url) {
+                        window.location.href = response.confirmation_url;
+                        return false;
+                    }
                     if (response.preference) {
                         mp_button = {
                             'preference': {

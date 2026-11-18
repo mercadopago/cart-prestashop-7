@@ -41,17 +41,19 @@ class PixPreference extends AbstractPreference
      */
     public function createPreference()
     {
-        $payload = $this->buildPixPreferencePayload();
+        return $this->initiatePayment($this->cart, 'payment', function () {
+            // Apply the checkout discount as a real cart rule before the payload reads the cart items,
+            // the metadata and the total — see the ordering trap in .agents/traps.md.
 
-        $this->setCartRule($this->cart, $this->settings['MERCADOPAGO_PIX_DISCOUNT']);
-        $payload['transaction_amount'] = $this->getAmount();
+            $payload = $this->buildPixPreferencePayload();
+            $payload['transaction_amount'] = $this->getAmount();
 
-        $this->generateLogs($payload, 'pix');
+            $this->generateLogs($payload, 'pix');
 
-        $createPreference = $this->mercadopago->createPayment($payload);
-        MPLog::generate('Cart ID ' . $this->cart->id . ' - Pix Preference created successfully');
-
-        return $createPreference;
+            return $payload;
+        }, function () {
+            $this->setCartRule($this->cart, $this->settings['MERCADOPAGO_PIX_DISCOUNT']);
+        });
     }
 
     /**
@@ -196,11 +198,7 @@ class PixPreference extends AbstractPreference
         $additionalInfo = [
             'payer' => $this->getCustomCustomerData($this->cart),
             'shipments' => $this->getShipmentAddress($this->cart),
-            'items' => $this->getCartItems(
-                $this->cart,
-                true,
-                $this->settings['MERCADOPAGO_PIX_DISCOUNT']
-            ),
+            'items' => $this->getCartItems($this->cart, true),
         ];
 
         return $additionalInfo;
@@ -213,8 +211,6 @@ class PixPreference extends AbstractPreference
      */
     public function getAmount()
     {
-        $total = (float) $this->cart->getOrderTotal();
-
-        return $total;
+        return $this->roundPrice((float) $this->cart->getOrderTotal());
     }
 }

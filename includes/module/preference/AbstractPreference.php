@@ -25,6 +25,20 @@ require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/checkouts/PseCheckou
 
 abstract class AbstractPreference
 {
+    /**
+     * Decimal places used to build every monetary value sent to Mercado Pago.
+     * Sites that transact in integer currency (CLP/COP) use zero decimals.
+     */
+    public const PRICE_DECIMALS = 2;
+    public const PRICE_DECIMALS_INTEGER_CURRENCY = 0;
+
+    /**
+     * Scope keys used to address the non-product lines when distributing a cart rule.
+     */
+    public const SCOPE_KEY_SHIPPING = 'service_shipping';
+    public const SCOPE_KEY_WRAPPING = 'service_wrapping';
+    public const SCOPE_KEY_NO_ELIGIBLE_ITEM = '__no_eligible_item__';
+
     public $module;
     public $checkout;
     public $settings;
@@ -33,6 +47,9 @@ abstract class AbstractPreference
     public $mercadopago;
     public $ps_cart_rule;
     public $ps_cart_rule_rule;
+
+    /** @var int|null Original checkout identity survives native replacement of Context cart. */
+    private $paymentHoldCartId;
 
     /**
      * AbstractPreference constructor.
@@ -45,6 +62,87 @@ abstract class AbstractPreference
         $this->mercadopago = MPApi::getInstance();
         $this->ps_cart_rule = new PSCartRule();
         $this->ps_cart_rule_rule = new PSCartRuleRule();
+    }
+
+    /** One issuance policy for every checkout, before payload/discount side effects. */
+    protected function initiatePayment($cart, string $kind, callable $build, ?callable $prepare = null)
+    {
+        require_once __DIR__ . '/../notification/CartPaymentInitiation.php';
+
+        $this->paymentHoldCartId = (int) $cart->id;
+
+        return (new CartPaymentInitiation($this->mercadopago))->run($cart, $kind, $build, function (int $preparedRuleId) use ($cart) {
+            if ($preparedRuleId > 0) {
+                $rule = new CartRule($preparedRuleId);
+                if (Validate::isLoadedObject($rule)) {
+                    if ($rule->code !== 'MPDISCOUNT' . (int) $cart->id) {
+                        throw new RuntimeException('Interrupted checkout discount identity changed');
+                    }
+                    $deleted = $rule->delete();
+                    if ($deleted !== true && $deleted !== 1) {
+                        throw new RuntimeException('Could not remove an interrupted checkout discount');
+                    }
+                }
+                $cart->clearCache();
+                Cache::clean('Cart::getCartRules_*');
+            }
+        }, function () {
+            return (int) $this->cart_rule;
+        }, $prepare);
+    }
+
+    public function getPaymentHoldUrl(): string
+    {
+        $context = Context::getContext();
+
+        return $context->link->getModuleLink('mercadopago', 'standardvalidation', [
+            'cart_id' => $this->paymentHoldCartId ?? (int) $context->cart->id, 'payment_hold' => 1,
+        ], true);
+    }
+
+    public function redirectPaymentHold()
+    {
+        Tools::redirect($this->getPaymentHoldUrl());
+    }
+
+    /** A post-issuance failure must preserve its discount even when logging fails. */
+    public function holdIssuedCheckout($cart, ?Throwable $error = null, string $phase = 'response'): void
+    {
+        $this->paymentHoldCartId = $this->paymentHoldCartId ?? (int) $cart->id;
+        $phase = in_array($phase, ['response', 'persistence', 'reconciliation', 'confirmation'], true) ? $phase : 'checkout';
+        $causes = [
+            'Could not complete checkout order reconciliation' => 'reconciliation_failed',
+            'Synchronous checkout did not create a verified order' => 'missing_order',
+            'Synchronous checkout order ownership could not be verified' => 'order_ownership',
+        ];
+        $cause = $error === null ? 'incomplete_issued_response' : ($causes[$error->getMessage()] ?? 'exception');
+        $type = 'none';
+        if ($error !== null) {
+            $type = $error instanceof RuntimeException ? 'runtime_exception' : 'exception';
+            if ($error instanceof PDOException || $error instanceof PrestaShopDatabaseException) {
+                $type = 'storage_exception';
+            } elseif ($error instanceof TypeError) {
+                $type = 'type_error';
+            } elseif ($error instanceof Error) {
+                $type = 'runtime_error';
+            }
+        }
+        try {
+            MPLog::generate('Mercado Pago issued checkout failure for cart ' . $this->paymentHoldCartId
+                . ' phase=' . $phase . ' cause=' . $cause . ' exception=' . $type, 'error');
+        } catch (Throwable $loggingError) {
+            // Diagnostic failure must not trigger discount cleanup or another payment.
+        }
+        $this->redirectPaymentHold();
+    }
+
+    public function respondPaymentHold(): void
+    {
+        header('Content-type: application/json');
+        http_response_code(409);
+        echo json_encode(['code' => 409, 'payment_confirmation_pending' => true,
+            'confirmation_url' => $this->getPaymentHoldUrl()]);
+        exit;
     }
 
     /**
@@ -101,22 +199,25 @@ abstract class AbstractPreference
     /**
      * Get all cart items
      *
+     * Every discount, except the Wallet Button checkout discount, must already be applied to the
+     * cart as a PrestaShop cart rule when this runs: the item prices are derived from the cart,
+     * never from a mirrored percentage. Callers are responsible for calling setCartRule() first.
+     * Wallet Button deliberately calculates its checkout discount separately and reconciles it
+     * after this method, before the CartRule is created during order creation (see the ordering
+     * traps in .agents/traps.md).
+     *
      * @param $cart
      * @param bool $custom
-     * @param int|float|null $percent
      *
      * @return array
      *
      * @throws PrestaShopDatabaseException
      * @throws PrestaShopException
      */
-    public function getCartItems($cart, $custom = false, $percent = null)
+    public function getCartItems($cart, $custom = false)
     {
         $items = [];
         $products = $cart->getProducts();
-
-        // Verify country for round
-        $round = $this->mpuseful->getRound();
 
         // Products
         foreach ($products as $product) {
@@ -128,19 +229,23 @@ abstract class AbstractPreference
             $link = new Link();
             $link_image = $link->getImageLink($image_product->link_rewrite, $image_id, '');
 
-            $product_price = $product['price_wt'];
-            if ($percent != null) {
-                $product_price = (float) $product_price - ($product_price * ($percent / 100));
-            }
-
             $item = [
                 'id' => $product['id_product'],
                 'title' => $product['name'],
                 'quantity' => $product['quantity'],
-                'unit_price' => $round ? Tools::ps_round($product_price) : $product_price,
+                'unit_price' => $this->roundPrice($product['price_wt']),
                 'picture_url' => 'https://' . $link_image,
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => strip_tags($product['description_short']),
+                // Underscore-prefixed keys are internal to the discount distribution and are
+                // stripped before the payload leaves this method.
+                '_scope_key' => (int) $product['id_product'] . '-' . (int) $product['id_product_attribute'],
+                '_product_id' => (int) $product['id_product'],
+                '_product_attribute_id' => (int) $product['id_product_attribute'],
+                // CartRule::getContextualValue() chooses the cheapest-product target from the
+                // original tax-excluded product price, not from a previously reduced payload line.
+                '_comparison_price' => (float) $product['price'],
+                '_reduction_applies' => !empty($product['reduction_applies']),
             ];
 
             if ($custom != true) {
@@ -153,82 +258,746 @@ abstract class AbstractPreference
         // Wrapping cost
         $wrapping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_WRAPPING);
         if ($wrapping_cost > 0) {
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
-            $item = [
+            $items[] = [
                 'title' => 'Wrapping',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($wrapping_cost) : $wrapping_cost,
+                'unit_price' => $this->roundPrice($wrapping_cost),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Wrapping service used by store',
+                '_scope_key' => self::SCOPE_KEY_WRAPPING,
             ];
-
-            $items[] = $item;
-        }
-
-        // Discounts
-        $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
-        if ($discounts > 0) {
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
-            $item = [
-                'title' => 'Discount',
-                'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round(-$discounts) : -$discounts,
-                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'description' => 'Discount provided by store',
-            ];
-
-            $items[] = $item;
         }
 
         // Shipping cost
         $shipping_cost = (float) $cart->getOrderTotal(true, Cart::ONLY_SHIPPING);
         if ($shipping_cost > 0) {
-            if ($custom != true) {
-                $item['currency_id'] = $this->module->context->currency->iso_code;
-            }
-
-            $item = [
+            $items[] = [
                 'title' => 'Shipping',
                 'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($shipping_cost) : $shipping_cost,
+                'unit_price' => $this->roundPrice($shipping_cost),
                 'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
                 'description' => 'Shipping service used by store',
+                '_scope_key' => self::SCOPE_KEY_SHIPPING,
             ];
-
-            $items[] = $item;
         }
 
-        // Check has price difference
-        $cartTotal = $round ? Tools::ps_round($cart->getOrderTotal(true)) : $cart->getOrderTotal();
-        $itemsTotal = array_reduce(
-            $items,
-            function ($accumulator, $item) {
-                $accumulator += $item['unit_price'] * $item['quantity'];
+        // Discounts are subtracted from the positive lines instead of being sent as a
+        // negative "Discount" item: Mercado Pago rejects a create_preference payload that
+        // carries a negative unit_price ("Invalid request parameters").
+        $discounts = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
+        if ($discounts > 0) {
+            $items = $this->applyPrestashopDiscounts($items, $cart, $discounts);
+        }
 
-                return $accumulator;
+        $cartTotal = $this->roundPrice($cart->getOrderTotal(true));
+        $items = $this->reconcileItemsToTotal($items, $cartTotal);
+        $this->logDiscountTotals($cart, $discounts, $cartTotal, $items);
+
+        return $this->stripInternalItemKeys($items);
+    }
+
+    /**
+     * Remove the internal, underscore-prefixed bookkeeping keys before the items are sent.
+     *
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function stripInternalItemKeys($items)
+    {
+        foreach ($items as &$item) {
+            foreach (array_keys($item) as $key) {
+                if (strpos($key, '_') === 0) {
+                    unset($item[$key]);
+                }
             }
-        );
+        }
+        unset($item);
 
-        $itemsTotal = $round ? Tools::ps_round($itemsTotal) : Tools::ps_round($itemsTotal, 2);
-        $priceDiff = $cartTotal - $itemsTotal;
+        return $items;
+    }
 
-        if ($priceDiff > 0) {
-            $items[] = [
-                'title' => 'Difference',
-                'quantity' => 1,
-                'unit_price' => $round ? Tools::ps_round($priceDiff) : $priceDiff,
-                'category_id' => $this->settings['MERCADOPAGO_STORE_CATEGORY'],
-                'description' => 'Adjustment for the Mercado Pago price to be the same as the store',
-            ];
+    /**
+     * Distribute PrestaShop cart rules over the items they actually affect when that scope is
+     * available. The final reconciliation remains authoritative because fixed reductions and
+     * combined rules are not always attributable to individual product lines by PrestaShop.
+     *
+     * @param array $items
+     * @param Cart $cart
+     * @param float $discountTotal
+     *
+     * @return array
+     */
+    protected function applyPrestashopDiscounts($items, $cart, $discountTotal)
+    {
+        $remaining = $this->priceToUnits($discountTotal);
+
+        // A single cart rule can carry more than one action (free shipping *and* a reduction,
+        // for instance) and PrestaShop then lists that same rule — with the same value_real —
+        // under every matching action filter. Reading it once with FILTER_ACTION_ALL and
+        // applying it in stages keeps a combined rule from being counted twice, which used to
+        // skew how much of its value each scope absorbed.
+        // Second argument false so PrestaShop does not auto-add rules while we only read them.
+        $cartRules = $cart->getCartRules(CartRule::FILTER_ACTION_ALL, false);
+        foreach ($cartRules as $cartRule) {
+            if ($remaining <= 0) {
+                break;
+            }
+
+            $ruleUnits = min($remaining, $this->priceToUnits((float) $cartRule['value_real']));
+            if ($ruleUnits <= 0) {
+                continue;
+            }
+
+            $remaining -= $this->applyCartRuleByStages($items, $cart, $cartRule, $ruleUnits);
+        }
+
+        // Whatever could not be attributed to a scope falls back to the products, then to any line.
+        if ($remaining > 0) {
+            $remaining -= $this->reduceItemsByUnits($items, $remaining, $this->getProductItemKeys($items));
+        }
+
+        if ($remaining > 0) {
+            $this->reduceItemsByUnits($items, $remaining, []);
         }
 
         return $items;
+    }
+
+    /**
+     * Apply one cart rule to the item lines, one action at a time: free shipping first, then the
+     * gifted product, and finally the reduction scope with whatever value is left. Each stage
+     * consumes part of the rule's value, so a rule combining several actions is applied exactly
+     * once and each of its actions only reaches the lines it is entitled to.
+     *
+     * @param array $items passed by reference, rewritten with the reduced lines
+     * @param Cart $cart
+     * @param array $cartRule
+     * @param int $ruleUnits
+     *
+     * @return int Applied amount in minor currency units
+     */
+    protected function applyCartRuleByStages(&$items, $cart, $cartRule, $ruleUnits)
+    {
+        $applied = 0;
+
+        if (!empty($cartRule['free_shipping'])) {
+            $stageUnits = $this->reduceItemsByUnits(
+                $items,
+                $ruleUnits,
+                $this->getCartRuleItemKeys($cartRule, $cart, 'shipping', $items)
+            );
+            $applied += $stageUnits;
+            $ruleUnits -= $stageUnits;
+        }
+
+        if ($ruleUnits > 0 && isset($cartRule['gift_product']) && (int) $cartRule['gift_product'] > 0) {
+            $stageUnits = $this->reduceItemsByUnits(
+                $items,
+                min($ruleUnits, $this->getGiftValueUnits($cartRule, $cart)),
+                $this->getCartRuleItemKeys($cartRule, $cart, 'gift', $items)
+            );
+            $applied += $stageUnits;
+            $ruleUnits -= $stageUnits;
+        }
+
+        if ($ruleUnits > 0) {
+            $applied += $this->reduceItemsByUnits(
+                $items,
+                $ruleUnits,
+                $this->getCartRuleItemKeys($cartRule, $cart, 'reduction', $items)
+            );
+        }
+
+        return $applied;
+    }
+
+    /**
+     * PrestaShop grants one original, tax-included product unit per gift action, even when
+     * that product has a larger quantity or an earlier rule already reduced its item price.
+     *
+     * @param array $cartRule
+     * @param Cart $cart
+     *
+     * @return int
+     */
+    protected function getGiftValueUnits($cartRule, $cart)
+    {
+        foreach ($cart->getProducts() as $product) {
+            if ((int) $product['id_product'] !== (int) $cartRule['gift_product']) {
+                continue;
+            }
+
+            if ((int) $cartRule['gift_product_attribute'] === 0
+                || (int) $product['id_product_attribute'] === (int) $cartRule['gift_product_attribute']
+            ) {
+                return max(0, $this->priceToUnits($product['price_wt']));
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Resolve which item lines one action ($type) of a cart rule is allowed to reduce.
+     *
+     * @param array $cartRule
+     * @param Cart $cart
+     * @param string $type
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getCartRuleItemKeys($cartRule, $cart, $type, $items)
+    {
+        if ($type == 'shipping') {
+            return [self::SCOPE_KEY_SHIPPING];
+        }
+
+        if ($type == 'gift') {
+            return $this->getGiftItemKeys($cartRule, $items);
+        }
+
+        // A gift/free-shipping-only rule carries no reduction target of its own.
+        $reductionProduct = isset($cartRule['reduction_product']) ? (int) $cartRule['reduction_product'] : 0;
+
+        // > 0: the rule targets one specific product.
+        if ($reductionProduct > 0) {
+            $keys = [];
+            foreach ($items as $item) {
+                if (isset($item['_product_id']) && $item['_product_id'] == $reductionProduct
+                    && $this->isDiscountableProductItem($cartRule, $item)
+                ) {
+                    $keys[] = $item['_scope_key'];
+                }
+            }
+
+            return empty($keys) ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM] : array_values(array_unique($keys));
+        }
+
+        // -1: the rule targets the cheapest product of the cart.
+        if ($reductionProduct == -1) {
+            return $this->getCheapestItemKeys($cartRule, $items);
+        }
+
+        // -2: the rule targets the products matched by its own restriction rules.
+        if ($reductionProduct == -2 && isset($cartRule['obj'])) {
+            $selectedProducts = $cartRule['obj']->checkProductRestrictionsFromCart($cart, true, false);
+
+            $keys = $this->getRestrictedProductItemKeys($selectedProducts, $items);
+
+            return $this->filterDiscountableItemKeys($cartRule, $items, $keys);
+        }
+
+        return $this->getDiscountableProductKeys($cartRule, $items);
+    }
+
+    /**
+     * Map PrestaShop restriction results to the module's item scope keys.
+     *
+     * PrestaShop returns product restrictions as <product-id>-<attribute-id>. For rules such as
+     * category or manufacturer restrictions it deliberately returns <product-id>-0, meaning all
+     * combinations of that product. The module item list carries the actual attribute id, so
+     * forwarding the PrestaShop value directly would miss product variations and incorrectly
+     * fall back to reducing unrelated lines.
+     *
+     * @param mixed $selectedProducts
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getRestrictedProductItemKeys($selectedProducts, $items)
+    {
+        if (!is_array($selectedProducts) || empty($selectedProducts)) {
+            return [self::SCOPE_KEY_NO_ELIGIBLE_ITEM];
+        }
+
+        $keys = [];
+        foreach ($selectedProducts as $selectedProduct) {
+            if (!is_string($selectedProduct)) {
+                continue;
+            }
+
+            $parts = explode('-', $selectedProduct);
+            if (count($parts) !== 2 || !ctype_digit($parts[0]) || !ctype_digit($parts[1])) {
+                continue;
+            }
+
+            $productId = (int) $parts[0];
+            $attributeId = (int) $parts[1];
+            foreach ($items as $item) {
+                if (!isset($item['_product_id']) || (int) $item['_product_id'] !== $productId) {
+                    continue;
+                }
+
+                if ($attributeId === 0 || (int) $item['_product_attribute_id'] === $attributeId) {
+                    $keys[] = $item['_scope_key'];
+                }
+            }
+        }
+
+        return empty($keys) ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM] : array_values(array_unique($keys));
+    }
+
+    /**
+     * @param array $cartRule
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getGiftItemKeys($cartRule, $items)
+    {
+        $keys = [];
+        foreach ($items as $item) {
+            if (!isset($item['_product_id']) || $item['_product_id'] != (int) $cartRule['gift_product']) {
+                continue;
+            }
+
+            if ((int) $cartRule['gift_product_attribute'] === 0
+                || $item['_product_attribute_id'] == (int) $cartRule['gift_product_attribute']
+            ) {
+                $keys[] = $item['_scope_key'];
+            }
+        }
+
+        return empty($keys) ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM] : array_values(array_unique($keys));
+    }
+
+    /**
+     * @param array $cartRule
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getCheapestItemKeys($cartRule, $items)
+    {
+        $cheapestKey = null;
+        $cheapestPrice = null;
+        foreach ($items as $item) {
+            if (!$this->isDiscountableProductItem($cartRule, $item)) {
+                continue;
+            }
+
+            $comparisonPrice = isset($item['_comparison_price']) ? $item['_comparison_price'] : $item['unit_price'];
+            if ($cheapestPrice === null || $comparisonPrice < $cheapestPrice) {
+                $cheapestPrice = $comparisonPrice;
+                $cheapestKey = $item['_scope_key'];
+            }
+        }
+
+        return $cheapestKey === null ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM] : [$cheapestKey];
+    }
+
+    /**
+     * @param array $cartRule
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getDiscountableProductKeys($cartRule, $items)
+    {
+        $keys = [];
+        foreach ($items as $item) {
+            if ($this->isDiscountableProductItem($cartRule, $item)) {
+                $keys[] = $item['_scope_key'];
+            }
+        }
+
+        return empty($keys) ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM] : array_values(array_unique($keys));
+    }
+
+    /**
+     * Keep a Cart Rule's product scope aligned with reduction_exclude_special.
+     *
+     * @param array $cartRule
+     * @param array $items
+     * @param array $keys
+     *
+     * @return array
+     */
+    protected function filterDiscountableItemKeys($cartRule, $items, $keys)
+    {
+        if (in_array(self::SCOPE_KEY_NO_ELIGIBLE_ITEM, $keys)) {
+            return [self::SCOPE_KEY_NO_ELIGIBLE_ITEM];
+        }
+
+        $discountableKeys = [];
+        foreach ($items as $item) {
+            if (in_array($item['_scope_key'], $keys) && $this->isDiscountableProductItem($cartRule, $item)) {
+                $discountableKeys[] = $item['_scope_key'];
+            }
+        }
+
+        return empty($discountableKeys)
+            ? [self::SCOPE_KEY_NO_ELIGIBLE_ITEM]
+            : array_values(array_unique($discountableKeys));
+    }
+
+    /**
+     * A product line is out of reach when the rule excludes items that already have a specific price.
+     *
+     * @param array $cartRule
+     * @param array $item
+     *
+     * @return bool
+     */
+    protected function isDiscountableProductItem($cartRule, $item)
+    {
+        if (!isset($item['_product_id'])) {
+            return false;
+        }
+
+        return empty($cartRule['reduction_exclude_special']) || empty($item['_reduction_applies']);
+    }
+
+    /**
+     * Reduce items proportionally, splitting a quantity into at most two lines when a rounding
+     * remainder exists. Every emitted unit keeps a value of at least one minor currency unit,
+     * because Mercado Pago also rejects zero-priced items.
+     *
+     * @param array $items passed by reference, rewritten with the reduced lines
+     * @param int $amountUnits
+     * @param array $eligibleKeys empty means "any line"
+     *
+     * @return int Applied amount in minor currency units
+     */
+    protected function reduceItemsByUnits(&$items, $amountUnits, $eligibleKeys)
+    {
+        $eligibleIndexes = [];
+        $totalCapacity = 0;
+        foreach ($items as $index => $item) {
+            $scopeKey = isset($item['_scope_key']) ? $item['_scope_key'] : 'item_' . $index;
+            if (!empty($eligibleKeys) && !in_array($scopeKey, $eligibleKeys)) {
+                continue;
+            }
+
+            $capacity = max(0, ($this->priceToUnits($item['unit_price']) - 1) * (int) $item['quantity']);
+            if ($capacity > 0) {
+                $eligibleIndexes[$index] = $capacity;
+                $totalCapacity += $capacity;
+            }
+        }
+
+        $amountUnits = min((int) $amountUnits, $totalCapacity);
+        if ($amountUnits <= 0) {
+            return 0;
+        }
+
+        $allocations = [];
+        $allocated = 0;
+        foreach ($eligibleIndexes as $index => $capacity) {
+            $allocation = min($capacity, (int) floor($amountUnits * $capacity / $totalCapacity));
+            $allocations[$index] = $allocation;
+            $allocated += $allocation;
+        }
+
+        // Hand the floor() leftovers to the first lines that still have capacity.
+        $remainder = $amountUnits - $allocated;
+        foreach ($eligibleIndexes as $index => $capacity) {
+            if ($remainder <= 0) {
+                break;
+            }
+
+            $extra = min($remainder, $capacity - $allocations[$index]);
+            $allocations[$index] += $extra;
+            $remainder -= $extra;
+        }
+
+        $result = [];
+        foreach ($items as $index => $item) {
+            if (empty($allocations[$index])) {
+                $result[] = $item;
+                continue;
+            }
+
+            foreach ($this->splitItemWithReduction($item, $allocations[$index]) as $splitItem) {
+                $result[] = $splitItem;
+            }
+        }
+        $items = $result;
+
+        return $amountUnits;
+    }
+
+    /**
+     * @param array $item
+     * @param int $reductionUnits
+     *
+     * @return array
+     */
+    protected function splitItemWithReduction($item, $reductionUnits)
+    {
+        $quantity = (int) $item['quantity'];
+        $unitPrice = $this->priceToUnits($item['unit_price']);
+        $baseReduction = (int) floor($reductionUnits / $quantity);
+        $remainder = $reductionUnits % $quantity;
+        $result = [];
+
+        if ($quantity - $remainder > 0) {
+            $baseItem = $item;
+            $baseItem['quantity'] = $quantity - $remainder;
+            $baseItem['unit_price'] = $this->unitsToPrice($unitPrice - $baseReduction);
+            $result[] = $baseItem;
+        }
+
+        if ($remainder > 0) {
+            $remainderItem = $item;
+            $remainderItem['quantity'] = $remainder;
+            $remainderItem['unit_price'] = $this->unitsToPrice($unitPrice - $baseReduction - 1);
+            $result[] = $remainderItem;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Make the sum of the item lines exactly equal to the amount that will be charged.
+     *
+     * @param array $items
+     * @param float $expectedTotal
+     *
+     * @return array
+     *
+     * @throws PrestaShopException
+     */
+    protected function reconcileItemsToTotal($items, $expectedTotal)
+    {
+        $expectedUnits = $this->priceToUnits($expectedTotal);
+        if ($expectedUnits <= 0) {
+            MPLog::generate(sprintf(
+                'Cannot create a Mercado Pago payment preference with a non-positive total - Expected total: %s',
+                $expectedTotal
+            ), 'error');
+            throw new PrestaShopException('Mercado Pago cannot create a payment preference with a non-positive total.');
+        }
+
+        $currentUnits = $this->getItemsTotalUnits($items);
+        if ($currentUnits > $expectedUnits) {
+            $this->reduceItemsByUnits($items, $currentUnits - $expectedUnits, []);
+        } elseif ($currentUnits < $expectedUnits) {
+            $items = $this->increaseItemsByUnits($items, $expectedUnits - $currentUnits);
+        }
+
+        if ($this->getItemsTotalUnits($items) != $expectedUnits) {
+            MPLog::generate('Unable to represent the cart total with positive Mercado Pago item prices', 'error');
+            throw new PrestaShopException('Mercado Pago items could not be reconciled with the cart total.');
+        }
+
+        foreach ($items as $item) {
+            if ($this->priceToUnits($item['unit_price']) <= 0) {
+                throw new PrestaShopException('Mercado Pago item prices must be positive.');
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param array $items
+     * @param int $amountUnits
+     *
+     * @return array
+     */
+    protected function increaseItemsByUnits($items, $amountUnits)
+    {
+        if (empty($items)) {
+            return $items;
+        }
+
+        $index = count($items) - 1;
+        $item = $items[$index];
+        $quantity = (int) $item['quantity'];
+        $unitPrice = $this->priceToUnits($item['unit_price']);
+        $baseIncrease = (int) floor($amountUnits / $quantity);
+        $remainder = $amountUnits % $quantity;
+        array_splice($items, $index, 1, $this->splitIncreasedItem($item, $unitPrice, $baseIncrease, $remainder));
+
+        return $items;
+    }
+
+    /**
+     * @param array $item
+     * @param int $unitPrice
+     * @param int $baseIncrease
+     * @param int $remainder
+     *
+     * @return array
+     */
+    protected function splitIncreasedItem($item, $unitPrice, $baseIncrease, $remainder)
+    {
+        $quantity = (int) $item['quantity'];
+        $result = [];
+
+        if ($quantity - $remainder > 0) {
+            $baseItem = $item;
+            $baseItem['quantity'] = $quantity - $remainder;
+            $baseItem['unit_price'] = $this->unitsToPrice($unitPrice + $baseIncrease);
+            $result[] = $baseItem;
+        }
+
+        if ($remainder > 0) {
+            $remainderItem = $item;
+            $remainderItem['quantity'] = $remainder;
+            $remainderItem['unit_price'] = $this->unitsToPrice($unitPrice + $baseIncrease + 1);
+            $result[] = $remainderItem;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getProductItemKeys($items)
+    {
+        $keys = [];
+        foreach ($items as $item) {
+            if (isset($item['_product_id'])) {
+                $keys[] = $item['_scope_key'];
+            }
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return int
+     */
+    protected function getItemsTotalUnits($items)
+    {
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $this->priceToUnits($item['unit_price']) * (int) $item['quantity'];
+        }
+
+        return $total;
+    }
+
+    /**
+     * Convert a price to minor currency units (integers), where all the discount math happens.
+     *
+     * @param float|int|string $price
+     *
+     * @return int
+     */
+    protected function priceToUnits($price)
+    {
+        return (int) round((float) $price * $this->getPriceFactor());
+    }
+
+    /**
+     * Convert minor currency units back to the value that goes into the payload.
+     *
+     * The explicit round() is not cosmetic. A price with decimals has no exact binary
+     * representation, so any arithmetic on it carries a residue. json_encode() in MPRestCli
+     * serializes floats with php.ini's serialize_precision, and on hosts where that is not the
+     * default -1 (17 significant digits instead of the shortest round-trip form) an accumulated
+     * residue is emitted as "12.330000000000001" instead of "12.33". Rounding to the site's
+     * decimals snaps the value back to the closest double of the intended decimal amount, which
+     * keeps the serialized text within one ulp of it. It cannot make a fractional double exact,
+     * so a 17-digit host may still print a "...93" tail; what it prevents is drift large enough
+     * to be read as a different amount. Strings are not an option: the API expects a number here.
+     *
+     * @param int $units
+     *
+     * @return float|int
+     */
+    protected function unitsToPrice($units)
+    {
+        if ($this->getPriceDecimals() === self::PRICE_DECIMALS_INTEGER_CURRENCY) {
+            return (int) $units;
+        }
+
+        return round($units / $this->getPriceFactor(), $this->getPriceDecimals());
+    }
+
+    /**
+     * Decimal places accepted by the Mercado Pago site this store transacts with.
+     *
+     * @return int
+     */
+    protected function getPriceDecimals()
+    {
+        return $this->mpuseful->getRound() ? self::PRICE_DECIMALS_INTEGER_CURRENCY : self::PRICE_DECIMALS;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getPriceFactor()
+    {
+        return (int) pow(10, $this->getPriceDecimals());
+    }
+
+    /**
+     * Round a price to the site's decimal places. Every monetary value that enters the payload
+     * must go through here so no unrounded float reaches json_encode() (see unitsToPrice).
+     *
+     * @param float|int|string $price
+     *
+     * @return float|int
+     */
+    protected function roundPrice($price)
+    {
+        return $this->unitsToPrice($this->priceToUnits($price));
+    }
+
+    /**
+     * @param Cart $cart
+     * @param float $discounts
+     * @param float|int $expectedTotal
+     * @param array $items
+     *
+     * @return void
+     */
+    protected function logDiscountTotals($cart, $discounts, $expectedTotal, $items)
+    {
+        if ($discounts <= 0) {
+            return;
+        }
+
+        $rules = [];
+        foreach ($this->getPrestashopCartRules($cart) as $cartRule) {
+            $rules[] = sprintf(
+                '#%d: %s',
+                $cartRule['id_cart_rule'],
+                $cartRule['amount']
+            );
+        }
+
+        MPLog::generate(sprintf(
+            'Cart %d discount totals - Original subtotal: %s; Prestashop discount: %s; Expected final total: %s; '
+            . 'MercadoPago items total: %s; Applied cart rules: %s',
+            (int) $cart->id,
+            $this->roundPrice($cart->getOrderTotal(true) + $discounts),
+            $this->roundPrice($discounts),
+            $expectedTotal,
+            $this->unitsToPrice($this->getItemsTotalUnits($items)),
+            empty($rules) ? 'none' : implode(' | ', $rules)
+        ));
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return array
+     */
+    protected function getPrestashopCartRules($cart)
+    {
+        $result = [];
+        foreach ($cart->getCartRules(CartRule::FILTER_ACTION_ALL, false) as $cartRule) {
+            $result[] = [
+                'id_cart_rule' => (int) $cartRule['id_cart_rule'],
+                'amount' => $this->roundPrice($cartRule['value_real']),
+                'free_shipping' => (bool) $cartRule['free_shipping'],
+            ];
+        }
+
+        return $result;
     }
 
     public function getStatementDescriptor()
@@ -522,6 +1291,25 @@ abstract class AbstractPreference
                 'user_registration_date' => $is_logged ? $customer_fields['date_add'] : ' ',
             ],
         ];
+
+        // Discounts no longer show up as their own item line, so the breakdown is kept in the
+        // metadata to keep chargeback/support investigations able to explain the charged amount.
+        $discountTotal = (float) $cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
+        if ($discountTotal > 0) {
+            $internal_metadata['prestashop_discount'] = [
+                'prestashop_cart_id' => (int) $cart->id,
+                'subtotal_before_discounts' => $this->roundPrice($cart->getOrderTotal(true) + $discountTotal),
+                'products_subtotal_before_discounts' => $this->roundPrice(
+                    $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS)
+                ),
+                'shipping_before_discounts' => $this->roundPrice(
+                    $cart->getOrderTotal(true, Cart::ONLY_SHIPPING)
+                ),
+                'discount_total' => $this->roundPrice($discountTotal),
+                'discounts' => $this->getPrestashopCartRules($cart),
+                'total_after_discounts' => $this->roundPrice($cart->getOrderTotal(true)),
+            ];
+        }
 
         return $internal_metadata;
     }

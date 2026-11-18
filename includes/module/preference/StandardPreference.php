@@ -40,14 +40,13 @@ class StandardPreference extends AbstractStandardPreference
      */
     public function createPreference($cart)
     {
-        $payload = $this->buildPreferencePayload($cart);
+        return $this->initiatePayment($cart, 'preference', function () use ($cart) {
+            $payload = $this->buildPreferencePayload($cart);
 
-        $this->generateLogs($payload, $cart);
+            $this->generateLogs($payload, $cart);
 
-        $createPreference = $this->mercadopago->createPreference($payload);
-        MPLog::generate('Cart id ' . $cart->id . ' - Standard Preference created successfully');
-
-        return $createPreference;
+            return $payload;
+        });
     }
 
     /**

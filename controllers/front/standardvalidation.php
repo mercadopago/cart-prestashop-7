@@ -31,6 +31,11 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
     public $mercadopago;
 
     public $mp_transaction;
+    public $confirmationPending = false;
+    public $confirmationPartial = false;
+
+    /** @var int|null Validated original cart scope for held buyer recovery. */
+    private $authorizedHeldCartId;
 
     public function __construct()
     {
@@ -46,26 +51,54 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      */
     public function initContent()
     {
+        if (Tools::getValue('payment_hold')) {
+            $cartId = Tools::getValue('cart_id');
+            if (!$this->canViewPaymentHold($cartId)) {
+                $this->redirectError();
+
+                return;
+            }
+            $this->authorizedHeldCartId = (int) $cartId;
+            if (Tools::getValue('typeReturn') !== 'success') {
+                $this->showPaymentHold((int) $cartId);
+
+                return;
+            }
+        }
         $typeReturn = Tools::getValue('typeReturn');
         $payment_ids = Tools::getValue('collection_id');
         $cartId = Tools::getValue('cart_id');
 
         if (isset($payment_ids) && $payment_ids != false && $payment_ids != 'null' && $typeReturn != 'failure') {
-            $payment_id = explode(',', $payment_ids)[0];
-            $this->redirectCheck($payment_id);
+            try {
+                $ids = IpnNotification::normalizeCandidatePaymentIds($payment_ids);
+            } catch (InvalidArgumentException $error) {
+                $this->redirectError();
+
+                return;
+            }
+            $this->redirectCheck($ids);
 
             return;
         }
 
         if (isset($cartId) && $typeReturn != 'failure') {
             $order = $this->mp_transaction->where('cart_id', '=', $cartId)->get();
-            $merchant_order_id = $order['merchant_order_id'];
+            if (!empty($order['payment_initiation']) && !$this->canViewPaymentHold($cartId)) {
+                $this->redirectError();
+
+                return;
+            }
+            if (!empty($order['payment_initiation'])) {
+                $this->authorizedHeldCartId = (int) $cartId;
+            }
+            $merchant_order_id = is_array($order) ? ($order['merchant_order_id'] ?? null) : null;
 
             if ($merchant_order_id || $merchant_order_id === '0') {
                 $merchant_order = $this->mercadopago->getMerchantOrder($order['merchant_order_id']);
 
                 if ($merchant_order === false || !isset($merchant_order['payments'][0]['id'])) {
-                    $this->redirectError();
+                    $this->showPendingConfirmation([], (int) $cartId);
 
                     return;
                 }
@@ -73,6 +106,8 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
                 $payment_id = $merchant_order['payments'][0]['id'];
 
                 $this->redirectCheck($payment_id);
+            } elseif (!empty($order['payment_initiation']) || $this->authorizedHeldCartId !== null) {
+                $this->showPaymentHold((int) $cartId);
             } else {
                 $this->redirectError();
             }
@@ -83,6 +118,33 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
         $this->redirectError();
     }
 
+    /** Native shopper authentication remains valid after core replaces an ordered cart. */
+    private function canViewPaymentHold($cartId): bool
+    {
+        if ((!is_string($cartId) && !is_int($cartId))
+            || !preg_match('/^[1-9][0-9]*$/D', (string) $cartId)
+            || (string) (int) $cartId !== (string) $cartId
+        ) {
+            return false;
+        }
+        $customer = $this->context->customer;
+        if (!Validate::isLoadedObject($customer) || (int) $customer->id <= 0
+            || !$customer->active || $customer->deleted || !$customer->isLogged(true)
+            || (int) $this->context->cookie->__get('id_customer') !== (int) $customer->id
+        ) {
+            return false;
+        }
+        $cart = new Cart((int) $cartId);
+
+        return Validate::isLoadedObject($cart)
+            && (int) $cart->id_customer > 0
+            && (int) $cart->id_customer === (int) $customer->id
+            && (int) $cart->id_shop === (int) $this->context->shop->id
+            && (int) $cart->id_shop_group === (int) $this->context->shop->id_shop_group
+            && (string) $customer->secure_key !== ''
+            && hash_equals((string) $customer->secure_key, (string) $cart->secure_key);
+    }
+
     /**
      * Default function to call redirect
      *
@@ -90,20 +152,92 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      */
     public function redirectCheck($payment_id)
     {
-        $payment = $this->mercadopago->getPaymentStandard($payment_id);
+        try {
+            $ids = IpnNotification::normalizeCandidatePaymentIds(is_array($payment_id) ? $payment_id : [$payment_id]);
+        } catch (InvalidArgumentException $error) {
+            $this->redirectError();
 
-        if ($payment !== false) {
-            $cart_id = $payment['external_reference'];
-            $transaction_id = $payment['order']['id'];
-            $cart = new Cart($cart_id);
-            $order = $this->createOrder($cart, $transaction_id);
-
-            if (Validate::isLoadedObject($order)) {
-                $this->redirectOrderConfirmation($cart, $order);
-            }
+            return;
         }
+        if (!$ids) {
+            $this->redirectError();
 
+            return;
+        }
+        $payment = $this->mercadopago->getPaymentStandard($ids[0]);
+        if ($this->authorizedHeldCartId !== null && (!is_array($payment)
+            || !isset($payment['external_reference'])
+            || (!is_string($payment['external_reference']) && !is_int($payment['external_reference']))
+            || (string) $payment['external_reference'] !== (string) $this->authorizedHeldCartId)
+        ) {
+            $this->showPendingConfirmation($ids, $this->authorizedHeldCartId);
+
+            return;
+        }
+        if (!is_array($payment) || !isset($payment['id'], $payment['external_reference'], $payment['order']['id'])
+            || (string) $payment['id'] !== $ids[0]
+        ) {
+            $this->showPendingConfirmation($ids);
+
+            return;
+        }
+        $cart = new Cart($payment['external_reference']);
+        $order = $this->createOrder($cart, $payment['order']['id'], $ids);
+        if (Validate::isLoadedObject($order)) {
+            $this->redirectOrderConfirmation($cart, $order);
+
+            return;
+        }
+        if ($this->confirmationPartial) {
+            $this->showPartialConfirmation($ids);
+
+            return;
+        }
+        if ($this->confirmationPending) {
+            $this->showPendingConfirmation($ids);
+
+            return;
+        }
         $this->redirectError();
+    }
+
+    public function showPartialConfirmation(array $ids)
+    {
+        $this->showPendingConfirmation($ids);
+        http_response_code(200);
+        $this->setTemplate('module:mercadopago/views/templates/front/confirmation_partial.tpl');
+    }
+
+    public function showPaymentHold(int $cartId)
+    {
+        $this->showPendingConfirmation([], $cartId);
+        $this->context->smarty->assign('mp_confirmation_retry_url', $this->context->link->getModuleLink(
+            'mercadopago',
+            'standardvalidation',
+            ['cart_id' => $cartId, 'payment_hold' => 1, 'typeReturn' => 'success'],
+            true
+        ));
+        $this->setTemplate('module:mercadopago/views/templates/front/confirmation_hold.tpl');
+    }
+
+    /** Confirmation is not evidence of payment and must not invite a second charge. */
+    public function showPendingConfirmation(array $ids, $cartId = null)
+    {
+        parent::initContent();
+        http_response_code(503);
+        $retry = $ids ? ['collection_id' => implode(',', $ids), 'typeReturn' => 'success']
+            : ['cart_id' => (int) $cartId, 'typeReturn' => 'success'];
+        if ($this->authorizedHeldCartId !== null) {
+            $retry['cart_id'] = $this->authorizedHeldCartId;
+            $retry['payment_hold'] = 1;
+        }
+        $this->context->smarty->assign('mp_confirmation_retry_url', $this->context->link->getModuleLink(
+            'mercadopago',
+            'standardvalidation',
+            $retry,
+            true
+        ));
+        $this->setTemplate('module:mercadopago/views/templates/front/confirmation_pending.tpl');
     }
 
     /**
@@ -114,11 +248,12 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
      *
      * @return Order|false
      */
-    public function createOrder($cart, $transaction_id)
+    public function createOrder($cart, $transaction_id, array $candidateIds = [])
     {
         $merchant_order = $this->mercadopago->getMerchantOrder($transaction_id);
 
         if (!is_array($merchant_order)) {
+            $this->confirmationPending = true;
             MPLog::generate(
                 'Standard checkout order not created for cart ' . (int) $cart->id . ': merchant order '
                 . (int) $transaction_id . ' could not be retrieved from Mercado Pago (verify the access token '
@@ -129,19 +264,17 @@ class MercadoPagoStandardValidationModuleFrontController extends ModuleFrontCont
             return false;
         }
 
-        $notification = new IpnNotification($transaction_id, $merchant_order);
+        $notification = new IpnNotification($transaction_id, $merchant_order, $candidateIds);
+        $notification->mercadopago = $this->mercadopago;
         try {
-            $notification->createStandardOrder($cart);
+            return $notification->createStandardOrder($cart);
         } catch (Throwable $th) {
+            $this->confirmationPartial = $notification->responseCode === 200 && $notification->checkoutOutcome === 'partial_funds';
+            $this->confirmationPending = $notification->responseCode === null || $notification->responseCode >= 400;
             MPLog::generate('Standard checkout payment lookup failed; order creation deferred', 'error');
 
             return false;
         }
-
-        $orderId = Order::getIdByCartId($cart->id);
-        $order = new Order($orderId);
-
-        return $order;
     }
 
     /**

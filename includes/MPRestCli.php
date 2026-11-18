@@ -33,12 +33,13 @@ class MPRestCli
     }
 
     /**
+     * Let curl_init() define the inferred return type: resource|false on PHP 7.4,
+     * CurlHandle|false on PHP 8. A fixed CurlHandle annotation breaks PHP 7.4 analysis.
+     *
      * @param $uri
      * @param $method
      * @param $headers
      * @param $uri_base
-     *
-     * @return CurlHandle|false
      */
     private static function getConnect($uri, $method, $headers, $uri_base)
     {
@@ -86,7 +87,7 @@ class MPRestCli
             if (gettype($data) == 'string') {
                 json_decode($data, true);
             } else {
-                $data = json_encode($data);
+                $data = self::encodeJson($data);
             }
 
             if (function_exists('json_last_error')) {
@@ -98,6 +99,36 @@ class MPRestCli
         }
 
         curl_setopt($connect, CURLOPT_POSTFIELDS, $data);
+    }
+
+    /**
+     * Encode API payloads with PHP's shortest float representation.
+     *
+     * A host-level serialize_precision=17 can turn an already-rounded monetary value such as
+     * 9.2 into 9.1999999999999993 in JSON. Keep the process setting intact for PrestaShop and
+     * scope the safe representation to this outbound API payload.
+     *
+     * @param mixed $data
+     *
+     * @return string|false
+     */
+    private static function encodeJson($data)
+    {
+        $serializePrecision = ini_get('serialize_precision');
+
+        try {
+            ini_set('serialize_precision', '-1');
+
+            return json_encode($data);
+        } finally {
+            // Always give the process setting back, even if json_encode() throws: this is a
+            // global php.ini value and leaving it overridden would change how the rest of
+            // PrestaShop serializes floats. ini_get() only returns false for an unknown
+            // directive, in which case there is nothing to restore.
+            if ($serializePrecision !== false) {
+                ini_set('serialize_precision', $serializePrecision);
+            }
+        }
     }
 
     /**

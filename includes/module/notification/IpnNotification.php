@@ -26,17 +26,20 @@ require_once _PS_MODULE_DIR_ . 'mercadopago/includes/module/notification/Abstrac
 class IpnNotification extends AbstractNotification
 {
     public $merchant_order;
-    public $preference;
+    public $merchantOrderId;
     public $isWalletButton;
+    public $candidatePaymentIds = [];
 
-    public function __construct($transaction_id, $merchant_order)
+    public function __construct($transaction_id, $merchant_order, array $candidatePaymentIds = [])
     {
         parent::__construct($transaction_id);
+        $this->candidatePaymentIds = self::normalizeCandidatePaymentIds($candidatePaymentIds);
 
         $this->merchant_order = $merchant_order;
-        $this->checkout = $this->getCheckoutType();
-        $this->isWalletButton = $this->checkout === 'wallet_button';
-        $this->preference = $this->getCheckoutPreference();
+        $this->merchantOrderId = (string) $transaction_id;
+        // Resolve checkout type from the authoritative preference under the cart lock.
+        $this->checkout = 'pro';
+        $this->isWalletButton = false;
         $this->mp_transaction_amount = isset($merchant_order['total_amount']) ? $merchant_order['total_amount'] : 0;
     }
 
@@ -49,90 +52,188 @@ class IpnNotification extends AbstractNotification
      */
     public function receiveNotification($cart)
     {
-        $this->verifyWebhook($cart);
-
-        $this->total = $this->getTotal($cart, $this->checkout);
-        $orderId = $this->getOrderId($cart);
-
-        if ($orderId != 0) {
-            $payments = $this->merchant_order['payments'];
-
-            $this->verifyPayments($payments);
-            $this->validateOrderState();
-
-            $baseOrder = new Order($orderId);
-            $orders = Order::getByReference($baseOrder->reference);
-
-            $this->updateOrders($cart, $orders);
-        } else {
-            $this->createStandardOrder($cart);
-        }
+        $this->processCartPayment($cart, true);
     }
 
-    /**
-     * Create order for standard payments without notification
-     *
-     * @param mixed $cart
-     *
-     * @return void
-     */
+    /** @return Order */
     public function createStandardOrder($cart)
     {
-        if (!is_array($this->merchant_order)) {
-            MPLog::generate(
-                'Standard order not created: merchant order was not retrieved or authorized by Mercado Pago',
-                'error'
-            );
-            $this->setNotificationResponse(
-                'Standard order not created: merchant order was not retrieved or authorized by Mercado Pago',
-                422
-            );
+        $this->processCartPayment($cart, true);
 
-            return;
+        return $this->getSynchronousOrder($cart);
+    }
+
+    /** Untrusted discovery hints only. Reject malformed/unbounded lists before HTTP. */
+    public static function normalizeCandidatePaymentIds($input): array
+    {
+        if (is_string($input)) {
+            if (strlen($input) > 1049) {
+                throw new InvalidArgumentException('Too many payment candidates');
+            }
+            $input = explode(',', $input);
+        }
+        if (!is_array($input) || count($input) > 50) {
+            throw new InvalidArgumentException('Invalid payment candidate list');
+        }
+        $ids = [];
+        foreach ($input as $id) {
+            if ((!is_string($id) && !is_int($id)) || !preg_match('/^[1-9][0-9]{0,19}$/D', (string) $id)) {
+                throw new InvalidArgumentException('Invalid payment candidate identity');
+            }
+            $ids[] = (string) $id;
         }
 
-        if ($this->isWalletButton) {
-            $this->preference->setCartRule($cart, Configuration::get('MERCADOPAGO_CUSTOM_DISCOUNT'));
-        }
+        return array_values(array_unique($ids));
+    }
 
-        try {
-            if (empty($this->transaction_id) && !empty($this->merchant_order['payments'])) {
-                $payments = $this->merchant_order['payments'];
-                if (isset($payments[0]['id'])) {
-                    $this->transaction_id = $payments[0]['id'];
+    protected function loadPaymentSnapshot($cart): array
+    {
+        $knownIds = $this->knownPaymentIds($cart);
+        $this->candidatePaymentIds = self::normalizeCandidatePaymentIds($this->candidatePaymentIds);
+        // The cart named lock serializes returns/events. No SQL transaction or
+        // row lock has started yet. Never sleep or retry native creation here.
+        for ($attempt = 0; $attempt < 3; ++$attempt) {
+            try {
+                return $this->loadCompletePaymentSnapshot($cart, $knownIds);
+            } catch (Throwable $error) {
+                if ($attempt === 2) {
+                    throw $error;
                 }
             }
+        }
+        throw new RuntimeException('Payment confirmation is pending');
+    }
 
-            $this->getOrderId($cart);
-            $this->total = $this->getTotal($cart, $this->checkout);
-
-            // If the merchant order carries payments, verify them to resolve the real
-            // status. Assuming a hardcoded 'pending' marks already-approved payments
-            // as rejected on PrestaShop 8.2 (mercadopago/cart-prestashop-7#89).
-            if (!empty($this->merchant_order['payments'])) {
-                $this->verifyPayments($this->merchant_order['payments']);
-            } else {
-                $this->status = 'pending';
-                $this->pending += $this->total;
+    private function loadCompletePaymentSnapshot($cart, array $knownIds): array
+    {
+        $ids = array_merge($knownIds, $this->candidatePaymentIds);
+        $id = $this->merchantOrderId;
+        if (!$id || !preg_match('/^[1-9][0-9]{0,19}$/D', (string) $id)) {
+            throw new RuntimeException('Invalid merchant order identity');
+        }
+        $merchantOrder = $this->mercadopago->getMerchantOrder($id, true);
+        if (!is_array($merchantOrder) || !isset($merchantOrder['id'], $merchantOrder['external_reference'], $merchantOrder['preference_id'], $merchantOrder['payments'])
+            || (string) $merchantOrder['id'] !== (string) $id
+            || (string) $merchantOrder['external_reference'] !== (string) $cart->id
+            || !isset($merchantOrder['collector']['id']) || !is_array($merchantOrder['payments'])
+        ) {
+            throw new RuntimeException('Merchant order ownership could not be verified');
+        }
+        $preference = $this->mercadopago->getPreference($merchantOrder['preference_id']);
+        if (!is_object($preference) || !isset($preference->id, $preference->external_reference)
+            || (string) $preference->id !== (string) $merchantOrder['preference_id']
+            || (string) $preference->external_reference !== (string) $cart->id
+            || (isset($preference->collector_id, $merchantOrder['collector']['id'])
+                && (string) $preference->collector_id !== (string) $merchantOrder['collector']['id'])
+        ) {
+            throw new RuntimeException('Checkout preference ownership could not be verified');
+        }
+        $this->merchant_order = $merchantOrder;
+        $this->checkout = isset($preference->metadata->checkout_type) && $preference->metadata->checkout_type === 'wallet_button' ? 'wallet_button' : 'pro';
+        $this->isWalletButton = $this->checkout === 'wallet_button';
+        $this->preference = $this->getCheckoutPreference();
+        $remoteIds = [];
+        foreach ($merchantOrder['payments'] as $payment) {
+            if (!isset($payment['id'])) {
+                throw new RuntimeException('Merchant order payment identity is missing');
             }
-
-            $this->validateOrderState();
-
-            if ($this->order_id == 0 && $this->amount >= $this->total && $this->status != 'rejected') {
-                $this->createOrder($cart);
-            } else {
-                MPLog::generate(sprintf(
-                    'Standard order not created for cart %d: order already exists, payment rejected, or amount not yet complete (status %s)',
-                    (int) $cart->id,
-                    $this->status
-                ));
-                $this->setNotificationResponse('No order created for this notification', 200);
+            if (!preg_match('/^[1-9][0-9]{0,19}$/D', (string) $payment['id'])) {
+                throw new RuntimeException('Invalid merchant order payment identity');
             }
-        } finally {
-            if ($this->isWalletButton) {
-                $this->preference->disableCartRule();
+            $remoteIds[] = (string) $payment['id'];
+            $ids[] = (string) $payment['id'];
+        }
+        $discoveredIds = $this->mercadopago->getMerchantOrderPaymentIds((string) $cart->id, (string) $id);
+        $ids = array_merge($ids, $discoveredIds);
+        $payments = [];
+        foreach (array_unique($ids) as $paymentId) {
+            $payment = $this->mercadopago->getPaymentStandard($paymentId, true);
+            if (!is_array($payment) || !isset($payment['id'], $payment['external_reference'])
+                || (string) $payment['id'] !== (string) $paymentId
+                || (string) $payment['external_reference'] !== (string) $cart->id
+            ) {
+                throw new RuntimeException('Merchant order payment ownership could not be verified');
+            }
+            if (!isset($payment['collector_id'])
+                || (string) $payment['collector_id'] !== (string) $merchantOrder['collector']['id']
+            ) {
+                throw new RuntimeException('Discovered payment collector could not be verified');
+            }
+            if (empty($payment['order']['id'])) {
+                if (in_array((string) $paymentId, $knownIds, true)
+                    && !in_array((string) $paymentId, $this->candidatePaymentIds, true)
+                    && $this->archiveClosedHistoricalAttempt($cart, $payment)
+                ) {
+                    continue;
+                }
+                throw new RuntimeException('Merchant order payment identity is missing');
+            }
+            if (!preg_match('/^[1-9][0-9]{0,19}$/D', (string) $payment['order']['id'])) {
+                throw new RuntimeException('Invalid payment merchant order identity');
+            }
+            if ((string) $payment['order']['id'] !== (string) $id) {
+                // A new preference may reuse an unpaid cart. Never aggregate an old MO;
+                // only a confirmed negative attempt without an order/receipt can be ignored.
+                if (in_array((string) $paymentId, $knownIds, true)
+                    && !in_array((string) $paymentId, $this->candidatePaymentIds, true)
+                    && !in_array((string) $paymentId, $discoveredIds, true)
+                    && !$this->findOrderId($cart) && !in_array((string) $paymentId, $remoteIds, true)
+                    && !isset($this->recordedPaymentIds[(string) $paymentId])
+                    && in_array($payment['status'] ?? null, ['rejected', 'cancelled'], true)
+                ) {
+                    require_once __DIR__ . '/CartPaymentInitiation.php';
+                    $history = (new CartPaymentInitiation($this->mercadopago))->hasApprovalHistory($cart, (string) $paymentId);
+                    if (PaymentClosureProof::isClosed($payment, $history, in_array($payment['currency_id'] ?? null, ['CLP', 'COP'], true) ? 0 : 2)) {
+                        $this->archiveNegativeAttempt($payment);
+                        continue;
+                    }
+                }
+                if (in_array((string) $paymentId, $knownIds, true)
+                    && !in_array((string) $paymentId, $this->candidatePaymentIds, true)
+                    && !$this->findOrderId($cart) && ($payment['status'] ?? null) === 'refunded'
+                ) {
+                    if ($this->archiveClosedHistoricalAttempt($cart, $payment)) {
+                        continue;
+                    }
+                }
+                throw new RuntimeException('Payment belongs to another merchant order');
+            }
+            if (isset($payment['preference_id']) && (string) $payment['preference_id'] !== (string) $merchantOrder['preference_id']) {
+                throw new RuntimeException('Current merchant order payment preference could not be verified');
+            }
+            $payments[] = $payment;
+        }
+        $precision = in_array(Configuration::get('MERCADOPAGO_SITE_ID'), ['MCO', 'MLC'], true) ? 0 : 2;
+
+        $snapshot = PaymentReconciliationSnapshot::fromPayments($payments, $precision);
+        if (!$snapshot['attempts']) {
+            throw new RuntimeException('Payment discovery is empty; confirmation pending');
+        }
+        // Existing references must reach their native state/reversal/fraud guards.
+        // Their persisted totals are already used by processCartPayment.
+        if ($this->loadOrdersForCart($cart, false)) {
+            return $snapshot;
+        }
+        $total = PaymentReconciliationSnapshot::units($this->getTotal($cart, $this->checkout), $precision);
+        $coverage = PaymentReconciliationSnapshot::units($snapshot['approved_amount'], $precision)
+            + PaymentReconciliationSnapshot::units($snapshot['pending_amount'], $precision);
+        $terminal = 0;
+        foreach ($snapshot['attempts'] as $payment) {
+            if (in_array($payment['status'], ['rejected', 'cancelled'], true)) {
+                $terminal += PaymentReconciliationSnapshot::units($payment['nominal_amount'], $precision);
             }
         }
+        // A complete terminal pair is final, not an endlessly retried approval.
+        // A positive/pending shortfall without that evidence must not be ACKed.
+        $terminalComplete = $snapshot['pending_amount'] === PaymentReconciliationSnapshot::decimal(0, $precision)
+            && $coverage + $terminal === $total;
+        if (($coverage > 0 || in_array($snapshot['effective_status'], ['approved', 'pending', 'in_process', 'authorized'], true))
+            && $coverage < $total && !$terminalComplete
+        ) {
+            throw new RuntimeException('Payment discovery is incomplete; confirmation pending');
+        }
+
+        return $snapshot;
     }
 
     /**
@@ -192,41 +293,15 @@ class IpnNotification extends AbstractNotification
      */
     public function verifyPayments($payments)
     {
-        $this->payments_data['payments_id'] = [];
-        $this->payments_data['payments_type'] = [];
-        $this->payments_data['payments_method'] = [];
-        $this->payments_data['payments_status'] = [];
-        $this->payments_data['payments_amount'] = [];
-
-        if (!empty($payments) && isset($payments[0]['id'])) {
-            $this->transaction_id = $payments[0]['id'];
-        }
-
+        $verified = [];
         foreach ($payments as $payment) {
-            $payment_info = $this->mercadopago->getPaymentStandard($payment['id'], true);
-            if (!is_array($payment_info) || !isset($payment_info['status'], $payment_info['id'])) {
-                throw new RuntimeException('Could not retrieve merchant order payment data');
+            $info = $this->mercadopago->getPaymentStandard($payment['id'], true);
+            if (!is_array($info) || !isset($info['id']) || (string) $info['id'] !== (string) $payment['id']) {
+                throw new RuntimeException('Could not verify merchant order payment identity');
             }
-            $this->status = $payment_info['status'];
-
-            $this->payments_data['payments_id'][] = $payment_info['id'];
-            $this->payments_data['payments_type'][] = $payment_info['payment_type_id'];
-            $this->payments_data['payments_method'][] = $payment_info['payment_method_id'];
-            $this->payments_data['payments_amount'][] = $payment_info['transaction_amount'];
-            $this->payments_data['payments_status'][] = $this->status;
-
-            if ($this->status == 'approved') {
-                $coupon_amount = isset($payment_info['coupon_amount']) ? $payment_info['coupon_amount'] : 0.00;
-                $this->approved += $payment_info['transaction_details']['total_paid_amount'] + $coupon_amount;
-            } elseif ($this->status == 'in_process' || $this->status == 'pending' || $this->status == 'authorized') {
-                $this->pending += $payment_info['transaction_amount'];
-            }
+            $verified[] = $info;
         }
-
-        MPLog::generate(sprintf(
-            'Processed %d payments for order. Transaction IDs: %s',
-            count($this->payments_data['payments_id']),
-            implode(', ', $this->payments_data['payments_id'])
-        ));
+        $precision = in_array(Configuration::get('MERCADOPAGO_SITE_ID'), ['MCO', 'MLC'], true) ? 0 : 2;
+        $this->applyPaymentSnapshot(PaymentReconciliationSnapshot::fromPayments($verified, $precision));
     }
 }
